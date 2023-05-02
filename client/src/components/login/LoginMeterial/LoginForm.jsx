@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import kakaoLogo from '../../../assets/kakaoLogo.png';
+import kakaoLogo from '../../../assets/png-file/kakaoLogo.png';
 
 //div : h1 form div(btn)
 const LoginFormBox = styled.div`
