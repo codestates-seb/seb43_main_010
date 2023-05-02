@@ -1,3 +1,5 @@
+@import './font-style.css';
+
 :root {
   --white-100: #fff;
   --black-900: #000;
@@ -51,4 +53,9 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+div {
+  width: 500px;
+  background-color: pink;
 }
