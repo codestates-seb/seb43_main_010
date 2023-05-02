@@ -1,5 +1,6 @@
 :root {
   --white-100: #fff;
+  --black-900: #000;
 
   --light-gray-100: #f7f7fa;
   --light-gray-150: #f0f3f4;
@@ -32,6 +33,12 @@
   --dark-blue-850: #191919;
   --dark-blue-860: #161616;
   --dark-blue-900: #131c23;
+}
+
+@import './reset.css';
+
+* {
+  box-sizing: border-box;
 }
 
 body {
