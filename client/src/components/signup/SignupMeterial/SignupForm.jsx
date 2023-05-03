@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import { useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import SignupInput from './SignupInput';
 import SignupImgInput from './SignupImgInput';
 import ArtistInput from './ArtistInput';
 import { BsCheckLg } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+import { resetInputs } from '../../../reducer/signupSlice';
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
   /* min-height: 178px; */
@@ -65,43 +69,6 @@ const InputBox = styled.div`
   @media screen and (min-width: 768px) {
     width: 395px;
   }
-
-  label {
-    height: 16px;
-    font-size: 13px;
-    line-height: 18.2px;
-    color: rgb(109, 109, 109);
-  }
-  .input-box {
-    height: 42px;
-    margin: 2px 0 1px 0;
-    display: flex;
-    position: relative;
-    > input {
-      flex-grow: 1;
-      font-size: 15px;
-      line-height: 21px;
-      color: rgb(89, 95, 99);
-      border-bottom: 0.1rem solid rgb(238, 238, 238);
-    }
-    input:focus ~ .hrtag::after {
-      width: 100%;
-      z-index: 1;
-    }
-  }
-`;
-const HrTag = styled.hr`
-  border: 0px solid red;
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0px;
-    bottom: -0.1rem;
-    width: 0px;
-    height: 0.1rem;
-    background: linear-gradient(90deg, #95c788, #1cbec8);
-    transition: all 0.3s linear 0s;
-  }
 `;
 
 //submtBtn Box
@@ -134,22 +101,6 @@ const SignupBtn = styled.button`
   }
 `;
 
-const CustomLink = styled.div`
-  display: flex;
-  justify-content: center;
-  .forgot-pwd {
-    height: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 19.6px;
-    color: rgb(142, 142, 142);
-    margin: 16px 0;
-    &:hover {
-      color: #111;
-    }
-  }
-`;
-
 const LoginForm = () => {
   //이미지 파일 처리를 위한 상태 관리
   const [fileImg, setFileImg] = useState('');
@@ -167,6 +118,22 @@ const LoginForm = () => {
     setUser(!user);
   };
 
+  // 확인 버튼 클릭과 취소 클릭 시 경로를 주기 위함
+  const navigate = useNavigate();
+
+  const onClickConfirm = () => {
+    onReset();
+    navigate('/');
+  };
+  const onClickCancle = () => {
+    onReset();
+    navigate('/login');
+  };
+  const dispatch = useDispatch();
+  // 리듀서 state 초기화
+  const onReset = () => {
+    dispatch(resetInputs());
+  };
   return (
     <>
       <SignupFormBox>
@@ -177,46 +144,15 @@ const LoginForm = () => {
             <CheckBox onClick={onClickCheckBox}>{user && <CheckIcon />}</CheckBox>
           </UserCheck>
         </Title>
-        <form>
-          <InputBox>
-            <label htmlFor='email'>이메일</label>
-            <div className='input-box'>
-              <input type='email' id='email' name='email' placeholder='your@email.com'></input>
-              <HrTag className='hrtag' />
-            </div>
-            <hr></hr>
-            <label htmlFor='pwd'>비밀번호</label>
-            <div className='input-box'>
-              <input type='password' id='pwd' name='pwd' placeholder='영문+숫자+특수문자 최소 8자리'></input>
-              <HrTag className='hrtag' />
-            </div>
-            <hr></hr>
-            <label htmlFor='pwd-check'>비밀번호 확인</label>
-            <div className='input-box'>
-              <input type='password' id='pwd-check' name='pwd-check' placeholder='비밀번호 확인'></input>
-              <HrTag className='hrtag' />
-            </div>
-            <hr></hr>
-            <label htmlFor='name'>이름</label>
-            <div className='input-box'>
-              <input type='text' id='pwd-check' name='name' placeholder='이름'></input>
-              <HrTag className='hrtag' />
-            </div>
-            <hr></hr>
-            <label htmlFor='nickname'>닉네임</label>
-            <div className='input-box'>
-              <input type='text' id='nickname' name='nickname' placeholder='닉네임'></input>
-              <HrTag className='hrtag' />
-            </div>
-            <hr></hr>
-            <SignupImgInput label={'프로필 이미지'} name={'avatar'} />
-            <hr></hr>
-            <ArtistInput isArtist={user} />
-          </InputBox>
-        </form>
+        <InputBox>
+          <SignupInput isArtist={user}></SignupInput>
+          <SignupImgInput label={'프로필 이미지'} name={'avatar'} />
+          <hr></hr>
+          <ArtistInput isArtist={user} />
+        </InputBox>
         <BtnBox>
-          <SignupBtn>확인</SignupBtn>
-          <SignupBtn>취소</SignupBtn>
+          <SignupBtn onClick={onClickConfirm}>확인</SignupBtn>
+          <SignupBtn onClick={onClickCancle}>취소</SignupBtn>
         </BtnBox>
       </SignupFormBox>
     </>
