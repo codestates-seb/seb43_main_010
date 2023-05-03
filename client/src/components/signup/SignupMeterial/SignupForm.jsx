@@ -115,6 +115,7 @@ const LoginForm = () => {
   const [user, setUser] = useState(false);
   // 체크박스 클릭시 setUser
   const onClickCheckBox = () => {
+    onReset();
     setUser(!user);
   };
 
