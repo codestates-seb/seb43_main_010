@@ -5,6 +5,8 @@ import Footer from './Footer';
 
 //브라우저 뷰를 담당하는 뷰 박스컨트롤 (로그인 페이지 박스 + 푸터를 담기위함)
 const Body = styled.div`
+  background-color: var(--light-gray-100);
+
   @media screen and (min-width: 768px) {
     padding-top: 40px;
     height: 966px;
