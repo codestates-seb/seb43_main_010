@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import SignupImgInput from './SignupImgInput';
 
 const ArtistBox = styled.div`
   font-weight: 500;
@@ -58,6 +59,8 @@ const ArtistInput = ({ isArtist }) => {
             <input type='text' id='group' name='group' placeholder='그룹명'></input>
             <HrTag className='hrtag' />
           </div>
+          <hr></hr>
+          <SignupImgInput label={'그룹 이미지'} name={'group'} />
         </ArtistBox>
       )}
     </>

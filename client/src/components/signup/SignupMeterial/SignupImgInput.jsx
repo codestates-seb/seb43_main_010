@@ -52,12 +52,12 @@ const Preview = styled.div`
   }
 `;
 
-const SignupImgInput = () => {
+const SignupImgInput = ({ label, name }) => {
   return (
     <>
       <ImgInputBox>
-        <label htmlFor='avatar'>
-          프로필 이미지
+        <label htmlFor={name}>
+          {label}
           <IconBox>
             <i className='i-plus-artist-icon' />
           </IconBox>
@@ -65,7 +65,7 @@ const SignupImgInput = () => {
             <i className='i-trash-icon' />
           </IconBox>
         </label>
-        <input className='avatar' type='file' id='avatar' name='avatar' placeholder='이미지업로드' accept='image/*'></input>
+        <input className={name} type='file' id={name} name={name} placeholder='이미지업로드' accept='image/*'></input>
       </ImgInputBox>
       <Preview></Preview>
     </>

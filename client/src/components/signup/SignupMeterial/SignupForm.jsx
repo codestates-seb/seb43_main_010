@@ -45,6 +45,7 @@ const CheckBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const CheckIcon = styled(BsCheckLg)`
@@ -208,7 +209,7 @@ const LoginForm = () => {
               <HrTag className='hrtag' />
             </div>
             <hr></hr>
-            <SignupImgInput />
+            <SignupImgInput label={'프로필 이미지'} name={'avatar'} />
             <hr></hr>
             <ArtistInput isArtist={user} />
           </InputBox>
