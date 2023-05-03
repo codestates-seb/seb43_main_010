@@ -52,14 +52,15 @@ const CdImgBox = styled.div`
         `
       : 'none'};
   @media screen and (max-width: 1024px) {
-    width: 350px;
-    height: 350px;
+    width: 313px;
+    height: 313px;
   }
   @media screen and (min-width: 768px) {
     background-size: cover;
     background-position: center;
-    width: 350px;
-    height: 350px;
+    width: 213px;
+    height: 213px;
+    margin-left: 20px;
     margin-right: 20px;
   }
 `;
@@ -79,14 +80,6 @@ const AritistBox = styled.div`
   width: 519px;
   margin-left: 68px;
   position: relative;
-  @media screen and (max-width: 1024px) {
-    margin-left: 0;
-    align-items: center;
-    text-align: center;
-  }
-  @media screen and (min-width: 768px) {
-    justify-content: center;
-  }
 `;
 
 const MusicBox = styled.div`
@@ -101,11 +94,6 @@ const MusicBox = styled.div`
   font-size: 17px;
   font-weight: bold;
   color: var(--gray-blue-300);
-  @media screen and (max-width: 1024px) {
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 20px;
-  }
 `;
 
 const MusicInfo = styled.div`
@@ -113,6 +101,12 @@ const MusicInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   margin-left: 10px;
+`;
+
+const MusicBoxImg = styled.img`
+  width: 46px;
+  height: 46px;
+  margin-right: 10px;
 `;
 
 const MusicTitle = styled.span`
@@ -134,14 +128,15 @@ const BookMark = styled.img`
   right: 173px;
   top: 15px;
   @media screen and (max-width: 1024px) {
-    right: 10px;
+    right: 5px;
+    top: 15px;
+    margin-right: 170px;
   }
-`;
-
-const MusicBoxImg = styled.img`
-  width: 46px;
-  height: 46px;
-  margin-right: 10px;
+  @media screen and (max-width: 768px) {
+    right: 5px;
+    top: 15px;
+    margin-right: 120px;
+  }
 `;
 
 const TextBox = styled.div`
@@ -158,11 +153,11 @@ const TextBox = styled.div`
   margin-top: 12px;
   @media screen and (max-width: 1024px) {
     width: 100%;
-    margin-top: 20px;
+    margin-right: 20px;
   }
   @media screen and (min-width: 768px) {
     width: 100%;
-    max-width: 768px;
+    margin-right: 20px;
   }
 `;
 
@@ -191,9 +186,6 @@ const Text = styled.div`
   font-size: 13px;
   line-height: 112.5%;
   margin-top: 30px;
-  @media screen and (min-width: 768px) {
-    width: 100%;
-  }
 `;
 
 const Music = () => {
