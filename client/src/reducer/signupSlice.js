@@ -13,16 +13,12 @@ const signupSlice = createSlice({
   reducers: {
     setFan(state, action) {
       state.fan = action.payload;
-      console.log(state.fan);
     },
     setArtist(state, action) {
       state.artist = action.payload;
-      console.log(state.artist);
     },
     resetInputs(state) {
       Object.assign(state, initialState);
-      console.log(state.fan);
-      console.log(state.artist);
     },
   },
 });
