@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SignupImgInput from './SignupImgInput';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setArtist } from '../../../reducer/signupSlice';
 const ArtistBox = styled.div`
   font-weight: 500;
   hr {
@@ -50,13 +51,21 @@ const HrTag = styled.hr`
 `;
 
 const ArtistInput = ({ isArtist }) => {
+  const artist = useSelector((state) => state.signup.artist);
+  const dispatch = useDispatch();
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    if (isArtist) {
+      dispatch(setArtist({ ...artist, [name]: value }));
+    }
+  };
   return (
     <>
       {isArtist && (
         <ArtistBox>
           <label htmlFor='group'>그룹명</label>
           <div className='input-box'>
-            <input type='text' id='group' name='group' placeholder='그룹명'></input>
+            <input type='text' id='group' name='group' onChange={onChange} placeholder='그룹명'></input>
             <HrTag className='hrtag' />
           </div>
           <hr></hr>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import kakaoLogo from '../../../assets/png-file/kakaoLogo.png';
-
+import { useNavigate } from 'react-router-dom';
 //div : h1 form div(btn)
 const LoginFormBox = styled.div`
   /* min-height: 178px; */
@@ -167,6 +167,11 @@ const KakaoBtn = styled.div`
 `;
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
+  const onClickSignup = () => navigate('/signup');
+  // const onClickLogin = () => navigate('/'); 이건 데이터 받아오면서 처리
+
   return (
     <>
       <LoginFormBox>
@@ -195,7 +200,7 @@ const LoginForm = () => {
           <CustomLink>
             <span className='forgot-pwd'>비밀번호를 잊어버리셨나요?</span>
           </CustomLink>
-          <SignupBtn>회원가입</SignupBtn>
+          <SignupBtn onClick={onClickSignup}>회원가입</SignupBtn>
           <div className='or-tag'>혹은</div>
           <KakaoBtn>
             <img src={kakaoLogo} alt='카카오로고'></img>
