@@ -12,6 +12,7 @@ const NavBlock = styled.nav`
   align-items: center;
   position: fixed;
   margin-top: 80px;
+  z-index: 1;
 `;
 
 const Button = styled.button`
