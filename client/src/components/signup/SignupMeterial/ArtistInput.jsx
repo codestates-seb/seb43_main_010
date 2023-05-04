@@ -50,7 +50,9 @@ const HrTag = styled.hr`
   }
 `;
 
-const ArtistInput = ({ isArtist }) => {
+const ArtistInput = () => {
+  const isArtist = useSelector((state) => state.signup.calssification);
+
   const artist = useSelector((state) => state.signup.artist);
   const dispatch = useDispatch();
   const onChange = (e) => {
@@ -59,6 +61,7 @@ const ArtistInput = ({ isArtist }) => {
       dispatch(setArtist({ ...artist, [name]: value }));
     }
   };
+
   return (
     <>
       {isArtist && (
