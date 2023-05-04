@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/Signup';
 import FeedPage from './pages/FeedPage';
 import MusicPage from './pages/MusicPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/feed' element={<FeedPage />} />
         <Route path='/music' element={<MusicPage />} />
+        <Route path='/profile' element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );
