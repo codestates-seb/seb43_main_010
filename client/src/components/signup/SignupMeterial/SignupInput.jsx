@@ -45,8 +45,9 @@ const HrTag = styled.hr`
   }
 `;
 
-const SignupInput = ({ isArtist }) => {
+const SignupInput = () => {
   // signup을 위한 reducer 전역상태 받아오기
+  const isArtist = useSelector((state) => state.signup.calssification);
   const fanUser = useSelector((state) => state.signup.fan);
   const artist = useSelector((state) => state.signup.artist);
   const dispatch = useDispatch();

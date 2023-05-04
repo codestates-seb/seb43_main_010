@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import SignupInput from './SignupInput';
 import SignupImgInput from './SignupImgInput';
 import ArtistInput from './ArtistInput';
 import { BsCheckLg } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import { resetInputs } from '../../../reducer/signupSlice';
+import { resetInputs, setCalssification } from '../../../reducer/signupSlice';
+
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
   /* min-height: 178px; */
@@ -102,21 +103,13 @@ const SignupBtn = styled.button`
 `;
 
 const LoginForm = () => {
-  //이미지 파일 처리를 위한 상태 관리
-  const [fileImg, setFileImg] = useState('');
-
-  //useRef로 img - input 태그에 접근
-  const imgInput = useRef();
-  //input 태그에 클릭이벤트 매핑
-  const onClickImgUpload = () => {
-    imgInput.current.click();
-  };
   // 일반유저인지 아티스트인지 알기위한 상태관리  f: 일반인, t:아티스트
-  const [user, setUser] = useState(false);
+  const isArtist = useSelector((state) => state.signup.calssification);
+
   // 체크박스 클릭시 setUser
   const onClickCheckBox = () => {
     onReset();
-    setUser(!user);
+    dispatch(setCalssification(!isArtist));
   };
 
   // 확인 버튼 클릭과 취소 클릭 시 경로를 주기 위함
@@ -141,15 +134,15 @@ const LoginForm = () => {
         <Title>
           루미안 회원가입
           <UserCheck>
-            {user ? '아티스트' : '일반인'}
-            <CheckBox onClick={onClickCheckBox}>{user && <CheckIcon />}</CheckBox>
+            {isArtist ? '아티스트' : '일반인'}
+            <CheckBox onClick={onClickCheckBox}>{isArtist && <CheckIcon />}</CheckBox>
           </UserCheck>
         </Title>
         <InputBox>
-          <SignupInput isArtist={user}></SignupInput>
-          <SignupImgInput label={'프로필 이미지'} name={'avatar'} />
+          <SignupInput />
+          <SignupImgInput label={'프로필 이미지'} name={isArtist ? 'artist' : 'fan'} />
           <hr></hr>
-          <ArtistInput isArtist={user} />
+          <ArtistInput />
         </InputBox>
         <BtnBox>
           <SignupBtn onClick={onClickConfirm}>확인</SignupBtn>
