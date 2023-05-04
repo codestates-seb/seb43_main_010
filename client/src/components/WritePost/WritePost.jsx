@@ -133,7 +133,7 @@ const BottomBox = styled.div`
 
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
 // 사용하실 때 const [modalOpen, setModalOpen] = useState(false)를 상위에서 사용해 주세요!
-const WritePost = ({ modalOpen, setModalOpen, notArtist }) => {
+const WritePost = ({ modalOpen, setModalOpen }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
@@ -170,7 +170,7 @@ const WritePost = ({ modalOpen, setModalOpen, notArtist }) => {
     if (content.trim().length > 1) {
       // 여기서 서버한테 content 데이터 전송해야 함.
       // 서버에 데이터 전송 되면 내용 비우고 창 닫기
-      // 조건을 더 추가해서 현재 로그인한 유저가 연에인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
+      // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
       setContent('');
       setModalOpen(false);
     }
@@ -200,9 +200,10 @@ const WritePost = ({ modalOpen, setModalOpen, notArtist }) => {
                 />
               </form>
 
-              <BottomBox notArtist={notArtist} validity={validity} hide={hide}>
+              <BottomBox validity={validity} hide={hide}>
                 <div className='hide-block'>
-                  <HideArtist notArtist={notArtist} setHide={setHide} hide={hide} />
+                  {/* HideArtist 컴포넌트, 아티스트인지 아닌지 여부에 따라 notArtist에 값을 넣어주는 거로 수정해야 함 */}
+                  <HideArtist notArtist='true' setHide={setHide} hide={hide} />
 
                   <button onClick={submitFn} className='submit-btn'>
                     <span>등록</span>
