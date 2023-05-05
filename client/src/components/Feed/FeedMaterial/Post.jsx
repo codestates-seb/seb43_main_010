@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 
 import EditDeleteModal from './EditDeleteModal';
@@ -18,9 +17,7 @@ const PostBlock = styled.div`
     .profile-img {
       width: 36px;
       height: 36px;
-      /* 왜 props로 넘긴 이미지를 인식을 못하는거지??? */
-      /* background: ${({ img }) => (img ? `url(${img})` : 'none')}; */
-      background: no-repeat url('${profileImg}');
+      background: ${({ img }) => (img ? `url(${img})` : 'none')};
       background-size: 36px 36px;
     }
 

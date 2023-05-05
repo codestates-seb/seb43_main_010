@@ -168,7 +168,7 @@ const EditDeleteModal = ({ openModal, setOpenModal }) => {
   };
 
   const clickOkFn = () => {
-    // !!!여기에서 서버한테 게시글 삭제하는 거 작성해야 함!!!
+    // !!!여기에서 서버한테 게시글 삭제하는 거 보내야 함!!!
     setDeleteModal(false);
     setOpenModal(false);
   };
