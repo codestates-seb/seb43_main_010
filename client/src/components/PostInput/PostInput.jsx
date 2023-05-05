@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
 import doubleStars from '../../assets/svg-file/double-stars.svg';
+import { useState } from 'react';
 
 const PostInputBlock = styled.form`
   input {
@@ -38,9 +39,22 @@ const Input = styled.input.attrs((props) => ({
 
 /* 공용 input입니다! transparent와 placeholder, pointer를 props로 받고 있어요. */
 const PostInput = ({ transparent, placeholder, pointer }) => {
+  const [content, setContent] = useState('');
+
+  const changeContent = (e) => {
+    setContent(e.target.value);
+  };
+
+  const submitFn = (e) => {
+    e.preventDefault();
+    // 이 부분은 채팅시에 사용하게 되실 듯
+    // 서버에 데이터를 전송해주세요!
+  };
+
   return (
-    <PostInputBlock>
+    <PostInputBlock onSubmit={submitFn}>
       <Input
+        onChange={changeContent}
         transparent={transparent}
         pointer={pointer}
         type='text'

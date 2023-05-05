@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 
+import EditDeleteModal from './EditDeleteModal';
+
 const PostBlock = styled.div`
   width: 707px;
   height: auto;
@@ -131,6 +133,10 @@ const PostBlock = styled.div`
       }
     }
 
+    .right-icon-box {
+      position: relative;
+    }
+
     .right-icon {
       width: 37px;
       height: 37px;
@@ -140,6 +146,7 @@ const PostBlock = styled.div`
       border-radius: 50%;
       transform: translateX(14px);
       cursor: pointer;
+
       &:hover {
         background-color: var(--light-gray-100);
         transition: 0.15s;
@@ -158,6 +165,7 @@ const PostBlock = styled.div`
 const Post = ({ createdAt, nickname, content, img, LikeNum }) => {
   const [liked, setLiked] = useState(false); // 좋아요 여부
   const [like, setLike] = useState(LikeNum);
+  const [openModal, setOpenModal] = useState(false);
 
   const clickLike = () => {
     setLiked(!liked);
@@ -167,6 +175,10 @@ const Post = ({ createdAt, nickname, content, img, LikeNum }) => {
     } else {
       setLike(like - 1);
     }
+  };
+
+  const clickMiniMenu = () => {
+    setOpenModal(!openModal);
   };
 
   return (
@@ -216,10 +228,14 @@ const Post = ({ createdAt, nickname, content, img, LikeNum }) => {
           </button>
         </div>
 
-        <div className='right-icon'>
-          <button className='mini-menu'>
-            <i className='i-three-point-menu-icon' />
+        <div className='right-icon-box'>
+          <button onClick={clickMiniMenu} className='right-icon'>
+            <div className='mini-menu'>
+              <i className='i-three-point-menu-icon' />
+            </div>
           </button>
+          {/* 게시글 수정, 삭제 모달 */}
+          {openModal ? <EditDeleteModal openModal={openModal} setOpenModal={setOpenModal} /> : null}
         </div>
       </div>
     </PostBlock>

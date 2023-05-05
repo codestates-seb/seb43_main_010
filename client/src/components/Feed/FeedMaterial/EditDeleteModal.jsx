@@ -1,0 +1,212 @@
+import styled from 'styled-components';
+import { useRef, useState, useEffect } from 'react';
+
+const EditDeleteModalBlock = styled.div`
+  position: absolute;
+  min-width: 150px;
+  height: 93px;
+  background-color: var(--white-100);
+  border-radius: 9px;
+  box-shadow: 0 2px 10px rgb(19, 28, 35, 17%);
+
+  display: ${({ deleteModal }) => (deleteModal ? 'none' : 'flex')};
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  top: 100%;
+  right: 0;
+
+  button {
+    padding: 0 8px 0 8px;
+    height: 39.5px;
+    width: 138px;
+    font-size: 14px;
+
+    &:hover {
+      background-color: var(--light-gray-100);
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    span {
+      color: var(--gray-850);
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    i {
+      font-size: 15px;
+    }
+  }
+  .delete {
+    margin-top: 2px;
+  }
+
+  .pen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-20px);
+  }
+
+  .trash {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-20px);
+  }
+`;
+
+const DeleteModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+`;
+
+const ModalBg = styled.div`
+  width: 428px;
+  height: 190px;
+  border-radius: 14px;
+  background-color: var(--white-100);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .ques {
+    font-size: 14px;
+    color: var(--dark-blue-900);
+    text-shadow: 0 0 0 var(--dark-blue-900);
+    margin: 38px 0 47px 0;
+  }
+
+  // 버튼 구역
+  .btn-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cancel {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--dark-blue-900);
+    width: 170px;
+    height: 50px;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: var(--light-gray-100);
+      transition: 0.13s;
+    }
+  }
+
+  .ok {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--skyblue-500);
+    width: 170px;
+    height: 50px;
+    border-radius: 8px;
+    margin-left: 40px;
+
+    &:hover {
+      background-color: var(--skyblue-100);
+      transition: 0.13s;
+    }
+  }
+`;
+
+const EditDeleteModal = ({ openModal, setOpenModal }) => {
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const modalRef = useRef(null);
+  const deleteRef = useRef(null);
+
+  // 수정, 삭제가 뜨는 미니 모달
+  useEffect(() => {
+    const clickOut = (e) => {
+      if (openModal && modalRef.current && !deleteRef.current && !modalRef.current.contains(e.target)) {
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener('mousedown', clickOut);
+    return () => {
+      document.removeEventListener('mousedown', clickOut);
+    };
+  }, [openModal]);
+
+  // delete 모달
+  useEffect(() => {
+    const clickOut = (e) => {
+      if (deleteModal && deleteRef.current && !deleteRef.current.contains(e.target)) {
+        setDeleteModal(false);
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener('mousedown', clickOut);
+    return () => {
+      document.removeEventListener('mousedown', clickOut);
+    };
+  }, [deleteModal]);
+
+  const openDeleteModal = () => {
+    setDeleteModal(true);
+  };
+
+  const clickCancelFn = () => {
+    setDeleteModal(false);
+    setOpenModal(false);
+  };
+
+  const clickOkFn = () => {
+    // !!!여기에서 서버한테 게시글 삭제하는 거 작성해야 함!!!
+    setDeleteModal(false);
+    setOpenModal(false);
+  };
+
+  return (
+    <>
+      <EditDeleteModalBlock ref={modalRef} deleteModal={deleteModal}>
+        <button className='edit'>
+          <div className='pen'>
+            <i className='i-pen-icon' />
+            <span>수정하기</span>
+          </div>
+        </button>
+        <button onClick={openDeleteModal} className='delete'>
+          <div className='trash'>
+            <i className='i-trash-icon' />
+            <span>삭제하기</span>
+          </div>
+        </button>
+      </EditDeleteModalBlock>
+      {/* 포스트 삭제 여부 모달 */}
+      {deleteModal ? (
+        <DeleteModal>
+          <ModalBg ref={deleteRef}>
+            <div className='ques'>이 포스트를 삭제하시겠습니까?</div>
+            <div className='btn-box'>
+              <button className='cancel' onClick={clickCancelFn}>
+                취소
+              </button>
+              <button className='ok' onClick={clickOkFn}>
+                확인
+              </button>
+            </div>
+          </ModalBg>
+        </DeleteModal>
+      ) : null}
+    </>
+  );
+};
+
+export default EditDeleteModal;
