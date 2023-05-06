@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
+import deleteBtn from '../../assets/png-file/x-btn.png';
 
 import PostInput from '../PostInput/PostInput';
 import Gradation from './FeedMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
 import RightImg from './FeedMaterial/RightImg';
 import Post from './FeedMaterial/Post';
+import DetailPost from './FeedMaterial/DetailPost';
 
 const FeedBlock = styled.div`
   display: flex;
@@ -40,13 +42,14 @@ const data = {
     {
       feedId: 1,
       userId: 1,
-      nickname: `아무리생각캐도난마늘`,
+      nickname: `아무리생각캐도난마늘`, // 작성자 닉네임
       content: `그거 알아요? 저는 영어 시간에 핸섬 외우기 어려워서 '김태형'이라고 외웠어요💜💜💜`,
       img: profileImg,
       createdAt: `05. 01. 10:22`,
       feedLikeId: [],
-      LikeNum: 1,
+      LikeNum: 1, // 좋아요 개수
       feedCommentId: [],
+      commentNum: 1, // 게시글에 달린 댓글 개수
     },
     {
       feedId: 2,
@@ -67,6 +70,7 @@ const data = {
       feedLikeId: [],
       LikeNum: 0,
       feedCommentId: [],
+      commentNum: 0,
     },
     {
       feedId: 3,
@@ -78,6 +82,7 @@ const data = {
       feedLikeId: [],
       LikeNum: 99,
       feedCommentId: [],
+      commentNum: 109,
     },
     {
       feedId: 4,
@@ -90,6 +95,7 @@ const data = {
       feedLikeId: [],
       LikeNum: 0,
       feedCommentId: [],
+      commentNum: 0,
     },
     {
       feedId: 5,
@@ -101,15 +107,17 @@ const data = {
       feedLikeId: [],
       LikeNum: 60,
       feedCommentId: [],
+      commentNum: 39,
     },
   ],
 };
 
 const Feed = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  // const [detailPost, setDetailPost] = useState(false);
 
-  const changeOpen = () => {
-    setModalOpen(!modalOpen);
+  const openModal = () => {
+    setModalOpen(true);
   };
 
   return (
@@ -119,7 +127,7 @@ const Feed = () => {
         <RealFeedBlock>
           <PostContextBox>
             {/* 공용 input입니다! => PostInput 컴포넌트*/}
-            <button onClick={changeOpen}>
+            <button onClick={openModal}>
               <PostInput transparent='transparent' pointer='pointer' placeholder='커뮤니티에 포스트를 남겨보세요.' />
             </button>
 
@@ -131,7 +139,15 @@ const Feed = () => {
             {/* 임시 데이터로 <Post />컴포넌트 map 돌림 */}
             <PostsBox>
               {data.allFeed.map((el) => (
-                <Post key={el.feedId} createdAt={el.createdAt} nickname={el.nickname} content={el.content} img={el.img} LikeNum={el.LikeNum} />
+                <Post
+                  key={el.feedId}
+                  createdAt={el.createdAt}
+                  nickname={el.nickname}
+                  content={el.content}
+                  img={el.img}
+                  LikeNum={el.LikeNum}
+                  commentNum={el.commentNum}
+                />
               ))}
             </PostsBox>
           </PostContextBox>
@@ -142,6 +158,8 @@ const Feed = () => {
       </FeedBlock>
       {/* 포스트 작성 컴포넌트임 => WritePost 컴포넌트 */}
       {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} /> : null}
+      {/* 디테일 포스트 컴포넌트임 => DetailPost 컴포넌트 */}
+      {/* {detailPost ? <DetailPost detailPost={detailPost} setDetailPost={setDetailPost} /> : null} */}
     </>
   );
 };

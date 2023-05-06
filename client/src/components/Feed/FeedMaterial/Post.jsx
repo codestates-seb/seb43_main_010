@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 
 import EditDeleteModal from './EditDeleteModal';
+import DetailPost from './DetailPost';
 
 const PostBlock = styled.div`
   width: 707px;
@@ -47,8 +48,10 @@ const PostBlock = styled.div`
     font-size: 15px;
     text-shadow: 0 0 0 var(--dark-blue-900);
     padding: 16px 0 0 0;
-    cursor: pointer;
     line-height: 125%;
+    cursor: pointer;
+
+    text-align: start;
 
     .more {
       color: #bababa;
@@ -72,6 +75,8 @@ const PostBlock = styled.div`
 
     .left-icon {
       display: flex;
+      justify-content: start;
+      align-items: center;
       color: var(--gray-700);
     }
 
@@ -83,7 +88,7 @@ const PostBlock = styled.div`
 
       .num {
         color: var(--gray-900);
-        font-size: 15px;
+        font-size: 14px;
         text-shadow: 0 0 0 var(--gray-900);
         transform: translateX(-5px) translateY(1px);
       }
@@ -156,86 +161,103 @@ const PostBlock = styled.div`
         }
       }
     }
+
+    .comment-num {
+      color: var(--gray-900);
+      font-size: 14px;
+      text-shadow: 0 0 0 var(--gray-900);
+      transform: translateX(-20px) translateY(0.6px);
+    }
   }
 `;
 
-const Post = ({ createdAt, nickname, content, img, LikeNum }) => {
+const Post = ({ createdAt, nickname, content, img, LikeNum, commentNum }) => {
   const [liked, setLiked] = useState(false); // 좋아요 여부
   const [like, setLike] = useState(LikeNum);
   const [openModal, setOpenModal] = useState(false);
+  const [detailPost, setDetailPost] = useState(false);
 
   const clickLike = () => {
     setLiked(!liked);
-
     if (!liked) {
       setLike(like + 1);
     } else {
       setLike(like - 1);
     }
+    // 서버한테 바뀐 좋아요 데이터 전송 해야함
   };
 
   const clickMiniMenu = () => {
     setOpenModal(!openModal);
   };
 
+  const openDetailPost = () => {
+    setDetailPost(true);
+  };
+
   return (
-    <PostBlock img={img}>
-      {/* 위 */}
-      <div className='top'>
-        <div className='profile'>
-          <div className='profile-img'></div>
-        </div>
-
-        <div className='user-txt-box'>
-          <div className='nickname'>{nickname}</div>
-          <span className='time'>{createdAt}</span>
-        </div>
-      </div>
-
-      {/* 중간 */}
-      <div className='mid'>
-        {content.length > 670 ? (
-          <p className='post-content'>
-            {content.slice(0, 670) + '...'}
-            <button className='more'>더 보기</button>
-          </p>
-        ) : (
-          <p className='post-content'>{content}</p>
-        )}
-      </div>
-
-      {/* 아래 */}
-      <div className='bottom'>
-        <div className='left-icon'>
-          <div className='thumbs-up'>
-            <button onClick={clickLike} className='thumbs-up-btn'>
-              {liked ? (
-                <div className='thumbs-up-fill'>
-                  <img src={thumbsUpFill} alt='like' />
-                </div>
-              ) : (
-                <i className='i-thumbs-up-icon' />
-              )}
-            </button>
-            {like === 0 ? null : <span className='num'>{like}</span>}
+    <>
+      <PostBlock img={img}>
+        {/* 위 */}
+        <div className='top'>
+          <div className='profile'>
+            <div className='profile-img'></div>
           </div>
 
-          <button className='bubble-up'>
-            <i className='i-bubble-icon' />
-          </button>
+          <div className='user-txt-box'>
+            <div className='nickname'>{nickname}</div>
+            <span className='time'>{createdAt}</span>
+          </div>
         </div>
 
-        <div className='right-icon-box'>
-          <button onClick={clickMiniMenu} className='right-icon'>
-            <div className='mini-menu'>
-              <i className='i-three-point-menu-icon' />
+        {/* 중간 */}
+        <button onClick={openDetailPost} className='mid'>
+          {content.length > 670 ? (
+            <p className='post-content'>
+              {content.slice(0, 670) + '...'}
+              <button className='more'>더 보기</button>
+            </p>
+          ) : (
+            <p className='post-content'>{content}</p>
+          )}
+        </button>
+
+        {/* 아래 */}
+        <div className='bottom'>
+          <div className='left-icon'>
+            <div className='thumbs-up'>
+              <button onClick={clickLike} className='thumbs-up-btn'>
+                {liked ? (
+                  <div className='thumbs-up-fill'>
+                    <img src={thumbsUpFill} alt='like' />
+                  </div>
+                ) : (
+                  <i className='i-thumbs-up-icon' />
+                )}
+              </button>
+              {like === 0 ? null : <span className='num'>{like}</span>}
             </div>
-          </button>
-          {/* 게시글 수정, 삭제 모달 */}
-          {openModal ? <EditDeleteModal openModal={openModal} setOpenModal={setOpenModal} /> : null}
+
+            <button onClick={openDetailPost} className='bubble-up'>
+              <i className='i-bubble-icon' />
+            </button>
+            {commentNum === 0 ? null : <span className='comment-num'>{commentNum}</span>}
+          </div>
+
+          <div className='right-icon-box'>
+            <button onClick={clickMiniMenu} className='right-icon'>
+              <div className='mini-menu'>
+                <i className='i-three-point-menu-icon' />
+              </div>
+            </button>
+            {/* 게시글 수정, 삭제 모달 */}
+            {openModal ? <EditDeleteModal openModal={openModal} setOpenModal={setOpenModal} /> : null}
+          </div>
         </div>
-      </div>
-    </PostBlock>
+      </PostBlock>
+      {/* 디테일 포스트 컴포넌트임 => DetailPost 컴포넌트 */}
+      {detailPost ? <DetailPost detailPost={detailPost} setDetailPost={setDetailPost} content={content} /> : null}
+    </>
   );
 };
 

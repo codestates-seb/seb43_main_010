@@ -18,12 +18,14 @@ const WritePostBlock = styled.div`
 
 const PostContentBox = styled.div`
   display: flex;
-  transform: translateX(25px);
+  transform: translateX(0);
+  position: relative;
 
   .delete-btn {
     width: 45px;
-    transform: translateY(-180px);
-    cursor: pointer;
+    position: absolute;
+    top: 9%;
+    right: -45px;
   }
 `;
 
@@ -144,7 +146,7 @@ const WritePost = ({ modalOpen, setModalOpen }) => {
     if (textarea) {
       textarea.style.height = 'auto';
       let height = textarea.scrollHeight;
-      let maxHeight = window.innerHeight * 0.74;
+      let maxHeight = window.innerHeight * 0.7; // 0.74
       textarea.style.height = `${Math.min(height + 8, maxHeight)}px`;
     }
 
