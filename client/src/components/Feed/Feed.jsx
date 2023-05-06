@@ -47,7 +47,7 @@ const data = {
       img: profileImg,
       createdAt: `05. 01. 10:22`,
       feedLikeId: [],
-      LikeNum: 1, // 좋아요 개수
+      likeNum: 1, // 좋아요 개수
       feedCommentId: [],
       commentNum: 1, // 게시글에 달린 댓글 개수
     },
@@ -68,7 +68,7 @@ const data = {
       img: profileImg,
       createdAt: `05. 01. 10:22`,
       feedLikeId: [],
-      LikeNum: 0,
+      likeNum: 0,
       feedCommentId: [],
       commentNum: 0,
     },
@@ -80,7 +80,7 @@ const data = {
       img: profileImg,
       createdAt: `05. 01. 10:22`,
       feedLikeId: [],
-      LikeNum: 99,
+      likeNum: 99,
       feedCommentId: [],
       commentNum: 109,
     },
@@ -93,7 +93,7 @@ const data = {
       img: profileImg,
       createdAt: `05. 01. 10:22`,
       feedLikeId: [],
-      LikeNum: 0,
+      likeNum: 0,
       feedCommentId: [],
       commentNum: 0,
     },
@@ -105,7 +105,7 @@ const data = {
       img: profileImg,
       createdAt: `05. 01. 10:22`,
       feedLikeId: [],
-      LikeNum: 60,
+      likeNum: 60,
       feedCommentId: [],
       commentNum: 39,
     },
@@ -114,7 +114,6 @@ const data = {
 
 const Feed = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  // const [detailPost, setDetailPost] = useState(false);
 
   const openModal = () => {
     setModalOpen(true);
@@ -145,7 +144,7 @@ const Feed = () => {
                   nickname={el.nickname}
                   content={el.content}
                   img={el.img}
-                  LikeNum={el.LikeNum}
+                  likeNum={el.likeNum}
                   commentNum={el.commentNum}
                 />
               ))}

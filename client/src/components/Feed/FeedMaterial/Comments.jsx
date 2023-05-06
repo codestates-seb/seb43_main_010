@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import profileImg from '../../../assets/jpg-file/profile-img.jpg';
+import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
+import { useState } from 'react';
 
 const CommentsBlock = styled.li`
   overflow-y: auto;
@@ -78,18 +80,51 @@ const Comment = styled.div`
 
   .bottom-icon {
     display: flex;
-    padding: 11px 33px 0 40px;
+    justify-content: start;
+    align-items: center;
+    padding: 7px 33px 0 36.5px;
 
     .thumbs-up {
       font-size: 16px;
+      width: 26px;
+      height: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      &:hover {
+        background-color: var(--light-gray-100);
+        transition: 0.15s;
+      }
       i:before {
         color: var(--light-gray-500);
       }
     }
 
+    .thumbs-up-fill {
+      width: 16px;
+      transform: translateY(1px);
+    }
+
+    .num {
+      color: var(--gray-600);
+      font-size: 13px;
+      text-shadow: 0 0 0 var(--gray-600);
+    }
+
     .bubble {
       font-size: 16px;
-      transform: translateX(16px);
+      transform: translateX(8px);
+      width: 26px;
+      height: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      &:hover {
+        background-color: var(--light-gray-100);
+        transition: 0.15s;
+      }
       i:before {
         color: var(--light-gray-500);
       }
@@ -97,7 +132,21 @@ const Comment = styled.div`
   }
 `;
 
-const Comments = () => {
+// 댓글 컴포넌트임
+const Comments = ({ likeNum = 0 }) => {
+  const [liked, setLiked] = useState(false);
+  const [like, setLike] = useState(likeNum);
+
+  const clickLike = () => {
+    setLiked(!liked);
+    if (!liked) {
+      setLike(like + 1);
+    } else {
+      setLike(like - 1);
+    }
+    // 서버한테 바뀐 좋아요 데이터 전송 해야함
+  };
+
   return (
     <CommentsBlock>
       <Comment>
@@ -117,9 +166,16 @@ const Comments = () => {
           <p>난 김태형 그닥이던데.. 내 마음으로 다그닥 다그닥🐎🐎💜</p>
         </div>
         <div className='bottom-icon'>
-          <button className='thumbs-up'>
-            <i className='i-thumbs-up-icon' />
+          <button onClick={clickLike} className='thumbs-up'>
+            {liked ? (
+              <div className='thumbs-up-fill'>
+                <img src={thumbsUpFill} alt='like' />
+              </div>
+            ) : (
+              <i className='i-thumbs-up-icon' />
+            )}
           </button>
+          {like === 0 ? null : <span className='num'>{like}</span>}
           <button className='bubble'>
             <i className='i-bubble-icon' />
           </button>

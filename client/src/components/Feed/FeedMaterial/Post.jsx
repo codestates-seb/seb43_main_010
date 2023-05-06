@@ -171,9 +171,9 @@ const PostBlock = styled.div`
   }
 `;
 
-const Post = ({ createdAt, nickname, content, img, LikeNum, commentNum }) => {
-  const [liked, setLiked] = useState(false); // 좋아요 여부
-  const [like, setLike] = useState(LikeNum);
+const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
+  const [liked, setLiked] = useState(false);
+  const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
   const [detailPost, setDetailPost] = useState(false);
 

@@ -244,10 +244,10 @@ const InputSubmit = styled.li`
 `;
 
 // 여기에선 해당하는 게시글의 댓글 데이터를 서버한테 받아와야 함.
-const DetailPost = ({ detailPost, setDetailPost, content, LikeNum = 0 }) => {
+const DetailPost = ({ detailPost, setDetailPost, content, likeNum = 0 }) => {
   const [comment, setComment] = useState('');
   const [liked, setLiked] = useState(false); // 좋아요 여부
-  const [like, setLike] = useState(LikeNum);
+  const [like, setLike] = useState(likeNum);
   const detailPostRef = useRef(null);
 
   useEffect(() => {
