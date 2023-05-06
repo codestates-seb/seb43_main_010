@@ -87,13 +87,11 @@ const SignupImgInput = ({ label, name }) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = imgInput.current.files[0];
-    console.log(file);
     if (file) {
       reader.readAsDataURL(file);
     }
 
     reader.onloadend = () => {
-      // setImgFile(reader.result); //dispatch로 교환
       if (isArtist) {
         if (e.target.name === 'group') {
           dispatch(setArtistGroupImg(reader.result));
@@ -104,6 +102,7 @@ const SignupImgInput = ({ label, name }) => {
         dispatch(setFanProfile(reader.result));
       }
     };
+    e.target.value = '';
   };
   // profile 상태 초기화
   const deleteImg = (e) => {

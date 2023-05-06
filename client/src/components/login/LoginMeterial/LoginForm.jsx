@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import kakaoLogo from '../../../assets/png-file/kakaoLogo.png';
 import { useNavigate } from 'react-router-dom';
+import { useState, useRef } from 'react';
+
 //div : h1 form div(btn)
 const LoginFormBox = styled.div`
   /* min-height: 178px; */
@@ -16,9 +18,8 @@ const Title = styled.h1`
   font-weight: 700;
   line-height: 36.4px;
   color: rgb(32, 36, 41);
-  /* height: 73px; */
   margin-bottom: 20px;
-  //로고 이미지
+  cursor: default;
 `;
 
 //Inputform Box
@@ -168,9 +169,34 @@ const KakaoBtn = styled.div`
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const onClickSignup = () => {
+    onReset();
+    navigate('/signup');
+  };
+  const onClickLogin = () => {
+    // navigate('/');
+  };
 
-  const onClickSignup = () => navigate('/signup');
-  // const onClickLogin = () => navigate('/'); 이건 데이터 받아오면서 처리
+  const [inputs, setInputs] = useState({
+    email: '',
+    pwd: '',
+  });
+  const { email, pwd } = inputs;
+
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  const onReset = () => {
+    setInputs({
+      email: '',
+      pwd: '',
+    });
+  };
 
   return (
     <>
@@ -184,19 +210,19 @@ const LoginForm = () => {
           <InputBox>
             <label htmlFor='email'>이메일</label>
             <div className='input-box'>
-              <input type='email' id='email' name='email' placeholder='your@email.com'></input>
+              <input type='email' id='email' name='email' onChange={onChange} value={email} placeholder='your@email.com'></input>
               <HrTag className='hrtag' />
             </div>
             <hr></hr>
             <label htmlFor='pwd'>비밀번호</label>
             <div className='input-box'>
-              <input type='password' id='pwd' name='pwd' placeholder='영문+숫자+특수문자 최소 8자리'></input>
+              <input type='password' id='pwd' name='pwd' onChange={onChange} value={pwd} placeholder='영문+숫자+특수문자 최소 8자리'></input>
               <HrTag className='hrtag' />
             </div>
           </InputBox>
         </form>
         <BtnBox>
-          <LoginBtn>로그인</LoginBtn>
+          <LoginBtn onClick={onClickLogin}>로그인</LoginBtn>
           <CustomLink>
             <span className='forgot-pwd'>비밀번호를 잊어버리셨나요?</span>
           </CustomLink>

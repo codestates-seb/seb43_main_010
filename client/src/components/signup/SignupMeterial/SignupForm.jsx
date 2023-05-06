@@ -6,7 +6,8 @@ import SignupImgInput from './SignupImgInput';
 import ArtistInput from './ArtistInput';
 import { BsCheckLg } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import { resetInputs, setCalssification } from '../../../reducer/signupSlice';
+import { setFanId, setArtistId, resetInputs, setCalssification } from '../../../reducer/signupSlice';
+import axios from 'axios';
 
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
@@ -105,6 +106,12 @@ const SignupBtn = styled.button`
 const LoginForm = () => {
   // 일반유저인지 아티스트인지 알기위한 상태관리  f: 일반인, t:아티스트
   const isArtist = useSelector((state) => state.signup.calssification);
+  //회원가입 확인 시 상태를 post에 날리기 위해 모든 전역 상태 가져오기
+  const fanUser = useSelector((state) => state.signup.fan);
+  // const fanProfile = useSelector((state) => state.signup.fan.profile);
+  // const artist = useSelector((state) => state.signup.artist);
+  // const artistProfile = useSelector((state) => state.signup.artist.profile);
+  // const artistGroupImg = useSelector((state) => state.signup.artist.groupImg);
 
   // 체크박스 클릭시 setUser
   const onClickCheckBox = () => {
@@ -115,9 +122,24 @@ const LoginForm = () => {
   // 확인 버튼 클릭과 취소 클릭 시 경로를 주기 위함
   const navigate = useNavigate();
 
-  const onClickConfirm = () => {
-    onReset();
-    navigate('/');
+  //이때 회원가입 Post 요청 날리기
+  const onClickSubmit = async (e) => {
+    e.preventDefault();
+    const body = {
+      ...fanUser,
+      // profile: fanProfile,
+    };
+    await axios
+      .post('http://localhost:4000/fans', body)
+      .then(() => {
+        console.log('성공');
+        dispatch(setFanId());
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    // onReset();
+    // navigate('/');
   };
   const onClickCancle = () => {
     onReset();
@@ -145,7 +167,7 @@ const LoginForm = () => {
           <ArtistInput />
         </InputBox>
         <BtnBox>
-          <SignupBtn onClick={onClickConfirm}>확인</SignupBtn>
+          <SignupBtn onClick={onClickSubmit}>확인</SignupBtn>
           <SignupBtn onClick={onClickCancle}>취소</SignupBtn>
         </BtnBox>
       </SignupFormBox>

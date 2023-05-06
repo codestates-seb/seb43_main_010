@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import SignupLogo from '../login/LoginMeterial/LoginLogo';
+import SignupLogo from '../Login/LoginMeterial/LoginLogo';
 import SignupForm from './SignupMeterial/SignupForm';
-import Footer from '../login/Footer';
+import Footer from '../Login/Footer';
 
 //브라우저 뷰를 담당하는 뷰 박스컨트롤 (로그인 페이지 박스 + 푸터를 담기위함)
 const Body = styled.div`
