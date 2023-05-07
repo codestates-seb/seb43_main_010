@@ -16,16 +16,16 @@ const pwdValidation = (str) => {
 //비밀번호 비밀번호 확인 이  다르면 처리
 const checkPwdValidation = (password, passwordCheck) => {
   if (password !== passwordCheck) {
-    return [false, '비밀번호가 다릅니다.'];
+    return [false, '비밀번호가 일치하지 않습니다.'];
   }
-  return [true, '비밀번호가 같습니다.'];
+  return [true, '비밀번호가 일치합니다.'];
 };
 const commonValidation = (str) => {
   const regexCommon = /^[a-zA-Zㄱ-힣0-9\s]{1,20}$/;
   if (!regexCommon.test(str)) {
-    return '잘못된 형식입니다.';
+    return false;
   }
-  return regexCommon.test(str);
+  return true;
 };
 
 export { emailValidation, pwdValidation, checkPwdValidation, commonValidation };

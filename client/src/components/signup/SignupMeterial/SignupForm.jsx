@@ -8,6 +8,7 @@ import { BsCheckLg } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { setFanId, setArtistId, resetInputs, setCalssification } from '../../../reducer/signupSlice';
 import axios from 'axios';
+import { emailValidation, pwdValidation, checkPwdValidation, commonValidation } from '../validation.js';
 
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
@@ -109,7 +110,7 @@ const LoginForm = () => {
   //회원가입 확인 시 상태를 post에 날리기 위해 모든 전역 상태 가져오기
   const fanUser = useSelector((state) => state.signup.fan);
   // const fanProfile = useSelector((state) => state.signup.fan.profile);
-  // const artist = useSelector((state) => state.signup.artist);
+  const artist = useSelector((state) => state.signup.artist);
   // const artistProfile = useSelector((state) => state.signup.artist.profile);
   // const artistGroupImg = useSelector((state) => state.signup.artist.groupImg);
 
@@ -117,6 +118,7 @@ const LoginForm = () => {
   const onClickCheckBox = () => {
     onReset();
     dispatch(setCalssification(!isArtist));
+    onInputReset();
   };
 
   // 확인 버튼 클릭과 취소 클릭 시 경로를 주기 위함
@@ -125,24 +127,59 @@ const LoginForm = () => {
   //이때 회원가입 Post 요청 날리기
   const onClickSubmit = async (e) => {
     e.preventDefault();
-    const body = {
-      ...fanUser,
-      // profile: fanProfile,
-    };
-    await axios
-      .post('http://localhost:4000/fans', body)
-      .then(() => {
-        console.log('성공');
-        dispatch(setFanId());
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    // onReset();
-    // navigate('/');
+    //아티스트인지 팬인지 구분해서 날리기
+    let body = {};
+    if (isArtist) {
+      if (
+        emailValidation(artist.email)[0] === false ||
+        pwdValidation(artist.password)[0] === false ||
+        checkPwdValidation(artist.password, artist.passwordCheck) === false ||
+        commonValidation(artist.name) === false ||
+        commonValidation(artist.nickname) === false
+      ) {
+        alert('모든 정보를 입력해주세요!');
+        return;
+      }
+      body = { ...artist };
+      await axios
+        .post('http://localhost:4000/artists', body)
+        .then(() => {
+          console.log('성공');
+          dispatch(setArtistId());
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      if (
+        emailValidation(fanUser.email)[0] === false ||
+        pwdValidation(fanUser.password)[0] === false ||
+        checkPwdValidation(fanUser.password, fanUser.passwordCheck) === false ||
+        commonValidation(fanUser.name) === false ||
+        commonValidation(fanUser.nickname) === false
+      ) {
+        alert('모든 정보를 입력해주세요!');
+        return;
+      }
+      body = { ...fanUser };
+      await axios
+        .post('http://localhost:4000/fans', body)
+        .then(() => {
+          console.log('성공');
+          dispatch(setFanId());
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+
+    onReset();
+    onInputReset();
+    navigate('/login');
   };
   const onClickCancle = () => {
     onReset();
+    onInputReset();
     navigate('/login');
   };
   const dispatch = useDispatch();
@@ -150,6 +187,21 @@ const LoginForm = () => {
   const onReset = () => {
     dispatch(resetInputs());
   };
+
+  const emailRef = useRef();
+  const pwdRef = useRef();
+  const pwdCheckRef = useRef();
+  const nameRef = useRef();
+  const nicknnameRef = useRef();
+
+  const onInputReset = () => {
+    emailRef.current.value = '';
+    pwdRef.current.value = '';
+    pwdCheckRef.current.value = '';
+    nameRef.current.value = '';
+    nicknnameRef.current.value = '';
+  };
+
   return (
     <>
       <SignupFormBox>
@@ -161,7 +213,7 @@ const LoginForm = () => {
           </UserCheck>
         </Title>
         <InputBox>
-          <SignupInput />
+          <SignupInput emailRef={emailRef} pwdRef={pwdRef} pwdCheckRef={pwdCheckRef} nameRef={nameRef} nicknnameRef={nicknnameRef} />
           <SignupImgInput label={'프로필 이미지'} name={isArtist ? 'artist' : 'fan'} />
           <hr></hr>
           <ArtistInput />

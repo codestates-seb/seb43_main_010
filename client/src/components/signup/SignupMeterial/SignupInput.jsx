@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setFan, setArtist } from '../../../reducer/signupSlice';
 import { emailValidation, pwdValidation, checkPwdValidation } from '../validation.js';
 import { BsCheckLg } from 'react-icons/bs';
+import axios from 'axios';
 import { useRef } from 'react';
 
 const InputForm = styled.form`
@@ -35,14 +36,13 @@ const InputForm = styled.form`
   }
 `;
 const HrTag = styled.hr`
-  border: 0px solid red;
   &::after {
     content: '';
     position: absolute;
     left: 0px;
     bottom: -0.1rem;
     width: 0px;
-    height: 0.1rem;
+    height: 2px;
     background: linear-gradient(90deg, #95c788, #1cbec8);
     transition: all 0.3s linear 0s;
   }
@@ -55,6 +55,7 @@ const EmailCheck = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
+  cursor: default;
 `;
 
 const CheckBox = styled.div`
@@ -82,7 +83,7 @@ const ValidDesc = styled.p`
     color: rgb(253, 91, 21);
   }
 `;
-const SignupInput = () => {
+const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) => {
   // signup을 위한 reducer 전역상태 받아오기
   const isArtist = useSelector((state) => state.signup.calssification);
   const fanUser = useSelector((state) => state.signup.fan);
@@ -94,7 +95,6 @@ const SignupInput = () => {
   const onChange = (e) => {
     const { value, name } = e.target;
 
-    //유효성 검사 통과시 아래가 수행되어야함
     if (isArtist) {
       dispatch(setArtist({ ...artist, [name]: value }));
     } else {
@@ -102,15 +102,32 @@ const SignupInput = () => {
     }
   };
 
+  //중복확인
+  const onClickCheckBox = async () => {
+    let curEmail = '';
+    if (isArtist) {
+      curEmail = artist.email;
+    } else {
+      curEmail = fanUser.email;
+    }
+    alert('사용가능');
+    // 중복검사 백엔드분께 물어보기
+    // await axios
+    //   .post('http://localhost:4000/fans', {
+    //     email: curEmail,
+    //   })
+    //   .then();
+  };
+
   return (
     <>
       <InputForm>
         <label htmlFor='email'>이메일</label>
         <div className='input-box'>
-          <input type='email' id='email' name='email' onChange={onChange} placeholder='your@email.com'></input>
+          <input ref={emailRef} type='email' id='email' name='email' onChange={onChange} placeholder='your@email.com'></input>
           <EmailCheck>
             중복확인
-            <CheckBox>
+            <CheckBox onClick={onClickCheckBox}>
               <CheckIcon />
             </CheckBox>
           </EmailCheck>
@@ -118,58 +135,58 @@ const SignupInput = () => {
         </div>
         {isArtist ? (
           emailValidation(artist.email)[0] ? (
-            <ValidDesc>{emailValidation(artist.email)[1]}</ValidDesc>
+            <hr />
           ) : (
             <ValidDesc className='false-input'>{emailValidation(artist.email)[1]}</ValidDesc>
           )
         ) : emailValidation(fanUser.email)[0] ? (
-          <ValidDesc>{emailValidation(fanUser.email)[1]}</ValidDesc>
+          <hr />
         ) : (
           <ValidDesc className='false-input'>{emailValidation(fanUser.email)[1]}</ValidDesc>
         )}
 
         <label htmlFor='password'>비밀번호</label>
         <div className='input-box'>
-          <input type='password' id='password' name='password' onChange={onChange} placeholder='영문+숫자+특수문자 최소 8자리'></input>
+          <input ref={pwdRef} type='password' id='password' name='password' onChange={onChange} placeholder='영문+숫자+특수문자 최소 8자리'></input>
           <HrTag className='hrtag' />
         </div>
         {isArtist ? (
           pwdValidation(artist.password)[0] ? (
-            <ValidDesc>{pwdValidation(artist.password)[1]}</ValidDesc>
+            <hr />
           ) : (
             <ValidDesc className='false-input'>{pwdValidation(artist.password)[1]}</ValidDesc>
           )
         ) : pwdValidation(fanUser.password)[0] ? (
-          <ValidDesc>{pwdValidation(fanUser.password)[1]}</ValidDesc>
+          <hr />
         ) : (
           <ValidDesc className='false-input'>{pwdValidation(fanUser.password)[1]}</ValidDesc>
         )}
 
         <label htmlFor='password-check'>비밀번호 확인</label>
         <div className='input-box'>
-          <input type='password' id='password-check' name='passwordCheck' onChange={onChange} placeholder='비밀번호 확인'></input>
+          <input ref={pwdCheckRef} type='password' id='password-check' name='passwordCheck' onChange={onChange} placeholder='비밀번호 확인'></input>
           <HrTag className='hrtag' />
         </div>
         {isArtist ? (
           checkPwdValidation(artist.password, artist.passwordCheck)[0] ? (
-            <ValidDesc>{checkPwdValidation(artist.password)[1]}</ValidDesc>
+            <hr />
           ) : (
             <ValidDesc className='false-input'>{checkPwdValidation(artist.password, artist.passwordCheck)[1]}</ValidDesc>
           )
         ) : checkPwdValidation(fanUser.password, fanUser.passwordCheck)[0] ? (
-          <ValidDesc>{checkPwdValidation(fanUser.password, fanUser.passwordCheck)[1]}</ValidDesc>
+          <hr />
         ) : (
           <ValidDesc className='false-input'>{checkPwdValidation(fanUser.password, fanUser.passwordCheck)[1]}</ValidDesc>
         )}
         <label htmlFor='name'>이름</label>
         <div className='input-box'>
-          <input type='text' id='password-check' name='name' onChange={onChange} placeholder='이름'></input>
+          <input ref={nameRef} type='text' id='password-check' name='name' onChange={onChange} placeholder='이름'></input>
           <HrTag className='hrtag' />
         </div>
-        <hr></hr>
+        <hr />
         <label htmlFor='nickname'>닉네임</label>
         <div className='input-box'>
-          <input type='text' id='nickname' name='nickname' onChange={onChange} placeholder='닉네임'></input>
+          <input ref={nicknnameRef} type='text' id='nickname' name='nickname' onChange={onChange} placeholder='닉네임'></input>
           <HrTag className='hrtag' />
         </div>
         <hr></hr>
