@@ -4,6 +4,7 @@ import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 
 import EditDeleteModal from './EditDeleteModal';
 import DetailPost from './DetailPost';
+import BigDetailPost from './BigDetailPost';
 
 const PostBlock = styled.div`
   width: 707px;
@@ -266,20 +267,37 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
           </div>
         </div>
       </PostBlock>
-      {/* 디테일 포스트 컴포넌트임 => DetailPost 컴포넌트 */}
-      {detailPost ? (
-        <DetailPost
-          detailPost={detailPost}
-          setDetailPost={setDetailPost}
-          createdAt={createdAt}
-          content={content}
-          nickname={nickname}
-          img={img}
-          liked={liked}
-          like={like}
-          clickLike={clickLike}
-        />
-      ) : null}
+
+      {/* 디테일 포스트 컴포넌트임 => BigDetailPost, DetailPost 컴포넌트 */}
+      {detailPost && (
+        <>
+          {content.length > 308 ? (
+            <BigDetailPost
+              detailPost={detailPost}
+              setDetailPost={setDetailPost}
+              createdAt={createdAt}
+              content={content}
+              nickname={nickname}
+              img={img}
+              liked={liked}
+              like={like}
+              clickLike={clickLike}
+            />
+          ) : (
+            <DetailPost
+              detailPost={detailPost}
+              setDetailPost={setDetailPost}
+              createdAt={createdAt}
+              content={content}
+              nickname={nickname}
+              img={img}
+              liked={liked}
+              like={like}
+              clickLike={clickLike}
+            />
+          )}
+        </>
+      )}
     </>
   );
 };

@@ -272,7 +272,6 @@ const InputSubmit = styled.li`
       display: flex;
       justify-content: center;
       align-items: center;
-      transform: translateX(-5px);
       border-radius: 7px;
       transform: translateX(10px);
 
@@ -282,13 +281,6 @@ const InputSubmit = styled.li`
       }
     }
   }
-`;
-
-const DarkBg = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
 `;
 
 // 여기에선 해당하는 게시글의 댓글 데이터를 서버한테 받아와야 함.
