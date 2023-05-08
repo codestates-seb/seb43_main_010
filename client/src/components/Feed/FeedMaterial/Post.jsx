@@ -18,7 +18,7 @@ const PostBlock = styled.div`
     .profile-img {
       width: 36px;
       height: 36px;
-      background: ${({ img }) => (img ? `url(${img})` : 'none')};
+      background: ${({ img }) => `no-repeat url(${img})`};
       background-size: 36px 36px;
     }
 
@@ -48,7 +48,7 @@ const PostBlock = styled.div`
     font-size: 15px;
     text-shadow: 0 0 0 var(--dark-blue-900);
     padding: 16px 0 0 0;
-    line-height: 125%;
+    line-height: 21px;
     cursor: pointer;
 
     text-align: start;
@@ -174,8 +174,9 @@ const PostBlock = styled.div`
 const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
-  const [openModal, setOpenModal] = useState(false);
   const [detailPost, setDetailPost] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const clickLike = () => {
     setLiked(!liked);
@@ -215,7 +216,7 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
           {content.length > 670 ? (
             <p className='post-content'>
               {content.slice(0, 670) + '...'}
-              <button className='more'>더 보기</button>
+              <span className='more'>더 보기</span>
             </p>
           ) : (
             <p className='post-content'>{content}</p>
@@ -251,12 +252,34 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
               </div>
             </button>
             {/* 게시글 수정, 삭제 모달 */}
-            {openModal ? <EditDeleteModal openModal={openModal} setOpenModal={setOpenModal} /> : null}
+            {openModal ? (
+              <EditDeleteModal
+                top='100%'
+                right='0'
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                deleteModal={deleteModal}
+                setDeleteModal={setDeleteModal}
+                what='포스트를'
+              />
+            ) : null}
           </div>
         </div>
       </PostBlock>
       {/* 디테일 포스트 컴포넌트임 => DetailPost 컴포넌트 */}
-      {detailPost ? <DetailPost detailPost={detailPost} setDetailPost={setDetailPost} content={content} /> : null}
+      {detailPost ? (
+        <DetailPost
+          detailPost={detailPost}
+          setDetailPost={setDetailPost}
+          createdAt={createdAt}
+          content={content}
+          nickname={nickname}
+          img={img}
+          liked={liked}
+          like={like}
+          clickLike={clickLike}
+        />
+      ) : null}
     </>
   );
 };

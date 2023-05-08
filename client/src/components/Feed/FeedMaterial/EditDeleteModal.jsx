@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -14,8 +14,10 @@ const EditDeleteModalBlock = styled.div`
   align-items: center;
   flex-direction: column;
 
-  top: 100%;
-  right: 0;
+  top: ${({ top }) => (top ? top : null)};
+  left: ${({ left }) => (left ? left : null)};
+  right: ${({ right }) => (right ? right : null)};
+  transform: ${({ transform }) => (transform ? transform : null)};
 
   button {
     padding: 0 8px 0 8px;
@@ -63,12 +65,13 @@ const DeleteModal = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: ${({ height }) => (height ? `calc(100% + ${height}px)` : ' 100%')};
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
-  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  background-color: ${({ bgColor }) => (bgColor ? bgColor : 'rgba(0, 0, 0, 0.7)')};
+  border-radius: ${({ radius }) => (radius ? radius : null)};
 `;
 
 const ModalBg = styled.div`
@@ -125,9 +128,20 @@ const ModalBg = styled.div`
   }
 `;
 
-const EditDeleteModal = ({ openModal, setOpenModal }) => {
-  const [deleteModal, setDeleteModal] = useState(false);
+function openDeleteModalBg() {
+  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.overflow = 'hidden';
+  document.body.style.paddingRight = `${scrollbarWidth}px`;
+}
 
+function closeDeleteModalBg() {
+  document.body.style.overflow = 'unset';
+  document.body.style.paddingRight = '0px';
+}
+
+// 상위에서 const [openModal, setOpenModal] = useState(false);와
+// const [deleteModal, setDeleteModal] = useState(false);를 써주고, props로 받아와야 함.
+const EditDeleteModal = ({ top, left, right, transform, height, bgColor, radius, openModal, setOpenModal, deleteModal, setDeleteModal, what }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
@@ -148,6 +162,7 @@ const EditDeleteModal = ({ openModal, setOpenModal }) => {
   useEffect(() => {
     const clickOut = (e) => {
       if (deleteModal && deleteRef.current && !deleteRef.current.contains(e.target)) {
+        closeDeleteModalBg();
         setDeleteModal(false);
         setOpenModal(false);
       }
@@ -160,22 +175,30 @@ const EditDeleteModal = ({ openModal, setOpenModal }) => {
 
   const openDeleteModal = () => {
     setDeleteModal(true);
+    openDeleteModalBg();
   };
 
   const clickCancelFn = () => {
+    closeDeleteModalBg();
     setDeleteModal(false);
     setOpenModal(false);
   };
 
   const clickOkFn = () => {
-    // !!!여기에서 서버한테 게시글 삭제하는 거 보내야 함!!!
+    // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
+    if (what === '포스트를') {
+      // 포스트 삭제
+    } else {
+      // 댓글 삭제
+    }
+    closeDeleteModalBg();
     setDeleteModal(false);
     setOpenModal(false);
   };
 
   return (
     <>
-      <EditDeleteModalBlock ref={modalRef} deleteModal={deleteModal}>
+      <EditDeleteModalBlock ref={modalRef} top={top} left={left} right={right} transform={transform} deleteModal={deleteModal}>
         <button className='edit'>
           <div className='pen'>
             <i className='i-pen-icon' />
@@ -189,11 +212,13 @@ const EditDeleteModal = ({ openModal, setOpenModal }) => {
           </div>
         </button>
       </EditDeleteModalBlock>
+
       {/* 포스트 삭제 여부 모달 */}
+
       {deleteModal ? (
-        <DeleteModal>
+        <DeleteModal height={height} bgColor={bgColor} radius={radius}>
           <ModalBg ref={deleteRef}>
-            <div className='ques'>이 포스트를 삭제하시겠습니까?</div>
+            <div className='ques'>{`이 ${what} 삭제하시겠습니까?`}</div>
             <div className='btn-box'>
               <button className='cancel' onClick={clickCancelFn}>
                 취소

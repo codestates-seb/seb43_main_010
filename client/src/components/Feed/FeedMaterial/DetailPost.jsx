@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
 import deleteBtn from '../../../assets/png-file/x-btn.png';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
-import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 
 import Comments from './Comments';
+import EditDeleteModal from './EditDeleteModal';
 
 const DetailPostBlock = styled.div`
   position: fixed;
@@ -16,45 +16,55 @@ const DetailPostBlock = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: ${({ deleteModal }) => (deleteModal ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.7)')};
 `;
 
 const DetailPostBox = styled.div`
   display: flex;
-  transform: translateX(0);
+  transform: translateY(-60px);
+  position: relative;
 
   .delete-btn {
     width: 45px;
-    height: 67px;
+    height: 66px;
     position: absolute;
     top: 8.4%;
     right: -45px;
+    filter: ${({ deleteModal }) => (deleteModal ? 'brightness(0.25)' : 'null')};
   }
 `;
 
 const DetailContent = styled.div`
   width: 768px;
-  min-height: 540px;
+  min-height: 316px;
   max-height: 90vh;
   background-color: var(--white-100);
-  border-radius: 20px;
-  position: relative;
+  border-radius: 20px 20px 0 0;
 
   .detail-post-ul {
-    min-height: 540px;
+    min-height: 340px;
     max-height: 90vh;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    background-color: var(--white-100);
+    border-radius: 20px 20px 0 0;
+  }
+
+  .top-mid-ul {
+    position: relative;
   }
 `;
 
 const AuthorContentBox = styled.li`
   width: 768px;
-  min-height: 143px;
   border-radius: 20px 20px 0 0;
   border-bottom: 1px solid var(--light-gray-150);
   padding: 26px 33px 36px 36px;
+
+  .right-icon-box {
+    position: relative;
+  }
 
   .author {
     display: flex;
@@ -68,7 +78,7 @@ const AuthorContentBox = styled.li`
     .profile-img {
       width: 46px;
       height: 46px;
-      background: no-repeat url('${profileImg}');
+      background: ${({ img }) => `no-repeat url(${img})`};
       background-size: 46px 46px;
       border-radius: 50%;
     }
@@ -118,7 +128,7 @@ const AuthorContentBox = styled.li`
     color: var(--dark-blue-900);
     font-size: 15px;
     text-shadow: 0 0 0 var(--dark-blue-900);
-    line-height: 125%;
+    line-height: 21px;
   }
 `;
 
@@ -131,12 +141,18 @@ const ConmmentsNum = styled.li`
 
 const InputSubmit = styled.li`
   width: 768px;
-  height: 135px;
+  height: 134.6px;
   background-color: var(--white-100);
   border-radius: 0 0 20px 20px;
   border-top: 1px solid var(--light-gray-150);
   bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding-bottom: 30px;
 
+  position: absolute;
+  transform: translateY(98%);
   .input-box {
     padding: 15px 20px 0 20px;
 
@@ -175,7 +191,7 @@ const InputSubmit = styled.li`
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: ${({ comment }) => (comment ? 'linear-gradient( -45deg, #1CBEC8, #FFCE4F )' : 'var(--light-gray-200)')};
+      background: ${({ comment }) => (comment ? 'linear-gradient( -35deg, #1CBEC8, #FFCE4F ) ' : 'var(--light-gray-200)')};
       display: flex;
       justify-content: center;
       align-items: center;
@@ -195,6 +211,31 @@ const InputSubmit = styled.li`
     justify-content: start;
     align-items: center;
     padding: 15px 0 0 30px;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .success-msg {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 160px;
+      height: 27px;
+      border-radius: 35px;
+      color: var(--white-100);
+      font-size: 13.5px;
+      font-weight: 600;
+      background: linear-gradient(-45deg, #1cbec8, #ffc022);
+      transform: translateX(16px);
+      animation: fadeIn 0.3s ease-out forwards;
+    }
 
     .num {
       color: var(--gray-900);
@@ -243,16 +284,24 @@ const InputSubmit = styled.li`
   }
 `;
 
+const DarkBg = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+`;
+
 // 여기에선 해당하는 게시글의 댓글 데이터를 서버한테 받아와야 함.
-const DetailPost = ({ detailPost, setDetailPost, content, likeNum = 0 }) => {
+const DetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname, img, liked, like, clickLike }) => {
   const [comment, setComment] = useState('');
-  const [liked, setLiked] = useState(false); // 좋아요 여부
-  const [like, setLike] = useState(likeNum);
+  const [openModal, setOpenModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [clipboard, setClipboard] = useState(false);
   const detailPostRef = useRef(null);
 
   useEffect(() => {
     const outDetailPost = (e) => {
-      if (detailPost && detailPostRef.current && !detailPostRef.current.contains(e.target)) {
+      if (detailPost && detailPostRef.current && !openModal && !detailPostRef.current.contains(e.target)) {
         setDetailPost(false);
       }
     };
@@ -261,24 +310,30 @@ const DetailPost = ({ detailPost, setDetailPost, content, likeNum = 0 }) => {
     return () => {
       document.removeEventListener('mousedown', outDetailPost);
     };
-  }, [detailPost]);
+  }, [detailPost, openModal]);
 
   const closeDetailPost = () => {
     setDetailPost(false);
   };
 
-  const clickLike = () => {
-    setLiked(!liked);
-    if (!liked) {
-      setLike(like + 1);
-    } else {
-      setLike(like - 1);
-    }
-    // 서버한테 바뀐 좋아요 데이터 전송 해야함
+  const clickMiniMenu = () => {
+    setOpenModal(!openModal);
   };
 
   const changeComment = (e) => {
     setComment(e.target.value);
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setClipboard(true);
+        setTimeout(() => {
+          setClipboard(false);
+        }, 2500);
+      })
+      .catch(() => alert('복사에 실패했습니다.'));
   };
 
   const submitComment = () => {
@@ -286,23 +341,41 @@ const DetailPost = ({ detailPost, setDetailPost, content, likeNum = 0 }) => {
   };
 
   return (
-    <DetailPostBlock>
-      <DetailPostBox ref={detailPostRef}>
+    <DetailPostBlock className='detailPost' deleteModal={deleteModal}>
+      <DetailPostBox ref={detailPostRef} deleteModal={deleteModal}>
         <DetailContent>
           <ul className='detail-post-ul'>
-            <ul>
-              <AuthorContentBox>
+            <ul className='top-mid-ul'>
+              <AuthorContentBox img={img}>
                 <div className='author'>
                   <div className='author-img-txt'>
                     <div className='profile-img'></div>
                     <div className='user-txt'>
-                      <span className='nickname'>유저 닉네임</span>
-                      <span className='time'>05. 01. 10:22</span>
+                      <span className='nickname'>{nickname}</span>
+                      <span className='time'>{createdAt}</span>
                     </div>
                   </div>
-                  <button className='mini-menu'>
-                    <i className='i-three-point-menu-icon' />
-                  </button>
+                  <div className='right-icon-box'>
+                    <button onClick={clickMiniMenu} className='mini-menu'>
+                      <i className='i-three-point-menu-icon' />
+                    </button>
+                    {/* 게시글 수정, 삭제 모달 */}
+                    {openModal ? (
+                      <EditDeleteModal
+                        top='100%'
+                        right='0%'
+                        transform='translateY(-28%)'
+                        bgColor='rgba(0, 0, 0, 0.75)'
+                        height='132'
+                        radius='18px 18px 19.5px 19.5px'
+                        openModal={openModal}
+                        setOpenModal={setOpenModal}
+                        deleteModal={deleteModal}
+                        setDeleteModal={setDeleteModal}
+                        what='포스트를'
+                      />
+                    ) : null}
+                  </div>
                 </div>
                 <div className='content'>
                   <p>{content}</p>
@@ -314,7 +387,7 @@ const DetailPost = ({ detailPost, setDetailPost, content, likeNum = 0 }) => {
               </ConmmentsNum>
 
               {/* 여기서 댓글 데이터 map 돌려야 함 => Comments 댓글 컴포넌트 */}
-              <Comments />
+              <Comments deleteModal={deleteModal} setDeleteModal={setDeleteModal} />
             </ul>
 
             <InputSubmit comment={comment.trim().length > 0}>
@@ -345,13 +418,15 @@ const DetailPost = ({ detailPost, setDetailPost, content, likeNum = 0 }) => {
                   )}
                 </button>
                 {like === 0 ? null : <span className='num'>{like}</span>}
-                <button className='share'>
+                <button onClick={() => copyToClipboard(window.location.href)} className='share'>
                   <i className='i-share-icon' />
                 </button>
+                {clipboard ? <div className='success-msg'>주소가 복사되었습니다.</div> : null}
               </div>
             </InputSubmit>
           </ul>
         </DetailContent>
+
         <button onClick={closeDetailPost} className='delete-btn'>
           <img src={deleteBtn} alt='delete-button' />
         </button>
