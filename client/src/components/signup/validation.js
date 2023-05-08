@@ -1,5 +1,5 @@
 const emailValidation = (str) => {
-  const regexEmail = /^[\w]+@([\w]+\.)+[\w]{2,4}$/;
+  const regexEmail = /^[\w]+@([\w]+\.)+[a-z]{2,4}$/;
   if (!regexEmail.test(str)) {
     return [false, '유효한 이메일을 입력해주세요.'];
   }
