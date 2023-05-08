@@ -179,7 +179,7 @@ const AuthorContentBox = styled.li`
     width: 37px;
     height: 37px;
     font-size: 16px;
-    transform: translateX(17px);
+    transform: translateX(13.5px);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -356,7 +356,7 @@ const BigDetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname
                     {openModal ? (
                       <EditDeleteModal
                         // top='100%'
-                        right='0%'
+                        right='7%'
                         bgColor='rgba(0, 0, 0, 0.75)'
                         openModal={openModal}
                         setOpenModal={setOpenModal}
