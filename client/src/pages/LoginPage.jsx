@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Login from '../components/login/Login';
+import Login from '../components/Login/Login';
 
 const ViewBox = styled.div`
   height: 100vh;

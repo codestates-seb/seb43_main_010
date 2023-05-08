@@ -31,19 +31,19 @@ const LoginPageBox = styled.div`
   flex-direction: column;
   @media screen and (min-width: 768px) {
     width: 494px;
-    height: 721px;
+    height: 756px;
     margin: 0 auto;
     border: 1px solid var(--light-gray-100);
     border-radius: 1rem;
   }
   @media screen and (min-width: 600px) and (max-width: 767px) {
     width: 100%;
-    min-height: 723px;
+    min-height: 758px;
     max-height: 834px;
   }
   @media screen and (max-width: 599px) {
     min-width: 260px;
-    min-height: 723px;
+    min-height: 758px;
     max-height: 834px;
   }
 `;

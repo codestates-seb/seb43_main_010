@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Signup from '../components/signup/Signup';
+import Signup from '../components/Signup/Signup';
 
 const ViewBox = styled.div`
   height: 100vh;

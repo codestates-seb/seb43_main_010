@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 import kakaoLogo from '../../../assets/png-file/kakaoLogo.png';
 import { useNavigate } from 'react-router-dom';
+import { useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { emailValidation, pwdValidation } from '../../Signup/validation';
+import { setToken } from '../../../reducer/authSlice';
+import axios from 'axios';
+import tempAuth from './tempAuth.js';
+import { setRefreshToken, getCookie } from './setCookie';
 //div : h1 form div(btn)
 const LoginFormBox = styled.div`
   /* min-height: 178px; */
@@ -16,18 +23,17 @@ const Title = styled.h1`
   font-weight: 700;
   line-height: 36.4px;
   color: rgb(32, 36, 41);
-  /* height: 73px; */
   margin-bottom: 20px;
-  //로고 이미지
+  cursor: default;
 `;
 
 //Inputform Box
 const InputBox = styled.div`
-  /* height: 170px; */
+  height: 200px;
   font-weight: 500;
   hr {
     border: none;
-    margin: 10px 0;
+    margin: 10px 0 10px;
   }
   @media screen and (min-width: 768px) {
     width: 395px;
@@ -69,6 +75,11 @@ const HrTag = styled.hr`
     background: linear-gradient(90deg, #95c788, #1cbec8);
     transition: all 0.3s linear 0s;
   }
+`;
+const ValidDesc = styled.p`
+  margin: 10px 0 10px;
+  font-size: 11px;
+  color: rgb(253, 91, 21);
 `;
 
 //submtBtn Box
@@ -146,7 +157,7 @@ const SignupBtn = styled.button`
 const CustomLink = styled.div`
   display: flex;
   justify-content: center;
-  .forgot-pwd {
+  .forgot-password {
     height: 20px;
     font-size: 14px;
     font-weight: 500;
@@ -168,9 +179,56 @@ const KakaoBtn = styled.div`
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  const onClickSignup = () => navigate('/signup');
-  // const onClickLogin = () => navigate('/'); 이건 데이터 받아오면서 처리
+  const onClickSignup = () => {
+    onReset();
+    navigate('/signup');
+  };
+  const onClickLogin = async (e) => {
+    e.preventDefault();
+    let body = { ...inputs };
+    // await axios
+    //   .post('http://localhost:4000/login', body)
+    //   .then(() => {
+    //     //여기서 토큰을 받아서 쿠키 설정 해주기
+    //     let token = '1234567';
+    //     console.log('성공');
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    //잠시 서버 axios 역할을 한다고 가정하자.
+    let res = tempAuth(body.email, body.password);
+    // 리프레시 토큰을 쿠키에 저장
+    setRefreshToken(res.refreshToken);
+    // 엑세스 토큰을 store에 저장
+    dispatch(setToken(res.accessToken));
+    onReset();
+    // navigate('/');
+  };
+
+  const [inputs, setInputs] = useState({
+    email: '',
+    password: '',
+  });
+  const { email, password } = inputs;
+
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  const onReset = () => {
+    setInputs({
+      email: '',
+      password: '',
+    });
+  };
 
   return (
     <>
@@ -184,21 +242,29 @@ const LoginForm = () => {
           <InputBox>
             <label htmlFor='email'>이메일</label>
             <div className='input-box'>
-              <input type='email' id='email' name='email' placeholder='your@email.com'></input>
-              <HrTag className='hrtag' />
+              <input type='email' id='email' name='email' onChange={onChange} value={email} placeholder='your@email.com'></input>
             </div>
-            <hr></hr>
-            <label htmlFor='pwd'>비밀번호</label>
+            <HrTag className='hrtag' />
+            {emailValidation(email)[0] ? <hr /> : <ValidDesc>{emailValidation(email)[1]}</ValidDesc>}
+            <label htmlFor='password'>비밀번호</label>
             <div className='input-box'>
-              <input type='password' id='pwd' name='pwd' placeholder='영문+숫자+특수문자 최소 8자리'></input>
+              <input
+                type='password'
+                id='password'
+                name='password'
+                onChange={onChange}
+                value={password}
+                placeholder='영문+숫자+특수문자 최소 8자리'
+              ></input>
               <HrTag className='hrtag' />
             </div>
+            {pwdValidation(password)[0] ? <hr></hr> : <ValidDesc>{pwdValidation(password)[1]}</ValidDesc>}
           </InputBox>
         </form>
         <BtnBox>
-          <LoginBtn>로그인</LoginBtn>
+          <LoginBtn onClick={onClickLogin}>로그인</LoginBtn>
           <CustomLink>
-            <span className='forgot-pwd'>비밀번호를 잊어버리셨나요?</span>
+            <span className='forgot-password'>비밀번호를 잊어버리셨나요?</span>
           </CustomLink>
           <SignupBtn onClick={onClickSignup}>회원가입</SignupBtn>
           <div className='or-tag'>혹은</div>
