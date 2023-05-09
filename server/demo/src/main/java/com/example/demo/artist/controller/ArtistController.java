@@ -29,7 +29,6 @@ public class ArtistController {
         this.artistService = artistService;
         this.mapper = mapper;
     }
-
     @PostMapping("/signup/artist")
     public ResponseEntity postArtist(@Valid @RequestBody ArtistPostDto artistDto) {
         Artist artist = mapper.artistPostDtoToUser(artistDto);
