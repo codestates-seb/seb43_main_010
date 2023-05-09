@@ -11,7 +11,7 @@ public class feedPostDto {
     @Setter
     public static class Post{
         @NotNull
-        private int userId;
+        private int fansId;
 
         @NotNull
         private String content;
@@ -19,8 +19,8 @@ public class feedPostDto {
         @NotNull
         private String img;
 
-        public Post(int userId, String content, String img) {
-            this.userId = userId;
+        public Post(int fansId, String content, String img) {
+            this.fansId = fansId;
             this.content = content;
             this.img = img;
         }
@@ -30,14 +30,16 @@ public class feedPostDto {
     @Setter
     public static class Patch{
         @NotNull
-        private int userId;
-        private String Content;
+        private int fansId;
+        private String content;
         private String img;
+        private int feedPostId;
 
-        public Patch(int userId, String content, String img) {
-            this.userId = userId;
-            Content = content;
+        public Patch(int fansId, String content, String img, int feedPostId) {
+            this.fansId = fansId;
+            this.content = content;
             this.img = img;
+            this.feedPostId = feedPostId;
         }
     }
 }

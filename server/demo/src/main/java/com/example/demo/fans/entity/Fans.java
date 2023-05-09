@@ -18,7 +18,7 @@ public class Fans extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private Integer id;
 
 
     @Column(nullable = false, updatable = false,unique = true,columnDefinition = "VARCHAR(30)")

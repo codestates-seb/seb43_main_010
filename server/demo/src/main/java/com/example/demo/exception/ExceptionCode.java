@@ -7,14 +7,16 @@ public enum ExceptionCode {
     FANS_EXISTS(409, "Fans exists"),
     ARTIST_NOT_FOUND(404, "Artist not found"),
     ARTIST_EXISTS(409, "Artist exists"),
-    QUESTION_NOT_FOUND(404, "Question not found"),
-    QUESTION_EXISTS(409, "Question exists"),
-    ANSWER_NOT_FOUND(404, "Answer not found"),
-    ANSWER_EXISTS(409, "Answer exists"),
-    ACCESS_DENIED_USER(403,"Access Denied Fans"),
-    CANNOT_CHANGE_ORDER(403, "Order can not change"),
-    NOT_IMPLEMENTATION(501, "Not Implementation"),
-    INVALID_MEMBER_STATUS(400, "Invalid member status");  // TO 추가된 부분
+    FEEDPOST_NOT_FOUND(404, "feedpost not found"),
+    FEEDPOST_AUTHOR_NOT_MATCH(404, "The author of the feedpost does not match"),
+    FEEDPOST_EXISTS(409, "feedpost exists"),
+    COMMENT_NOT_FOUND(404,"comment not found"),
+    COMMENT_EXISTS(409, "comment exists"),
+    COMMENT_AUTHOR_NOT_MATCH(404, "The author of the comment does not match");
+//    ACCESS_DENIED_USER(403,"Access Denied Fans"),
+//    CANNOT_CHANGE_ORDER(403, "Order can not change"),
+//    NOT_IMPLEMENTATION(501, "Not Implementation"),
+//    INVALID_MEMBER_STATUS(400, "Invalid member status");  // TO 추가된 부분
 
     @Getter
     private int status;

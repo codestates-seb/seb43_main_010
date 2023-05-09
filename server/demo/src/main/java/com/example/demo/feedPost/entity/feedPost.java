@@ -1,16 +1,32 @@
 package com.example.demo.feedPost.entity;
 
+import com.example.demo.common.global.BaseTimeEntity;
+import com.example.demo.fans.entity.Fans;
+import com.example.demo.like.entity.Like;
+import com.example.demo.comment.entity.Comment;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class feedPost {
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
+@Entity
+public class feedPost extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int feedId;
+    private Integer Id;
     @Column(length = 100, nullable = false)
     private String content;
     private String img;
@@ -22,19 +38,37 @@ public class feedPost {
     @Column(name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
-    /*
-    user 받아와야 사용 가능 (FK)
     @ManyToOne
-    @JoinColume(name = "USER_ID")
-    private User user;
-     */
+    @JoinColumn(name = "FAN_ID")
+    private Fans fans;
 
-    /*
-    like, comment 매핑 전
 
-    private feedLike feedLike;
+    private Like Like;
 
-    private int feedComment feedComment;
+    @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 
-     */
+    @ColumnDefault("0")
+    @Column(name = "like_count", nullable = false)
+    private Integer likeCount;
+
+    public feedPost(String content, String img, Fans fans) {
+        this.content = content;
+        this.img = img;
+        this.fans = fans;
+    }
+
+//    @Builder
+//    public feedPost(Integer id, String content, String img, LocalDateTime createdAt, LocalDateTime modifiedAt,
+//                    Fans fans, com.example.demo.like.entity.Like like, List<Comment> comments, Integer likeCount) {
+//        this.id = id;
+//        this.content = content;
+//        this.img = img;
+//        this.createdAt = createdAt;
+//        this.modifiedAt = modifiedAt;
+//        this.fans = fans;
+//        this.like = like;
+//        this.comments = comments;
+//        this.likeCount = likeCount;
+//    }
 }
