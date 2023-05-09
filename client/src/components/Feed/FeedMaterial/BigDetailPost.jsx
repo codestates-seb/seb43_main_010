@@ -355,7 +355,6 @@ const BigDetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname
                     {/* 게시글 수정, 삭제 모달 */}
                     {openModal ? (
                       <EditDeleteModal
-                        // top='100%'
                         right='7%'
                         bgColor='rgba(0, 0, 0, 0.75)'
                         openModal={openModal}
