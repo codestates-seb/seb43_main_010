@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import btsImg from '../../../assets/jpg-file/bts-img.jpg';
+import btsImg from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
 
 import MiniFoot from '../../Foot/MiniFoot';
 
