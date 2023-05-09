@@ -11,5 +11,10 @@
         <module name="demo.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="example" target="11" />
+      <module name="example.main" target="11" />
+      <module name="example.test" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
