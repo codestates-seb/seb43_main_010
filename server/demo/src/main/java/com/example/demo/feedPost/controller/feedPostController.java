@@ -20,7 +20,7 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping("/feed")
+@RequestMapping("/feeds")
 public class feedPostController {
     private feedPostMapper mapper;
     private FansRepository fansRepository;
@@ -34,7 +34,7 @@ public class feedPostController {
         this.feedPostRepository = feedPostRepository;
     }
 
-    @PostMapping
+    @PostMapping("/ask")
     public ResponseEntity postFeedPost(@Valid @RequestBody feedPostDto.Post requestBody){
         Fans fans = fansRepository.findById(requestBody.getFansId())
                     .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
@@ -53,8 +53,20 @@ public class feedPostController {
 //                        HttpStatus.OK);
 //    }
 
-    @GetMapping("/{group_id}") // 무한 스크롤
-    public ResponseEntity<List<feedPost>> getItems(@RequestParam(value = "lastId", required = false) Long lastId) {
+    // feed 상세 조회
+    @GetMapping("{feed-id}")
+    public ResponseEntity getFeed(
+            @PathVariable("feed-id") @Positive int feedPostId){
+        feedPost feedPost = service.findFeedPost(feedPostId);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.feedToFeedResponseDto(feedPost)),
+                HttpStatus.OK);
+    }
+
+
+    // feed 리스트 조회(무한 스크롤)
+    @GetMapping("/{group_id}")
+    public ResponseEntity<List<feedPost>> getFeeds(@RequestParam(value = "lastId", required = false) Long lastId) {
         int pageSize = 10; // 한 페이지에 보여줄 데이터의 양
         List<feedPost> feedPosts;
         if (lastId == null) {
@@ -67,20 +79,20 @@ public class feedPostController {
 
 
 
-
-    @PatchMapping("/{feed_id}")
-    public ResponseEntity pathchFeedPost(@PathVariable("feed_id") @Positive int feedPostId,
-                                        @Valid @RequestBody feedPostDto.Patch requestBody) {
-        requestBody.setFeedPostId(feedPostId);
-        Fans fans = fansRepository.findById(requestBody.getFansId())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-        feedPost feedPost = mapper.feedPatchDtoToFeed(requestBody, fans);
-        feedPost updateFeedPost = service.updateFeedPost(feedPost);
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.feedToFeedResponseDto(updateFeedPost)),
-                HttpStatus.OK);
-    }
+//    // feed 리스트 조회(무한 스크롤)
+//    @PatchMapping("/{feed_id}")
+//    public ResponseEntity pathchFeedPost(@PathVariable("feed_id") @Positive int feedPostId,
+//                                        @Valid @RequestBody feedPostDto.Patch requestBody) {
+//        requestBody.setFeedPostId(feedPostId);
+//        Fans fans = fansRepository.findById(requestBody.getFansId())
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+//        feedPost feedPost = mapper.feedPatchDtoToFeed(requestBody, fans);
+//        feedPost updateFeedPost = service.updateFeedPost(feedPost);
+//
+//        return new ResponseEntity<>(
+//                new SingleResponseDto<>(mapper.feedToFeedResponseDto(updateFeedPost)),
+//                HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{feed_id}")
     public ResponseEntity deleteFeedPost(@PathVariable("feed_id") @Positive int feedPostId) {

@@ -27,7 +27,7 @@ public class feedPost extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
-    @Column(length = 100, nullable = false)
+    @Column(length = 16000, nullable = false)
     private String content;
     private String img;
     @CreatedDate

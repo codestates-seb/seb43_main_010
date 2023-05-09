@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class feedPostResponseDto {
-    private FansResponseDto fansResponseDto;
-    private int feedId;
+    private FansResponseDto fans;
+    private int feedPostId;
     private String content;
     private String img;
     private LocalDateTime createdAt;
