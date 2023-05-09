@@ -22,11 +22,13 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Entity
+@Table(name = "feedPost")
 public class FeedPost extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    @Column(name = "feedPost_id")
+    private Integer id;
     @Column(length = 16000, nullable = false)
     private String content;
     private String img;
@@ -35,15 +37,16 @@ public class FeedPost extends BaseTimeEntity {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @LastModifiedDate // 자동으로 업데이트
-    @Column(name = "LAST_MODIFIED_AT")
+    @Column(name = "last_modified_at")
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "FAN_ID")
+    @JoinColumn(name = "fan_id")
     private Fans fans;
 
 
-    private Like Like;
+//    @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
+//    private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
