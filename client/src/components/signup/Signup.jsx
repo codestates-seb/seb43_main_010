@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import SignupLogo from '../Login/LoginMeterial/LoginLogo';
-import SignupForm from './SignupMeterial/SignupForm';
+import SignupLogo from '../Login/LoginMaterial/LoginLogo';
+import SignupForm from './SignupMaterial/SignupForm';
 import Footer from '../Login/Footer';
 
 //브라우저 뷰를 담당하는 뷰 박스컨트롤 (로그인 페이지 박스 + 푸터를 담기위함)

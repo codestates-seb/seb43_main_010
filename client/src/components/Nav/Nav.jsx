@@ -38,7 +38,7 @@ const Button = styled.button`
   }
 `;
 
-const Nav = () => {
+const Nav = ({ navMenu }) => {
   const [selected, setSelected] = useState('feed');
 
   const clickFeed = () => {
