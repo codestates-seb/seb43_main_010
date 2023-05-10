@@ -39,7 +39,6 @@ const Button = styled.button`
   }
 `;
 
-const Nav = ({ navMenu }) => {
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
