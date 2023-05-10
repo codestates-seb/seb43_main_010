@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import kakaoLogo from '../../../assets/png-file/kakaoLogo.png';
 import { useNavigate } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { emailValidation, pwdValidation } from '../../Signup/validation';
 import { setToken } from '../../../reducer/authSlice';
@@ -183,12 +183,22 @@ const LoginForm = () => {
   const dispatch = useDispatch();
 
   const onClickSignup = () => {
+    console.log(token.authenticated);
+    if (token.authenticated) {
+      alert('이미 로그인 되어있습니다.');
+      navigate('/feed');
+    }
     onReset();
     navigate('/signup');
   };
   const onClickLogin = async (e) => {
     e.preventDefault();
     let body = { ...inputs };
+    if (emailValidation(body.email)[0] === false || pwdValidation(body.password)[0] === false) {
+      alert('정확한 정보를 입력해주세요!');
+      return;
+    }
+
     // await axios
     //   .post('http://localhost:4000/login', body)
     //   .then(() => {
@@ -205,8 +215,14 @@ const LoginForm = () => {
     setRefreshToken(res.refreshToken);
     // 엑세스 토큰을 store에 저장
     dispatch(setToken(res.accessToken));
+    //여기서 바로 accessToken 찍으면 null나옴
+    // dispatch도 useState처럼 비동기적으로 실행?
+    // 그래서 dispatch전에 console.log가 먼저 실행되나?
+    //그럼 어떻게 해야할까?
+    console.log(token.accessToken);
+
     onReset();
-    // navigate('/');
+    navigate('/');
   };
 
   const [inputs, setInputs] = useState({
