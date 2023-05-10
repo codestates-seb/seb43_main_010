@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import BigImgBox from './MainMaterial/BigImgBox';
 import fillMoon from '../../assets/png-file/fill-moon-icon.png';
 import moon from '../../assets/png-file/moon-icon.png';
+import { Link } from 'react-router-dom';
 
 // 임시 데이터
 import data from './data';
@@ -117,6 +118,10 @@ const NewArtistCards = styled.div`
   }
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const Main = () => {
   const filteredData = data.allGroup.filter((group) => {
     return !data.myGroup.some((myGroup) => myGroup.groupId === group.groupId);
@@ -142,7 +147,9 @@ const Main = () => {
               <CardBlock className='card-block'>
                 {/* 여기서 My artist가 있으면 map 돌려야 함 => Card 컴포넌트*/}
                 {data.myGroup.map((el) => (
-                  <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
+                  <Link to={`/feed/${el.groupId}`} key={el.groupId}>
+                    <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
+                  </Link>
                 ))}
               </CardBlock>
             </MyArtistCards>
@@ -161,7 +168,9 @@ const Main = () => {
             <CardBlock className='card-block'>
               {/* 여기서 artist들을 map 돌려야 함 => Card 컴포넌트 */}
               {filteredData.map((el) => (
-                <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
+                <StyledLink to={`/join/${el.groupId}`} key={el.groupId}>
+                  <Card groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
+                </StyledLink>
               ))}
             </CardBlock>
           </NewArtistCards>
