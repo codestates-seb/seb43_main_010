@@ -30,6 +30,7 @@ const StyledCard = styled.li`
   .name-box {
     width: 208px;
     height: 59px;
+    color: var(--dark-blue-900);
     font-size: 18.5px;
     font-weight: 900;
 

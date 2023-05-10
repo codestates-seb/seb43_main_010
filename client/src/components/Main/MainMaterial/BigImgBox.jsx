@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import bigImg from '../../../assets/png-file/big-img.png';
+import bigImg from '../../../assets/gif-file/big-img.gif';
 
 const BigImgBoxBlock = styled.div`
   width: 100%;
@@ -11,7 +11,8 @@ const BigImgBoxBlock = styled.div`
   align-items: center;
 
   img {
-    width: 573px;
+    max-width: 620px;
+    margin-left: 15px;
   }
 `;
 

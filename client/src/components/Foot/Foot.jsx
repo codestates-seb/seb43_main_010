@@ -3,7 +3,6 @@ import styled from 'styled-components';
 const FootBlock = styled.footer`
   height: 141px;
   border-top: 1px solid var(--light-gray-200);
-  background-color: var(--light-gray-100);
 
   display: flex;
   justify-content: center;

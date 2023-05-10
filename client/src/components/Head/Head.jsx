@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import logo from '../../assets/svg-file/white-logo.svg';
+import { Link } from 'react-router-dom';
+
 import RightIcon from './HeadMaterial/RightIcon';
 
 const HeadBlock = styled.header`
@@ -25,7 +27,8 @@ const LeftBox = styled.div`
     cursor: pointer;
   }
 
-  /* .artist-box {
+  // 로그인했을 때만 보이는 곳. 주석 처리할 예정
+  .artist-box {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,16 +45,18 @@ const LeftBox = styled.div`
   .i-down-icon {
     margin: 0 0 0 10px;
     font-size: 8px;
-  } */
+  }
 `;
 
 const Head = () => {
   return (
     <HeadBlock>
       <LeftBox>
-        <div className='logo'>
-          <img src={logo} alt='logo' />
-        </div>
+        <Link to='/'>
+          <div className='logo'>
+            <img src={logo} alt='logo' />
+          </div>
+        </Link>
 
         {/* <div className="artist-box">
           <span className="artist-name">BTS</span>
