@@ -2,7 +2,6 @@ package example.domain.artistPost.entity;
 
 import example.domain.artist.entity.Artist;
 import example.domain.comment.entity.Comment;
-import example.domain.fans.entity.Fans;
 import example.global.common.global.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,8 +47,8 @@ public class ArtistPost extends BaseTimeEntity{
 
 
 
-        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
-        private List<Comment> comments = new ArrayList<>();
+        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE) // 엔티티가 삭제 될 때 함께 삭제
+        private List<Comment> comments = new ArrayList<>(); // null일 경우도 사용 가능
 
         @ColumnDefault("0")
         @Column(name = "like_count", nullable = false)
@@ -59,5 +58,10 @@ public class ArtistPost extends BaseTimeEntity{
             this.content = content;
             this.img = img;
             this.artist = artist;
+        }
+
+        public void addComment(Comment comment) {
+                comments.add(comment);
+                comment.setArtistPost(this);
         }
 }

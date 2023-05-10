@@ -15,7 +15,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "like")
+@Table(name = "likes")
 public class Like {
 
     @Id
