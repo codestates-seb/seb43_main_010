@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import logo from '../../assets/svg-file/white-logo.svg';
+import { Link } from 'react-router-dom';
+
 import RightIcon from './HeadMaterial/RightIcon';
 
 const HeadBlock = styled.header`
@@ -49,9 +51,11 @@ const Head = () => {
   return (
     <HeadBlock>
       <LeftBox>
-        <div className='logo'>
-          <img src={logo} alt='logo' />
-        </div>
+        <Link to='/'>
+          <div className='logo'>
+            <img src={logo} alt='logo' />
+          </div>
+        </Link>
 
         {/* <div className="artist-box">
           <span className="artist-name">BTS</span>

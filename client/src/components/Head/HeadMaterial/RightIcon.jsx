@@ -68,6 +68,19 @@ const RightIconBlock = styled.div`
         text-shadow: 0 0 0 var(--gray-blue-400);
       }
     }
+    @media screen and (max-width: 800px) {
+      input {
+        width: 200px;
+        transform: translateX(20px);
+        transition: 0.25s linear;
+      }
+    }
+    @media screen and (min-width: 801px) {
+      input {
+        width: 300px;
+        transition: 0.25s linear;
+      }
+    }
   }
 `;
 
@@ -83,6 +96,7 @@ const RightIcon = () => {
       }
     };
     document.addEventListener('mousedown', clickOutInput);
+    if (outInput.current) return outInput.current.focus();
 
     return () => {
       document.addEventListener('mousedown', clickOutInput);

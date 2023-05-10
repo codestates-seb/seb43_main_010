@@ -10,6 +10,35 @@ import Card from './MainMaterial/Card';
 
 const MainBlock = styled.div`
   padding: 80px 0 212px 0;
+
+  @media screen and (max-width: 965px) {
+    .my-cards,
+    .new-cards,
+    .card-block {
+      width: 430px;
+    }
+  }
+  @media screen and (min-width: 966px) and (max-width: 1187px) {
+    .my-cards,
+    .new-cards,
+    .card-block {
+      width: 652px;
+    }
+  }
+  @media screen and (min-width: 1188px) and (max-width: 1409px) {
+    .my-cards,
+    .new-cards,
+    .card-block {
+      width: 874px;
+    }
+  }
+  @media screen and (min-width: 1410px) {
+    .my-cards,
+    .new-cards,
+    .card-block {
+      width: 1096px;
+    }
+  }
 `;
 
 const MyArtistCardsBlock = styled.div`
@@ -19,8 +48,6 @@ const MyArtistCardsBlock = styled.div`
 `;
 
 const MyArtistCards = styled.div`
-  // min-width: 430px; // 보니까 나중에 미디어 쿼리로 조절해야 할듯
-  // max-width: 1096px;
   width: 1096px;
   height: auto;
   margin-top: 67px;
@@ -49,7 +76,6 @@ const MyArtistCards = styled.div`
 `;
 
 const CardBlock = styled.ul`
-  // min-width: 430px; // 나중에 미디어 쿼리로 조절해야 할듯
   width: 1096px;
   height: auto;
   display: flex;
@@ -64,7 +90,6 @@ const NewArtistCardsBlock = styled.div`
 `;
 
 const NewArtistCards = styled.div`
-  // min-width: 430px; // 나중에 미디어 쿼리로 조절해야 할듯
   width: 1096px;
   height: auto;
   margin-top: 67px;
@@ -104,26 +129,28 @@ const Main = () => {
         <BigImgBox />
 
         {/* My artist가 없으면 안보이게 처리해야 함 */}
-        <MyArtistCardsBlock>
-          <MyArtistCards>
-            <div className='my-artist'>
-              <div className='fill-moon'>
-                <img src={fillMoon} alt='fill-moon' />
+        {data.myGroup.length === 0 ? null : (
+          <MyArtistCardsBlock>
+            <MyArtistCards className='my-cards'>
+              <div className='my-artist'>
+                <div className='fill-moon'>
+                  <img src={fillMoon} alt='fill-moon' />
+                </div>
+                <span className='my-artist-txt'>My artist</span>
               </div>
-              <span className='my-artist-txt'>My artist</span>
-            </div>
 
-            <CardBlock>
-              {/* 여기서 My artist가 있으면 map 돌려야 함 => Card 컴포넌트*/}
-              {data.myGroup.map((el) => (
-                <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
-              ))}
-            </CardBlock>
-          </MyArtistCards>
-        </MyArtistCardsBlock>
+              <CardBlock className='card-block'>
+                {/* 여기서 My artist가 있으면 map 돌려야 함 => Card 컴포넌트*/}
+                {data.myGroup.map((el) => (
+                  <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
+                ))}
+              </CardBlock>
+            </MyArtistCards>
+          </MyArtistCardsBlock>
+        )}
 
         <NewArtistCardsBlock>
-          <NewArtistCards>
+          <NewArtistCards className='new-cards'>
             <div className='new-artist'>
               <div className='moon'>
                 <img src={moon} alt='fill-moon' />
@@ -131,7 +158,7 @@ const Main = () => {
               <span className='new-artist-txt'>Find a new artist!</span>
             </div>
 
-            <CardBlock>
+            <CardBlock className='card-block'>
               {/* 여기서 artist들을 map 돌려야 함 => Card 컴포넌트 */}
               {filteredData.map((el) => (
                 <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
