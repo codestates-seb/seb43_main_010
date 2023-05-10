@@ -1,5 +1,6 @@
 package example.global.config;
 
+import example.domain.artist.repository.ArtistRepository;
 import example.global.config.jwt.JwtAuthenticationFilter;
 import example.global.config.jwt.JwtAuthorizationFilter;
 import example.domain.fans.repository.FansRepository;
@@ -20,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig{
     @Autowired
     private FansRepository fansRepository;
+    private ArtistRepository artistRepository;
     @Autowired
     private CorsConfig corsConfig;
 
@@ -40,8 +42,7 @@ public class SecurityConfig{
                 .apply(new MyCustomDsl())
                 .and()
                 .authorizeRequests(authroize -> authroize.antMatchers("/**")
-                        .access("hasRole('FANS')")
-                        .anyRequest().permitAll())
+                        .permitAll())
                 .build();
 
 
@@ -53,7 +54,7 @@ public class SecurityConfig{
             http
                     .addFilter(corsConfig.corsFilter())
                     .addFilter(new JwtAuthenticationFilter(authenticationManager))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, fansRepository));
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager, fansRepository, artistRepository));
         }
     }
 }

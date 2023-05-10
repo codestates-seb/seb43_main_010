@@ -22,7 +22,7 @@ public class Artist extends BaseEntity {
     @Column(nullable = false, updatable = false,unique = true,columnDefinition = "VARCHAR(30)")
     private String email;
 
-    @Column(nullable = false,columnDefinition = "VARCHAR(15)")
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false,columnDefinition = "VARCHAR(20)")
@@ -31,13 +31,13 @@ public class Artist extends BaseEntity {
     @Column(nullable = false,columnDefinition = "VARCHAR(20)")
     private String nickname;
 
-    @Column(nullable = true)
+    @Column
     private String profile = "https://mblogthumb-phinf.pstatic.net/MjAyMDA2MTBfMTY1/MDAxNTkxNzQ2ODcyOTI2.Yw5WjjU3IuItPtqbegrIBJr3TSDMd_OPhQ2Nw-0-0ksg.8WgVjtB0fy0RCv0XhhUOOWt90Kz_394Zzb6xPjG6I8gg.PNG.lamute/user.png?type=w800";
 
     @Column(name = "\"group\"", nullable = false)
     private String group;
 
-    @Column(nullable = true)
+    @Column
     private String role="ARTIST";
 
 }
