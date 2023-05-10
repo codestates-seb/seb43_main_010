@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import deleteBtn from '../../../assets/png-file/x-btn.png';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 //이미지아이콘 가져오기
 import { CgImage } from 'react-icons/cg';
 // import HideArtist from './WritePostMaterial/HideArtist';
@@ -107,14 +107,6 @@ const BottomBox = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  //현아님! 이미지 추가버튼입니다!
-  .img-btn {
-    background-color: red;
-    width: 38px;
-    height: 38px;
-    transform: translateX(28px);
-  }
-
   .submit-btn {
     width: 55px;
     height: 38px;
@@ -143,6 +135,7 @@ const BottomBox = styled.div`
   }
 `;
 
+// 이미지 버튼
 const ImgIcon = styled(CgImage)`
   width: 32px;
   height: 32px;
@@ -150,13 +143,32 @@ const ImgIcon = styled(CgImage)`
   transform: translateX(28px);
   cursor: pointer;
 `;
-
+//이미지 인풋태그
+const ImgInput = styled.input`
+  /* display: none; */
+`;
+//이미지 미리보기
+const ImgPreview = styled.div`
+  ${(props) =>
+    props.uploadImg === ''
+      ? `display:none;`
+      : `
+          width: 150px;
+          height: 150px;
+          &img {
+            width: 100%;
+            object-fit: cover;
+          }`}
+`;
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
 // 사용하실 때 const [modalOpen, setModalOpen] = useState(false)를 상위에서 사용해 주세요!
 const WriteModalPost = ({ modalOpen, setModalOpen }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
+
+  const imgInput = useRef();
+  const [imgList, setImgList] = useState([]);
 
   const autoResizeTextarea = () => {
     let textarea = document.querySelector('.autoTextarea');
@@ -177,6 +189,58 @@ const WriteModalPost = ({ modalOpen, setModalOpen }) => {
 
   const changeContent = (e) => {
     setContent(e.target.value);
+  };
+
+  //이미지 아이콘 누르면 imgInput에 접근
+  const onClickImgIcon = (e) => {
+    e.preventDefault();
+    imgInput.current.click();
+  };
+
+  //이미지 미리보기위한 함수
+  const handleAddImg = async (e) => {
+    e.preventDefault();
+    const fileArr = e.target.files;
+    const fileURLs = [];
+    let file;
+    let maxFile = 4;
+    let filesLength = fileArr.length > maxFile ? maxFile : fileArr.length;
+    if (fileArr.length > maxFile) {
+      alert(`한번에 업로드 가능한 사진은 최대 ${maxFile}장 까지 입니다.`);
+      return;
+    }
+
+    for (let i = 0; i < filesLength; i++) {
+      file = fileArr[i];
+
+      let reader = new FileReader();
+
+      reader.onload = () => {
+        fileURLs[i] = reader.result;
+        console.log(fileURLs[i]);
+        setImgList([...fileURLs]);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // for (let i = 0; i < imgToAdd.length; i++) {
+    //   temp.push(URL.createObjectURL(imgToAdd[i]));
+    // }
+    // setImgList(temp.concat(imgList));
+
+    // if (imgList.length > 3) {
+    //   imgList = imgList.slice(0, 3);
+    // }
+    // const reader = new FileReader();
+    // const file = imgInput.current.files[0];
+    // if (file) {
+    //   reader.readAsDataURL(file);
+    // }
+
+    // reader.onloadend = () => {
+    //   // dispatch(setArtistProfile(reader.result));
+    // };
+    // e.target.value = '';
   };
 
   const deleteBtnFn = () => {
@@ -206,6 +270,19 @@ const WriteModalPost = ({ modalOpen, setModalOpen }) => {
                 <span className='post-txt'>포스트 쓰기</span>
               </div>
               <form className='post-form'>
+                <ImgInput
+                  className='img-post'
+                  type='file'
+                  multiple='multiple'
+                  name='img-post'
+                  placeholder='이미지업로드'
+                  accept='image/*'
+                  ref={imgInput}
+                  onChange={handleAddImg}
+                ></ImgInput>
+                {/* <ImgPreview uploadImg={uploadImg}>
+                  <img src={uploadImg} alt='preview-img'></img>
+                </ImgPreview> */}
                 <textarea
                   className='autoTextarea'
                   onKeyDown={autoResizeTextarea}
@@ -221,7 +298,7 @@ const WriteModalPost = ({ modalOpen, setModalOpen }) => {
 
               <BottomBox validity={validity} hide={hide}>
                 {/* 현아님! 이미지 추가버튼입니다 */}
-                <ImgIcon />
+                <ImgIcon onClick={onClickImgIcon} />
                 <div className='hide-block'>
                   {/* HideArtist 컴포넌트, 아티스트인지 아닌지 여부에 따라 notArtist에 값을 넣어주는 거로 수정해야 함 */}
                   {/* <HideArtist notArtist='true' setHide={setHide} hide={hide} /> */}
