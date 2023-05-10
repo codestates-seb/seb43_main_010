@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Link, useParams } from 'react-router-dom';
 
 const NavBlock = styled.nav`
   width: 100%;
@@ -39,7 +40,14 @@ const Button = styled.button`
 `;
 
 const Nav = ({ navMenu }) => {
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const Nav = () => {
   const [selected, setSelected] = useState('feed');
+
+  const { groupId } = useParams();
 
   const clickFeed = () => {
     setSelected('feed');
@@ -57,19 +65,27 @@ const Nav = ({ navMenu }) => {
   return (
     <NavBlock>
       <Button selected={selected === 'feed'} onClick={clickFeed}>
-        <span>Feed</span>
+        <StyledLink to={`/feed/${groupId}`}>
+          <span>Feed</span>
+        </StyledLink>
       </Button>
 
       <Button selected={selected === 'artist'} onClick={clickArtist}>
-        <span>Artist</span>
+        <StyledLink to={`/artist/${groupId}`}>
+          <span>Artist</span>
+        </StyledLink>
       </Button>
 
       <Button selected={selected === 'music'} onClick={clickMusic}>
-        <span>Music</span>
+        <StyledLink to={`/music/${groupId}`}>
+          <span>Music</span>
+        </StyledLink>
       </Button>
 
       <Button selected={selected === 'chat'} onClick={clickChat}>
-        <span>Chat</span>
+        <StyledLink to={`/chat/${groupId}`}>
+          <span>Chat</span>
+        </StyledLink>
       </Button>
     </NavBlock>
   );

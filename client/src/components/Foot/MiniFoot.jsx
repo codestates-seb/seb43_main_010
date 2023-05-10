@@ -16,6 +16,8 @@ const MiniFootBlock = styled.footer`
   }
 
   li {
+    cursor: pointer;
+
     .bold {
       font-weight: 500;
     }

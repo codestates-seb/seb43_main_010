@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import searchIcon from '../../../assets/svg-file/search-input-icon.svg';
 import { useState, useRef, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 const RightIconBlock = styled.div`
   display: flex;
@@ -68,13 +69,31 @@ const RightIconBlock = styled.div`
         text-shadow: 0 0 0 var(--gray-blue-400);
       }
     }
+    @media screen and (max-width: 800px) {
+      input {
+        width: 200px;
+        transform: translateX(20px);
+        transition: 0.25s linear;
+      }
+    }
+    @media screen and (min-width: 801px) {
+      input {
+        width: 300px;
+        transition: 0.25s linear;
+      }
+    }
   }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;
 
 const RightIcon = () => {
   const [openSearch, setOpenSearch] = useState(false);
 
   const outInput = useRef(null);
+  const { groupId } = useParams();
 
   useEffect(() => {
     const clickOutInput = (e) => {
@@ -83,6 +102,7 @@ const RightIcon = () => {
       }
     };
     document.addEventListener('mousedown', clickOutInput);
+    if (outInput.current) return outInput.current.focus();
 
     return () => {
       document.addEventListener('mousedown', clickOutInput);
@@ -108,9 +128,11 @@ const RightIcon = () => {
       <button className='bell'>
         <i className='i-bell-icon' />
       </button>
-      <button className='people'>
-        <i className='i-people-icon' />
-      </button>
+      <StyledLink to={`/profile/${groupId}`}>
+        <button className='people'>
+          <i className='i-people-icon' />
+        </button>
+      </StyledLink>
       <button className='ques'>
         <i className='i-ques-icon' />
       </button>
