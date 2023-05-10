@@ -55,7 +55,7 @@ public class CommentController {
 
     // 댓글 리스트 조회(무한 스크롤) > 수정 필요러
     @GetMapping("/{group_id}") // 무한 스크롤
-    public ResponseEntity<List<Comment>> getItems(@RequestParam(value = "lastId", required = false) Long lastId) {
+    public ResponseEntity<List<Comment>> getItems(@RequestParam(value = "lastId", required = false) Integer lastId) {
         int pageSize = 10; // 한 페이지에 보여줄 데이터의 양
         List<Comment> comments;
         if (lastId == null) {

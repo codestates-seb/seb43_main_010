@@ -1,29 +1,36 @@
-//package com.example.demo.feedPost.repository;
-//
-//import com.example.demo.feedPost.entity.feedPost;
-//import com.example.demo.feedPost.entity.QfeedPost;
-//import com.querydsl.jpa.impl.JPAQueryFactory;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Repository;
-//
-//@RequiredArgsConstructor
-//@Repository
-//public class feedPostRepositoryImpl implements feedPostCustomRepository{
-//
-//    private final JPAQueryFactory queryFactory;
-//    @Override
-//    public void addLikeCount(feedPost selectedFeedPost) {
-//        queryFactory.update(feedPost)
-//                .set(feedPost.likeCount, feedPost.likeCount.add(1))
-//                .where(feedPost.eq(selectedFeedPost))
-//                .execute(); // 쿼리를 실행하여 레코드 수정
-//    }
-//
-//    @Override
-//    public void subLikeCount(feedPost selectedFeedPost) {
-//        queryFactory.update(feedPost)
-//                .set(feedPost.likeCount, feedPost.likeCount.subtract(1))
-//                .where(feedPost.eq(selectedFeedPost))
-//                .execute();
-//    }
-//}
+package example.domain.feedPost.repository;
+
+import example.domain.feedPost.entity.FeedPost;
+import example.domain.feedPost.entity.QFeedPost;
+import example.domain.feedPost.repository.feedPostCustomRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import javax.persistence.EntityManager;
+
+
+@RequiredArgsConstructor
+@Repository
+public class feedPostRepositoryImpl implements feedPostCustomRepository {
+
+    private final EntityManager entityManager;
+    private final JPAQueryFactory queryFactory;
+    @Override
+    public void addLikeCount(FeedPost selectedFeedPost) {
+        QFeedPost qFeedPost = QFeedPost.feedPost;
+        queryFactory.update(qFeedPost)
+                .set(qFeedPost.likeCount, qFeedPost.likeCount.add(1))
+                .where(qFeedPost.eq(selectedFeedPost))
+                .execute();
+    }
+
+    @Override
+    public void subLikeCount(FeedPost selectedFeedPost) {
+        QFeedPost qFeedPost = QFeedPost.feedPost;
+        queryFactory.update(qFeedPost)
+                .set(qFeedPost.likeCount, qFeedPost.likeCount.subtract(1))
+                .where(qFeedPost.eq(selectedFeedPost))
+                .execute();
+    }
+}

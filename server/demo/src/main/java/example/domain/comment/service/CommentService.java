@@ -31,12 +31,12 @@ public class CommentService {
     }
 
     public List<Comment> findVerifiedComments(int feedPostId){ // 요청된 댓글이 DB에 없으면 에러
-        List<Comment> optionalComment = commentRepository.findAllByFeedPostId(feedPostId);
-        return optionalComment;
+        List<Comment> optionalComments = commentRepository.findAllByFeedPostId(feedPostId);
+        return optionalComments;
     }
 
     public Comment updateComment(Comment comment){
-        Comment findComment = findVerifiedComment(comment.getCommentId());
+        Comment findComment = findVerifiedComment(comment.getId());
         if(comment.getFans().getId() != findComment.getFans().getId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }else{

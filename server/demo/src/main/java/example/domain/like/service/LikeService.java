@@ -29,7 +29,7 @@ public class LikeService {
                 .orElseThrow(() -> new NotFoundException("Could not found feedPost id : " + likeRequestDto.getFeedPostId()));
 
         // 이미 좋아요 되어 있으면 에러 반환
-        if (likeRepository.findByFansAndfeedPost(fans, feedPost).isPresent()){
+        if (likeRepository.findByFansAndFeedPost(fans, feedPost).isPresent()){
             // todo 409 에러로 변경
             throw new DuplicateResourceException("already exist data by fan id :" + fans.getId() + " ,"
                     + "feedPost id : " + feedPost.getId());
@@ -52,8 +52,8 @@ public class LikeService {
         Fans fans = fansRepository.findById(likeRequestDto.getFanId())
                 .orElseThrow(() -> new NotFoundException("Could not found fan id : " + likeRequestDto.getFanId()));
         FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
-                .orElseThrow(() -> new NotFoundException("Could not found post id : " + likeRequestDto.getFeedPostId()));
-        Like like = likeRepository.findByFansAndfeedPost(fans, feedPost)
+                .orElseThrow(() -> new NotFoundException("Could not found feedPost id : " + likeRequestDto.getFeedPostId()));
+        Like like = likeRepository.findByFansAndFeedPost(fans, feedPost)
                 .orElseThrow(() -> new NotFoundException("Could not found like id"));
 
         likeRepository.delete(like);

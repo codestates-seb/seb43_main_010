@@ -15,5 +15,5 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     List<Comment> findAllByFeedPostId(@Param("feedPostId") int feedPostId);
 
     List<Comment> findFirst10ByOrderByIdDesc();
-    List<Comment> findByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
+    List<Comment> findByIdLessThanOrderByIdDesc(Integer id, Pageable pageable);
 }

@@ -61,17 +61,16 @@ public class FeedPost extends BaseTimeEntity {
         this.fans = fans;
     }
 
-//    @Builder
-//    public feedPost(Integer id, String content, String img, LocalDateTime createdAt, LocalDateTime modifiedAt,
-//                    Fans fans, com.example.demo.like.entity.Like like, List<Comment> comments, Integer likeCount) {
-//        this.id = id;
-//        this.content = content;
-//        this.img = img;
-//        this.createdAt = createdAt;
-//        this.modifiedAt = modifiedAt;
-//        this.fans = fans;
-//        this.like = like;
-//        this.comments = comments;
-//        this.likeCount = likeCount;
-//    }
+    @Builder
+    public FeedPost(Integer id, String content, String img, LocalDateTime createdAt, LocalDateTime modifiedAt,
+                    Fans fans, List<Comment> comments, Integer likeCount) {
+        this.id = id;
+        this.content = content;
+        this.img = img;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.fans = fans;
+        this.comments = comments;
+        this.likeCount = likeCount;
+    }
 }

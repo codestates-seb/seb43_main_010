@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
-    Optional<Like> findByFansAndfeedPost(Fans fans, FeedPost feedpost);
+    Optional<Like> findByFansAndFeedPost(Fans fans, FeedPost feedpost);
 
 }

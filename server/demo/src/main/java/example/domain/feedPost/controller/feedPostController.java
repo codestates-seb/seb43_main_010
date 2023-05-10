@@ -66,7 +66,7 @@ public class feedPostController {
 
     // feed 리스트 조회(무한 스크롤)
     @GetMapping("/{group_id}")
-    public ResponseEntity<List<FeedPost>> getFeeds(@RequestParam(value = "lastId", required = false) Long lastId) {
+    public ResponseEntity<List<FeedPost>> getFeeds(@RequestParam(value = "lastId", required = false) Integer lastId) {
         int pageSize = 10; // 한 페이지에 보여줄 데이터의 양
         List<FeedPost> feedPosts;
         if (lastId == null) {

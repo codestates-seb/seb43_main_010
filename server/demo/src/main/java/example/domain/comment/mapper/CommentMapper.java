@@ -27,7 +27,7 @@ public interface CommentMapper {
     // CommentPatchDto -> Comment
     default Comment commentPatchDtoToComment(CommentPatchDto requestBody, Fans fans, FeedPost feedPost){
         Comment comment = new Comment(feedPost, requestBody.getContent(), fans);
-        comment.setCommentId(requestBody.getCommentId());
+        comment.setId(requestBody.getCommentId());
         return comment;
     }
 
@@ -36,7 +36,7 @@ public interface CommentMapper {
     default CommentResponseDto commentToCommentResponseDto(Comment comment){
         CommentResponseDto commentResponseDto = new CommentResponseDto();
         commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
-        commentResponseDto.setCommentId(comment.getCommentId());
+        commentResponseDto.setCommentId(comment.getId());
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());
         commentResponseDto.setFanId(comment.getFans().getId());
