@@ -166,6 +166,8 @@ const Main = () => {
             </CardBlock>
           </NewArtistCards>
         </NewArtistCardsBlock>
+
+        <></>
       </MainBlock>
     </>
   );

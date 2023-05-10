@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import bigImg from '../../../assets/png-file/big-img.gif';
+import bigImg from '../../../assets/gif-file/big-img.gif';
 
 const BigImgBoxBlock = styled.div`
   width: 100%;
