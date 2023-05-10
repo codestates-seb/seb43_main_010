@@ -27,10 +27,11 @@ const LeftBox = styled.div`
     cursor: pointer;
   }
 
-  /* .artist-box {
+  // 로그인했을 때만 보이는 곳. 주석 처리할 예정
+  .artist-box {
     display: flex;
     justify-content: center;
-    align-items: center;  
+    align-items: center;
     cursor: pointer;
   }
 
@@ -44,7 +45,7 @@ const LeftBox = styled.div`
   .i-down-icon {
     margin: 0 0 0 10px;
     font-size: 8px;
-  } */
+  }
 `;
 
 const Head = () => {
