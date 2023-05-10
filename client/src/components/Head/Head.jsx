@@ -30,7 +30,7 @@ const LeftBox = styled.div`
   /* .artist-box {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center;  
     cursor: pointer;
   }
 
