@@ -63,6 +63,7 @@ const RealRightImgBlock = styled.div`
 
     .cummu-txt {
       font-size: 18px;
+      padding-top: 2px;
     }
   }
 
