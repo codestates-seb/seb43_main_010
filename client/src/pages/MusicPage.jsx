@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import Head from '../components/Head/Head';
 import Nav from '../components/Nav/Nav';
 import Music from '../components/Music/Music';
-import Nav from '../components/Nav/Nav';
 import MiniFoot from '../components/Foot/MiniFoot';
 
 const MusicPageBlock = styled.div`
