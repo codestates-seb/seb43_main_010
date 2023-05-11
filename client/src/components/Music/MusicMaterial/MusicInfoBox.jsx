@@ -20,12 +20,11 @@ const MusicBox = styled.div`
   justify-content: space-between;
   width: 316px;
   height: 82px;
-  background-color: var(--black-900);
+  background-color: var(--dark-blue-900);
   border-radius: 15px;
   padding: 0 20px;
   font-size: 17px;
   font-weight: bold;
-  color: var(--gray-blue-300);
 `;
 
 const MusicInfo = styled.div`
@@ -68,11 +67,10 @@ const TextBox = styled.div`
   align-items: flex-start;
   width: 519px;
   height: 162px;
-  background-color: var(--black-900);
+  background-color: var(--dark-blue-900);
   border-radius: 15px;
   padding: 18px 18px;
   font-size: 13px;
-  color: var(--gray-blue-300);
   margin-top: 12px;
 `;
 
@@ -107,12 +105,13 @@ const MoonVerified = styled.img`
 `;
 
 const Text = styled.div`
-  width: 397px;
+  width: 100%;
   white-space: pre-wrap; //텍스트 줄 바꿈 유지
   font-size: 13px;
   line-height: 112.5%;
   margin-top: 11px;
   color: var(--gray-blue-300);
+  line-height: 19px;
 `;
 
 const MusicInfoBox = () => (

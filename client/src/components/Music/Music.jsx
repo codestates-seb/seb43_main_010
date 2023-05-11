@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Nav from '../Nav/Nav';
 import styled from 'styled-components';
 import CdPlayer from './MusicMaterial/CDPlayer';
 import MusicInfoBox from './MusicMaterial/MusicInfoBox';
@@ -9,7 +8,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: var(--dark-blue-900);
+  background-color: var(--dark-blue-800);
 `;
 
 const MusicContainer = styled.div`
@@ -17,6 +16,7 @@ const MusicContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+  margin-top: 85px;
 `;
 
 const Music = () => {
@@ -28,7 +28,6 @@ const Music = () => {
 
   return (
     <Body>
-      <Nav />
       <MusicContainer>
         <CdPlayer isPlaying={isPlaying} handlePlayToggle={handlePlayToggle} />
         <MusicInfoBox />
