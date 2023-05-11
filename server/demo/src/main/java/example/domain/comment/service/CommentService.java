@@ -2,9 +2,14 @@ package example.domain.comment.service;
 
 import example.domain.comment.entity.Comment;
 import example.domain.comment.repository.CommentRepository;
+import example.domain.feedPost.entity.FeedPost;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +39,23 @@ public class CommentService {
         List<Comment> optionalComments = commentRepository.findAllByFeedPostId(feedPostId);
         return optionalComments;
     }
+
+    // feedPost 댓글 (무한 스크롤)
+    @Transactional(readOnly = true)
+    public Page<Comment> findAllCommentsByFeedPostId(int page, int size){
+        Page<Comment> fanComments = commentRepository.findAll((PageRequest.of(page, size, Sort.by("fanCommentId").descending())));
+
+        return fanComments;
+    }
+
+    // artistPost 댓글 (무한 스크롤)
+    @Transactional(readOnly = true)
+    public Page<Comment> findAllCommentsByArtistPostId(int page, int size){
+        Page<Comment> artistComments = commentRepository.findAll((PageRequest.of(page, size, Sort.by("artistCommentId").descending())));
+
+        return artistComments;
+    }
+
 
     public Comment updateComment(Comment comment){
         Comment findComment = findVerifiedComment(comment.getId());

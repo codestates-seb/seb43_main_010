@@ -12,10 +12,13 @@ import example.domain.fans.entity.Fans;
 import example.domain.fans.mapper.FansMapper;
 import example.domain.fans.repository.FansRepository;
 import example.domain.feedPost.entity.FeedPost;
+import example.global.response.MultiResponseDto;
 import example.global.response.SingleResponseDto;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +31,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/comments")
+@RequestMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
 public class CommentController {
     private CommentService commentService;
@@ -40,7 +43,7 @@ public class CommentController {
 
 
     // 댓글 작성
-    @PostMapping
+    @PostMapping("comments")  // 생성
     public ResponseEntity postComment(@Valid @RequestBody CommentPostDto requestBody){
         Fans fans = fansRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
@@ -53,17 +56,26 @@ public class CommentController {
     }
 
 
-    // 댓글 리스트 조회(무한 스크롤) > 수정 필요러
-    @GetMapping("/{group_id}") // 무한 스크롤
-    public ResponseEntity<List<Comment>> getItems(@RequestParam(value = "lastId", required = false) Integer lastId) {
-        int pageSize = 10; // 한 페이지에 보여줄 데이터의 양
-        List<Comment> comments;
-        if (lastId == null) {
-            comments = commentRepository.findFirst10ByOrderByIdDesc(); // 마지막 10개의 피드 게시물 반환
-        } else {
-            comments = commentRepository.findByIdLessThanOrderByIdDesc(lastId, PageRequest.of(0, pageSize)); // 마지막 id보다 작은 항목 반환
-        }
-        return ResponseEntity.ok(comments);
+    // 댓글 리스트 조회(무한 스크롤)
+
+    @GetMapping("fans/{feedPost-id}/comments")  // feedPost 댓글
+    public ResponseEntity getAllFansComment(@RequestParam(defaultValue = "1") @Positive int page,
+                                            @RequestParam(defaultValue = "16") @Positive int size) {
+        Page<Comment> fansComments = commentService.findAllCommentsByFeedPostId(page -1, size);
+        List<Comment> list = fansComments.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToCommentResponseDtos(list), fansComments), HttpStatus.OK);
+    }
+
+
+
+    @GetMapping("artists/{artistPost-id}/comments") // artistPost 댓글
+    public ResponseEntity getAllArtistComment(@RequestParam(defaultValue = "1") @Positive int page,
+                                            @RequestParam(defaultValue = "16") @Positive int size) {
+        Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(page -1, size);
+        List<Comment> list = artistComments.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToCommentResponseDtos(list), artistComments), HttpStatus.OK);
     }
 
 
