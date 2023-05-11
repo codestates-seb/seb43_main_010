@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Head from '../components/Head/Head';
+import HeadMain from '../components/Head/HeadMain';
 import Main from '../components/Main/Main';
 import Foot from '../components/Foot/Foot';
 
@@ -12,7 +12,7 @@ const MainPageBlock = styled.div`
 const MainPage = () => {
   return (
     <MainPageBlock>
-      <Head />
+      <HeadMain />
       <Main />
       <Foot />
     </MainPageBlock>
