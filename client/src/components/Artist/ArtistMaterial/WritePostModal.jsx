@@ -1,9 +1,9 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import deleteBtn from '../../../assets/png-file/x-btn.png';
 import { useState, useRef, useEffect } from 'react';
-//이미지아이콘 가져오기
+import HideArtist from '../../WritePost/WritePostMaterial/HideArtist';
 import { BsFillCameraFill } from 'react-icons/bs';
-// import HideArtist from './WritePostMaterial/HideArtist';
+import testImg from '../../../assets/jpg-file/card-jpg/11-bibi.jpg';
 
 const WritePostBlock = styled.div`
   position: fixed;
@@ -69,6 +69,37 @@ const PostContent = styled.div`
   .post-form {
     width: 767px;
     transform: translateX(-20px) translateY(-20px);
+    position: relative;
+    label {
+      position: absolute;
+      top: 20px;
+      left: 28px;
+      color: var(--light-gray-500);
+      font-size: 14px;
+      text-shadow: 0 0 0 var(--light-gray-500);
+    }
+    textarea {
+      width: 713px;
+      min-height: 334px;
+      flex: 1;
+      margin: 40px 28px 0 28px;
+      color: var(--dark-blue-900);
+      text-shadow: 0 0 0 var(--dark-blue-900);
+      font-size: 15px;
+      border: 1px solid var(--light-gray-500);
+      border-radius: 0.3rem;
+      resize: none;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;
+
+      &:focus {
+        outline: none;
+      }
+      &::placeholder {
+        color: var(--light-gray-350);
+        text-shadow: 0 0 0 var(--light-gray-350);
+      }
+    }
   }
 `;
 
@@ -79,7 +110,7 @@ const BottomBox = styled.div`
   background-color: var(--white-100);
   transform: translateX(-20px) translateY(-20px);
   position: absolute;
-  border-top: 1px solid var(--light-gray-150);
+  /* border-top: 1px solid var(--light-gray-150); */
 
   display: flex;
   justify-content: space-between;
@@ -117,33 +148,102 @@ const BottomBox = styled.div`
 const ImgIcon = styled(BsFillCameraFill)`
   width: 32px;
   height: 32px;
+
   font-weight: 100;
-  transform: translateX(28px);
+  transform: translateX(32px);
   cursor: pointer;
+  color: var(--light-gray-360);
+  :hover {
+    color: var(--light-gray-400);
+    transform: scale(1.01) translateX(32px);
+  }
 `;
 //이미지 인풋태그
 const ImgInput = styled.input`
   display: none;
 `;
-//이미지 미리보기
-const ImgPreview = styled.div`
-  width: 100%;
-  img {
-    cursor: move;
-    max-width: 100%;
+const ImgPreviewBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 28px;
+  width: 767px;
+  height: 170px;
+  transform: translateX(-20px) translateY(-20px);
+  position: relative;
+  .preview-txt {
+    color: var(--light-gray-500);
+    font-size: 14px;
+    text-shadow: 0 0 0 var(--light-gray-500);
+    position: absolute;
+    top: -28px;
   }
 `;
+//이미지 미리보기
+const ImgPreview = styled.div`
+  /* flex-grow: 1; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 5px;
+  .img-box {
+    width: 25%;
+    height: 100%;
+    .post-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+  }
+`;
+
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
 // 사용하실 때 const [modalOpen, setModalOpen] = useState(false)를 상위에서 사용해 주세요!
-const WriteModalPost = ({ modalOpen, setModalOpen }) => {
+const WritePostModal = ({ modalOpen, setModalOpen }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
 
-  const editorRef = useRef();
-  const imgInput = useRef();
-  const [imgList, setImgList] = useState([]);
   const [showImages, setShowImages] = useState([]);
+  const imgInput = useRef();
+
+  const autoResizeTextarea = () => {
+    let textarea = document.querySelector('.autoTextarea');
+
+    if (textarea) {
+      textarea.style.height = 'auto';
+      let height = textarea.scrollHeight;
+      let maxHeight = window.innerHeight * 0.53; // 0.74
+      textarea.style.height = `${Math.min(height + 8, maxHeight)}px`;
+    }
+
+    if (content.trim().length > 1) {
+      setValidity(true);
+    } else {
+      setValidity(false);
+    }
+  };
+
+  const changeContent = (e) => {
+    setContent(e.target.value);
+  };
+
+  const deleteBtnFn = () => {
+    setModalOpen(false);
+    setContent('');
+  };
+
+  // submit
+  const submitFn = (e) => {
+    e.preventDefault();
+    if (content.trim().length > 1) {
+      // 여기서 서버한테 content 데이터 전송해야 함.
+      // 서버에 데이터 전송 되면 내용 비우고 창 닫기
+      // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
+      setContent('');
+      setModalOpen(false);
+    }
+  };
 
   //이미지 아이콘 누르면 imgInput에 접근
   const onClickImgIcon = (e) => {
@@ -208,22 +308,6 @@ const WriteModalPost = ({ modalOpen, setModalOpen }) => {
     // }
     // imgInput.current.value = '';
   };
-  const deleteBtnFn = () => {
-    setModalOpen(false);
-    setContent('');
-  };
-
-  // submit
-  const submitFn = (e) => {
-    e.preventDefault();
-    // if (content.trim().length > 1) {
-    //   // 여기서 서버한테 content 데이터 전송해야 함.
-    //   // 서버에 데이터 전송 되면 내용 비우고 창 닫기
-    //   // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
-    //   setContent('');
-    //   setModalOpen(false);
-    // }
-  };
 
   return (
     <>
@@ -233,17 +317,40 @@ const WriteModalPost = ({ modalOpen, setModalOpen }) => {
             <PostContent>
               <div className='top-txt-box'>
                 <span className='post-txt'>포스트 쓰기</span>
+                <span className='artist-txt'>BTS</span> {/* 나중에 수정해야 할 부분임 */}
               </div>
-              <div className='post-form'>
-                {/* <Editor className='editor' contentEditable='true' suppressContentEditableWarning='true' onInput={onContextnHandler} ref={editorRef}>
-                  {showImages.map((el, id) => (
-                    <>
-                      <ImgPreview key={id}>
-                        <img src={el} alt='preview-img'></img>
-                      </ImgPreview>
-                    </>
-                  ))}
-                </Editor> */}
+              <ImgPreviewBox>
+                <div className='preview-txt'>이미지 목록</div>
+                <ImgPreview>
+                  <div className='img-box'>
+                    <img className='post-img' src={testImg} alt='post-img'></img>
+                  </div>
+                  <div className='img-box'>
+                    <img className='post-img' src={testImg} alt='post-img'></img>
+                  </div>
+                  <div className='img-box'>
+                    <img className='post-img' src={testImg} alt='post-img'></img>
+                  </div>
+                  <div className='img-box'>
+                    <img className='post-img' src={testImg} alt='post-img'></img>
+                  </div>
+                </ImgPreview>
+              </ImgPreviewBox>
+
+              <form className='post-form'>
+                <label htmlFor='post-content'>포스트</label>
+                <textarea
+                  id='post-content'
+                  className='autoTextarea'
+                  onKeyDown={autoResizeTextarea}
+                  onKeyUp={autoResizeTextarea}
+                  onChange={changeContent}
+                  type='text'
+                  // placeholder='내용을 입력해 주세요.'
+                  name='content'
+                  autoComplete='off'
+                  required
+                />
                 <ImgInput
                   className='img-post'
                   type='file'
@@ -254,14 +361,14 @@ const WriteModalPost = ({ modalOpen, setModalOpen }) => {
                   ref={imgInput}
                   onChange={handleAddImg}
                 ></ImgInput>
-              </div>
+              </form>
 
               <BottomBox validity={validity} hide={hide}>
                 {/* 현아님! 이미지 추가버튼입니다 */}
                 <ImgIcon onClick={onClickImgIcon} />
                 <div className='hide-block'>
                   {/* HideArtist 컴포넌트, 아티스트인지 아닌지 여부에 따라 notArtist에 값을 넣어주는 거로 수정해야 함 */}
-                  {/* <HideArtist notArtist='true' setHide={setHide} hide={hide} /> */}
+                  <HideArtist notArtist='true' setHide={setHide} hide={hide} />
 
                   <button onClick={submitFn} className='submit-btn'>
                     <span>등록</span>
@@ -279,4 +386,4 @@ const WriteModalPost = ({ modalOpen, setModalOpen }) => {
   );
 };
 
-export default WriteModalPost;
+export default WritePostModal;

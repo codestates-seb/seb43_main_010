@@ -49,13 +49,22 @@ const HrTag = styled.hr`
 `;
 
 const EmailCheck = styled.div`
-  font-size: 15px;
-  font-weight: 600;
-  color: rgb(32, 36, 41);
+  font-size: 11px;
+  width: 50px;
+  height: 25px;
+  font-weight: 500;
+  color: var(--gray-850);
   display: flex;
-  gap: 10px;
+  justify-content: center;
   align-items: center;
-  cursor: default;
+  margin: auto;
+  cursor: pointer;
+  border: 1px solid var(--light-gray-400);
+  border-radius: 0.5rem;
+  padding: 2px 5px;
+  :hover {
+    font-weight: 600;
+  }
 `;
 
 const CheckBox = styled.div`
@@ -125,11 +134,11 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
         <label htmlFor='email'>이메일</label>
         <div className='input-box'>
           <input ref={emailRef} type='email' id='email' name='email' onChange={onChange} placeholder='your@email.com'></input>
-          <EmailCheck>
+          <EmailCheck onClick={onClickCheckBox}>
             중복확인
-            <CheckBox onClick={onClickCheckBox}>
+            {/* <CheckBox onClick={onClickCheckBox}>
               <CheckIcon />
-            </CheckBox>
+            </CheckBox> */}
           </EmailCheck>
           <HrTag className='hrtag' />
         </div>

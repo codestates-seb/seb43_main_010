@@ -6,11 +6,11 @@ const cookies = new Cookies();
 
 //Refresh Token을 Cookie에 저장하기 위한 함수
 // 리프레시 토큰은 1주일로 잡자
-const setRefreshToken = (refreshToken) => {
+const setAccessToken = (accessToken) => {
   const today = new Date();
-  const expireDate = today.setDate(today.getDate() + 7);
+  const expireDate = today.setDate(today.getDate() + 1);
 
-  return cookies.set('refreshToken', refreshToken, {
+  return cookies.set('accessToken', accessToken, {
     sameSite: 'strict',
     path: '/',
     expires: new Date(expireDate),
@@ -19,12 +19,12 @@ const setRefreshToken = (refreshToken) => {
 
 //Cookie에 저장된 Refresh Token 값을 갖고 오기 위한 함수.
 const getCookie = () => {
-  return cookies.get('refreshToken');
+  return cookies.get('accessToken');
 };
 
 //Cookie 삭제를 위한 함수. 로그아웃 시 사용
 const removeCookie = () => {
-  return cookies.remove('refreshToken', { sameSite: 'strict', path: '/' });
+  return cookies.remove('accessToken', { sameSite: 'strict', path: '/' });
 };
 
-export { setRefreshToken, getCookie, removeCookie };
+export { setAccessToken, getCookie, removeCookie };
