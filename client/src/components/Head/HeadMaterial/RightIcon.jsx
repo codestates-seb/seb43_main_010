@@ -129,7 +129,7 @@ const RightIcon = () => {
         <i className='i-bell-icon' />
       </button>
       <StyledLink to={`/profile/${groupId}`}>
-        <button className='people'>
+        <button className='people' tabIndex='-1'>
           <i className='i-people-icon' />
         </button>
       </StyledLink>

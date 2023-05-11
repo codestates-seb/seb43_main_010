@@ -1,33 +1,61 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+// font-weight
+// 100: Thin
+// 200: Extra Light (Ultra Light)
+// 300: Light
+// 400: Normal (Regular)
+// 500: Medium
+// 600: Semi Bold (Demi Bold)
+// 700: Bold
+// 800: Extra Bold (Ultra Bold)
+// 900: Black (Heavy)
+
 const RightBox = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 670px;
-  min-height: 727px;
+  width: 670px;
+  height: 727px;
+  box-sizing: border-box;
   margin-left: 72px;
   padding: 51px 49px;
-  border-radius: 16px;
+  border-radius: 15px;
   background-color: var(--white-100);
-  box-sizing: border-box;
+  border: 1px solid var(--light-gray-150);
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
 `;
 
 const Title = styled.span`
   font-size: 30px;
-  font-weight: bold;
+  font-weight: 900;
   color: var(--gray-980);
-  margin-bottom: 32px;
+  margin-bottom: 34px;
 `;
 
 const Label = styled.label`
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 600;
 `;
 
 const Input = styled.input`
-  color: var(--dark-blue-850);
   font-size: 14px;
+  font-weight: 500;
+  color: var(--dark-blue-850);
+  border: 1px solid var(--gray-blue-200);
+  padding: 4px 8px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--gray-blue-400);
+    box-shadow: 0 0 3px var(--gray-blue-200);
+  }
 `;
 
 const Button = styled.button`
@@ -45,9 +73,49 @@ const Button = styled.button`
   }
 `;
 
+const ConnectButton = styled(Button)`
+  width: 74px;
+  margin-left: auto;
+`;
+
 const InfoText = styled.span`
   font-size: 14px;
+  font-weight: 500;
   color: var(--dark-blue-850);
+`;
+
+const KakaoContainer = styled.div`
+  margin-top: 35px;
+  display: flex;
+  align-items: center;
+
+  button {
+    margin-right: 8px;
+  }
+`;
+
+const Kakao = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 8px;
+`;
+
+const KakaoIcon = styled.i`
+  width: 22px;
+  height: 22px;
+`;
+
+const WithdrawalBtn = styled.button`
+  color: var(--gray-blue-400);
+  font-size: 13.5px;
+  font-weight: 500;
+  display: block;
+  cursor: pointer;
+  margin-top: 129px;
+
+  /* &:hover {
+    font-weight: bold;
+  } */
 `;
 
 const MyInfoRight = () => {
@@ -65,52 +133,76 @@ const MyInfoRight = () => {
     password: false,
   });
 
-  const handleChange = (e, field) => {
-    setInfo({ ...info, [field]: e.target.value });
-  };
+  const FieldInput = ({ field, label }) => {
+    const [inputValue, setInputValue] = useState(info[field]);
+    const isEmail = field === 'email';
+    const isPassword = field === 'password';
 
-  const handleSaveButtonClick = (field) => {
-    // 정보 저장 기능 구현
-    setShowInput({ ...showInput, [field]: false });
-  };
+    const handleChange = (e) => {
+      setInputValue(e.target.value);
+    };
 
-  const handleEditButtonClick = (field) => {
-    setShowInput({ ...showInput, [field]: true });
-  };
+    const handleSaveButtonClick = () => {
+      setInfo((prevInfo) => ({
+        ...prevInfo,
+        [field]: isPassword ? '●'.repeat(inputValue.length) : inputValue, // 변경된 비밀번호를 ● 기호로 표시
+      }));
+      setShowInput((prevShowInput) => ({
+        ...prevShowInput,
+        [field]: false,
+      }));
+    };
 
-  const editButton = (field, label) => (
-    <div>
-      <Label htmlFor={field}>{label}</Label>
-      {showInput[field] ? (
-        <div>
-          <Input type={field === 'password' ? 'password' : 'text'} id={field} value={info[field]} onChange={(e) => handleChange(e, field)} />
-          <Button onClick={() => handleSaveButtonClick(field)}>저장</Button>
-        </div>
-      ) : (
-        <div>
-          <InfoText>{info[field]}</InfoText>
-          <Button onClick={() => handleEditButtonClick(field)}>변경</Button>
-        </div>
-      )}
-    </div>
-  );
+    const handleEditButtonClick = () => {
+      setInputValue(info[field]);
+      setShowInput((prevShowInput) => ({
+        ...prevShowInput,
+        [field]: true,
+      }));
+    };
+
+    return (
+      <div>
+        <Label htmlFor={field}>{label}</Label>
+        <ButtonContainer>
+          {isEmail ? (
+            <InfoText>{info[field]}</InfoText>
+          ) : showInput[field] ? (
+            <>
+              <Input type={isPassword ? 'password' : 'text'} id={field} value={inputValue} onChange={handleChange} />
+              <Button onClick={handleSaveButtonClick}>저장</Button>
+            </>
+          ) : (
+            <>
+              <InfoText>{info[field]}</InfoText>
+              <Button onClick={handleEditButtonClick}>변경</Button>
+            </>
+          )}
+        </ButtonContainer>
+      </div>
+    );
+  };
 
   return (
     <>
       <RightBox>
         <Title>내 정보</Title>
+        <FieldInput field='email' label='이메일' />
+        <FieldInput field='nickname' label='닉네임' />
+        <FieldInput field='name' label='이름' />
+        <FieldInput field='password' label='비밀번호' />
         <div>
-          {editButton('email', '이메일')}
-          {editButton('nickname', '닉네임')}
-          {editButton('name', '이름')}
-          {editButton('password', '비밀번호')}
-          <div>
-            <Title>연결된 SNS 계정</Title>
-            <Button>연결하기</Button>
-          </div>
+          <Title>연결된 SNS 계정</Title>
+          <KakaoContainer>
+            <button className='kakao'>
+              <KakaoIcon className='i-kakao-icon' />
+            </button>
+            <Kakao>카카오톡</Kakao>
+            <ConnectButton>연결하기</ConnectButton>
+          </KakaoContainer>
         </div>
+        <WithdrawalBtn>루미안 계정 탈퇴하기</WithdrawalBtn>
       </RightBox>
-      {/* <Footer /> */}
     </>
   );
 };

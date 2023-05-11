@@ -5,8 +5,8 @@ import Feed from '../components/Feed/Feed';
 const FeedPage = () => {
   return (
     <>
-      <Head />
       <Nav />
+      <Head />
       <Feed />
     </>
   );

@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 const NavBlock = styled.nav`
   width: 100%;
   height: 50px;
   /* background 색상은 나중에 props로 바꾸어주어야 할 부분임 */
-  background: linear-gradient(to right, #60abe1, #0b6bb0);
+  background: linear-gradient(to right, #70a7e7, #265696);
 
   display: flex;
   justify-content: center;
@@ -16,11 +15,8 @@ const NavBlock = styled.nav`
   z-index: 1;
 `;
 
-const Button = styled.button`
-  background: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const StyledLink = styled(NavLink)`
+  text-decoration: none;
   margin-right: 78px;
 
   &:last-of-type {
@@ -32,60 +28,50 @@ const Button = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-
     font-weight: 600;
     font-size: 16px;
-    opacity: ${({ selected }) => (selected ? '1' : '0.6')};
+    opacity: 0.6;
+  }
+
+  &.active span {
+    opacity: 1;
+  }
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-`;
-
 const Nav = () => {
-  const [selected, setSelected] = useState('feed');
-
   const { groupId } = useParams();
-
-  const clickFeed = () => {
-    setSelected('feed');
-  };
-  const clickArtist = () => {
-    setSelected('artist');
-  };
-  const clickMusic = () => {
-    setSelected('music');
-  };
-  const clickChat = () => {
-    setSelected('chat');
-  };
 
   return (
     <NavBlock>
-      <Button selected={selected === 'feed'} onClick={clickFeed}>
-        <StyledLink to={`/feed/${groupId}`}>
+      <StyledLink to={`/feed/${groupId}`}>
+        <button>
           <span>Feed</span>
-        </StyledLink>
-      </Button>
+        </button>
+      </StyledLink>
 
-      <Button selected={selected === 'artist'} onClick={clickArtist}>
-        <StyledLink to={`/artist/${groupId}`}>
+      <StyledLink to={`/artist/${groupId}`}>
+        <button>
           <span>Artist</span>
-        </StyledLink>
-      </Button>
+        </button>
+      </StyledLink>
 
-      <Button selected={selected === 'music'} onClick={clickMusic}>
-        <StyledLink to={`/music/${groupId}`}>
+      <StyledLink to={`/music/${groupId}`}>
+        <button>
           <span>Music</span>
-        </StyledLink>
-      </Button>
+        </button>
+      </StyledLink>
 
-      <Button selected={selected === 'chat'} onClick={clickChat}>
-        <StyledLink to={`/chat/${groupId}`}>
+      <StyledLink to={`/chat/${groupId}`}>
+        <button>
           <span>Chat</span>
-        </StyledLink>
-      </Button>
+        </button>
+      </StyledLink>
     </NavBlock>
   );
 };

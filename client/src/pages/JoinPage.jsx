@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Head from '../components/Head/Head';
+import HeadMain from '../components/Head/HeadMain';
 import Join from '../components/Join/Join';
 
 const JoinPageBlock = styled.div`
@@ -10,7 +10,7 @@ const JoinPageBlock = styled.div`
 const JoinPage = () => {
   return (
     <JoinPageBlock>
-      <Head />
+      <HeadMain />
       <Join />
     </JoinPageBlock>
   );
