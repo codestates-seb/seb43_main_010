@@ -76,7 +76,7 @@ const RealRightImgBlock = styled.div`
     align-items: center;
     border-radius: 0 0 15px 15px;
     // 색상 props로 받아서 바꿔야 함
-    background: #11233b;
+    background: #62a6e0;
     position: relative;
 
     &::before {
@@ -86,7 +86,7 @@ const RealRightImgBlock = styled.div`
       width: 353px;
       height: 120px;
       // 색상 props로 받아서 바꿔야 함
-      background: linear-gradient(to top, #11233b, transparent);
+      background: linear-gradient(to top, #62a6e0, transparent);
     }
 
     .chat-txt {
