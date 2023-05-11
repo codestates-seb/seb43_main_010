@@ -1,6 +1,7 @@
 package example.domain.comment.mapper;
 
 
+import example.domain.artistPost.entity.ArtistPost;
 import example.domain.comment.dto.CommentPatchDto;
 import example.domain.comment.dto.CommentPostDto;
 import example.domain.comment.dto.CommentResponseDto;
@@ -19,6 +20,15 @@ public interface CommentMapper {
         comment.setFans(fans);
         comment.setContent(requestBody.getContent());
         comment.setFeedPost(feedPost);
+
+        return comment;
+    }
+
+    default Comment commentPostDtoToComment(CommentPostDto requestBody, Fans fans, ArtistPost artistPost){
+        Comment comment = new Comment();
+        comment.setFans(fans);
+        comment.setContent(requestBody.getContent());
+        comment.setArtistPost(artistPost);
 
         return comment;
     }

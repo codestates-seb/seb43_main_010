@@ -1,5 +1,8 @@
 package example.domain.comment.controller;
 
+import example.domain.artist.entity.Artist;
+import example.domain.artist.repository.ArtistRepository;
+import example.domain.artistPost.entity.ArtistPost;
 import example.domain.comment.dto.CommentPatchDto;
 import example.domain.comment.dto.CommentPostDto;
 import example.domain.comment.entity.Comment;
@@ -16,7 +19,7 @@ import example.global.response.MultiResponseDto;
 import example.global.response.SingleResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import example.domain.artistPost.repository.artistPostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,26 +42,45 @@ public class CommentController {
     private FansMapper fansMapper;
     private CommentMapper mapper;
     private feedPostRepository feedPostRepository;
+    private artistPostRepository artistPostRepository;
+    private ArtistRepository artistRepository;
     private CommentRepository commentRepository;
 
 
-    // 댓글 작성
-    @PostMapping("comments")  // 생성
-    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto requestBody){
+    // feedPost 댓글 작성
+    @PostMapping("fans/comments")
+    public ResponseEntity feedPostComment(@Valid @RequestBody CommentPostDto requestBody){
         Fans fans = fansRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+        Artist artist = artistRepository.findById(requestBody.getArtistId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         FeedPost findFeedPost = feedPostRepository.findById(requestBody.getFeedPostId())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-        Comment feedPost = commentService.createComment(
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
+        Comment comment = commentService.createComment(
                 mapper.commentPostDtoToComment(requestBody, fans, findFeedPost));
 
-        return new ResponseEntity<>(mapper.commentToCommentResponseDto(feedPost), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.commentToCommentResponseDto(comment), HttpStatus.CREATED);
     }
 
 
-    // 댓글 리스트 조회(무한 스크롤)
+    // artistPost 댓글 작성
+    @PostMapping("artist/comments")
+    public ResponseEntity artistPostComment(@Valid @RequestBody CommentPostDto requestBody){
+        Fans fans = fansRepository.findById(requestBody.getFanId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+        Artist artist = artistRepository.findById(requestBody.getArtistId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+        ArtistPost findArtistPost = artistPostRepository.findById(requestBody.getArtistPostId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND));
+        Comment comment = commentService.createComment(
+                mapper.commentPostDtoToComment(requestBody, fans, findArtistPost));
 
-    @GetMapping("fans/{feedPost-id}/comments")  // feedPost 댓글
+        return new ResponseEntity<>(mapper.commentToCommentResponseDto(comment), HttpStatus.CREATED);
+    }
+
+
+    // feedPost 댓글 리스트 조회(무한 스크롤)
+    @GetMapping("fans/{feedPost-id}/comments")
     public ResponseEntity getAllFansComment(@RequestParam(defaultValue = "1") @Positive int page,
                                             @RequestParam(defaultValue = "16") @Positive int size) {
         Page<Comment> fansComments = commentService.findAllCommentsByFeedPostId(page -1, size);
@@ -68,8 +90,8 @@ public class CommentController {
     }
 
 
-
-    @GetMapping("artists/{artistPost-id}/comments") // artistPost 댓글
+    // artistPost 댓글 리스트 조회(무한 스크롤)
+    @GetMapping("artist/{artistPost-id}/comments") // artistPost 댓글
     public ResponseEntity getAllArtistComment(@RequestParam(defaultValue = "1") @Positive int page,
                                             @RequestParam(defaultValue = "16") @Positive int size) {
         Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(page -1, size);
@@ -92,6 +114,8 @@ public class CommentController {
         requestBody.setCommentId(commentId);
         Fans fans = fansRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+        Artist artist = artistRepository.findById(requestBody.getArtistId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         Comment findComment = commentRepository.findById(requestBody.getCommentId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
         Comment comment = mapper.commentPatchDtoToComment(requestBody, fans, findComment.getFeedPost());

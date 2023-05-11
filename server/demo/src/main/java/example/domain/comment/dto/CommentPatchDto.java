@@ -10,6 +10,7 @@ import lombok.Setter;
 public class CommentPatchDto {
 
     private int fanId;
+    private int artistId;
     private int commentId;
     private String content; // 내용 수정
 
