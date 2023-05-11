@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import logo from '../../assets/svg-file/white-logo.svg';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 import RightIcon from './HeadMaterial/RightIcon';
+import MyArtistModal from './HeadMaterial/MyArtistModal';
 
 const HeadBlock = styled.header`
   width: 100%;
@@ -26,14 +28,14 @@ const LeftBox = styled.div`
     margin-left: 51px;
     cursor: pointer;
   }
+`;
 
-  // 로그인했을 때만 보이는 곳. 주석 처리할 예정
-  .artist-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
+const ArtistBox = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
 
   .artist-name {
     color: var(--gray-blue-400);
@@ -46,29 +48,48 @@ const LeftBox = styled.div`
     margin: 0 0 0 10px;
     font-size: 8px;
   }
+
+  .artist-name-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const Head = () => {
+  const [myArtModal, setMyArttModal] = useState(false);
+
+  const toggleMyArtistModal = () => {
+    setMyArttModal(!myArtModal);
+  };
+
   return (
-    <HeadBlock>
-      <LeftBox>
-        <Link to='/'>
-          <div className='logo'>
-            <img src={logo} alt='logo' />
-          </div>
-        </Link>
+    <>
+      <HeadBlock>
+        <LeftBox>
+          <Link to='/'>
+            <div className='logo'>
+              <img src={logo} alt='logo' />
+            </div>
+          </Link>
 
-        {/* <div className="artist-box">
-          <span className="artist-name">BTS</span>
-          <div className="down">
-            <i className="i-down-icon" />
-          </div>
-        </div> */}
-      </LeftBox>
+          <ArtistBox>
+            <button onClick={toggleMyArtistModal} className='artist-name-box' tabIndex='-1'>
+              {/* BTS 부분을 나중에 데이터 받아서 수정해줘야 함 */}
+              <span className='artist-name'>BTS</span>
+              <div className='down'>
+                <i className='i-down-icon' />
+              </div>
+            </button>
 
-      {/* 오른쪽 search, bell, people, ques 아이콘들이 있는 곳 => RightIcon 컴포넌트 */}
-      <RightIcon />
-    </HeadBlock>
+            {/* 헤더 왼쪽 모달창 => MyArtistModal 컴포넌트 */}
+            {myArtModal ? <MyArtistModal myArtModal={myArtModal} setMyArttModal={setMyArttModal} /> : null}
+          </ArtistBox>
+        </LeftBox>
+        {/* 오른쪽 search, bell, people, ques 아이콘들이 있는 곳 => RightIcon 컴포넌트 */}
+        <RightIcon />
+      </HeadBlock>
+    </>
   );
 };
 

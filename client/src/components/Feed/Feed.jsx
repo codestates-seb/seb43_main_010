@@ -126,7 +126,7 @@ const Feed = () => {
       <FeedBlock>
         <RealFeedBlock>
           <PostContextBox>
-            {/* 공용 input입니다! => PostInput 컴포넌트*/}
+            {/* 공용 input입니다! => PostInput 컴포넌트 */}
             <button onClick={openModal}>
               <PostInput transparent='transparent' pointer='pointer' placeholder='커뮤니티에 포스트를 남겨보세요.' />
             </button>

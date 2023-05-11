@@ -4,8 +4,8 @@ import Artist from '../components/Artist/Artist';
 const ArtistPage = () => {
   return (
     <>
-      <Head />
       <Nav />
+      <Head />
       <Artist />
     </>
   );

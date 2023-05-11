@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Nav from '../Nav/Nav';
 import styled from 'styled-components';
 import CdPlayer from './MusicMaterial/CDPlayer';
 import MusicInfoBox from './MusicMaterial/MusicInfoBox';
@@ -28,7 +27,6 @@ const Music = () => {
 
   return (
     <Body>
-      <Nav />
       <MusicContainer>
         <CdPlayer isPlaying={isPlaying} handlePlayToggle={handlePlayToggle} />
         <MusicInfoBox />

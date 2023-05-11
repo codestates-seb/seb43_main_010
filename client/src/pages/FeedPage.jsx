@@ -3,11 +3,10 @@ import Nav from '../components/Nav/Nav';
 import Feed from '../components/Feed/Feed';
 
 const FeedPage = () => {
-  const navMenu = 'artist';
   return (
     <>
+      <Nav />
       <Head />
-      <Nav navMenu={navMenu} />
       <Feed />
     </>
   );
