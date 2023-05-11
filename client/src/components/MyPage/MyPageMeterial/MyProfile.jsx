@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import BTS from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
+import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
+import NewJeans from '../../../assets/jpg-file/card-jpg/3-newJeans.jpg';
 
 const LeftWrapper = styled.div`
   display: flex;
@@ -18,33 +21,66 @@ const LeftBox = styled.div`
   align-items: center;
 `;
 
+const Img = styled.div`
+  width: 124px;
+  height: 64px;
+  border-radius: 5px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+`;
+
 const Name = styled.span`
-  font-size: 23px;
-  font-weight: bold;
+  font-size: 35px;
+  font-weight: 900;
   color: var(--gray-980);
+  margin-bottom: 11px;
+  display: block;
+`;
+
+const NickName = styled.span`
+  font-size: 17.5px;
+  font-weight: 700;
+  color: var(--gray-980);
+  margin-bottom: 3px;
+  display: block;
+`;
+
+const ArtistName = styled.span`
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--light-gray-500);
   margin-bottom: 20px;
+  display: block;
+`;
+
+const MembershipDate = styled.span`
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--light-gray-300);
   display: block;
 `;
 
 const Email = styled.span`
   font-size: 23px;
-  font-weight: bold;
-  color: var(--gray-980);
+  font-weight: 500;
+  color: var(--dark-blue-700);
   margin-bottom: 20px;
   display: block;
 `;
 
 const LogoutBtn = styled.button`
-  /* width: 48px; */
   height: 16px;
   color: var(--gray-blue-400);
   font-size: 13px;
+  font-weight: 500;
   display: block;
   cursor: pointer;
-
-  &:hover {
-    font-weight: bold;
-  }
+  text-decoration: underline;
 `;
 
 const Container = styled.div`
@@ -81,13 +117,11 @@ const DeleteBtn = styled.button`
   top: 0;
   right: 0;
   height: 16px;
-  color: var(--gray-blue-400);
+  color: var(--gray-blue-300);
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-
-  &:hover {
-    font-weight: bold;
-  }
+  text-decoration: underline;
 `;
 
 const ModalWrapper = styled.div`
@@ -106,18 +140,34 @@ const ModalContent = styled.div`
   background-color: var(--white-100);
   width: 428px;
   height: 302px;
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 14px;
+  padding: 70px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const ModalTitle = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
+const ModalTitle = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 20px;
   margin-bottom: 20px;
+`;
+
+const ModalText = styled.div`
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+`;
+
+const ModalTextBold = styled.div`
+  font-size: 12.8px;
+  font-weight: 600;
+  /* width: 100%; */
+  margin-top: 15px;
+  margin-bottom: 15px;
 `;
 
 const ModalBtnWrapper = styled.div`
@@ -126,21 +176,39 @@ const ModalBtnWrapper = styled.div`
   width: 100%;
 `;
 
-const ModalBtn = styled.button`
-  width: 100px;
-  height: 40px;
-  border-radius: 8px;
-  font-size: 16px;
+const ConfirmBtn = styled.button`
+  width: 170px;
+  height: 50px;
+  font-size: 15px;
   font-weight: bold;
+  color: var(--skyblue-500);
 `;
 
-const CancelBtn = styled(ModalBtn)`
+const CancelBtn = styled(ConfirmBtn)`
   background-color: var(--white-100);
   color: var(--dark-blue-900);
 `;
 
+const ArtistCard = ({ imgSrc, imgAlt, nickName, artistName, membershipDate, handleDeleteBtnClick }) => (
+  <Box>
+    <Img>
+      <img src={imgSrc} alt={imgAlt} />
+    </Img>
+    <NickName>
+      {nickName}{' '}
+      <button className='pen'>
+        <i className='i-name-pen-icon' />
+      </button>
+    </NickName>
+    <ArtistName>{artistName}</ArtistName>
+    <MembershipDate>{membershipDate} 가입</MembershipDate>
+    <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
+  </Box>
+);
+
 const MyProfile = () => {
   const [showModal, setShowModal] = useState(false);
+  const [membershipDate, setMembershipDate] = useState('2023-04-28');
 
   const handleDeleteBtnClick = () => {
     setShowModal(true);
@@ -151,9 +219,16 @@ const MyProfile = () => {
   };
 
   const handleConfirmBtnClick = () => {
-    // TODO: Handle delete action
     setShowModal(false);
   };
+
+  // useEffect(() => {
+  //   // 서버로부터 회원 가입일 가져오기
+  //   fetch('회원가입일자 API 엔드포인트')
+  //     .then(response => response.json())
+  //     .then(data => setMembershipDate(data.membershipDate))
+  //     .catch(error => console.error('Error:', error));
+  // }, []);
 
   return (
     <>
@@ -165,31 +240,44 @@ const MyProfile = () => {
         </LeftBox>
         <Container>
           <Title>나의 프로필</Title>
-          <Box>
-            <Name>TATA-V</Name>
-            <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
-          </Box>
-          <Box>
-            <Name>TATA-V</Name>
-            <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
-          </Box>
-          <Box>
-            <Name>TATA-V</Name>
-            <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
-          </Box>
+          <ArtistCard
+            imgSrc={BTS}
+            imgAlt='BTS'
+            nickName='TATA-V'
+            artistName='BTS'
+            membershipDate={membershipDate}
+            handleDeleteBtnClick={handleDeleteBtnClick}
+          />
+          <ArtistCard
+            imgSrc={TXT}
+            imgAlt='TXT'
+            nickName='TATA-T'
+            artistName='TXT'
+            membershipDate={membershipDate}
+            handleDeleteBtnClick={handleDeleteBtnClick}
+          />
+          <ArtistCard
+            imgSrc={NewJeans}
+            imgAlt='NewJeans'
+            nickName='TATA-J'
+            artistName='NewJeans'
+            membershipDate={membershipDate}
+            handleDeleteBtnClick={handleDeleteBtnClick}
+          />
         </Container>
       </LeftWrapper>
       {showModal && (
         <ModalWrapper>
           <ModalContent>
             <ModalTitle>커뮤니티를 탈퇴하시겠습니까?</ModalTitle>
-            <p>✰ 커뮤니티를 탈퇴하더라도 내가 작성한 콘텐츠는 삭제되지 않습니다. 프로필 사진과 닉네임도 함께 유지되어 노출됩니다.</p>
-            <p>✰ 커뮤니티 내 모든 구독 정보가 초기화됩니다.</p>
-            <p>✰ 커뮤니티의 MY 프로필 화면을 볼 수 없습니다. ✰ 이 커뮤니티에서 진행된 혜택을 행사할 수 없습니다.</p>
-            <p>일부 정보와혜택은 재가입해도 복구되지 않습니다.</p>
+            <ModalText>✰ 커뮤니티를 탈퇴하더라도 내가 작성한 콘텐츠는 삭제되지 않습니다. 프로필 사진과 닉네임도 함께 유지되어 노출됩니다.</ModalText>
+            <ModalText>✰ 커뮤니티 내 모든 구독 정보가 초기화됩니다.</ModalText>
+            <ModalText>✰ 커뮤니티의 MY 프로필 화면을 볼 수 없습니다.</ModalText>
+            <ModalText>✰ 이 커뮤니티에서 진행된 혜택을 행사할 수 없습니다.</ModalText>
+            <ModalTextBold>일부 정보와혜택은 재가입해도 복구되지 않습니다.</ModalTextBold>
             <ModalBtnWrapper>
               <CancelBtn onClick={handleCancelBtnClick}>취소</CancelBtn>
-              <ModalBtn onClick={handleConfirmBtnClick}>확인</ModalBtn>
+              <ConfirmBtn onClick={handleConfirmBtnClick}>탈퇴</ConfirmBtn>
             </ModalBtnWrapper>
           </ModalContent>
         </ModalWrapper>
