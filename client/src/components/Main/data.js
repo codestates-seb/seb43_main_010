@@ -8,7 +8,7 @@ const data = {
       groupName: 'BTS',
       groupImg: imgs.bts,
       grouplogoImg: imgs.btsPng,
-      gradColor: ['#70a7e7', '#265696', '#c5d6eb', '#11233b'],
+      gradColor: ['#70a7e7', '#265696', '#c5d6eb', '#62a6e0'],
     },
     {
       groupId: 2,
