@@ -8,7 +8,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: var(--dark-blue-900);
+  background-color: var(--dark-blue-800);
 `;
 
 const MusicContainer = styled.div`
@@ -16,6 +16,7 @@ const MusicContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+  margin-top: 85px;
 `;
 
 const Music = () => {
