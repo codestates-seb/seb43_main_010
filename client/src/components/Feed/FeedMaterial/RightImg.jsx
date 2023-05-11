@@ -17,7 +17,7 @@ const RightImgBlock = styled.div`
 const RealRightImgBlock = styled.div`
   width: 353px;
   height: 506px;
-  background-color: var(--dark-blue-900);
+
   border-radius: 15px;
   color: var(--white-100);
   box-shadow: 0 0 12px rgb(19, 28, 35, 15%);
@@ -45,18 +45,25 @@ const RealRightImgBlock = styled.div`
     .txt-box {
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: end;
       flex-direction: column;
       padding: 12px 20px;
+
+      .long {
+        font-size: 45px;
+      }
     }
 
     .artist-txt {
       font-size: 50px;
       font-weight: 800;
+      text-shadow: 0 0 80px rgba(19, 28, 35, 10%);
+      text-align: end;
     }
 
     .cummu-txt {
       font-size: 18px;
+      padding-top: 2px;
     }
   }
 
@@ -67,13 +74,50 @@ const RealRightImgBlock = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 0 0 15px 15px;
+    // 색상 props로 받아서 바꿔야 함
+    background: #11233b;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      width: 353px;
+      height: 120px;
+      // 색상 props로 받아서 바꿔야 함
+      background: linear-gradient(to top, #11233b, transparent);
+    }
 
     .chat-txt {
       color: var(--white-100);
-      font-size: 25px;
+      font-size: 28px;
       font-weight: 600;
+      text-shadow: 0 0 0 var(--white-100);
       text-shadow: 0 0 35px rgb(255, 255, 255, 80%);
+      text-align: center;
+      line-height: 120%;
       cursor: pointer;
+
+      .bold-txt {
+        font-weight: 700;
+      }
+    }
+
+    .long {
+      color: var(--white-100);
+      font-size: 29px;
+      font-weight: 600;
+      text-shadow: 0 0 0 var(--white-100);
+      text-shadow: 0 7px 35px rgb(255, 255, 255, 60%);
+      text-align: center;
+      line-height: 120%;
+      padding-bottom: 10px;
+      cursor: pointer;
+
+      .bold-txt {
+        font-weight: 700;
+      }
     }
   }
 `;
@@ -82,21 +126,34 @@ const StyledMiniFoot = styled(MiniFoot)`
   transform: translateX(11px) translateY(34px);
 `;
 
-const RightImg = () => {
+const RightImg = ({ groupName = 'BTS' }) => {
   return (
     <RightImgBlock>
       <RealRightImgBlock>
         <div className='artist-img'>
           <div className='txt-bg'>
             <div className='txt-box'>
-              <span className='artist-txt'>BTS</span> {/* 나중에 수정해야 함 */}
+              {groupName.length > 10 ? <span className='artist-txt long'>{groupName}</span> : <span className='artist-txt'>{groupName}</span>}
               <span className='cummu-txt'>Community</span>
             </div>
           </div>
         </div>
 
         <div className='chat-box'>
-          <div className='chat-txt'>Let&lsquo;s go chat with BTS</div> {/* 나중에 수정해야 함, 링크도 추가해야 함 */}
+          {groupName.length > 4 ? (
+            <>
+              <div className='chat-txt long'>
+                {`Let's go chat with `}
+                <br />
+                <span className='bold-txt'>{groupName}</span>
+              </div>
+            </>
+          ) : (
+            <div className='chat-txt'>
+              Let&apos;s go chat with <span className='bold-txt'>{groupName}</span>
+            </div>
+          )}
+          {/* Let&lsquo;s go chat with {groupName}</div> 나중에 수정해야 함, 링크도 추가해야 함 */}
         </div>
       </RealRightImgBlock>
       <StyledMiniFoot />

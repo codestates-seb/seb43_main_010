@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink, useParams } from 'react-router-dom';
 
@@ -6,7 +5,7 @@ const NavBlock = styled.nav`
   width: 100%;
   height: 50px;
   /* background 색상은 나중에 props로 바꾸어주어야 할 부분임 */
-  background: linear-gradient(to right, #60abe1, #0b6bb0);
+  background: linear-gradient(to right, #70a7e7, #265696);
 
   display: flex;
   justify-content: center;
