@@ -58,7 +58,7 @@ public class feedPostController {
     }
 
 
-    // feed 리스트 조회(무한 스크롤)
+    // feedPost 리스트 조회(무한 스크롤)
     @GetMapping("/new_post")
     public ResponseEntity getAllFeedPost(@RequestParam(defaultValue = "1") @Positive int page,
                                          @RequestParam(defaultValue = "16") @Positive int size) {
