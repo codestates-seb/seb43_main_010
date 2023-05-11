@@ -27,6 +27,7 @@ public class FansService {
         fans.setPassword(bCryptPasswordEncoder.encode(fans.getPassword()));
         return fansRepository.save(fans);
     }
+
     private void verifyExistsEmail(String email) {
         Optional<Fans> fans = fansRepository.findByEmail(email);
         Optional<Artist> artist = artistRepository.findByEmail(email);
