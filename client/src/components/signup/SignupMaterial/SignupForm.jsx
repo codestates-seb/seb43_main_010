@@ -142,7 +142,7 @@ const LoginForm = () => {
       }
       body = { ...artist };
       await axios
-        .post('http://localhost:4000/artists', body)
+        .post('/signup/artist', body)
         .then(() => {
           console.log('성공');
           dispatch(setArtistId());
@@ -163,9 +163,9 @@ const LoginForm = () => {
       }
       body = { ...fanUser };
       await axios
-        .post('http://localhost:4000/fans', body)
-        .then(() => {
-          console.log('성공');
+        .post('/signup/fans', body)
+        .then((res) => {
+          console.log(res);
           dispatch(setFanId());
         })
         .catch((e) => {

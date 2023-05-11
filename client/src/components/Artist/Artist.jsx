@@ -5,7 +5,7 @@ import profileImg from '../../assets/jpg-file/profile-img.jpg';
 import ArtistPostInput from './ArtistMaterial/ArtistPostInput';
 import ArtistPost from '../Artist/ArtistMaterial/ArtistPost';
 import Gradation from '../Artist/ArtistMaterial/Gradation';
-import WriteModalPost from '../Artist/ArtistMaterial/WriteModalPost';
+import WritePostModal from './ArtistMaterial/WritePostModal';
 import RightArea from './ArtistMaterial/Rightarea';
 
 const Container = styled.div`
@@ -121,7 +121,7 @@ const Artist = () => {
         </ArtistBox>
       </Container>
       {/* 포스트 작성 컴포넌트임 => WritePost 컴포넌트 */}
-      {modalOpen ? <WriteModalPost modalOpen={modalOpen} setModalOpen={setModalOpen} /> : null}
+      {modalOpen ? <WritePostModal modalOpen={modalOpen} setModalOpen={setModalOpen} /> : null}
     </>
   );
 };

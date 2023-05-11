@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
+import bubbleTail from '../../../assets/svg-file/bubble-tail.svg';
 
 import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
 import DetailPost from '../../Feed/FeedMaterial/DetailPost';
@@ -40,14 +41,21 @@ const ArtistProfile = styled.div`
 const ArtistPostBox = styled.div`
   width: 635px;
   height: auto;
-
+  position: relative;
+  .bubble-tail {
+    position: absolute;
+    left: -10px;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    img {
+    }
+  }
   .top-mid {
     min-height: 98px;
     background: linear-gradient(to left, transparent, #c7e7ff);
     border: 1px solid linear-gradient(#c7e7ff);
-    border-radius: 0.7rem;
-    /* border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem; */
+    border-radius: 0.5rem;
     box-shadow: 0 0 12px rgb(19, 28, 35, 5%);
     padding: 12px 0 0 12px;
 
@@ -238,6 +246,9 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum }) 
           <div className='created-month'>May</div>
         </ArtistProfile>
         <ArtistPostBox>
+          <div className='bubble-tail'>
+            <img src={bubbleTail} alt='bubble-tail-icon'></img>
+          </div>
           <div className='top-mid'>
             {/* 위 */}
             <div className='top'>

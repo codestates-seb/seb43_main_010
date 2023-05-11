@@ -7,7 +7,7 @@ import { emailValidation, pwdValidation } from '../../Signup/validation';
 import { setToken } from '../../../reducer/authSlice';
 import axios from 'axios';
 import tempAuth from './tempAuth.js';
-import { setRefreshToken, getCookie } from './setCookie';
+import { setAccessToken, getCookie } from './setCookie';
 //div : h1 form div(btn)
 const LoginFormBox = styled.div`
   /* min-height: 178px; */
@@ -179,15 +179,9 @@ const KakaoBtn = styled.div`
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const token = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-
+  // const token = useSelector((state) => state.auth);
+  // const dispatch = useDispatch();
   const onClickSignup = () => {
-    console.log(token.authenticated);
-    if (token.authenticated) {
-      alert('이미 로그인 되어있습니다.');
-      navigate('/feed');
-    }
     onReset();
     navigate('/signup');
   };
@@ -199,28 +193,16 @@ const LoginForm = () => {
       return;
     }
 
-    // await axios
-    //   .post('http://localhost:4000/login', body)
-    //   .then(() => {
-    //     //여기서 토큰을 받아서 쿠키 설정 해주기
-    //     let token = '1234567';
-    //     console.log('성공');
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    //잠시 서버 axios 역할을 한다고 가정하자.
-    let res = tempAuth(body.email, body.password);
-    // 리프레시 토큰을 쿠키에 저장
-    setRefreshToken(res.refreshToken);
-    // 엑세스 토큰을 store에 저장
-    dispatch(setToken(res.accessToken));
-    //여기서 바로 accessToken 찍으면 null나옴
-    // dispatch도 useState처럼 비동기적으로 실행?
-    // 그래서 dispatch전에 console.log가 먼저 실행되나?
-    //그럼 어떻게 해야할까?
-    console.log(token.accessToken);
-
+    await axios
+      .post('/login', body)
+      .then((res) => {
+        console.log(res);
+        let token = res.headers.get('authorization');
+        setAccessToken(token);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     onReset();
     navigate('/');
   };
