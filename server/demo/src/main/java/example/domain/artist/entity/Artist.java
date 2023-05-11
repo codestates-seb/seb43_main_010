@@ -22,7 +22,7 @@ public class Artist extends BaseEntity {
     @Column(nullable = false, updatable = false,unique = true,columnDefinition = "VARCHAR(30)")
     private String email;
 
-    @Column(nullable = false,columnDefinition = "VARCHAR(15)")
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false,columnDefinition = "VARCHAR(20)")

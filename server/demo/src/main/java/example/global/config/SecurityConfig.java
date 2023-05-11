@@ -40,8 +40,7 @@ public class SecurityConfig{
                 .apply(new MyCustomDsl())
                 .and()
                 .authorizeRequests(authroize -> authroize.antMatchers("/**")
-                        .access("hasRole('FANS')")
-                        .anyRequest().permitAll())
+                        .permitAll())
                 .build();
 
 
