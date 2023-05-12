@@ -213,7 +213,7 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
     if (textarea) {
       textarea.style.height = 'auto';
       let height = textarea.scrollHeight;
-      let maxHeight = window.innerHeight * 0.53; // 0.74
+      let maxHeight = window.innerHeight * 0.45; // 0.74
       textarea.style.height = `${Math.min(height + 8, maxHeight)}px`;
     }
 
@@ -236,13 +236,14 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
   // submit
   const submitFn = (e) => {
     e.preventDefault();
-    if (content.trim().length > 1) {
-      // 여기서 서버한테 content 데이터 전송해야 함.
-      // 서버에 데이터 전송 되면 내용 비우고 창 닫기
-      // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
-      setContent('');
-      setModalOpen(false);
-    }
+    // if (content.trim().length > 1) {
+    //   // 여기서 서버한테 content 데이터 전송해야 함.
+    //   // 서버에 데이터 전송 되면 내용 비우고 창 닫기
+    //   // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
+    //   setContent('');
+    //   setModalOpen(false);
+    // }
+    console.log(setContent);
   };
 
   //이미지 아이콘 누르면 imgInput에 접근

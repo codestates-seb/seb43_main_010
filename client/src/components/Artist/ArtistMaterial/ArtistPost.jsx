@@ -45,7 +45,7 @@ const ArtistPostBox = styled.div`
   .bubble-tail {
     position: absolute;
     left: -10px;
-    top: 2px;
+    top: 1px;
     width: 20px;
     height: 20px;
     img {
@@ -61,8 +61,10 @@ const ArtistPostBox = styled.div`
 
     .top {
       display: flex;
-      justify-content: start;
+      justify-content: space-between;
       align-items: center;
+      /* height: 30px; */
+      margin-bottom: 8px;
 
       .user-txt-box {
         display: flex;
@@ -74,6 +76,31 @@ const ArtistPostBox = styled.div`
         color: var(--dark-blue-900);
         font-size: 15px;
         font-weight: 800;
+      }
+
+      .right-icon-box {
+        position: relative;
+      }
+
+      .right-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        transform: translateX(-10px);
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--light-gray-100);
+          transition: 0.15s;
+        }
+
+        .mini-menu {
+          font-size: 16px;
+          i::before {
+            color: var(--light-gray-400);
+          }
+        }
       }
     }
 
@@ -173,7 +200,7 @@ const ArtistPostBox = styled.div`
         }
       }
     }
-
+    /* 
     .right-icon-box {
       position: relative;
     }
@@ -199,7 +226,7 @@ const ArtistPostBox = styled.div`
           color: var(--light-gray-400);
         }
       }
-    }
+    } */
 
     .comment-num {
       color: var(--gray-900);
@@ -255,6 +282,25 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum }) 
               <div className='user-txt-box'>
                 <div className='nickname'>{nickname}</div>
               </div>
+              <div className='right-icon-box'>
+                <button onClick={clickMiniMenu} className='right-icon'>
+                  <div className='mini-menu'>
+                    <i className='i-three-point-menu-icon' />
+                  </div>
+                </button>
+                {/* 게시글 수정, 삭제 모달 */}
+                {openModal ? (
+                  <EditDeleteModal
+                    top='100%'
+                    right='0'
+                    openModal={openModal}
+                    setOpenModal={setOpenModal}
+                    deleteModal={deleteModal}
+                    setDeleteModal={setDeleteModal}
+                    what='포스트를'
+                  />
+                ) : null}
+              </div>
             </div>
 
             {/* 중간 */}
@@ -291,26 +337,6 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum }) 
                 <i className='i-bubble-icon' />
               </button>
               {commentNum === 0 ? null : <span className='comment-num'>{commentNum}</span>}
-            </div>
-
-            <div className='right-icon-box'>
-              <button onClick={clickMiniMenu} className='right-icon'>
-                <div className='mini-menu'>
-                  <i className='i-three-point-menu-icon' />
-                </div>
-              </button>
-              {/* 게시글 수정, 삭제 모달 */}
-              {openModal ? (
-                <EditDeleteModal
-                  top='100%'
-                  right='0'
-                  openModal={openModal}
-                  setOpenModal={setOpenModal}
-                  deleteModal={deleteModal}
-                  setDeleteModal={setDeleteModal}
-                  what='포스트를'
-                />
-              ) : null}
             </div>
           </div>
         </ArtistPostBox>
