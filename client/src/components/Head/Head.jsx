@@ -30,7 +30,7 @@ const LeftBox = styled.div`
   }
 `;
 
-const ArtistBox = styled.button`
+const ArtistBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
