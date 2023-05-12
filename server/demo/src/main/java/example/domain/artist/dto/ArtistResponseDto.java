@@ -8,6 +8,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ArtistResponseDto {
+    private int id;
     private String content;
+    private String nickname;
+    private String role;
 
 }

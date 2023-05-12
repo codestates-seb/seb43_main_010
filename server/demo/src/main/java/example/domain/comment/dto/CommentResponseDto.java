@@ -1,20 +1,17 @@
 package example.domain.comment.dto;
 
-import lombok.AllArgsConstructor;
+import example.domain.artist.dto.ArtistResponseDto;
+import example.domain.fans.dto.FansResponseDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class CommentResponseDto {
-    @Positive
-    private int fanId;
-    private String nickName;
+    private FansResponseDto fan;
+    private ArtistResponseDto artist;
     private long feedPostId;
     private long commentId;
     private String content;

@@ -35,7 +35,7 @@ public class artistPostService {
     public ArtistPost updateArtistPost(ArtistPost artistPost){
         ArtistPost findArtistPost = findArtistPost(artistPost.getId());
 
-        if(artistPost.getArtist().getArtistId() != findArtistPost.getArtist().getArtistId()) {
+        if(artistPost.getArtist().getId() != findArtistPost.getArtist().getId()) {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
         }else{
             Optional.ofNullable(artistPost.getContent()).ifPresent(content -> findArtistPost.setContent(content));

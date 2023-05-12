@@ -52,4 +52,9 @@ public class Comment {
         this.content = content;
         this.fans = fans;
     }
+    public Comment(ArtistPost artistPost, String content, Artist artist) {
+        this.artistPost = artistPost;
+        this.content = content;
+        this.artist = artist;
+    }
 }
