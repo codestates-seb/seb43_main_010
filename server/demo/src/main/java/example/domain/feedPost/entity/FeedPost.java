@@ -42,7 +42,6 @@ public class FeedPost extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "fan_id")
-//    @JsonIgnore
     private Fans fans;
 
 

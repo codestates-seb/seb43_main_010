@@ -10,15 +10,12 @@ import example.domain.feedPost.mapper.feedPostMapper;
 import example.domain.feedPost.service.feedPostService;
 import example.global.response.MultiResponseDto;
 import example.global.response.SingleResponseDto;
-import example.domain.feedPost.repository.feedPostRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -49,7 +46,7 @@ public class feedPostController {
 
 
 //     feed 상세 조회
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // 경로 변수 안에는 entity 클래스의 식별자 들어감
     public ResponseEntity getFeed(
             @PathVariable("id") @Positive int feedPostId){
         FeedPost feedPost = service.findFeedPost(feedPostId);
@@ -59,19 +56,8 @@ public class feedPostController {
     }
 
 
-    // feedPost 리스트 조회(무한 스크롤)
-    @GetMapping
-    public ResponseEntity getAllFeedPost(@RequestParam(defaultValue = "1") @Min(1) int page,
-                                         @RequestParam(defaultValue = "16") @Min(1) int size) {
-        Page<FeedPost> pageFeedPosts = service.findAllFeedPost(page -1, size);
-        List<FeedPost> list = pageFeedPosts.getContent();
-
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.feedPostsToFeedResponseDtos(list), pageFeedPosts), HttpStatus.OK);
-    }
-
     @PatchMapping("/{id}")
-    public ResponseEntity pathFeedPost(
+    public ResponseEntity patchFeedPost(
             @PathVariable("id") @Positive int feedPostId,
             @Valid @RequestBody feedPostDto.Patch requestBody){
         requestBody.setFeedPostId(feedPostId);
@@ -87,8 +73,21 @@ public class feedPostController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteFeedPost(@PathVariable("id") @Positive int feedPostId) {
+    public ResponseEntity deleteFeedPost(
+            @PathVariable("id") @Positive int feedPostId) {
         service.deleteFeedPost(feedPostId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // feedPost 리스트 조회(무한 스크롤)
+    @GetMapping
+    public ResponseEntity getFeedPosts(@Positive @RequestParam int page,
+                                        @Positive @RequestParam int size) {
+        Page<FeedPost> pageFeedPosts = service.findFeedPosts(page -1, size);
+        List<FeedPost> feedPosts = pageFeedPosts.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(
+                        mapper.feedPostsToFeedResponseDtos(feedPosts), pageFeedPosts), HttpStatus.OK);
     }
 }

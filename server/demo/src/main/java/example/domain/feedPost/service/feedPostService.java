@@ -1,6 +1,7 @@
 package example.domain.feedPost.service;
 
 import example.domain.fans.repository.FansRepository;
+import example.domain.feedPost.dto.feedPostResponseDto;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.feedPost.entity.FeedPost;
@@ -17,7 +18,6 @@ import java.util.Optional;
 
 @Service
 public class feedPostService {
-    @Autowired
     private feedPostRepository feedPostRepository;
 
     public feedPostService(feedPostRepository feedPostRepository){
@@ -31,14 +31,6 @@ public class feedPostService {
     public FeedPost findFeedPost(int feedPostId){
         return feedPostRepository.findById(feedPostId)
                 .orElseThrow(()-> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
-    }
-
-
-//    @Transactional(readOnly = true)
-    public Page<FeedPost> findAllFeedPost(int page, int size){
-        Page<FeedPost> feedPosts = feedPostRepository.findAll((PageRequest.of(page, size, Sort.by("id").descending())));
-
-        return feedPosts;
     }
 
     public FeedPost updateFeedPost(FeedPost feedPost){
@@ -60,4 +52,17 @@ public class feedPostService {
         feedPostRepository.delete(findFeedPost);
     }
 
+    //    @Transactional(readOnly = true)
+    public Page<FeedPost> findFeedPosts(int page, int size){
+        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
+    }
+
+//    public feedPostResponseDto getFeedById(int feedPostId) {
+//        Optional<FeedPost> optionalFeedPost = feedPostRepository.findById(feedPostId);
+//        FeedPost feedPost = optionalFeedPost.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
+//
+//        feedPostResponseDto responseDto = new feedPostResponseDto();
+//        responseDto.setFeedPostId(feedPost.getId());
+//        return responseDto;
+//    }
 }

@@ -16,7 +16,8 @@ import java.util.List;
 @Setter
 public class feedPostResponseDto {
     private FansResponseDto fans;
-    private int feedPostId = 1; // 초기값을 1로 설정
+//    private int feedPostId = 1; // 초기값을 1로 설정
+    private Integer id;
     private String content;
     private String img;
     private LocalDateTime createdAt;

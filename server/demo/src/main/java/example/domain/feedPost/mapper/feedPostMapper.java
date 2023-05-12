@@ -17,15 +17,18 @@ public interface feedPostMapper {
         FeedPost feedPost = new FeedPost(requestBody.getContent(), requestBody.getImg(), fans);
         return feedPost;
     }
-
-    // feedPost -> feedPostDto.Response
-    feedPostResponseDto feedToFeedResponseDto(FeedPost feedPost);
-    List<feedPostResponseDto> feedPostsToFeedResponseDtos(List<FeedPost> feedPosts);
-
     // feedPostDto.Patch -> feedPost
     default FeedPost feedPatchDtoToFeed(feedPostDto.Patch requestBody, Fans fans){
         FeedPost feedPost = new FeedPost(requestBody.getContent(), requestBody.getImg(), fans);
         feedPost.setId(requestBody.getFeedPostId());
         return feedPost;
     }
+
+    // feedPost -> feedPostDto.Response
+    //    @Mapping(source = "id", target = "feedPostId")
+    feedPostResponseDto feedToFeedResponseDto(FeedPost feedPost);
+
+
+    List<feedPostResponseDto> feedPostsToFeedResponseDtos(List<FeedPost> feedPost);
+
 }
