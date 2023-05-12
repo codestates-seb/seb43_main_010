@@ -1,5 +1,6 @@
 package example.domain.feedPost.mapper;
 
+import example.domain.fans.dto.FansResponseDto;
 import example.domain.fans.entity.Fans;
 import example.domain.feedPost.dto.feedPostDto;
 import example.domain.feedPost.dto.feedPostResponseDto;

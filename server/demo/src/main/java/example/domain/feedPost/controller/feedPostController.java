@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -27,13 +28,12 @@ public class feedPostController {
     private feedPostMapper mapper;
     private FansRepository fansRepository;
     private feedPostService service;
-    private example.domain.feedPost.repository.feedPostRepository feedPostRepository;
 
-    public feedPostController(feedPostMapper mapper, FansRepository fansRepository, feedPostService service, feedPostRepository feedPostRepository) {
+
+    public feedPostController(feedPostMapper mapper, FansRepository fansRepository, feedPostService service) {
         this.mapper = mapper;
         this.fansRepository = fansRepository;
         this.service = service;
-        this.feedPostRepository = feedPostRepository;
     }
 
     @PostMapping("/ask")
@@ -42,15 +42,16 @@ public class feedPostController {
                     .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
         FeedPost feedPost = mapper.feedPostDtoToFeed(requestBody, fans);
         FeedPost saveFeedPost = service.createFeedPost(feedPost);
-        return new ResponseEntity<>(mapper.feedToFeedResponseDto(saveFeedPost),
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.feedToFeedResponseDto(saveFeedPost)),
                 HttpStatus.OK);
     }
 
 
-    // feed 상세 조회
-    @GetMapping("{feed-id}")
+//     feed 상세 조회
+    @GetMapping("/{id}")
     public ResponseEntity getFeed(
-            @PathVariable("feed-id") @Positive int feedPostId){
+            @PathVariable("id") @Positive int feedPostId){
         FeedPost feedPost = service.findFeedPost(feedPostId);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.feedToFeedResponseDto(feedPost)),
@@ -59,19 +60,34 @@ public class feedPostController {
 
 
     // feedPost 리스트 조회(무한 스크롤)
-    @GetMapping("/new_post")
-    public ResponseEntity getAllFeedPost(@RequestParam(defaultValue = "1") @Positive int page,
-                                         @RequestParam(defaultValue = "16") @Positive int size) {
-        Page<FeedPost> feedPosts = service.findAllFeedPost(page -1, size);
-        List<FeedPost> list = feedPosts.getContent();
+    @GetMapping
+    public ResponseEntity getAllFeedPost(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                         @RequestParam(defaultValue = "16") @Min(1) int size) {
+        Page<FeedPost> pageFeedPosts = service.findAllFeedPost(page -1, size);
+        List<FeedPost> list = pageFeedPosts.getContent();
 
-        return new ResponseEntity(new MultiResponseDto<>(mapper.feedPostsToFeedResponseDtos(list), feedPosts), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.feedPostsToFeedResponseDtos(list), pageFeedPosts), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity pathFeedPost(
+            @PathVariable("id") @Positive int feedPostId,
+            @Valid @RequestBody feedPostDto.Patch requestBody){
+        requestBody.setFeedPostId(feedPostId);
+        Fans fans = fansRepository.findById(requestBody.getFansId())
+                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+        FeedPost feedPost = mapper.feedPatchDtoToFeed(requestBody, fans);
+        FeedPost updateFeedPost = service.updateFeedPost(feedPost);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.feedToFeedResponseDto(updateFeedPost)), HttpStatus.OK);
     }
 
 
 
-    @DeleteMapping("/{feed_id}")
-    public ResponseEntity deleteFeedPost(@PathVariable("feed_id") @Positive int feedPostId) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteFeedPost(@PathVariable("id") @Positive int feedPostId) {
         service.deleteFeedPost(feedPostId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

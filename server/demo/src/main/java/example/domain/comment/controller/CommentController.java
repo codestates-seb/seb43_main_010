@@ -5,6 +5,7 @@ import example.domain.artist.repository.ArtistRepository;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.comment.dto.CommentPatchDto;
 import example.domain.comment.dto.CommentPostDto;
+import example.domain.comment.dto.CommentResponseDto;
 import example.domain.comment.entity.Comment;
 import example.domain.comment.mapper.CommentMapper;
 import example.domain.comment.repository.CommentRepository;
@@ -48,13 +49,11 @@ public class CommentController {
 
 
     // feedPost 댓글 작성
-    @PostMapping("fans/comments")
-    public ResponseEntity feedPostComment(@Valid @RequestBody CommentPostDto requestBody){
+    @PostMapping("feeds/comments")
+    public ResponseEntity<CommentResponseDto> feedPostComment(@Valid @RequestBody CommentPostDto.FanPostDto requestBody){
         Fans fans = fansRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-        Artist artist = artistRepository.findById(requestBody.getArtistId())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
-        FeedPost findFeedPost = feedPostRepository.findById(requestBody.getFeedPostId())
+        FeedPost findFeedPost = feedPostRepository.findById(requestBody.getId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
         Comment comment = commentService.createComment(
                 mapper.commentPostDtoToComment(requestBody, fans, findFeedPost));
@@ -64,23 +63,21 @@ public class CommentController {
 
 
     // artistPost 댓글 작성
-    @PostMapping("artist/comments")
-    public ResponseEntity artistPostComment(@Valid @RequestBody CommentPostDto requestBody){
-        Fans fans = fansRepository.findById(requestBody.getFanId())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+    @PostMapping("artists/comments")
+    public ResponseEntity<CommentResponseDto> artistPostComment(@Valid @RequestBody CommentPostDto.ArtistPostDto requestBody){
         Artist artist = artistRepository.findById(requestBody.getArtistId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
-        ArtistPost findArtistPost = artistPostRepository.findById(requestBody.getArtistPostId())
+        ArtistPost findArtistPost = artistPostRepository.findById(requestBody.getId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND));
         Comment comment = commentService.createComment(
-                mapper.commentPostDtoToComment(requestBody, fans, findArtistPost));
+                mapper.commentPostDtoToComment(requestBody, artist, findArtistPost));
 
         return new ResponseEntity<>(mapper.commentToCommentResponseDto(comment), HttpStatus.CREATED);
     }
 
 
     // feedPost 댓글 리스트 조회(무한 스크롤)
-    @GetMapping("fans/{feedPost-id}/comments")
+    @GetMapping("feeds/comments/{feedPost_id}")
     public ResponseEntity getAllFansComment(@RequestParam(defaultValue = "1") @Positive int page,
                                             @RequestParam(defaultValue = "16") @Positive int size) {
         Page<Comment> fansComments = commentService.findAllCommentsByFeedPostId(page -1, size);
@@ -91,7 +88,7 @@ public class CommentController {
 
 
     // artistPost 댓글 리스트 조회(무한 스크롤)
-    @GetMapping("artist/{artistPost-id}/comments") // artistPost 댓글
+    @GetMapping("artists/comments/{artistPost_id}") // artistPost 댓글
     public ResponseEntity getAllArtistComment(@RequestParam(defaultValue = "1") @Positive int page,
                                             @RequestParam(defaultValue = "16") @Positive int size) {
         Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(page -1, size);
@@ -101,15 +98,10 @@ public class CommentController {
     }
 
 
+    // fans 댓글 수정
 
-    /**
-     댓글 수정
-     자기가 작성한 답만 수정,삭제 가능
-     자기 답 아닌데 접근 ->  예외 발생
-     **/
-
-    @PatchMapping("comment_id")
-    public ResponseEntity patchComment(@PathVariable("comment_id") @Positive @NotNull int commentId,
+    @PatchMapping("feeds/comments/{comment_id}")
+    public ResponseEntity patchFansComment(@PathVariable("comment_id") @Positive @NotNull int commentId,
                                        @Valid @RequestBody CommentPatchDto requestBody){
         requestBody.setCommentId(commentId);
         Fans fans = fansRepository.findById(requestBody.getFanId())
@@ -124,9 +116,35 @@ public class CommentController {
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentResponseDto(updateComment)), HttpStatus.OK);
     }
 
-    // 댓글 삭제
-    @DeleteMapping("/{comment_id}")
-    public ResponseEntity deleteComment(@PathVariable("comment_id") @Positive int commentId) {
+
+    // artist 댓글 수정
+    @PatchMapping("artists/comments/{comment_id}")
+    public ResponseEntity patchArtistComment(@PathVariable("comment_id") @Positive @NotNull int commentId,
+                                       @Valid @RequestBody CommentPatchDto requestBody){
+        requestBody.setCommentId(commentId);
+        Fans fans = fansRepository.findById(requestBody.getFanId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+        Artist artist = artistRepository.findById(requestBody.getArtistId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+        Comment findComment = commentRepository.findById(requestBody.getCommentId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
+        Comment comment = mapper.commentPatchDtoToComment(requestBody, fans, findComment.getFeedPost());
+        Comment updateComment = commentService.updateComment(comment);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentResponseDto(updateComment)), HttpStatus.OK);
+    }
+
+    // fans 댓글 삭제
+    @DeleteMapping("feeds/comments/{comment_id}")
+    public ResponseEntity deleteFansComment(@PathVariable("comment_id") @Positive int commentId) {
+        commentService.deleteComment(commentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    // artist 댓글 삭제
+    @DeleteMapping("artists/comments/{comment_id}")
+    public ResponseEntity deleteArtistComment(@PathVariable("comment_id") @Positive int commentId) {
         commentService.deleteComment(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

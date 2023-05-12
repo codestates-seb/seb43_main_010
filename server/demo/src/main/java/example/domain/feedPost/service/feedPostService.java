@@ -1,21 +1,23 @@
 package example.domain.feedPost.service;
 
+import example.domain.fans.repository.FansRepository;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.feedPost.entity.FeedPost;
 import example.domain.feedPost.repository.feedPostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DecimalFormat;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 public class feedPostService {
+    @Autowired
     private feedPostRepository feedPostRepository;
 
     public feedPostService(feedPostRepository feedPostRepository){
@@ -26,15 +28,15 @@ public class feedPostService {
         return feedPostRepository.save(feedPost);
     }
 
-    public FeedPost findFeedPost(int feedId){
-        Optional<FeedPost> optionalPost = feedPostRepository.findById(feedId); // findById : Optional<T> 객체 반환
-        return optionalPost.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
+    public FeedPost findFeedPost(int feedPostId){
+        return feedPostRepository.findById(feedPostId)
+                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
     }
 
-    // 최신글 순으로 조회
-    @Transactional(readOnly = true)
+
+//    @Transactional(readOnly = true)
     public Page<FeedPost> findAllFeedPost(int page, int size){
-        Page<FeedPost> feedPosts = feedPostRepository.findAll((PageRequest.of(page, size, Sort.by("feedPostId").descending())));
+        Page<FeedPost> feedPosts = feedPostRepository.findAll((PageRequest.of(page, size, Sort.by("id").descending())));
 
         return feedPosts;
     }

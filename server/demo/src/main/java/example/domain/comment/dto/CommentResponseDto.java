@@ -12,8 +12,8 @@ public class CommentResponseDto {
     @Positive
     private int fanId;
     private String nickName;
-    private int feedPostId;
-    private int commentId;
+    private long feedPostId;
+    private long commentId;
     private String content;
     private LocalDateTime createdAt;
 }

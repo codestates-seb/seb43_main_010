@@ -1,5 +1,6 @@
 package example.domain.feedPost.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import example.global.common.global.BaseTimeEntity;
 import example.domain.fans.entity.Fans;
 import example.domain.like.entity.Like;
@@ -27,7 +28,6 @@ public class FeedPost extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "feedPost_id")
     private Integer id;
     @Column(length = 16000, nullable = false)
     private String content;
@@ -42,6 +42,7 @@ public class FeedPost extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "fan_id")
+//    @JsonIgnore
     private Fans fans;
 
 

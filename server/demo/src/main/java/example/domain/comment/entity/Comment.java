@@ -1,5 +1,6 @@
 package example.domain.comment.entity;
 
+import example.domain.artist.entity.Artist;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.fans.entity.Fans;
 import lombok.Getter;
@@ -38,6 +39,13 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fan_id")
     private Fans fans;
+
+    @Column(name = "fan_comment_id")
+    private int fanCommentId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
 
     public Comment(FeedPost feedPost, String content, Fans fans) {
         this.feedPost = feedPost;
