@@ -156,7 +156,9 @@ const ModalTitle = styled.div`
 `;
 
 const ModalText = styled.div`
-  text-align: left;
+  display: flex;
+  /* text-align: left; */
+  /* align-items: flex-start; // text와 ✰의 정렬을 위해 추가 */
   font-size: 13px;
   font-weight: 500;
   line-height: 1.5;
@@ -165,7 +167,6 @@ const ModalText = styled.div`
 const ModalTextBold = styled.div`
   font-size: 12.8px;
   font-weight: 600;
-  /* width: 100%; */
   margin-top: 15px;
   margin-bottom: 15px;
 `;
@@ -189,22 +190,68 @@ const CancelBtn = styled(ConfirmBtn)`
   color: var(--dark-blue-900);
 `;
 
-const ArtistCard = ({ imgSrc, imgAlt, nickName, artistName, membershipDate, handleDeleteBtnClick }) => (
-  <Box>
-    <Img>
-      <img src={imgSrc} alt={imgAlt} />
-    </Img>
-    <NickName>
-      {nickName}{' '}
-      <button className='pen'>
-        <i className='i-name-pen-icon' />
-      </button>
-    </NickName>
-    <ArtistName>{artistName}</ArtistName>
-    <MembershipDate>{membershipDate} 가입</MembershipDate>
-    <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
-  </Box>
-);
+const Star = styled.span`
+  margin-right: 10px;
+`;
+
+const Input = styled.input`
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dark-blue-850);
+  border: 1px solid var(--gray-blue-200);
+  padding: 4px 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--gray-blue-400);
+    box-shadow: 0 0 3px var(--gray-blue-200);
+  }
+`;
+
+const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBtnClick }) => {
+  const [editMode, setEditMode] = useState(false);
+  const [nickName, setNickName] = useState('TATA-V');
+  const [newNickName, setNewNickName] = useState(nickName);
+
+  const handlePenClick = () => {
+    setEditMode(true);
+  };
+
+  const handleNickNameChange = (e) => {
+    setNewNickName(e.target.value);
+  };
+
+  const handleNickNameSubmit = (e) => {
+    e.preventDefault();
+    setNickName(newNickName);
+    setEditMode(false);
+  };
+
+  return (
+    <Box>
+      <Img>
+        <img src={imgSrc} alt={imgAlt} />
+      </Img>
+      {editMode ? (
+        <form onSubmit={handleNickNameSubmit}>
+          <Input type='text' value={newNickName} onChange={handleNickNameChange} />
+        </form>
+      ) : (
+        <NickName>
+          {nickName}{' '}
+          <button className='pen' onClick={handlePenClick}>
+            <i className='i-name-pen-icon' />
+          </button>
+        </NickName>
+      )}
+      <ArtistName>{artistName}</ArtistName>
+      <MembershipDate>{membershipDate} 가입</MembershipDate>
+      <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
+    </Box>
+  );
+};
 
 const MyProfile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -270,10 +317,18 @@ const MyProfile = () => {
         <ModalWrapper>
           <ModalContent>
             <ModalTitle>커뮤니티를 탈퇴하시겠습니까?</ModalTitle>
-            <ModalText>✰ 커뮤니티를 탈퇴하더라도 내가 작성한 콘텐츠는 삭제되지 않습니다. 프로필 사진과 닉네임도 함께 유지되어 노출됩니다.</ModalText>
-            <ModalText>✰ 커뮤니티 내 모든 구독 정보가 초기화됩니다.</ModalText>
-            <ModalText>✰ 커뮤니티의 MY 프로필 화면을 볼 수 없습니다.</ModalText>
-            <ModalText>✰ 이 커뮤니티에서 진행된 혜택을 행사할 수 없습니다.</ModalText>
+            <ModalText>
+              <Star>✰</Star>커뮤니티를 탈퇴하더라도 내가 작성한 콘텐츠는 삭제되지 않습니다. 프로필 사진과 닉네임도 함께 유지되어 노출됩니다.
+            </ModalText>
+            <ModalText>
+              <Star>✰</Star>커뮤니티 내 모든 구독 정보가 초기화됩니다.
+            </ModalText>
+            <ModalText>
+              <Star>✰</Star>커뮤니티의 MY 프로필 화면을 볼 수 없습니다.
+            </ModalText>
+            <ModalText>
+              <Star>✰</Star>이 커뮤니티에서 진행된 혜택을 행사할 수 없습니다.
+            </ModalText>
             <ModalTextBold>일부 정보와혜택은 재가입해도 복구되지 않습니다.</ModalTextBold>
             <ModalBtnWrapper>
               <CancelBtn onClick={handleCancelBtnClick}>취소</CancelBtn>

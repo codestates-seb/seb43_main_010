@@ -133,13 +133,13 @@ const MyInfoRight = () => {
     password: false,
   });
 
-  const handleClick = () => {
-    const kakaoAppKey = 'YOUR_KAKAO_APP_KEY'; // 여기에 카카오 앱 키를 넣기
-    const redirectUri = 'YOUR_REDIRECT_URI'; // 여기에 리디렉트 URI를 넣기
-    const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoAppKey}&redirect_uri=${redirectUri}&response_type=code`;
+  // const handleClick = () => {
+  //   const kakaoAppKey = 'YOUR_KAKAO_APP_KEY'; // 여기에 카카오 앱 키를 넣기
+  //   const redirectUri = 'YOUR_REDIRECT_URI'; // 여기에 리디렉트 URI를 넣기
+  //   const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoAppKey}&redirect_uri=${redirectUri}&response_type=code`;
 
-    window.location.assign(authUrl);
-  };
+  //   window.location.assign(authUrl);
+  // };
 
   const FieldInput = ({ field, label }) => {
     const [inputValue, setInputValue] = useState(info[field]);
@@ -206,7 +206,8 @@ const MyInfoRight = () => {
               <KakaoIcon className='i-kakao-icon' />
             </button>
             <Kakao>카카오톡</Kakao>
-            <ConnectButton onClick={handleClick}>연결하기</ConnectButton>
+            <ConnectButton>연결하기</ConnectButton>
+            {/* <ConnectButton onClick={handleClick}>연결하기</ConnectButton> */}
           </KakaoContainer>
         </div>
         <WithdrawalBtn>루미안 계정 탈퇴하기</WithdrawalBtn>
