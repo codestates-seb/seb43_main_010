@@ -199,7 +199,7 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
 
   return (
     <>
-      <PostBlock img={img}>
+      <PostBlock className='post' img={img}>
         {/* 위 */}
         <div className='top'>
           <div className='profile'>

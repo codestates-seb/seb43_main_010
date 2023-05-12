@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import logo from '../../assets/svg-file/white-logo.svg';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import RightIcon from './HeadMaterial/RightIcon';
 import MyArtistModal from './HeadMaterial/MyArtistModal';
@@ -30,7 +31,7 @@ const LeftBox = styled.div`
   }
 `;
 
-const ArtistBox = styled.div`
+const ArtistBox = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,6 +60,12 @@ const ArtistBox = styled.div`
 const Head = () => {
   const [myArtModal, setMyArttModal] = useState(false);
 
+  const { groupId } = useParams();
+  const state = useSelector((state) => state.color);
+
+  const group3 = state.allGroup.find((el) => el.groupId === Number(groupId));
+  const groupName = group3 ? group3.groupName : [];
+
   const toggleMyArtistModal = () => {
     setMyArttModal(!myArtModal);
   };
@@ -76,7 +83,7 @@ const Head = () => {
           <ArtistBox>
             <button onClick={toggleMyArtistModal} className='artist-name-box' tabIndex='-1'>
               {/* BTS 부분을 나중에 데이터 받아서 수정해줘야 함 */}
-              <span className='artist-name'>BTS</span>
+              <span className='artist-name'>{groupName}</span>
               <div className='down'>
                 <i className='i-down-icon' />
               </div>

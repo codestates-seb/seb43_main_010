@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import btsImg from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import MiniFoot from '../../Foot/MiniFoot';
 
@@ -32,7 +33,7 @@ const RealRightImgBlock = styled.div`
     border-radius: 15px 15px 0 0;
 
     // 임시 이미지임.. 나중에 수정해야 함
-    background: no-repeat url('${btsImg}');
+    background: ${({ groupImg }) => `no-repeat url(${groupImg})`};
     background-size: 353px 398px;
 
     // 글자 잘 보이게 딤 처리함
@@ -64,6 +65,7 @@ const RealRightImgBlock = styled.div`
     .cummu-txt {
       font-size: 18px;
       padding-top: 2px;
+      text-shadow: 0 0 10px rgba(19, 28, 35, 12%);
     }
   }
 
@@ -76,7 +78,7 @@ const RealRightImgBlock = styled.div`
     align-items: center;
     border-radius: 0 0 15px 15px;
     // 색상 props로 받아서 바꿔야 함
-    background: #62a6e0;
+    background: ${({ gradColor }) => (gradColor ? `${gradColor[3]}` : `#62a6e0`)};
     position: relative;
 
     &::before {
@@ -86,7 +88,8 @@ const RealRightImgBlock = styled.div`
       width: 353px;
       height: 120px;
       // 색상 props로 받아서 바꿔야 함
-      background: linear-gradient(to top, #62a6e0, transparent);
+      background: ${({ gradColor }) =>
+        gradColor ? `linear-gradient(to top, ${gradColor[3]}, transparent)` : `linear-gradient(to top, #62a6e0, transparent)`};
     }
 
     .chat-txt {
@@ -126,10 +129,21 @@ const StyledMiniFoot = styled(MiniFoot)`
   transform: translateX(11px) translateY(34px);
 `;
 
-const RightImg = ({ groupName = 'BTS' }) => {
+const RightImg = () => {
+  const { groupId } = useParams();
+  const state = useSelector((state) => state.color);
+  const group = state.allGroup.find((el) => el.groupId === Number(groupId));
+  const gradColor = group ? group.gradColor : [];
+
+  const group2 = state.allGroup.find((el) => el.groupId === Number(groupId));
+  const groupImg = group2 ? group2.groupImg : [];
+
+  const group3 = state.allGroup.find((el) => el.groupId === Number(groupId));
+  const groupName = group3 ? group3.groupName : [];
+
   return (
     <RightImgBlock>
-      <RealRightImgBlock>
+      <RealRightImgBlock gradColor={gradColor} groupImg={groupImg}>
         <div className='artist-img'>
           <div className='txt-bg'>
             <div className='txt-box'>
@@ -153,7 +167,6 @@ const RightImg = ({ groupName = 'BTS' }) => {
               Let&apos;s go chat with <span className='bold-txt'>{groupName}</span>
             </div>
           )}
-          {/* Let&lsquo;s go chat with {groupName}</div> 나중에 수정해야 함, 링크도 추가해야 함 */}
         </div>
       </RealRightImgBlock>
       <StyledMiniFoot />

@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { NavLink, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const NavBlock = styled.nav`
   width: 100%;
   height: 50px;
   /* background 색상은 나중에 props로 바꾸어주어야 할 부분임 */
-  background: linear-gradient(to right, #70a7e7, #265696);
+  background: ${({ gradColor }) =>
+    gradColor ? `linear-gradient(to right, ${gradColor[0]}, ${gradColor[1]})` : `linear-gradient(to right, #5faae1, #0c6bb0)`};
 
   display: flex;
   justify-content: center;
@@ -46,9 +48,12 @@ const StyledLink = styled(NavLink)`
 
 const Nav = () => {
   const { groupId } = useParams();
+  const state = useSelector((state) => state.color);
+  const group = state.allGroup.find((el) => el.groupId === Number(groupId));
+  const gradColor = group ? group.gradColor : [];
 
   return (
-    <NavBlock>
+    <NavBlock gradColor={gradColor}>
       <StyledLink to={`/feed/${groupId}`}>
         <button>
           <span>Feed</span>
