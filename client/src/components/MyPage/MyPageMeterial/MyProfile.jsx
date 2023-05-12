@@ -156,7 +156,9 @@ const ModalTitle = styled.div`
 `;
 
 const ModalText = styled.div`
-  text-align: left;
+  display: flex;
+  /* text-align: left; */
+  /* align-items: flex-start; // text와 ✰의 정렬을 위해 추가 */
   font-size: 13px;
   font-weight: 500;
   line-height: 1.5;
@@ -165,7 +167,6 @@ const ModalText = styled.div`
 const ModalTextBold = styled.div`
   font-size: 12.8px;
   font-weight: 600;
-  /* width: 100%; */
   margin-top: 15px;
   margin-bottom: 15px;
 `;
@@ -187,6 +188,10 @@ const ConfirmBtn = styled.button`
 const CancelBtn = styled(ConfirmBtn)`
   background-color: var(--white-100);
   color: var(--dark-blue-900);
+`;
+
+const Star = styled.span`
+  margin-right: 10px;
 `;
 
 const ArtistCard = ({ imgSrc, imgAlt, nickName, artistName, membershipDate, handleDeleteBtnClick }) => (
@@ -270,10 +275,18 @@ const MyProfile = () => {
         <ModalWrapper>
           <ModalContent>
             <ModalTitle>커뮤니티를 탈퇴하시겠습니까?</ModalTitle>
-            <ModalText>✰ 커뮤니티를 탈퇴하더라도 내가 작성한 콘텐츠는 삭제되지 않습니다. 프로필 사진과 닉네임도 함께 유지되어 노출됩니다.</ModalText>
-            <ModalText>✰ 커뮤니티 내 모든 구독 정보가 초기화됩니다.</ModalText>
-            <ModalText>✰ 커뮤니티의 MY 프로필 화면을 볼 수 없습니다.</ModalText>
-            <ModalText>✰ 이 커뮤니티에서 진행된 혜택을 행사할 수 없습니다.</ModalText>
+            <ModalText>
+              <Star>✰</Star>커뮤니티를 탈퇴하더라도 내가 작성한 콘텐츠는 삭제되지 않습니다. 프로필 사진과 닉네임도 함께 유지되어 노출됩니다.
+            </ModalText>
+            <ModalText>
+              <Star>✰</Star>커뮤니티 내 모든 구독 정보가 초기화됩니다.
+            </ModalText>
+            <ModalText>
+              <Star>✰</Star>커뮤니티의 MY 프로필 화면을 볼 수 없습니다.
+            </ModalText>
+            <ModalText>
+              <Star>✰</Star>이 커뮤니티에서 진행된 혜택을 행사할 수 없습니다.
+            </ModalText>
             <ModalTextBold>일부 정보와혜택은 재가입해도 복구되지 않습니다.</ModalTextBold>
             <ModalBtnWrapper>
               <CancelBtn onClick={handleCancelBtnClick}>취소</CancelBtn>
