@@ -45,8 +45,8 @@ public class FeedPost extends BaseTimeEntity {
     private Fans fans;
 
 
-//    @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
-//    private List<Like> likes = new ArrayList<>();
+    @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
+    private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();

@@ -3,10 +3,7 @@ package example.domain.artistPost.entity;
 import example.domain.artist.entity.Artist;
 import example.domain.comment.entity.Comment;
 import example.global.common.global.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -59,8 +56,20 @@ public class ArtistPost extends BaseTimeEntity{
             this.artist = artist;
         }
 
-        public void addComment(Comment comment) {
-                comments.add(comment);
-                comment.setArtistPost(this);
+//        public void addComment(Comment comment) {
+//                comments.add(comment);
+//                comment.setArtistPost(this);
+//        }
+
+        @Builder
+        public ArtistPost(Integer id, String content, String img, LocalDateTime createdAt, LocalDateTime modifiedAt, Artist artist, List<Comment> comments, Integer likeCount) {
+                this.id = id;
+                this.content = content;
+                this.img = img;
+                this.createdAt = createdAt;
+                this.modifiedAt = modifiedAt;
+                this.artist = artist;
+                this.comments = comments;
+                this.likeCount = likeCount;
         }
 }

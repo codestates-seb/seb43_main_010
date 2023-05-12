@@ -1,5 +1,6 @@
 package example.domain.feedPost.dto;
 
+import example.domain.comment.dto.CommentResponseDto;
 import example.domain.comment.entity.Comment;
 import example.domain.fans.dto.FansResponseDto;
 import example.domain.like.entity.Like;
@@ -23,10 +24,8 @@ public class feedPostResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    @NotNull
-    private List<Like> likeList = new ArrayList<>();;
-
-    private List<Comment> comments = new ArrayList<>();
+//    private List<LikeDto> likeList = new ArrayList<>();
+    private List<CommentResponseDto> comments;
 
     }
 //
