@@ -194,22 +194,64 @@ const Star = styled.span`
   margin-right: 10px;
 `;
 
-const ArtistCard = ({ imgSrc, imgAlt, nickName, artistName, membershipDate, handleDeleteBtnClick }) => (
-  <Box>
-    <Img>
-      <img src={imgSrc} alt={imgAlt} />
-    </Img>
-    <NickName>
-      {nickName}{' '}
-      <button className='pen'>
-        <i className='i-name-pen-icon' />
-      </button>
-    </NickName>
-    <ArtistName>{artistName}</ArtistName>
-    <MembershipDate>{membershipDate} 가입</MembershipDate>
-    <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
-  </Box>
-);
+const Input = styled.input`
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dark-blue-850);
+  border: 1px solid var(--gray-blue-200);
+  padding: 4px 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--gray-blue-400);
+    box-shadow: 0 0 3px var(--gray-blue-200);
+  }
+`;
+
+const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBtnClick }) => {
+  const [editMode, setEditMode] = useState(false);
+  const [nickName, setNickName] = useState('TATA-V');
+  const [newNickName, setNewNickName] = useState(nickName);
+
+  const handlePenClick = () => {
+    setEditMode(true);
+  };
+
+  const handleNickNameChange = (e) => {
+    setNewNickName(e.target.value);
+  };
+
+  const handleNickNameSubmit = (e) => {
+    e.preventDefault();
+    setNickName(newNickName);
+    setEditMode(false);
+  };
+
+  return (
+    <Box>
+      <Img>
+        <img src={imgSrc} alt={imgAlt} />
+      </Img>
+      {editMode ? (
+        <form onSubmit={handleNickNameSubmit}>
+          <Input type='text' value={newNickName} onChange={handleNickNameChange} />
+        </form>
+      ) : (
+        <NickName>
+          {nickName}{' '}
+          <button className='pen' onClick={handlePenClick}>
+            <i className='i-name-pen-icon' />
+          </button>
+        </NickName>
+      )}
+      <ArtistName>{artistName}</ArtistName>
+      <MembershipDate>{membershipDate} 가입</MembershipDate>
+      <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
+    </Box>
+  );
+};
 
 const MyProfile = () => {
   const [showModal, setShowModal] = useState(false);
