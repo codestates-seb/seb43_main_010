@@ -347,7 +347,7 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
                   onKeyUp={autoResizeTextarea}
                   onChange={changeContent}
                   type='text'
-                  // placeholder='내용을 입력해 주세요.'
+                  placeholder='내용을 입력해 주세요.'
                   name='content'
                   autoComplete='off'
                   required
