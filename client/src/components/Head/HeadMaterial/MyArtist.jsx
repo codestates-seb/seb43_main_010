@@ -1,15 +1,15 @@
 import styled from 'styled-components';
-import btsPng from '../../../assets/png-file/card-png/1-bts.png';
 
 const MyArtistBlock = styled.li`
-  width: 283px;
+  width: 100%;
   height: 57px;
   border-radius: 8px;
-  padding: 0 11.5px;
+  padding: 14px 12px;
 
   display: flex;
   justify-content: start;
   align-items: center;
+  flex-shrink: 0;
 
   &:hover {
     background-color: var(--light-gray-150);
@@ -26,17 +26,21 @@ const MyArtistBlock = styled.li`
     font-weight: 700;
     margin-left: 9px;
   }
+
+  &.scrollbar {
+    width: 270px;
+  }
 `;
 
-const MyArtist = () => {
+const MyArtist = ({ grouplogoImg, groupName }) => {
   return (
     <MyArtistBlock>
       {/* 이미지와 alt 부분을 나중에 데이터 받아서 수정해줘야 함 */}
       {/* 만약 현재페이지와 같은 그룹이름이라면 => 글자 색상을 skyblue600으로 바꿔야 함 */}
       <div className='artist-img'>
-        <img src={btsPng} alt='bts' />
+        <img src={grouplogoImg} alt={groupName} />
       </div>
-      <span>BTS</span>
+      <span>{groupName}</span>
     </MyArtistBlock>
   );
 };

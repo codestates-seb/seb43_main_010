@@ -32,6 +32,12 @@ const PostContextBox = styled.div`
 
 const PostsBox = styled.div`
   margin-bottom: 71px;
+
+  .post:last-child {
+    .bottom {
+      border-bottom: none;
+    }
+  }
 `;
 
 // 그냥 임시 Post 데이터임
