@@ -134,12 +134,8 @@ const RightImg = () => {
   const state = useSelector((state) => state.color);
   const group = state.allGroup.find((el) => el.groupId === Number(groupId));
   const gradColor = group ? group.gradColor : [];
-
-  const group2 = state.allGroup.find((el) => el.groupId === Number(groupId));
-  const groupImg = group2 ? group2.groupImg : [];
-
-  const group3 = state.allGroup.find((el) => el.groupId === Number(groupId));
-  const groupName = group3 ? group3.groupName : [];
+  const groupImg = group ? group.groupImg : [];
+  const groupName = group ? group.groupName : [];
 
   return (
     <RightImgBlock>
