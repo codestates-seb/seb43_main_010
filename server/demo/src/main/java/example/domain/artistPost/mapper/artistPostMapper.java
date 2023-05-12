@@ -19,7 +19,7 @@ public interface artistPostMapper {
 
     // artistPost -> artistPostDto.Response
     artistPostResponseDto artistToArtistResponseDto(ArtistPost artistPost);
-    List<artistPostResponseDto> artistPostsToArtistResponseDtos(List<ArtistPost> artistPosts);
+    List<artistPostResponseDto> artistPostsToArtistResponseDtos(List<ArtistPost> artistPost);
 
     // artistPostDto.Patch -> artistPost
     default ArtistPost artistPatchDtoToArtist(artistPostDto.Patch requestBody, Artist artist){

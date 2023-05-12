@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class artistPostResponseDto {
     private ArtistResponseDto artist;
-    private int artistPostId;
+    private Integer id; // artistPostId
     private String content;
     private String img;
     private LocalDateTime createdAt;

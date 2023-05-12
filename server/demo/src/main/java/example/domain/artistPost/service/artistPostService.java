@@ -31,13 +31,6 @@ public class artistPostService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND));
     }
 
-    // 최신글 순으로 조회
-    @Transactional(readOnly = true)
-    public Page<ArtistPost> findAllArtistPost(int page, int size){
-        Page<ArtistPost> artistPosts = artistPostRepository.findAll((PageRequest.of(page, size, Sort.by("artistPostId").descending())));
-
-        return artistPosts;
-    }
 
     public ArtistPost updateArtistPost(ArtistPost artistPost){
         ArtistPost findArtistPost = findArtistPost(artistPost.getId());
@@ -56,5 +49,9 @@ public class artistPostService {
     public void deleteArtistPost(int artistId){
         ArtistPost findArtistPost = findArtistPost(artistId);
         artistPostRepository.delete(findArtistPost);
+    }
+
+    public Page<ArtistPost> findArtistPosts(int page, int size){
+        return artistPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
     }
 }

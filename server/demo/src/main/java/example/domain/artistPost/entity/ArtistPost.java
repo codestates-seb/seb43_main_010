@@ -28,7 +28,7 @@ import java.util.List;
 public class ArtistPost extends BaseTimeEntity{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "artistPost_id")
+//        @Column(name = "artistPost_id")
         private Integer id;
         @Column(length = 16000, nullable = false)
         private String content;
@@ -44,7 +44,6 @@ public class ArtistPost extends BaseTimeEntity{
         @ManyToOne
         @JoinColumn(name = "artist_id")
         private Artist artist;
-
 
 
         @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE) // 엔티티가 삭제 될 때 함께 삭제
