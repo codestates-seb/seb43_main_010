@@ -134,8 +134,8 @@ const MyInfoRight = () => {
   });
 
   const handleClick = () => {
-    const kakaoAppKey = 'YOUR_KAKAO_APP_KEY'; // 여기에 카카오 앱 키를 넣으세요
-    const redirectUri = 'YOUR_REDIRECT_URI'; // 여기에 리디렉트 URI를 넣으세요
+    const kakaoAppKey = 'YOUR_KAKAO_APP_KEY'; // 여기에 카카오 앱 키를 넣기
+    const redirectUri = 'YOUR_REDIRECT_URI'; // 여기에 리디렉트 URI를 넣기
     const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoAppKey}&redirect_uri=${redirectUri}&response_type=code`;
 
     window.location.assign(authUrl);
