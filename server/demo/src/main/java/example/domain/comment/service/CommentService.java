@@ -42,16 +42,16 @@ public class CommentService {
 
     // feedPost 댓글 (무한 스크롤)
     @Transactional(readOnly = true)
-    public Page<Comment> findAllCommentsByFeedPostId(int page, int size){
-        Page<Comment> fanComments = commentRepository.findAll((PageRequest.of(page, size, Sort.by("fanCommentId").descending())));
+    public Page<Comment> findAllCommentsByFeedPostId(int feedPostId, int page, int size){
+        Page<Comment> fanComments = commentRepository.findAllByFeedPostId(feedPostId, PageRequest.of(page, size, Sort.by("id").descending()));
 
         return fanComments;
     }
 
     // artistPost 댓글 (무한 스크롤)
     @Transactional(readOnly = true)
-    public Page<Comment> findAllCommentsByArtistPostId(int page, int size){
-        Page<Comment> artistComments = commentRepository.findAll((PageRequest.of(page, size, Sort.by("artistCommentId").descending())));
+    public Page<Comment> findAllCommentsByArtistPostId(int artistPostId, int page, int size){
+        Page<Comment> artistComments = commentRepository.findAllByArtistPostId(artistPostId, PageRequest.of(page, size, Sort.by("id").descending()));
 
         return artistComments;
     }

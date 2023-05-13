@@ -78,9 +78,10 @@ public class CommentController {
 
     // feedPost 댓글 리스트 조회(무한 스크롤)
     @GetMapping("feeds/comments/{feedPost_id}")
-    public ResponseEntity getAllFansComment(@RequestParam(defaultValue = "1") @Positive int page,
+    public ResponseEntity getAllFansComment(@PathVariable("feedPost_id") int feedPostId,
+                                            @RequestParam(defaultValue = "1") @Positive int page,
                                             @RequestParam(defaultValue = "16") @Positive int size) {
-        Page<Comment> fansComments = commentService.findAllCommentsByFeedPostId(page -1, size);
+        Page<Comment> fansComments = commentService.findAllCommentsByFeedPostId(feedPostId,page -1, size);
         List<Comment> list = fansComments.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToCommentResponseDtos(list), fansComments), HttpStatus.OK);
@@ -89,9 +90,10 @@ public class CommentController {
 
     // artistPost 댓글 리스트 조회(무한 스크롤)
     @GetMapping("artists/comments/{artistPost_id}") // artistPost 댓글
-    public ResponseEntity getAllArtistComment(@RequestParam(defaultValue = "1") @Positive int page,
-                                            @RequestParam(defaultValue = "16") @Positive int size) {
-        Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(page -1, size);
+    public ResponseEntity getAllArtistComment(@PathVariable("artistPost_id") int artistPostId,
+                                              @RequestParam(defaultValue = "1") @Positive int page,
+                                              @RequestParam(defaultValue = "16") @Positive int size) {
+        Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(artistPostId, page -1, size);
         List<Comment> list = artistComments.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToCommentResponseDtos(list), artistComments), HttpStatus.OK);

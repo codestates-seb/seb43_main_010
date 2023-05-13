@@ -1,6 +1,8 @@
 package example.domain.comment.repository;
 
 import example.domain.comment.entity.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,5 +14,8 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query(value = "SELECT * FROM answer WHERE feedPost_Id = :feedPostId", nativeQuery = true)
     List<Comment> findAllByFeedPostId(@Param("feedPostId") int feedPostId);
+
+    Page<Comment> findAllByFeedPostId(Integer feedPostId, Pageable pageable);
+    Page<Comment> findAllByArtistPostId(Integer artistPostId, Pageable pageable);
 
 }
