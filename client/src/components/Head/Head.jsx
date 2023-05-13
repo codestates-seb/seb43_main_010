@@ -24,7 +24,7 @@ const LeftBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  .left-logi-box {
+  .left-logo-box {
     position: relative;
   }
 
@@ -77,7 +77,7 @@ const Head = () => {
     <>
       <HeadBlock>
         <LeftBox>
-          <div className='left-logi-box'>
+          <div className='left-logo-box'>
             <Link to='/'>
               <div className='logo'>
                 <img src={logo} alt='logo' />
