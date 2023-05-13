@@ -24,6 +24,10 @@ const LeftBox = styled.div`
   justify-content: center;
   align-items: center;
 
+  .left-logi-box {
+    position: relative;
+  }
+
   .logo {
     width: 132px;
     margin-left: 51px;
@@ -31,11 +35,10 @@ const LeftBox = styled.div`
   }
 `;
 
-const ArtistBox = styled.button`
+const ArtistBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   cursor: pointer;
 
   .artist-name {
@@ -74,11 +77,15 @@ const Head = () => {
     <>
       <HeadBlock>
         <LeftBox>
-          <Link to='/'>
-            <div className='logo'>
-              <img src={logo} alt='logo' />
-            </div>
-          </Link>
+          <div className='left-logi-box'>
+            <Link to='/'>
+              <div className='logo'>
+                <img src={logo} alt='logo' />
+              </div>
+            </Link>
+            {/* 헤더 왼쪽 모달창 => MyArtistModal 컴포넌트 */}
+            {myArtModal ? <MyArtistModal myArtModal={myArtModal} setMyArttModal={setMyArttModal} /> : null}
+          </div>
 
           <ArtistBox>
             <button onClick={toggleMyArtistModal} className='artist-name-box' tabIndex='-1'>
@@ -88,9 +95,6 @@ const Head = () => {
                 <i className='i-down-icon' />
               </div>
             </button>
-
-            {/* 헤더 왼쪽 모달창 => MyArtistModal 컴포넌트 */}
-            {myArtModal ? <MyArtistModal myArtModal={myArtModal} setMyArttModal={setMyArttModal} /> : null}
           </ArtistBox>
         </LeftBox>
         {/* 오른쪽 search, bell, people, ques 아이콘들이 있는 곳 => RightIcon 컴포넌트 */}
