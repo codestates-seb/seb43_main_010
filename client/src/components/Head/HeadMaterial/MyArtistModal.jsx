@@ -9,8 +9,8 @@ import MyArtist from './MyArtist';
 
 const MyArtistModalBlock = styled.div`
   position: absolute;
-  top: 165%;
-  left: 22%;
+  top: 170%;
+  left: 108.9%;
   width: 300px;
   min-height: 120px;
   border-radius: 14px;
@@ -78,7 +78,6 @@ const MyArtistModal = ({ myArtModal, setMyArttModal }) => {
 
   return (
     <MyArtistModalBlock ref={artistModalRef}>
-      {/* 여기서 map 돌려야 함 */}
       <ul className='my-artist-box'>
         {/* 현재 로그인한 유저의 커뮤니티 가입한 거를 map돌려야 함 */}
         {/* 해당 아티스트에 맞는 Link도 추가해야 함 => MyArtist 컴포넌트 */}

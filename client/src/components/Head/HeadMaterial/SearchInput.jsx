@@ -146,7 +146,7 @@ const SearchInput = ({ openSearch, setOpenSearch }) => {
   const searchChange = (e) => {
     setSearchName(e.target.value);
 
-    if (e.target.value.trim().length > 0) {
+    if (e.target.value.length > 0) {
       setSearchModal(true);
     } else {
       setSearchModal(false);
@@ -169,7 +169,7 @@ const SearchInput = ({ openSearch, setOpenSearch }) => {
       </SearchInputBlock>
 
       {searchModal && (
-        <SearchArtistUl ref={artUlRef} searchModal={searchModal}>
+        <SearchArtistUl ref={artUlRef}>
           {filterName.length > 0 ? (
             filterName.map((el) => (
               <StyledLink to={filterId.includes(el.groupId) ? `/feed/${el.groupId}` : `/join/${el.groupId}`} key={el.groupId}>
