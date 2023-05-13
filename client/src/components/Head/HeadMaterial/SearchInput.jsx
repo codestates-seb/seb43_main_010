@@ -134,13 +134,15 @@ const SearchInput = ({ openSearch, setOpenSearch }) => {
   }, [openSearch, searchModal]);
 
   // 함수 영역
-  const filterId = data.myGroup.map((el) => {
-    return el.groupId;
-  });
+  const filterId = new Set(
+    data.myGroup.map((el) => {
+      return el.groupId;
+    }),
+  );
 
   const filterName = data.allGroup.filter((el) => {
-    const result = el.groupName.toLocaleLowerCase().replace(' ', '').includes(searchName.toLocaleLowerCase().replace(' ', ''));
-    return result;
+    const findGroupName = new Set(el.groupName.toLocaleLowerCase().replace(' ', ''));
+    return findGroupName.has(searchName.toLocaleLowerCase().replace(' ', ''));
   });
 
   const searchChange = (e) => {
@@ -172,7 +174,7 @@ const SearchInput = ({ openSearch, setOpenSearch }) => {
         <SearchArtistUl ref={artUlRef}>
           {filterName.length > 0 ? (
             filterName.map((el) => (
-              <StyledLink to={filterId.includes(el.groupId) ? `/feed/${el.groupId}` : `/join/${el.groupId}`} key={el.groupId}>
+              <StyledLink to={filterId.has(el.groupId) ? `/feed/${el.groupId}` : `/join/${el.groupId}`} key={el.groupId}>
                 <SearchArtistLi groupName={el.groupName} grouplogoImg={el.grouplogoImg} />
               </StyledLink>
             ))
