@@ -186,6 +186,7 @@ const ImgPreview = styled.div`
   display: flex;
   gap: 5px;
   .img-box {
+    position: relative;
     width: 25%;
     height: 100%;
     .post-img {
@@ -193,6 +194,25 @@ const ImgPreview = styled.div`
       height: 100%;
       object-fit: cover;
       border-radius: 0.5rem;
+    }
+    .delete-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 22px;
+      height: 22px;
+      color: var(--light-gray-100);
+      background: linear-gradient(0deg, hsla(0, 0%, 100%, 0.2), hsla(0, 0%, 100%, 0.2)), rgba(0, 0, 0, 0.45);
+      border-radius: 1rem;
+      z-index: 1;
+      font-size: 0.7rem;
+      /* font-weight: 600; */
+      :hover {
+        background: linear-gradient(0deg, hsla(0, 0%, 100%, 0.2), hsla(0, 0%, 100%, 0.2)), rgba(45, 45, 45, 0.45);
+      }
     }
   }
 `;
@@ -204,8 +224,12 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
 
-  const [showImages, setShowImages] = useState([]);
+  //파일 저장을 위한것
+  const [imgList, setImgList] = useState([]);
+
+  const limitRef = useRef(4);
   const imgInput = useRef();
+  const imgIdRef = useRef(1);
 
   const autoResizeTextarea = () => {
     let textarea = document.querySelector('.autoTextarea');
@@ -231,6 +255,9 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
   const deleteBtnFn = () => {
     setModalOpen(false);
     setContent('');
+    setImgList([]);
+    limitRef.current = 4;
+    // imgIdRef.current = 1;
   };
 
   // submit
@@ -243,7 +270,7 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
     //   setContent('');
     //   setModalOpen(false);
     // }
-    console.log(setContent);
+    console.log(imgList);
   };
 
   //이미지 아이콘 누르면 imgInput에 접근
@@ -252,64 +279,52 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
     imgInput.current.click();
   };
 
-  //이미지 미리보기위한 함수
-  const handleAddImg = (e) => {
+  //이미지 미리보기위한 함수, input의 onChange이벤트임
+  const handleUploadImg = (e) => {
     e.preventDefault();
-    const imgLists = e.target.files;
-    let imageUrlLists = [...showImages];
+    const fileArr = e.target.files;
+    let fileURLs = [];
+    let file;
+    let tempObj = {};
+    let tempArr = [];
+    limitRef.current -= fileArr.length;
 
-    if (imageUrlLists.length > 3) {
-      alert('최대 4장 가능');
+    //한번에 올릴 최대 파일의 개수를 제한하기 위해 사용
+    if (fileArr.length > 4) {
+      alert(`사진은 한번에 최대 4장까지 업로드 가능합니다.`);
       return;
-      // imageUrlLists = imageUrlLists.slice(0, 4);
     }
+    //현재 limit이 4장보다 작은경우에만 imgList에 추가할 수 있다.
+    if (limitRef.current < 0) {
+      alert(`현재 사진은 ${limitRef.current + fileArr.length}장까지 더 업로드 가능합니다.`);
+      limitRef.current += fileArr.length;
+      return;
+    } else {
+      for (let i = 0; i < fileArr.length; i++) {
+        file = fileArr[i];
+        let reader = new FileReader();
+        // 비동기로 동작함
+        reader.onload = () => {
+          fileURLs[i] = reader.result;
+          tempObj = { id: imgIdRef.current, url: fileURLs[i] };
+          tempArr.push(tempObj);
+          imgIdRef.current++;
+          setImgList([...imgList, ...tempArr]);
 
-    for (let i = 0; i < imgLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imgLists[i]);
-      imageUrlLists.push(currentImageUrl);
+          e.target.value = '';
+        };
+        reader.readAsDataURL(file);
+      }
     }
-    setShowImages(imageUrlLists);
-    // focusEditor();
-
-    // textInput.current.focus();
-
-    // const fileArr = e.target.files;
-    // const fileURLs = [];
-    // let file;
-    // let maxFile = 4;
-    // let filesLength = fileArr.length > maxFile ? maxFile : fileArr.length;
-    // if (fileArr.length > maxFile) {
-    //   imgInput.current.value = '';
-    //   alert(`한번에 업로드 가능한 사진은 최대 ${maxFile}장 까지 입니다.`);
-    //   return;
-    // }
-
-    // for (let i = 0; i < filesLength; i++) {
-    //   file = fileArr[i];
-    //   let reader = new FileReader();
-    //   console.log('1');
-    //   //reader.readAsDataURL(file); 후에 실행된다
-    //   //이게 실행될때까지 포문이 돌면안된다.
-    //   reader.onload = () => {
-    //     fileURLs[i] = reader.result; //인코딩된 파일
-    //     setImgList([fileURLs[i], ...imgList]);
-    //     console.log('2');
-    //   };
-    //   console.log('3');
-
-    //   reader.readAsDataURL(file); //base64로 인코딩
-    //   console.log('4');
-
-    // if (file) {
-    //   reader.readAsDataURL(file);
-    // }
-    // if (imgList.length > 4) {
-    //   alert('사진은 최대 4장까지 등록이 가능합니다.');
-    //   return;
-    // }
-    // imgInput.current.value = '';
+    e.target.value = '';
   };
 
+  //이미지 삭제 버튼 함수
+  const handleDeleteImg = (fileId) => {
+    const newImgList = imgList.filter((file) => file.id !== fileId);
+    limitRef.current++;
+    setImgList(newImgList);
+  };
   return (
     <>
       {modalOpen ? (
@@ -320,23 +335,28 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
                 <span className='post-txt'>포스트 쓰기</span>
                 <span className='artist-txt'>BTS</span> {/* 나중에 수정해야 할 부분임 */}
               </div>
-              <ImgPreviewBox>
-                <div className='preview-txt'>이미지 목록</div>
-                <ImgPreview>
-                  <div className='img-box'>
-                    <img className='post-img' src={testImg} alt='post-img'></img>
-                  </div>
-                  <div className='img-box'>
-                    <img className='post-img' src={testImg} alt='post-img'></img>
-                  </div>
-                  <div className='img-box'>
-                    <img className='post-img' src={testImg} alt='post-img'></img>
-                  </div>
-                  <div className='img-box'>
-                    <img className='post-img' src={testImg} alt='post-img'></img>
-                  </div>
-                </ImgPreview>
-              </ImgPreviewBox>
+              {imgList.length === 0 ? null : (
+                <ImgPreviewBox>
+                  <div className='preview-txt'>이미지 목록</div>
+                  <ImgPreview>
+                    {imgList.map((el) => {
+                      return (
+                        <div key={el.id} className='img-box'>
+                          <img className='post-img' src={el.url} alt='post-img' />
+                          <button
+                            className='delete-btn'
+                            onClick={() => {
+                              handleDeleteImg(el.id);
+                            }}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </ImgPreview>
+                </ImgPreviewBox>
+              )}
 
               <form className='post-form'>
                 <label htmlFor='post-content'>포스트</label>
@@ -360,7 +380,7 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
                   placeholder='이미지업로드'
                   accept='image/*'
                   ref={imgInput}
-                  onChange={handleAddImg}
+                  onChange={handleUploadImg}
                 ></ImgInput>
               </form>
 
