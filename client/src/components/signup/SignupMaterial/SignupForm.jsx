@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { setFanId, setArtistId, resetInputs, setCalssification } from '../../../reducer/signupSlice';
 import axios from 'axios';
 import { emailValidation, pwdValidation, checkPwdValidation, commonValidation } from '../validation.js';
-
+import SwitchButton from './SignupSwitchBtn';
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
   /* min-height: 178px; */
@@ -41,24 +41,6 @@ const UserCheck = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-`;
-
-// artist 체크박스
-const CheckBox = styled.div`
-  border: 1px solid #95c788;
-  border-radius: 6px;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const CheckIcon = styled(BsCheckLg)`
-  color: #1cbec8;
-  font-size: 21px;
-  margin-right: 1px;
 `;
 
 //Inputform Box
@@ -114,8 +96,8 @@ const LoginForm = () => {
   // const artistProfile = useSelector((state) => state.signup.artist.profile);
   // const artistGroupImg = useSelector((state) => state.signup.artist.groupImg);
 
-  // 체크박스 클릭시 setUser
-  const onClickCheckBox = () => {
+  // switch 클릭시 setUser
+  const handleChange = () => {
     onReset();
     dispatch(setCalssification(!isArtist));
     onInputReset();
@@ -137,7 +119,7 @@ const LoginForm = () => {
         commonValidation(artist.name) === false ||
         commonValidation(artist.nickname) === false
       ) {
-        alert('모든 정보를 입력해주세요!');
+        alert('올바른 정보를 입력해주세요!');
         return;
       }
       body = { ...artist };
@@ -158,7 +140,7 @@ const LoginForm = () => {
         commonValidation(fanUser.name) === false ||
         commonValidation(fanUser.nickname) === false
       ) {
-        alert('모든 정보를 입력해주세요!');
+        alert('올바른정보를 입력해주세요!');
         return;
       }
       body = { ...fanUser };
@@ -206,10 +188,10 @@ const LoginForm = () => {
     <>
       <SignupFormBox>
         <Title>
-          루미안 회원가입
+          {isArtist ? '아티스트로 회원가입' : '팬으로 회원가입'}
           <UserCheck>
-            {isArtist ? '아티스트' : '일반인'}
-            <CheckBox onClick={onClickCheckBox}>{isArtist && <CheckIcon />}</CheckBox>
+            가입유형
+            <SwitchButton handleChange={handleChange} />
           </UserCheck>
         </Title>
         <InputBox>

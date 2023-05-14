@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import deleteBtn from '../../../assets/png-file/x-btn.png';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import HideArtist from '../../WritePost/WritePostMaterial/HideArtist';
 import { BsFillCameraFill } from 'react-icons/bs';
-import testImg from '../../../assets/jpg-file/card-jpg/11-bibi.jpg';
+import ModalImgPreview from './ModalImgPreview';
 
 const WritePostBlock = styled.div`
   position: fixed;
@@ -162,73 +162,21 @@ const ImgIcon = styled(BsFillCameraFill)`
 const ImgInput = styled.input`
   display: none;
 `;
-const ImgPreviewBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 28px;
-  width: 767px;
-  height: 170px;
-  transform: translateX(-20px) translateY(-20px);
-  position: relative;
-  .preview-txt {
-    color: var(--light-gray-500);
-    font-size: 14px;
-    text-shadow: 0 0 0 var(--light-gray-500);
-    position: absolute;
-    top: -28px;
-  }
-`;
-//이미지 미리보기
-const ImgPreview = styled.div`
-  /* flex-grow: 1; */
-  width: 100%;
-  height: 100%;
-  display: flex;
-  gap: 5px;
-  .img-box {
-    position: relative;
-    width: 25%;
-    height: 100%;
-    .post-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 0.5rem;
-    }
-    .delete-btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 22px;
-      height: 22px;
-      color: var(--light-gray-100);
-      background: linear-gradient(0deg, hsla(0, 0%, 100%, 0.2), hsla(0, 0%, 100%, 0.2)), rgba(0, 0, 0, 0.45);
-      border-radius: 1rem;
-      z-index: 1;
-      font-size: 0.7rem;
-      /* font-weight: 600; */
-      :hover {
-        background: linear-gradient(0deg, hsla(0, 0%, 100%, 0.2), hsla(0, 0%, 100%, 0.2)), rgba(45, 45, 45, 0.45);
-      }
-    }
-  }
-`;
 
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
 // 사용하실 때 const [modalOpen, setModalOpen] = useState(false)를 상위에서 사용해 주세요!
-const WritePostModal = ({ modalOpen, setModalOpen }) => {
+const WritePostModal = ({ modalOpen, setModalOpen, postData, setPostData }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
 
-  //파일 저장을 위한것
+  //이미지파일 저장 + 미리보기를 위한것
   const [imgList, setImgList] = useState([]);
-
+  // 이미지 파일 최대 올릴수 있는 개수 4개로 제한하는 변수관리
   const limitRef = useRef(4);
+  // 사진버튼 클릭시 이미지 인풋에 접근하기 위한 inputRef
   const imgInput = useRef();
+  // 이미지를 {id: x, img: string} 객체로 관리하기 위한 이미지 하나의 고유 id 관리를 위한 변수
   const imgIdRef = useRef(1);
 
   const autoResizeTextarea = () => {
@@ -263,13 +211,18 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
   // submit
   const submitFn = (e) => {
     e.preventDefault();
-    // if (content.trim().length > 1) {
-    //   // 여기서 서버한테 content 데이터 전송해야 함.
-    //   // 서버에 데이터 전송 되면 내용 비우고 창 닫기
-    //   // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
-    //   setContent('');
-    //   setModalOpen(false);
-    // }
+    if (content.trim().length > 1) {
+      // 이 부분 조건을 바꿔야할까? 컨텐츠나 이미지 둘 다 null 일 경우 submit 안되게??
+      // 여기서 서버한테 content 데이터 전송해야 함.
+      // 서버에 데이터 전송 되면 내용 비우고 창 닫기
+      // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
+      setPostData([{ content, img: imgList }, ...postData]);
+      setContent('');
+      setImgList([]);
+      limitRef.current = 4;
+      imgIdRef.current = 1;
+      setModalOpen(false);
+    }
     console.log(imgList);
   };
 
@@ -335,28 +288,8 @@ const WritePostModal = ({ modalOpen, setModalOpen }) => {
                 <span className='post-txt'>포스트 쓰기</span>
                 <span className='artist-txt'>BTS</span> {/* 나중에 수정해야 할 부분임 */}
               </div>
-              {imgList.length === 0 ? null : (
-                <ImgPreviewBox>
-                  <div className='preview-txt'>이미지 목록</div>
-                  <ImgPreview>
-                    {imgList.map((el) => {
-                      return (
-                        <div key={el.id} className='img-box'>
-                          <img className='post-img' src={el.url} alt='post-img' />
-                          <button
-                            className='delete-btn'
-                            onClick={() => {
-                              handleDeleteImg(el.id);
-                            }}
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </ImgPreview>
-                </ImgPreviewBox>
-              )}
+              {/* 이미지 업로드시 미리보기를 위한 곳 */}
+              {imgList.length === 0 ? null : <ModalImgPreview imgList={imgList} handleDeleteImg={handleDeleteImg} />}
 
               <form className='post-form'>
                 <label htmlFor='post-content'>포스트</label>

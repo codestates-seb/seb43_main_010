@@ -24,7 +24,7 @@ const IconBox = styled.div`
   width: 21px;
   height: 21px;
   border: 1px solid #95c788;
-  border-radius: 1rem;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
