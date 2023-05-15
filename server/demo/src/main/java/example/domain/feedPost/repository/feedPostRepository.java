@@ -1,6 +1,9 @@
 package example.domain.feedPost.repository;
 
+import example.domain.comment.entity.Comment;
 import example.domain.feedPost.entity.FeedPost;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface feedPostRepository extends JpaRepository<FeedPost, Integer>, feedPostCustomRepository{
+
+    Page<Comment> findAllByFeedGroupId(Integer groupId, Pageable pageable);
 
 //
 //    @Modifying

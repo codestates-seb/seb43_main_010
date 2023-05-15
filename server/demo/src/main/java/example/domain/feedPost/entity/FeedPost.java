@@ -1,6 +1,6 @@
 package example.domain.feedPost.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import example.domain.artist.entity.Artist;
 import example.global.common.global.BaseTimeEntity;
 import example.domain.fans.entity.Fans;
 import example.domain.like.entity.Like;
@@ -10,7 +10,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,17 +32,18 @@ public class FeedPost extends BaseTimeEntity {
     private String content;
     private String img;
     @CreatedDate
-    @Column(name = "created_at", updatable = false) // 한번 생성되면 업데이트 수정x
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @LastModifiedDate // 자동으로 업데이트
-    @Column(name = "last_modified_at")
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+    private String group;
 
     @ManyToOne
     @JoinColumn(name = "fan_id")
     private Fans fans;
 
+    @ManyToOne
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
 
     @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
     private List<Like> likes = new ArrayList<>();
@@ -61,14 +61,18 @@ public class FeedPost extends BaseTimeEntity {
         this.fans = fans;
     }
 
+    public FeedPost(int id, Fans fans) {
+        this.id = id;
+        this.fans = fans;
+    }
+
     @Builder
-    public FeedPost(Integer id, String content, String img, LocalDateTime createdAt, LocalDateTime modifiedAt,
+    public FeedPost(Integer id, String content, String img, LocalDateTime createdAt,
                     Fans fans, List<Comment> comments, Integer likeCount) {
         this.id = id;
         this.content = content;
         this.img = img;
         this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
         this.fans = fans;
         this.comments = comments;
         this.likeCount = likeCount;

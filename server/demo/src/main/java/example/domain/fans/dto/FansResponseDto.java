@@ -9,8 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FansResponseDto {
     private int id;
-    private String email;
     private String nickname;
-    private String role;
+    private String profile;
 
 }

@@ -1,17 +1,12 @@
 package example.domain.feedPost.dto;
 
 import example.domain.comment.dto.CommentResponseDto;
-import example.domain.comment.entity.Comment;
 import example.domain.fans.dto.FansResponseDto;
-import example.domain.like.entity.Like;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -22,10 +17,8 @@ public class feedPostResponseDto {
     private String content;
     private String img;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-
-//    private List<LikeDto> likeList = new ArrayList<>();
     private List<CommentResponseDto> comments;
+    private int likeCount;
 
     }
 //

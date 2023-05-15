@@ -1,12 +1,12 @@
 package example.domain.feedPost.service;
 
+import example.domain.fans.entity.Fans;
 import example.domain.fans.repository.FansRepository;
-import example.domain.feedPost.dto.feedPostResponseDto;
+//import example.domain.feedPost.dto.feedPostResponseDto;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.feedPost.entity.FeedPost;
 import example.domain.feedPost.repository.feedPostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,6 +19,7 @@ import java.util.Optional;
 @Service
 public class feedPostService {
     private feedPostRepository feedPostRepository;
+    private FansRepository fansRepository;
 
     public feedPostService(feedPostRepository feedPostRepository){
         this.feedPostRepository = feedPostRepository;
@@ -38,23 +39,35 @@ public class feedPostService {
 
         if(feedPost.getFans().getId() != findFeedPost.getFans().getId()) {
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
-        }else{
+        }else{ // feedPost의 content가 null이 아니라면, findFeedPost의 content를 feedPost의 content로 설정
             Optional.ofNullable(feedPost.getContent()).ifPresent(content -> findFeedPost.setContent(content));
             Optional.ofNullable(feedPost.getImg()).ifPresent(img -> findFeedPost.setImg(img));
-            findFeedPost.setModifiedAt(LocalDateTime.now());
+            findFeedPost.setCreatedAt(LocalDateTime.now());
         }
 
         return feedPostRepository.save(findFeedPost);
     }
 
-    public void deleteFeedPost(int feedId){
-        FeedPost findFeedPost = findFeedPost(feedId);
+    public void deleteFeedPost(Fans fan, FeedPost feedPost){
+        FeedPost findFeedPost = findFeedPost(feedPost.getId());
+        if(fan.getId() != findFeedPost.getFans().getId()) { //  fanId와 findFeedPost의 작성자 ID를 비교하여 일치하지 않으면
+            throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
+        }
         feedPostRepository.delete(findFeedPost);
     }
 
     //    @Transactional(readOnly = true)
-    public Page<FeedPost> findFeedPosts(int page, int size){
-        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
+    public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
+        Page<FeedPost> feedPosts = feedPostRepository.findAllByFeedGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
+
+        return feedPosts;
+//        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
+    }
+
+//     팬 검증 메서드
+    private Fans findFan(int fanId) {
+        return fansRepository.findById(fanId).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
     }
 
 //    public feedPostResponseDto getFeedById(int feedPostId) {

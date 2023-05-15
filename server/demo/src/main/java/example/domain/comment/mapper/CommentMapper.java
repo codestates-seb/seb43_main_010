@@ -11,80 +11,114 @@ import example.domain.comment.entity.Comment;
 import example.domain.fans.dto.FansResponseDto;
 import example.domain.fans.entity.Fans;
 import example.domain.feedPost.entity.FeedPost;
+import example.global.exception.BusinessLogicException;
+import example.global.exception.ExceptionCode;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
 @Mapper(componentModel = "Spring")
 public interface CommentMapper {
-    // fan 의 경우 : CommentPostDto -> comment
-    default Comment commentPostDtoToComment(CommentPostDto.FanPostDto requestBody, Fans fans, FeedPost feedPost){
+    // feedPost에서 fan 의 경우 : CommentPostDto -> comment
+    default Comment commentPostDtoToComment(Fans fans, FeedPost feedPost, CommentPostDto requestBody){
         Comment comment = new Comment();
         comment.setFans(fans);
-        comment.setContent(requestBody.getContent());
         comment.setFeedPost(feedPost);
-
+        comment.setContent(requestBody.getContent());
         return comment;
     }
 
-    // artist 의 경우 : CommentPostDto -> comment
-    default Comment commentPostDtoToComment(CommentPostDto.ArtistPostDto requestBody, Artist artist, ArtistPost artistPost){
+    // feedPost에서 artist 의 경우 : CommentPostDto -> comment
+    default Comment commentPostDtoToComment(Artist artist, FeedPost feedPost,CommentPostDto requestBody){
         Comment comment = new Comment();
         comment.setArtist(artist);
+        comment.setFeedPost(feedPost);
         comment.setContent(requestBody.getContent());
+
+        return comment;
+    }
+
+    // artistPost에서 fan 의 경우 : CommentPostDto -> comment
+    default Comment commentPostDtoToComment(Fans fans, ArtistPost artistPost, CommentPostDto requestBody){
+        Comment comment = new Comment();
+        comment.setFans(fans);
         comment.setArtistPost(artistPost);
+        comment.setContent(requestBody.getContent());
+        return comment;
+    }
+
+    // artistPost에서 artist 의 경우 : CommentPostDto -> comment
+    default Comment commentPostDtoToComment(Artist artist, ArtistPost artistPost, CommentPostDto requestBody){
+        Comment comment = new Comment();
+        comment.setArtist(artist);
+        comment.setArtistPost(artistPost);
+        comment.setContent(requestBody.getContent());
 
         return comment;
     }
 
 
-    //  fan 의 경우 : CommentPatchDto -> Comment
-    default Comment commentPatchDtoToComment(CommentPatchDto requestBody, Fans fans, FeedPost feedPost){
-        Comment comment = new Comment(feedPost, requestBody.getContent(), fans);
-        comment.setId(requestBody.getCommentId());
+    //  feedPost에서 fan 의 경우 : CommentPatchDto -> Comment
+    default Comment commentPatchDtoToComment(Fans fans, FeedPost feedPost, CommentPatchDto requestBody){
+        Comment comment = new Comment();
+        comment.setFans(fans);
+        comment.setFeedPost(feedPost);
+        comment.setContent(requestBody.getContent());
         return comment;
     }
 
-    // artist 의 경우 :  CommentPatchDto -> Comment
-    default Comment commentPatchDtoToComment(CommentPatchDto requestBody, Artist artist, ArtistPost artistPost){
-        Comment comment = new Comment(artistPost, requestBody.getContent(), artist);
-        comment.setId(requestBody.getCommentId());
+    // feedPost에서 artist 의 경우 :  CommentPatchDto -> Comment
+    default Comment commentPatchDtoToComment(Artist artist, FeedPost feedPost, CommentPatchDto requestBody){
+        Comment comment = new Comment();
+        comment.setArtist(artist);
+        comment.setFeedPost(feedPost);
+        comment.setContent(requestBody.getContent());
+        return comment;
+    }
+
+    //  artistPost에서 fan 의 경우 : CommentPatchDto -> Comment
+    default Comment commentPatchDtoToComment(Fans fans, ArtistPost artistPost, CommentPatchDto requestBody){
+        Comment comment = new Comment();
+        comment.setFans(fans);
+        comment.setArtistPost(artistPost);
+        comment.setContent(requestBody.getContent());
+        return comment;
+    }
+
+    // artistPost에서 artist 의 경우 :  CommentPatchDto -> Comment
+    default Comment commentPatchDtoToComment(Artist artist, ArtistPost artistPost, CommentPatchDto requestBody){
+        Comment comment = new Comment();
+        comment.setArtist(artist);
+        comment.setArtistPost(artistPost);
+        comment.setContent(requestBody.getContent());
         return comment;
     }
 
 
     // Comment -> CommentResponseDto
-    default CommentResponseDto commentToCommentResponseDto(Comment comment){
-        CommentResponseDto commentResponseDto = new CommentResponseDto();
+    default CommentResponseDto.Fan commentToCommentFanResponseDto(Comment comment){
+        CommentResponseDto.Fan commentResponseDto = new CommentResponseDto.Fan();
         commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
-        commentResponseDto.setCommentId(comment.getId());
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());
-
-        // Fan 정보 가져오기
-        Fans fans = comment.getFans();
-        if(fans != null) {
-            FansResponseDto fanResponseDto = new FansResponseDto();
-            fanResponseDto.setId(fans.getId());
-            fanResponseDto.setNickname(fans.getNickname());
-            fanResponseDto.setEmail(fans.getEmail());
-            fanResponseDto.setRole(fans.getRole());
-            commentResponseDto.setFan(fanResponseDto);
-        }
-
-        // Artist 정보 가져오기
-        Artist artist = comment.getArtist();
-        if(artist != null) {
-            ArtistResponseDto artistResponseDto = new ArtistResponseDto();
-            artistResponseDto.setId(artist.getId());
-            artistResponseDto.setNickname(artist.getNickname());
-            artistResponseDto.setRole(artist.getRole());
-            commentResponseDto.setArtist(artistResponseDto);
-        }
+        commentResponseDto.setLikeCount(comment.getLikeCount());
 
         return commentResponseDto;
     }
 
-    List<CommentResponseDto> commentsToCommentResponseDtos(List<Comment> comments);
+    default CommentResponseDto.Artist commentToCommentArtistResponseDto(Comment comment){
+        CommentResponseDto.Artist commentResponseDto = new CommentResponseDto.Artist();
+        commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        commentResponseDto.setContent(comment.getContent());
+        commentResponseDto.setCreatedAt(comment.getCreatedAt());
+        commentResponseDto.setLikeCount(comment.getLikeCount());
 
+        return commentResponseDto;
+    }
+
+    List<CommentResponseDto.Fan> commentsToFanCommentResponseDtos(List<Comment> comments);
+
+    List<CommentResponseDto.Artist> commentsToArtistCommentResponseDtos(List<Comment> comments);
+
+    List<CommentResponseDto.User> commentsToUserCommentResponseDtos(List<Comment> comments);
 }

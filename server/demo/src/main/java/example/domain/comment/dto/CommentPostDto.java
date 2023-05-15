@@ -1,46 +1,29 @@
 package example.domain.comment.dto;
 
-import com.sun.istack.NotNull;
+import example.domain.artist.dto.ArtistResponseDto;
+import example.domain.fans.dto.FansResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class CommentPostDto { // 요청
 
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class FanPostDto{
-
-        private int fanId;
-        private int id; //feedPostId
+//        private UserType userType;
+        @NotNull
+        private String email;
+        @NotNull
         private String content;
-        private String img;
 
-        public FanPostDto(int fansId, int id, String content, String img) {
-            this.fanId = fansId;
-            this.id = id;
-            this.content = content;
-            this.img = img;
-        }
-    }
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class ArtistPostDto{
-        private int artistId;
-        private int id; // artistPostId
-        private String content;
-        private String img;
 
-        public ArtistPostDto(int artistId, int id, String content, String img) {
-            this.artistId = artistId;
-            this.id = id;
-            this.content = content;
-            this.img = img;
-        }
-    }
+//        public enum UserType {
+//                FANS,
+//                ARTIST
+//        }
 }

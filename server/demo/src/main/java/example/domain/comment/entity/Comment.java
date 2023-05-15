@@ -6,6 +6,7 @@ import example.domain.fans.entity.Fans;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import example.domain.feedPost.entity.FeedPost;
 
@@ -40,12 +41,16 @@ public class Comment {
     @JoinColumn(name = "fan_id")
     private Fans fans;
 
-    @Column(name = "fan_comment_id")
-    private int fanCommentId;
+//    @Column(name = "fan_comment_id")
+//    private int fanCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
     private Artist artist;
+
+    @ColumnDefault("0")
+    @Column(name = "like_count", nullable = false)
+    private Integer likeCount;
 
     public Comment(FeedPost feedPost, String content, Fans fans) {
         this.feedPost = feedPost;

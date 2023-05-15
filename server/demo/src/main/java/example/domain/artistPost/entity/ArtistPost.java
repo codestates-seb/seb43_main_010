@@ -2,6 +2,8 @@ package example.domain.artistPost.entity;
 
 import example.domain.artist.entity.Artist;
 import example.domain.comment.entity.Comment;
+import example.domain.fans.entity.Fans;
+import example.domain.like.entity.Like;
 import example.global.common.global.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -31,17 +33,21 @@ public class ArtistPost extends BaseTimeEntity{
         private String content;
         private String img;
         @CreatedDate
-        @Column(name = "created_at", updatable = false) // 한번 생성되면 업데이트 수정x
+        @Column(name = "created_at")
         private LocalDateTime createdAt = LocalDateTime.now();
 
-        @LastModifiedDate // 자동으로 업데이트
-        @Column(name = "last_modified_at")
-        private LocalDateTime modifiedAt = LocalDateTime.now();
+        private String group;
+
+        @ManyToOne
+        @JoinColumn(name = "fan_id")
+        private Fans fans;
 
         @ManyToOne
         @JoinColumn(name = "artist_id")
         private Artist artist;
 
+        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
+        private List<Like> likes = new ArrayList<>();
 
         @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE) // 엔티티가 삭제 될 때 함께 삭제
         private List<Comment> comments = new ArrayList<>(); // null일 경우도 사용 가능
@@ -56,18 +62,19 @@ public class ArtistPost extends BaseTimeEntity{
             this.artist = artist;
         }
 
-//        public void addComment(Comment comment) {
-//                comments.add(comment);
-//                comment.setArtistPost(this);
-//        }
+        public ArtistPost(int id, Artist artist) {
+                this.id = id;
+                this.artist = artist;
+        }
+
 
         @Builder
-        public ArtistPost(Integer id, String content, String img, LocalDateTime createdAt, LocalDateTime modifiedAt, Artist artist, List<Comment> comments, Integer likeCount) {
+        public ArtistPost(Integer id, String content, String img, LocalDateTime createdAt,
+                          Artist artist, List<Comment> comments, Integer likeCount) {
                 this.id = id;
                 this.content = content;
                 this.img = img;
                 this.createdAt = createdAt;
-                this.modifiedAt = modifiedAt;
                 this.artist = artist;
                 this.comments = comments;
                 this.likeCount = likeCount;

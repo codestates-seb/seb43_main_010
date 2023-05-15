@@ -16,6 +16,6 @@ public class artistPostResponseDto {
     private String content;
     private String img;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
+    private int likeCount;
 }

@@ -1,5 +1,7 @@
 package example.domain.artistPost.service;
 
+import example.domain.artist.entity.Artist;
+import example.domain.artist.repository.ArtistRepository;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.artistPost.repository.artistPostRepository;
 import example.domain.feedPost.entity.FeedPost;
@@ -40,18 +42,24 @@ public class artistPostService {
         }else{
             Optional.ofNullable(artistPost.getContent()).ifPresent(content -> findArtistPost.setContent(content));
             Optional.ofNullable(artistPost.getImg()).ifPresent(img -> findArtistPost.setImg(img));
-            findArtistPost.setModifiedAt(LocalDateTime.now());
+            findArtistPost.setCreatedAt(LocalDateTime.now());
         }
 
         return artistPostRepository.save(findArtistPost);
     }
 
-    public void deleteArtistPost(int artistId){
-        ArtistPost findArtistPost = findArtistPost(artistId);
+    public void deleteArtistPost(Artist artist, ArtistPost artistPost){
+        ArtistPost findArtistPost = findArtistPost(artistPost.getId());
+        if(artist.getId() != findArtistPost.getArtist().getId()) {
+            throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
+        }
         artistPostRepository.delete(findArtistPost);
     }
 
-    public Page<ArtistPost> findArtistPosts(int page, int size){
-        return artistPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
+    public Page<ArtistPost> findArtistPosts(int groupId, int page, int size){
+        Page<FeedPost> artistPosts = artistPostRepository.findAllByArtistGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
+
+        return artistPosts;
+//        return artistPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
     }
 }

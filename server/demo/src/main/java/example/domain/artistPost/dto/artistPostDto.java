@@ -33,13 +33,22 @@ public class artistPostDto {
         private int artistId;
         private String content;
         private String img;
-        private int artistPostId;
 
-        public Patch(int artistId, String content, String img, int artistPostId) {
+        public Patch(int artistId, String content, String img) {
             this.artistId = artistId;
             this.content = content;
             this.img = img;
-            this.artistPostId = artistPostId;
+        }
+    }
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Delete {
+        @NotNull
+        private int artistId;
+
+        public Delete(int fansId) {
+            this.artistId = fansId;
         }
     }
 }
