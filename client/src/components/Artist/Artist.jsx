@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
 import ArtistPostInput from './ArtistMaterial/ArtistPostInput';
-import PostInput from '../PostInput/PostInput';
 import ArtistPost from '../Artist/ArtistMaterial/ArtistPost';
 import Gradation from '../Artist/ArtistMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
@@ -62,7 +61,7 @@ const Artist = () => {
           <PostContextBox>
             {/* 공용 input입니다! => PostInput 컴포넌트*/}
             <button onClick={openModal}>
-              <PostInput transparent='transparent' pointer='pointer' placeholder='커뮤니티에 포스트를 남겨보세요.' />
+              <ArtistPostInput transparent='transparent' pointer='pointer' placeholder='커뮤니티에 포스트를 남겨보세요.' />
             </button>
 
             {/* Post 컴포넌트 */}
@@ -77,10 +76,6 @@ const Artist = () => {
                   img={el.img}
                   likeNum={el.likeNum}
                   commentNum={el.commentNum}
-                  modalOpen={modalOpen}
-                  setModalOpen={setModalOpen}
-                  postData={postData}
-                  setPostData={setPostData}
                 />
               ))}
             </PostsBox>

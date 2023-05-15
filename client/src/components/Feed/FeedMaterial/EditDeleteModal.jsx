@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
-import WritePost from '../../WritePost/WritePost';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -142,24 +141,7 @@ function closeDeleteModalBg() {
 
 // 상위에서 const [openModal, setOpenModal] = useState(false);와
 // const [deleteModal, setDeleteModal] = useState(false);를 써주고, props로 받아와야 함.
-const EditDeleteModal = ({
-  top,
-  left,
-  right,
-  transform,
-  height,
-  bgColor,
-  radius,
-  openModal,
-  setOpenModal,
-  deleteModal,
-  setDeleteModal,
-  what,
-  modalOpen,
-  setModalOpen,
-  postData,
-  setPostData,
-}) => {
+const EditDeleteModal = ({ top, left, right, transform, height, bgColor, radius, openModal, setOpenModal, deleteModal, setDeleteModal, what }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
@@ -231,9 +213,6 @@ const EditDeleteModal = ({
           </div>
         </button>
       </EditDeleteModalBlock>
-
-      {/* 포스트 작성 및 수정 컴포넌트임 => WritePost 컴포넌트 */}
-      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
 
       {/* 포스트 삭제 여부 모달 */}
 

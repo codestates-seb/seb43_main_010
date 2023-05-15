@@ -237,7 +237,7 @@ const ArtistPostBox = styled.div`
   }
 `;
 
-const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
+const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [detailPost, setDetailPost] = useState(false);
@@ -300,10 +300,6 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
                     deleteModal={deleteModal}
                     setDeleteModal={setDeleteModal}
                     what='포스트를'
-                    modalOpen={modalOpen}
-                    setModalOpen={setModalOpen}
-                    postData={postData}
-                    setPostData={setPostData}
                   />
                 ) : null}
               </div>
