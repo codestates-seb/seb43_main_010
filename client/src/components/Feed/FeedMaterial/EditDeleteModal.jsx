@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import WritePost from '../../WritePost/WritePost';
+import axios from 'axios';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -141,9 +143,35 @@ function closeDeleteModalBg() {
 
 // 상위에서 const [openModal, setOpenModal] = useState(false);와
 // const [deleteModal, setDeleteModal] = useState(false);를 써주고, props로 받아와야 함.
-const EditDeleteModal = ({ top, left, right, transform, height, bgColor, radius, openModal, setOpenModal, deleteModal, setDeleteModal, what }) => {
+const EditDeleteModal = ({
+  top,
+  left,
+  right,
+  transform,
+  height,
+  bgColor,
+  radius,
+  openModal,
+  setOpenModal,
+  deleteModal,
+  setDeleteModal,
+  what,
+  modalOpen,
+  setModalOpen,
+  postData,
+  setPostData,
+}) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
+
+  //포스트 수정을 위함
+  // 포스트 수정 버튼 누르면 WritePost 컴포넌트 들고오기위함
+  const openWriteModal = () => {
+    //여기서 수정하기 위해  이전에 작성된 데이터를 axios로 받아서 WritePost에 전달해야함
+    //받아온 데이터를 props로 전달해주고
+    //해당 props가 있다면 WritePost에서 할당시켜주고 이전 값을 보여주면된다.
+    setModalOpen(true);
+  };
 
   // 수정, 삭제가 뜨는 미니 모달
   useEffect(() => {
@@ -195,17 +223,17 @@ const EditDeleteModal = ({ top, left, right, transform, height, bgColor, radius,
     setDeleteModal(false);
     setOpenModal(false);
   };
-
   return (
     <>
       <EditDeleteModalBlock ref={modalRef} top={top} left={left} right={right} transform={transform} deleteModal={deleteModal}>
         {/* 여길 누르면 post의 수정이 일어나야함 */}
-        <button className='edit'>
+        <button className='edit' onClick={openWriteModal}>
           <div className='pen'>
             <i className='i-pen-icon' />
             <span>수정하기</span>
           </div>
         </button>
+        {/* 포스트가 삭제되는 곳 */}
         <button onClick={openDeleteModal} className='delete'>
           <div className='trash'>
             <i className='i-trash-icon' />
@@ -213,6 +241,9 @@ const EditDeleteModal = ({ top, left, right, transform, height, bgColor, radius,
           </div>
         </button>
       </EditDeleteModalBlock>
+
+      {/* 포스트 작성/수정 컴포넌트 => WritePost 컴포넌트 */}
+      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
 
       {/* 포스트 삭제 여부 모달 */}
 

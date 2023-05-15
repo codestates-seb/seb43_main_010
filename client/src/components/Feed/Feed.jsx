@@ -121,6 +121,7 @@ const data = {
 
 const Feed = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  // WritePost 컴포넌트에 담길 data입니다 {content:string,imgList:[] 이렇게 담깁니다}
   const [postData, setPostData] = useState([data]);
   const openModal = () => {
     setModalOpen(true);
@@ -153,6 +154,11 @@ const Feed = () => {
                   img={el.img}
                   likeNum={el.likeNum}
                   commentNum={el.commentNum}
+                  // 수정한 부분
+                  modalOpen={modalOpen}
+                  setModalOpen={setModalOpen}
+                  postData={postData}
+                  setPostData={setPostData}
                 />
               ))}
             </PostsBox>
