@@ -16,11 +16,11 @@ function App() {
         <Route path='/' element={<MainPage />} />
         <Route path='/join/:groupId' element={<JoinPage />} />
         <Route path='/feed/:groupId' element={<FeedPage />} />
+        <Route path='/artist/:groupId' element={<ArtistPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/feed' element={<FeedPage />} />
         <Route path='/artist' element={<ArtistPage />} />
-        <Route path='/artist/:groupId' element={<ArtistPage />} />
         <Route path='/music' element={<MusicPage />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/music/:groupId' element={<MusicPage />} />
