@@ -124,8 +124,10 @@ const StyledLink = styled(Link)`
 `;
 
 const Main = () => {
-  const filteredData = data.allGroup.filter((group) => {
-    return !data.myGroup.some((myGroup) => myGroup.groupId === group.groupId);
+  const myGroupIds = new Set(data.myGroup.map((el) => el.groupId));
+
+  const filteredData = data.allGroup.filter((el) => {
+    return !myGroupIds.has(el.groupId);
   });
 
   return (

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import searchIcon from '../../../assets/svg-file/search-input-icon.svg';
-import { useState, useRef, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import SearchInput from './SearchInput';
 
 const RightIconBlock = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const RightIconBlock = styled.div`
     height: 62px;
     border-radius: 50%;
     margin-right: 7px;
+    transition: 0.04s ease-in-out;
 
     display: flex;
     justify-content: center;
@@ -24,7 +26,7 @@ const RightIconBlock = styled.div`
 
     &:hover {
       background-color: var(--dark-blue-800);
-      transition: 0.04s ease-in;
+      transition: 0.04s ease-in-out;
     }
   }
 
@@ -38,51 +40,6 @@ const RightIconBlock = styled.div`
   .ques {
     font-size: 26px;
   }
-
-  .search-input {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 20px;
-
-    input {
-      width: 300px;
-      height: 48px;
-      border: none;
-      border-radius: 35px;
-      box-shadow: 0px 0px 7px #48525d;
-      padding-left: 50px;
-      color: var(--white-100);
-      font-size: 14px;
-
-      background: no-repeat url('${searchIcon}');
-      background-size: 19px;
-      background-position: 21px;
-      background-color: var(--dark-blue-500);
-
-      &:focus {
-        outline: none;
-      }
-
-      &::placeholder {
-        color: var(--gray-blue-400);
-        text-shadow: 0 0 0 var(--gray-blue-400);
-      }
-    }
-    @media screen and (max-width: 800px) {
-      input {
-        width: 200px;
-        transform: translateX(20px);
-        transition: 0.25s linear;
-      }
-    }
-    @media screen and (min-width: 801px) {
-      input {
-        width: 300px;
-        transition: 0.25s linear;
-      }
-    }
-  }
 `;
 
 const StyledLink = styled(Link)`
@@ -92,23 +49,6 @@ const StyledLink = styled(Link)`
 const RightIcon = () => {
   const [openSearch, setOpenSearch] = useState(false);
 
-  const outInput = useRef(null);
-  const { groupId } = useParams();
-
-  useEffect(() => {
-    const clickOutInput = (e) => {
-      if (openSearch && outInput.current && !outInput.current.contains(e.target)) {
-        setOpenSearch(false);
-      }
-    };
-    document.addEventListener('mousedown', clickOutInput);
-    if (outInput.current) return outInput.current.focus();
-
-    return () => {
-      document.addEventListener('mousedown', clickOutInput);
-    };
-  }, [openSearch]);
-
   const handleChange = () => {
     setOpenSearch(!openSearch);
   };
@@ -116,9 +56,7 @@ const RightIcon = () => {
   return (
     <RightIconBlock>
       {openSearch ? (
-        <form className='search-input'>
-          <input ref={outInput} type='text' placeholder='Search Artist' id='nickname' name='nickname' autoComplete='off' required />
-        </form>
+        <SearchInput openSearch={openSearch} setOpenSearch={setOpenSearch} />
       ) : (
         <button className='search' onClick={handleChange}>
           <i className='i-search-icon' />
@@ -128,7 +66,7 @@ const RightIcon = () => {
       <button className='bell'>
         <i className='i-bell-icon' />
       </button>
-      <StyledLink to={`/profile/${groupId}`}>
+      <StyledLink to={'/profile'}>
         <button className='people' tabIndex='-1'>
           <i className='i-people-icon' />
         </button>

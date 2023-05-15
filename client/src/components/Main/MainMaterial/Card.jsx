@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-// import btsJpg from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
-// import btsPng from '../../../assets/png-file/card-png/1-bts.png';
 
 const StyledCard = styled.li`
   width: 208px;
@@ -16,14 +14,25 @@ const StyledCard = styled.li`
     background: ${({ img }) => `no-repeat url(${img})`};
     background-size: 208px 221px;
     border-radius: 15px 15px 0 0;
+    background-position: center;
+    transition: 0.2s ease-in-out;
 
     display: flex;
     justify-content: start;
     align-items: end;
 
+    &:hover {
+      background-size: 214px 228px;
+      transition: 0.2s ease-in-out;
+    }
+
     .png-img-box {
       width: 98px;
-      transform: translateY(2.57px);
+      display: flex;
+
+      .png-img {
+        transform: translateY(0.6px);
+      }
     }
   }
 
@@ -45,7 +54,7 @@ const Card = ({ groupName, groupImg, grouplogoImg }) => {
     <StyledCard img={groupImg}>
       <div className='jpg-img-box'>
         <div className='png-img-box'>
-          <img src={grouplogoImg} alt={groupName} />
+          <img className='png-img' src={grouplogoImg} alt={groupName} />
         </div>
       </div>
       <div className='name-box'>{groupName}</div>

@@ -1,10 +1,14 @@
-import imgs from '../../img';
+import { createSlice } from '@reduxjs/toolkit';
+import imgs from '../img';
 
-const data = {
+// api 받으면 이렇게 냅둘거임
+// const initialState = { allGroup: []};
+
+// 일단 임시로 만듬.
+const initialState = {
   allGroup: [
     {
       groupId: 1,
-      artistId: 1,
       groupName: 'BTS',
       groupImg: imgs.bts,
       grouplogoImg: imgs.btsPng,
@@ -12,7 +16,6 @@ const data = {
     },
     {
       groupId: 2,
-      artistId: 2,
       groupName: 'TXT',
       groupImg: imgs.txt,
       grouplogoImg: imgs.txtPng,
@@ -20,7 +23,6 @@ const data = {
     },
     {
       groupId: 3,
-      artistId: 3,
       groupName: 'NewJeans',
       groupImg: imgs.newJeans,
       grouplogoImg: imgs.newJeansPng,
@@ -28,7 +30,6 @@ const data = {
     },
     {
       groupId: 4,
-      artistId: 4,
       groupName: 'SUZY',
       groupImg: imgs.suzy,
       grouplogoImg: imgs.suzyPng,
@@ -36,7 +37,6 @@ const data = {
     },
     {
       groupId: 5,
-      artistId: 5,
       groupName: 'LE SSERAFIM',
       groupImg: imgs.lesserafim,
       grouplogoImg: imgs.lesserafimPng,
@@ -44,7 +44,6 @@ const data = {
     },
     {
       groupId: 6,
-      artistId: 6,
       groupName: 'IVE',
       groupImg: imgs.ive,
       grouplogoImg: imgs.ivePng,
@@ -60,7 +59,6 @@ const data = {
     },
     {
       groupId: 8,
-      artistId: 8,
       groupName: 'NMIXX',
       groupImg: imgs.nmixx,
       grouplogoImg: imgs.nmixxPng,
@@ -68,7 +66,6 @@ const data = {
     },
     {
       groupId: 9,
-      artistId: 9,
       groupName: '(G)I-DLE',
       groupImg: imgs.gIdle,
       grouplogoImg: imgs.gIdlePng,
@@ -76,7 +73,6 @@ const data = {
     },
     {
       groupId: 10,
-      artistId: 10,
       groupName: 'BLACKPINK',
       groupImg: imgs.blackPink,
       grouplogoImg: imgs.blackPinkPng,
@@ -84,7 +80,6 @@ const data = {
     },
     {
       groupId: 11,
-      artistId: 11,
       groupName: 'BIBI',
       groupImg: imgs.bibi,
       grouplogoImg: imgs.bibiPng,
@@ -92,7 +87,6 @@ const data = {
     },
     {
       groupId: 12,
-      artistId: 12,
       groupName: 'BOL4',
       groupImg: imgs.bol4,
       grouplogoImg: imgs.bol4Png,
@@ -100,7 +94,6 @@ const data = {
     },
     {
       groupId: 13,
-      artistId: 13,
       groupName: 'SEVENTEEN',
       groupImg: imgs.seventeen,
       grouplogoImg: imgs.seventeenPng,
@@ -108,7 +101,6 @@ const data = {
     },
     {
       groupId: 14,
-      artistId: 14,
       groupName: 'AKMU',
       groupImg: imgs.akmu,
       grouplogoImg: imgs.akmuPng,
@@ -116,7 +108,6 @@ const data = {
     },
     {
       groupId: 15,
-      artistId: 15,
       groupName: 'PENTAGON',
       groupImg: imgs.pentagon,
       grouplogoImg: imgs.pentagonPng,
@@ -124,7 +115,6 @@ const data = {
     },
     {
       groupId: 16,
-      artistId: 16,
       groupName: 'IU',
       groupImg: imgs.iu,
       grouplogoImg: imgs.iuPng,
@@ -132,7 +122,6 @@ const data = {
     },
     {
       groupId: 17,
-      artistId: 17,
       groupName: 'Apink',
       groupImg: imgs.apink,
       grouplogoImg: imgs.apinkPng,
@@ -140,7 +129,6 @@ const data = {
     },
     {
       groupId: 18,
-      artistId: 18,
       groupName: 'SUNMMI',
       groupImg: imgs.summi,
       grouplogoImg: imgs.summiPng,
@@ -148,7 +136,6 @@ const data = {
     },
     {
       groupId: 19,
-      artistId: 19,
       groupName: 'ZICO',
       groupImg: imgs.zico,
       grouplogoImg: imgs.zicoPng,
@@ -156,7 +143,6 @@ const data = {
     },
     {
       groupId: 20,
-      artistId: 20,
       groupName: 'BamBam',
       groupImg: imgs.bambam,
       grouplogoImg: imgs.bambamPng,
@@ -164,7 +150,6 @@ const data = {
     },
     {
       groupId: 21,
-      artistId: 21,
       groupName: 'LEE YOUNG JI',
       groupImg: imgs.youngJi,
       grouplogoImg: imgs.youngJiPng,
@@ -172,7 +157,6 @@ const data = {
     },
     {
       groupId: 22,
-      artistId: 22,
       groupName: 'MAMAMOO',
       groupImg: imgs.mmmoo,
       grouplogoImg: imgs.mmmooPng,
@@ -180,7 +164,6 @@ const data = {
     },
     {
       groupId: 23,
-      artistId: 23,
       groupName: 'STAYC',
       groupImg: imgs.stayc,
       grouplogoImg: imgs.staycPng,
@@ -188,7 +171,6 @@ const data = {
     },
     {
       groupId: 24,
-      artistId: 24,
       groupName: 'HWANG MIN HYUN',
       groupImg: imgs.minhyun,
       grouplogoImg: imgs.minhyunPng,
@@ -196,29 +178,23 @@ const data = {
     },
     {
       groupId: 25,
-      artistId: 25,
       groupName: 'PARK BO GUM',
       groupImg: imgs.bogum,
       grouplogoImg: imgs.bogumPng,
       gradColor: ['#616878', '#2d303a', '#cfd7e5', '#616878'],
     },
   ],
-  myGroup: [
-    {
-      groupId: 1,
-      artistId: 1,
-      groupName: 'BTS',
-      groupImg: imgs.bts,
-      grouplogoImg: imgs.btsPng,
-    },
-    {
-      groupId: 2,
-      artistId: 2,
-      groupName: 'TXT',
-      groupImg: imgs.txt,
-      grouplogoImg: imgs.txtPng,
-    },
-  ],
 };
 
-export default data;
+const colorSlice = createSlice({
+  name: 'color',
+  initialState,
+  reducers: {
+    setColorData: (state, action) => {
+      return { ...state, allGroup: [...action.payload] };
+    },
+  },
+});
+
+export const { setColorData } = colorSlice.actions;
+export default colorSlice.reducer;
