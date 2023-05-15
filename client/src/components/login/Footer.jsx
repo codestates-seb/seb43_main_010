@@ -57,7 +57,7 @@ const Footer = () => {
           이용약관 <span>개인정보처리방침 쿠키정책</span> 공지사항
         </Content>
         <Content>
-          <span>LUMIAN PROJECT</span> 팀원 <span>곽미소 조원호 최현아 정수진 김현진</span>
+          <span>LUMIAN PROJECT</span> 팀원 <span>곽미소 조원호 최현아 정수진 김현지</span>
         </Content>
         <Inc>LUMIAN PROJECT</Inc>
       </FooterBox>

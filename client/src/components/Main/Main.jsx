@@ -3,7 +3,8 @@ import BigImgBox from './MainMaterial/BigImgBox';
 import fillMoon from '../../assets/png-file/fill-moon-icon.png';
 import moon from '../../assets/png-file/moon-icon.png';
 import { Link } from 'react-router-dom';
-
+//쿠키 가져오기
+import { getCookie } from '../Login/LoginMaterial/setCookie';
 // 임시 데이터
 import data from './data';
 

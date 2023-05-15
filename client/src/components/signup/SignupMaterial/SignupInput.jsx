@@ -50,7 +50,7 @@ const HrTag = styled.hr`
 
 const EmailCheck = styled.div`
   font-size: 11px;
-  width: 50px;
+  width: 52px;
   height: 25px;
   font-weight: 500;
   color: var(--gray-850);
@@ -65,23 +65,6 @@ const EmailCheck = styled.div`
   :hover {
     font-weight: 600;
   }
-`;
-
-const CheckBox = styled.div`
-  border: 1px solid #95c788;
-  border-radius: 6px;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const CheckIcon = styled(BsCheckLg)`
-  color: #1cbec8;
-  font-size: 21px;
-  margin-right: 1px;
 `;
 
 const ValidDesc = styled.p`
@@ -115,17 +98,28 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
   const onClickCheckBox = async () => {
     let curEmail = '';
     if (isArtist) {
+      if (emailValidation(artist.email)[0] === false) {
+        alert(emailValidation(artist.email)[1]);
+        return;
+      }
       curEmail = artist.email;
+      console.log(curEmail);
     } else {
+      if (emailValidation(fanUser.email)[0] === false) {
+        alert(emailValidation(fanUser.email)[1]);
+        return;
+      }
       curEmail = fanUser.email;
+      console.log(curEmail);
     }
-    alert('사용가능');
-    // 중복검사 백엔드분께 물어보기
-    // await axios
-    //   .post('http://localhost:4000/fans', {
-    //     email: curEmail,
-    //   })
-    //   .then();
+
+    await axios
+      .post('http://localhost:4000/signup/email', {
+        email: curEmail,
+      })
+      .then((res) => {
+        alert(res.data.msg);
+      });
   };
 
   return (
