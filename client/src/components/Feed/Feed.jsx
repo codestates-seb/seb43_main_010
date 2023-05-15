@@ -115,7 +115,7 @@ const data = {
 
 const Feed = () => {
   const [modalOpen, setModalOpen] = useState(false);
-
+  const [postData, setPostData] = useState([data]);
   const openModal = () => {
     setModalOpen(true);
   };
@@ -157,7 +157,7 @@ const Feed = () => {
         </RealFeedBlock>
       </FeedBlock>
       {/* 포스트 작성 컴포넌트임 => WritePost 컴포넌트 */}
-      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} /> : null}
+      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
     </>
   );
 };

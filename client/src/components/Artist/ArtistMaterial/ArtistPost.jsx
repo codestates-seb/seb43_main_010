@@ -254,10 +254,12 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum }) 
     // 서버한테 바뀐 좋아요 데이터 전송 해야함
   };
 
+  //이건 수정하기 삭제하기 뜨는 모달창
   const clickMiniMenu = () => {
     setOpenModal(!openModal);
   };
 
+  //클릭시 해당하는 포스트의 디테일 창으로 가는 모달
   const openDetailPost = () => {
     setDetailPost(true);
   };

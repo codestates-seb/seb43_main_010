@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import deleteBtn from '../../assets/png-file/x-btn.png';
-import { useState } from 'react';
 import HideArtist from './WritePostMaterial/HideArtist';
+import { useState, useRef } from 'react';
+import { BsFillCameraFill } from 'react-icons/bs';
+import WriteImgPreview from './WritePostMaterial/WriteImgPreview';
 
 const WritePostBlock = styled.div`
   position: fixed;
@@ -67,16 +69,25 @@ const PostContent = styled.div`
   .post-form {
     width: 767px;
     transform: translateX(-20px) translateY(-20px);
-
+    position: relative;
+    label {
+      position: absolute;
+      top: 20px;
+      left: 28px;
+      color: var(--light-gray-500);
+      font-size: 14px;
+      text-shadow: 0 0 0 var(--light-gray-500);
+    }
     textarea {
-      width: 767px;
-      min-height: 374px;
+      width: 713px;
+      min-height: 334px;
       flex: 1;
-      padding: 20px 28px 0 28px;
+      margin: 40px 28px 0 28px;
       color: var(--dark-blue-900);
       text-shadow: 0 0 0 var(--dark-blue-900);
       font-size: 15px;
-      border: none;
+      border: 1px solid var(--light-gray-500);
+      border-radius: 0.3rem;
       resize: none;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
         'Helvetica Neue', sans-serif;
@@ -99,10 +110,10 @@ const BottomBox = styled.div`
   background-color: var(--white-100);
   transform: translateX(-20px) translateY(-20px);
   position: absolute;
-  border-top: 1px solid var(--light-gray-150);
+  /* border-top: 1px solid var(--light-gray-150); */
 
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
 
   .submit-btn {
@@ -133,12 +144,40 @@ const BottomBox = styled.div`
   }
 `;
 
+// 이미지 버튼
+const ImgIcon = styled(BsFillCameraFill)`
+  width: 32px;
+  height: 32px;
+
+  font-weight: 100;
+  transform: translateX(32px);
+  cursor: pointer;
+  color: var(--light-gray-360);
+  :hover {
+    color: var(--light-gray-400);
+    transform: scale(1.01) translateX(32px);
+  }
+`;
+//이미지 인풋태그
+const ImgInput = styled.input`
+  display: none;
+`;
+
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
 // 사용하실 때 const [modalOpen, setModalOpen] = useState(false)를 상위에서 사용해 주세요!
-const WritePost = ({ modalOpen, setModalOpen }) => {
+const WritePost = ({ modalOpen, setModalOpen, postData, setPostData }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
+
+  //이미지파일 저장 + 미리보기를 위한것
+  const [imgList, setImgList] = useState([]);
+  // 이미지 파일 최대 올릴수 있는 개수 4개로 제한하는 변수관리
+  const limitRef = useRef(4);
+  // 사진버튼 클릭시 이미지 인풋에 접근하기 위한 inputRef
+  const imgInput = useRef();
+  // 이미지를 {id: x, img: string} 객체로 관리하기 위한 이미지 하나의 고유 id 관리를 위한 변수
+  const imgIdRef = useRef(1);
 
   const autoResizeTextarea = () => {
     let textarea = document.querySelector('.autoTextarea');
@@ -146,7 +185,7 @@ const WritePost = ({ modalOpen, setModalOpen }) => {
     if (textarea) {
       textarea.style.height = 'auto';
       let height = textarea.scrollHeight;
-      let maxHeight = window.innerHeight * 0.7; // 0.74
+      let maxHeight = window.innerHeight * 0.45; // 0.74
       textarea.style.height = `${Math.min(height + 8, maxHeight)}px`;
     }
 
@@ -164,20 +203,81 @@ const WritePost = ({ modalOpen, setModalOpen }) => {
   const deleteBtnFn = () => {
     setModalOpen(false);
     setContent('');
+    setImgList([]);
+    limitRef.current = 4;
+    // imgIdRef.current = 1;
   };
 
   // submit
   const submitFn = (e) => {
     e.preventDefault();
     if (content.trim().length > 1) {
+      // 이 부분 조건을 바꿔야할까? 컨텐츠나 이미지 둘 다 null 일 경우 submit 안되게??
       // 여기서 서버한테 content 데이터 전송해야 함.
       // 서버에 데이터 전송 되면 내용 비우고 창 닫기
       // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
+      setPostData([{ content, img: imgList }, ...postData]);
       setContent('');
+      setImgList([]);
+      limitRef.current = 4;
+      imgIdRef.current = 1;
       setModalOpen(false);
     }
+    console.log(imgList);
   };
 
+  //이미지 아이콘 누르면 imgInput에 접근
+  const onClickImgIcon = (e) => {
+    e.preventDefault();
+    imgInput.current.click();
+  };
+
+  //이미지 미리보기위한 함수, input의 onChange이벤트임
+  const handleUploadImg = (e) => {
+    e.preventDefault();
+    const fileArr = e.target.files;
+    let fileURLs = [];
+    let file;
+    let tempObj = {};
+    let tempArr = [];
+    limitRef.current -= fileArr.length;
+
+    //한번에 올릴 최대 파일의 개수를 제한하기 위해 사용
+    if (fileArr.length > 4) {
+      alert(`사진은 한번에 최대 4장까지 업로드 가능합니다.`);
+      return;
+    }
+    //현재 limit이 4장보다 작은경우에만 imgList에 추가할 수 있다.
+    if (limitRef.current < 0) {
+      alert(`현재 사진은 ${limitRef.current + fileArr.length}장까지 더 업로드 가능합니다.`);
+      limitRef.current += fileArr.length;
+      return;
+    } else {
+      for (let i = 0; i < fileArr.length; i++) {
+        file = fileArr[i];
+        let reader = new FileReader();
+        // 비동기로 동작함
+        reader.onload = () => {
+          fileURLs[i] = reader.result;
+          tempObj = { id: imgIdRef.current, url: fileURLs[i] };
+          tempArr.push(tempObj);
+          imgIdRef.current++;
+          setImgList([...imgList, ...tempArr]);
+
+          e.target.value = '';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    e.target.value = '';
+  };
+
+  //이미지 삭제 버튼 함수
+  const handleDeleteImg = (fileId) => {
+    const newImgList = imgList.filter((file) => file.id !== fileId);
+    limitRef.current++;
+    setImgList(newImgList);
+  };
   return (
     <>
       {modalOpen ? (
@@ -188,8 +288,13 @@ const WritePost = ({ modalOpen, setModalOpen }) => {
                 <span className='post-txt'>포스트 쓰기</span>
                 <span className='artist-txt'>BTS</span> {/* 나중에 수정해야 할 부분임 */}
               </div>
+              {/* 이미지 업로드시 미리보기를 위한 곳 */}
+              {imgList.length === 0 ? null : <WriteImgPreview imgList={imgList} handleDeleteImg={handleDeleteImg} />}
+
               <form className='post-form'>
+                <label htmlFor='post-content'>포스트</label>
                 <textarea
+                  id='post-content'
                   className='autoTextarea'
                   onKeyDown={autoResizeTextarea}
                   onKeyUp={autoResizeTextarea}
@@ -200,9 +305,21 @@ const WritePost = ({ modalOpen, setModalOpen }) => {
                   autoComplete='off'
                   required
                 />
+                <ImgInput
+                  className='img-post'
+                  type='file'
+                  multiple='multiple'
+                  name='img-post'
+                  placeholder='이미지업로드'
+                  accept='image/*'
+                  ref={imgInput}
+                  onChange={handleUploadImg}
+                ></ImgInput>
               </form>
 
               <BottomBox validity={validity} hide={hide}>
+                {/* 현아님! 이미지 추가버튼입니다 */}
+                <ImgIcon onClick={onClickImgIcon} />
                 <div className='hide-block'>
                   {/* HideArtist 컴포넌트, 아티스트인지 아닌지 여부에 따라 notArtist에 값을 넣어주는 거로 수정해야 함 */}
                   <HideArtist notArtist='true' setHide={setHide} hide={hide} />

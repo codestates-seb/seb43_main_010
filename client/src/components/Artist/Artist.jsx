@@ -4,7 +4,7 @@ import profileImg from '../../assets/jpg-file/profile-img.jpg';
 import ArtistPostInput from './ArtistMaterial/ArtistPostInput';
 import ArtistPost from '../Artist/ArtistMaterial/ArtistPost';
 import Gradation from '../Artist/ArtistMaterial/Gradation';
-import WritePostModal from './ArtistMaterial/WritePostModal';
+import WritePost from '../WritePost/WritePost';
 import RightArea from './ArtistMaterial/Rightarea';
 
 const Container = styled.div`
@@ -53,7 +53,6 @@ const Artist = () => {
   const openModal = () => {
     setModalOpen(true);
   };
-  console.log(postData);
   return (
     <>
       <Gradation /> {/* 그라데이션 컴포넌트임 => FeedBlock 컴포넌트 */}
@@ -87,7 +86,7 @@ const Artist = () => {
         </ArtistBox>
       </Container>
       {/* 포스트 작성 컴포넌트임 => WritePost 컴포넌트 */}
-      {modalOpen ? <WritePostModal modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
+      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
     </>
   );
 };

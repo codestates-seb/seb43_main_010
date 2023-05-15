@@ -199,6 +199,7 @@ const EditDeleteModal = ({ top, left, right, transform, height, bgColor, radius,
   return (
     <>
       <EditDeleteModalBlock ref={modalRef} top={top} left={left} right={right} transform={transform} deleteModal={deleteModal}>
+        {/* 여길 누르면 post의 수정이 일어나야함 */}
         <button className='edit'>
           <div className='pen'>
             <i className='i-pen-icon' />

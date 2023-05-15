@@ -144,7 +144,6 @@ const LoginForm = () => {
         return;
       }
       body = { ...fanUser };
-      console.log(body);
       await axios
         .post('/signup/fans', body)
         .then((res) => {
