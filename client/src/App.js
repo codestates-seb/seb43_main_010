@@ -8,6 +8,7 @@ import MusicPage from './pages/MusicPage';
 import ProfilePage from './pages/ProfilePage';
 import MainPage from './pages/MainPage';
 import JoinPage from './pages/JoinPage';
+import MyProfilePage from './pages/MyProfilePage';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <Route path='/music' element={<MusicPage />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/music/:groupId' element={<MusicPage />} />
-        <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/myprofile/:groupId' element={<MyProfilePage />} />
       </Routes>
     </BrowserRouter>
   );
