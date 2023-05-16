@@ -7,7 +7,7 @@ import Gradation from '../Feed/FeedMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
 import RightImg from '../Feed/FeedMaterial/RightImg';
 import Post from '../Feed/FeedMaterial/Post';
-import Comments from '../Feed/FeedMaterial/Comments';
+import MyProfileComments from './MyProfileMaterial/MyProfileComments';
 
 const MyProfileBlock = styled.div`
   display: flex;
@@ -188,7 +188,7 @@ const MyProfile = () => {
             ) : (
               <CommentsBox>
                 {data.allFeed.map((el) => (
-                  <Comments
+                  <MyProfileComments
                     key={el.myprofileId}
                     createdAt={el.createdAt}
                     nickname={el.nickname}
