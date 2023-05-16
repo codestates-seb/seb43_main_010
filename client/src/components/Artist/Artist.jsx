@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
-import ArtistPostInput from './ArtistMaterial/ArtistPostInput';
 import PostInput from '../PostInput/PostInput';
 import ArtistPost from '../Artist/ArtistMaterial/ArtistPost';
 import Gradation from '../Artist/ArtistMaterial/Gradation';

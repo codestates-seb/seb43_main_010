@@ -284,7 +284,21 @@ const InputSubmit = styled.li`
 `;
 
 // 여기에선 해당하는 게시글의 댓글 데이터를 서버한테 받아와야 함.
-const DetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname, img, liked, like, clickLike }) => {
+const DetailPost = ({
+  detailPost,
+  setDetailPost,
+  createdAt,
+  content,
+  nickname,
+  img,
+  liked,
+  like,
+  clickLike,
+  modalOpen,
+  setModalOpen,
+  postData,
+  setPostData,
+}) => {
   const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -365,6 +379,11 @@ const DetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname, i
                         deleteModal={deleteModal}
                         setDeleteModal={setDeleteModal}
                         what='포스트를'
+                        //추가
+                        modalOpen={modalOpen}
+                        setModalOpen={setModalOpen}
+                        postData={postData}
+                        setPostData={setPostData}
                       />
                     ) : null}
                   </div>

@@ -13,7 +13,7 @@ const LoginPage = () => {
   const token = getCookie();
   useEffect(() => {
     if (token) {
-      console.log('로그인되어있음');
+      alert('로그인되어있음');
       navigate('/');
     }
   }, []);

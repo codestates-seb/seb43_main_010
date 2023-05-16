@@ -16,7 +16,7 @@ const SignupPage = () => {
   //컴포넌트를 그리다 말고 실행되면 오류가 나므로 useEffect에서 실행해주자
   useEffect(() => {
     if (token) {
-      console.log('로그인되어있음');
+      alert('로그인되어있음');
       navigate('/');
     }
   }, []);

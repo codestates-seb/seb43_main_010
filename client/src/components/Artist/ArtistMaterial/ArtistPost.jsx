@@ -362,6 +362,11 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               liked={liked}
               like={like}
               clickLike={clickLike}
+              // 추가
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              postData={postData}
+              setPostData={setPostData}
             />
           ) : (
             <DetailPost
@@ -374,6 +379,11 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               liked={liked}
               like={like}
               clickLike={clickLike}
+              // 추가
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              postData={postData}
+              setPostData={setPostData}
             />
           )}
         </>

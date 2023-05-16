@@ -172,7 +172,7 @@ const PostBlock = styled.div`
   }
 `;
 
-const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
+const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [detailPost, setDetailPost] = useState(false);
@@ -262,6 +262,10 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
                 deleteModal={deleteModal}
                 setDeleteModal={setDeleteModal}
                 what='포스트를'
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                postData={postData}
+                setPostData={setPostData}
               />
             ) : null}
           </div>
@@ -282,6 +286,11 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
               liked={liked}
               like={like}
               clickLike={clickLike}
+              // 추가
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              postData={postData}
+              setPostData={setPostData}
             />
           ) : (
             <DetailPost
@@ -294,6 +303,11 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum }) => {
               liked={liked}
               like={like}
               clickLike={clickLike}
+              //추가
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              postData={postData}
+              setPostData={setPostData}
             />
           )}
         </>

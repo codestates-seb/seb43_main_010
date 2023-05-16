@@ -284,7 +284,21 @@ const LikeShare = styled.div`
   }
 `;
 
-const BigDetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname, img, liked, like, clickLike }) => {
+const BigDetailPost = ({
+  detailPost,
+  setDetailPost,
+  createdAt,
+  content,
+  nickname,
+  img,
+  liked,
+  like,
+  clickLike,
+  modalOpen,
+  setModalOpen,
+  postData,
+  setPostData,
+}) => {
   const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -362,6 +376,11 @@ const BigDetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname
                         deleteModal={deleteModal}
                         setDeleteModal={setDeleteModal}
                         what='포스트를'
+                        //추가
+                        modalOpen={modalOpen}
+                        setModalOpen={setModalOpen}
+                        postData={postData}
+                        setPostData={setPostData}
                       />
                     ) : null}
                   </div>

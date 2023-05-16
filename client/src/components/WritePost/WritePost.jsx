@@ -70,19 +70,12 @@ const PostContent = styled.div`
     width: 767px;
     transform: translateX(-20px) translateY(-20px);
     position: relative;
-    label {
-      position: absolute;
-      top: 20px;
-      left: 28px;
-      color: var(--light-gray-500);
-      font-size: 14px;
-      text-shadow: 0 0 0 var(--light-gray-500);
-    }
+
     textarea {
       width: 713px;
       min-height: 334px;
       flex: 1;
-      margin: 40px 28px 0 28px;
+      margin: 28px 28px 0 28px;
       color: var(--dark-blue-900);
       text-shadow: 0 0 0 var(--dark-blue-900);
       font-size: 15px;
@@ -290,9 +283,7 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData }) => {
               </div>
               {/* 이미지 업로드시 미리보기를 위한 곳 */}
               {imgList.length === 0 ? null : <WriteImgPreview imgList={imgList} handleDeleteImg={handleDeleteImg} />}
-
               <form className='post-form'>
-                <label htmlFor='post-content'>포스트</label>
                 <textarea
                   id='post-content'
                   className='autoTextarea'
