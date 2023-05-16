@@ -149,7 +149,7 @@ public class CommentController {
 
 
     // feedPost 댓글 리스트 조회(무한 스크롤)
-    @GetMapping("feed/{feedPostId}/comments")
+    @GetMapping("feed/{feedPostId}/comment")
     public ResponseEntity<MultiResponseDto<CommentResponseDto.User>> getAllCommentsByFeedPostId(@PathVariable("feedPostId") int feedPostId,
                                                         @RequestParam(defaultValue = "1") @Positive int page,
                                                         @RequestParam(defaultValue = "16") @Positive int size) {
@@ -179,7 +179,7 @@ public class CommentController {
 
     // artistPost 댓글 리스트 조회(무한 스크롤)
 
-    @GetMapping("artist/{artistPostId}/comments") // artistPost 댓글
+    @GetMapping("artist/{artistPostId}/comment") // artistPost 댓글
     public ResponseEntity<MultiResponseDto<CommentResponseDto.User>> getAllArtistComment(@PathVariable("artistPostId") int artistPostId,
                                               @RequestParam(defaultValue = "1") @Positive int page,
                                               @RequestParam(defaultValue = "16") @Positive int size) {
@@ -319,63 +319,101 @@ public class CommentController {
 //        }
 //    }
 
-    // fans 댓글 삭제
-    @DeleteMapping("feed/{feedPostId}/comments/{commentId}")
-    public ResponseEntity deleteFansComment(@PathVariable("feedPostId") @Positive @NotNull int feedPostId,
-                                            @PathVariable("commentId") @Positive int commentId,
-                                            @Valid @RequestBody CommentDeleteDto requestBody) {
-        if (fansRepository.existsByEmail(requestBody.getEmail())) { // 이메일 주소를 가진 팬 정보가 있다면
+    // feedPost 댓글 삭제
+
+    @DeleteMapping("feed/{feedPostId}/comment/{commentId}")
+    public ResponseEntity<?> deleteFansComment(@PathVariable("feedPostId") @Positive @NotNull int feedPostId,
+                                               @PathVariable("commentId") @Positive int commentId,
+                                               @Valid @RequestBody CommentDeleteDto requestBody) {
+        String userEmail = requestBody.getEmail();
+        Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+
+        if (findComment.getFans().getEmail().equals(userEmail) || findComment.getArtist().getEmail().equals(userEmail)) {
             FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId); // feedPostId에 해당하는 feedPost 정보 조회
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
-
-            if (findComment.getFans().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteFeedPostComment(findFeedPost, commentId);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-            }
-        } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
-            FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
-
-            if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteFeedPostComment(findFeedPost, commentId);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-            }
+            commentService.deleteFeedPostComment(findFeedPost, commentId, userEmail);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
     }
 
-    // artist 댓글 삭제
-    @DeleteMapping("artist/{artistPostId}/comments/{commentId}")
+
+    // 방법 2)
+//    @DeleteMapping("feed/{feedPostId}/comment/{commentId}")
+//    public ResponseEntity<?> deleteFansComment(@PathVariable("feedPostId") @Positive @NotNull int feedPostId,
+//                                            @PathVariable("commentId") @Positive int commentId,
+//                                            @Valid @RequestBody CommentDeleteDto requestBody) {
+//        if (fansRepository.existsByEmail(requestBody.getEmail())) { // 이메일 주소를 가진 팬 정보가 있다면
+//            FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId); // feedPostId에 해당하는 feedPost 정보 조회
+//            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+//
+//            if (findComment.getFans().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
+//                commentService.deleteFeedPostComment(findFeedPost, commentId);
+//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//            } else {
+//                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//            }
+//        } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
+//            FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
+//            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+//
+//            if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
+//                commentService.deleteFeedPostComment(findFeedPost, commentId);
+//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//            } else {
+//                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//            }
+//        } else {
+//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+//        }
+//    }
+
+    // artistPost 댓글 삭제
+
+    @DeleteMapping("artist/{artistPostId}/comment/{commentId}")
     public ResponseEntity deleteArtistComment(@PathVariable("artistPostId") @Positive @NotNull int artistPostId,
                                               @PathVariable("commentId") @Positive int commentId,
                                               @Valid @RequestBody CommentDeleteDto requestBody) {
-        if (fansRepository.existsByEmail(requestBody.getEmail())) { // 이메일 주소를 가진 팬 정보가 있다면
-            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId); // artistPostId에 해당하는 artistPost 정보 조회
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+        String userEmail = requestBody.getEmail();
+        Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
 
-            if (findComment.getFans().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteArtistPostComment(findArtistPost, commentId); //
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-            }
-        } else if (artistRepository.existsByEmail(requestBody.getEmail())) { //아티스트 DB에 이메일 주소 가진 아티스트 정보가 있다면
-            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
-
-            if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 아티스 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteArtistPostComment(findArtistPost, commentId);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-            }
+        if (findComment.getFans().getEmail().equals(userEmail) || findComment.getArtist().getEmail().equals(userEmail)) {
+            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId); // feedPostId에 해당하는 feedPost 정보 조회
+            commentService.deleteArtistPostComment(findArtistPost, commentId, userEmail);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
     }
+
+
+//    방법 2)
+//    @DeleteMapping("artist/{artistPostId}/comments/{commentId}")
+//    public ResponseEntity deleteArtistComment(@PathVariable("artistPostId") @Positive @NotNull int artistPostId,
+//                                              @PathVariable("commentId") @Positive int commentId,
+//                                              @Valid @RequestBody CommentDeleteDto requestBody) {
+//        if (fansRepository.existsByEmail(requestBody.getEmail())) { // 이메일 주소를 가진 팬 정보가 있다면
+//            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId); // artistPostId에 해당하는 artistPost 정보 조회
+//            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+//
+//            if (findComment.getFans().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
+//                commentService.deleteArtistPostComment(findArtistPost, commentId); //
+//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//            } else {
+//                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//            }
+//        } else if (artistRepository.existsByEmail(requestBody.getEmail())) { //아티스트 DB에 이메일 주소 가진 아티스트 정보가 있다면
+//            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
+//            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+//
+//            if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 아티스 이메일 정보와 요청받은 이메일 정보가 같다면
+//                commentService.deleteArtistPostComment(findArtistPost, commentId);
+//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//            } else {
+//                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//            }
+//        } else {
+//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+//        }
+//    }
 }
