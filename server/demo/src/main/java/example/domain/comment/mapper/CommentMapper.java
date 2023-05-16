@@ -53,24 +53,36 @@ public interface CommentMapper {
         return comment;
     }
 
-
-    //  feedPost에서 fan 의 경우 : CommentPatchDto -> Comment
-    default Comment commentPatchDtoToComment(Fans fans, FeedPost feedPost, CommentPatchDto requestBody){
+    // feedPost에서 fan(artist) 의 경우 : CommentPatchDto -> Comment
+    default Comment commentPatchDtoToComment(Object author, FeedPost feedPost, CommentPatchDto requestBody) {
         Comment comment = new Comment();
-        comment.setFans(fans);
+        if (author instanceof Fans) {
+            comment.setFans((Fans) author);
+        } else if (author instanceof Artist) {
+            comment.setArtist((Artist) author);
+        }
         comment.setFeedPost(feedPost);
         comment.setContent(requestBody.getContent());
         return comment;
     }
 
-    // feedPost에서 artist 의 경우 :  CommentPatchDto -> Comment
-    default Comment commentPatchDtoToComment(Artist artist, FeedPost feedPost, CommentPatchDto requestBody){
-        Comment comment = new Comment();
-        comment.setArtist(artist);
-        comment.setFeedPost(feedPost);
-        comment.setContent(requestBody.getContent());
-        return comment;
-    }
+//    //  feedPost에서 fan 의 경우 : CommentPatchDto -> Comment
+//    default Comment commentPatchDtoToComment(Fans fans, FeedPost feedPost, CommentPatchDto requestBody){
+//        Comment comment = new Comment();
+//        comment.setFans(fans);
+//        comment.setFeedPost(feedPost);
+//        comment.setContent(requestBody.getContent());
+//        return comment;
+//    }
+//
+//    // feedPost에서 artist 의 경우 :  CommentPatchDto -> Comment
+//    default Comment commentPatchDtoToComment(Artist artist, FeedPost feedPost, CommentPatchDto requestBody){
+//        Comment comment = new Comment();
+//        comment.setArtist(artist);
+//        comment.setFeedPost(feedPost);
+//        comment.setContent(requestBody.getContent());
+//        return comment;
+//    }
 
     //  artistPost에서 fan 의 경우 : CommentPatchDto -> Comment
     default Comment commentPatchDtoToComment(Fans fans, ArtistPost artistPost, CommentPatchDto requestBody){

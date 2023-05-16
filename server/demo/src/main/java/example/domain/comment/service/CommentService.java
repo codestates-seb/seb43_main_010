@@ -1,8 +1,12 @@
 package example.domain.comment.service;
 
+import example.domain.artist.entity.Artist;
+import example.domain.artist.repository.ArtistRepository;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.comment.entity.Comment;
 import example.domain.comment.repository.CommentRepository;
+import example.domain.fans.entity.Fans;
+import example.domain.fans.repository.FansRepository;
 import example.domain.feedPost.entity.FeedPost;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
@@ -18,9 +22,13 @@ import java.util.Optional;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
+    private FansRepository fansRepository;
+    private ArtistRepository artistRepository;
 
-    public CommentService(CommentRepository commentRepository){
+    public CommentService(CommentRepository commentRepository,FansRepository fansRepository, ArtistRepository artistRepository){
         this.commentRepository = commentRepository;
+        this.fansRepository = fansRepository;
+        this.artistRepository = artistRepository;
     }
 
     /*
@@ -59,37 +67,58 @@ public class CommentService {
     }
 
 
-    public Comment updateFanComment(int commentId, Comment comment){
+    public Comment updateComment(int commentId, Comment comment) {
         Comment findComment = findVerifiedComment(commentId);
-        if(comment.getFans().getId() != findComment.getFans().getId()) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-        }else{
-            Optional.ofNullable(comment.getContent()) // 내용 수정
-                    .ifPresent(commentContent -> findComment.setContent(commentContent));
-            Optional.ofNullable(comment.getFeedPost())
-                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
-            Optional.ofNullable(comment.getCreatedAt())
-                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
 
-            return commentRepository.save(findComment);
+        if (comment.getFans() != null && comment.getFans().getId() != findComment.getFans().getId()) {
+            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
+
+        if (comment.getArtist() != null && comment.getArtist().getId() != findComment.getArtist().getId()) {
+            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+        }
+
+        Optional.ofNullable(comment.getContent())
+                .ifPresent(commentContent -> findComment.setContent(commentContent));
+        Optional.ofNullable(comment.getFeedPost())
+                .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
+        Optional.ofNullable(comment.getCreatedAt())
+                .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt));
+
+        return commentRepository.save(findComment);
     }
 
-    public Comment updateArtistComment(int commentId, Comment comment){
-        Comment findComment = findVerifiedComment(commentId);
-        if(comment.getArtist().getId() != findComment.getArtist().getId()) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-        }else{
-            Optional.ofNullable(comment.getContent()) // 내용 수정
-                    .ifPresent(commentContent -> findComment.setContent(commentContent));
-            Optional.ofNullable(comment.getFeedPost())
-                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
-            Optional.ofNullable(comment.getCreatedAt())
-                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
-
-            return commentRepository.save(findComment);
-        }
-    }
+//    public Comment updateFanComment(int commentId, Comment comment){
+//        Comment findComment = findVerifiedComment(commentId);
+//        if(comment.getFans().getId() != findComment.getFans().getId()) {
+//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//        }else{
+//            Optional.ofNullable(comment.getContent()) // 내용 수정
+//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
+//            Optional.ofNullable(comment.getFeedPost())
+//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
+//            Optional.ofNullable(comment.getCreatedAt())
+//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
+//
+//            return commentRepository.save(findComment);
+//        }
+//    }
+//
+//    public Comment updateArtistComment(int commentId, Comment comment){
+//        Comment findComment = findVerifiedComment(commentId);
+//        if(comment.getArtist().getId() != findComment.getArtist().getId()) {
+//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//        }else{
+//            Optional.ofNullable(comment.getContent()) // 내용 수정
+//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
+//            Optional.ofNullable(comment.getFeedPost())
+//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
+//            Optional.ofNullable(comment.getCreatedAt())
+//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
+//
+//            return commentRepository.save(findComment);
+//        }
+//    }
 
     public void deleteFeedPostComment(FeedPost feedPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
@@ -105,6 +134,16 @@ public class CommentService {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
         commentRepository.delete(findComment);
+    }
+
+    public Fans findFansByEmail(String email) {
+        return fansRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+    }
+
+    public Artist findArtistByEmail(String email) {
+        return artistRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
     }
 
 }
