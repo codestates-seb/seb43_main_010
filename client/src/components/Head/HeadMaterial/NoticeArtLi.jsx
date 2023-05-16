@@ -6,12 +6,12 @@ const Button = styled.button`
   border-bottom: ${({ selected }) => (selected ? `2px solid var(--skyblue-500);` : `none`)};
 `;
 
-const NoticeArtLi = ({ setLeftBtnHide, setRightBtnHide, selected, setSelected, groupName }) => {
+const NoticeArtLi = ({ isScroll, setLeftBtnHide, setRightBtnHide, selected, setSelected, groupName }) => {
   const liRef = useRef(null);
 
   const scrollToCenter = () => {
     const liElement = liRef.current;
-    if (liElement) {
+    if (liElement && isScroll) {
       const container = liElement.parentElement;
       const containerWidth = container.offsetWidth;
       const liOffsetLeft = liElement.offsetLeft;

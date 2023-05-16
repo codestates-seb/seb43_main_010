@@ -148,6 +148,7 @@ const Notice = ({ openNotice, setOpenNotice }) => {
   const [selected, setSelected] = useState('전체');
   const [leftBtnHide, setLeftBtnHide] = useState(true);
   const [rightBtnHide, setRightBtnHide] = useState(false);
+  const [isScroll, setIsScroll] = useState(true);
 
   const noticeRef = useRef(null);
   const containerRef = useRef(null);
@@ -168,6 +169,14 @@ const Notice = ({ openNotice, setOpenNotice }) => {
     setSelected('전체');
   };
 
+  // 가로 스크롤이 없는 경우
+  useEffect(() => {
+    if (containerRef.current.scrollWidth <= 430) {
+      setRightBtnHide(true);
+      setIsScroll(false);
+    }
+  }, []);
+
   // 왼쪽
   const scrollLeft = () => {
     const container = containerRef.current;
@@ -175,14 +184,11 @@ const Notice = ({ openNotice, setOpenNotice }) => {
     if (container) {
       container.scrollLeft -= 200;
 
-      if (container.scrollLeft <= 0) {
-        setLeftBtnHide(false);
-        setRightBtnHide(false);
-      } else if (container.scrollLeft + container.offsetWidth >= container.scrollWidth) {
-        setLeftBtnHide(false);
-        setRightBtnHide(true);
-      } else {
+      if (container.scrollLeft === 0) {
         setLeftBtnHide(true);
+        setRightBtnHide(false);
+      } else {
+        setLeftBtnHide(false);
         setRightBtnHide(false);
       }
     }
@@ -192,12 +198,10 @@ const Notice = ({ openNotice, setOpenNotice }) => {
   const scrollRight = () => {
     const container = containerRef.current;
     if (container) {
+      const containerWidth = container.offsetWidth;
       container.scrollLeft += 200;
 
-      if (container.scrollLeft + container.offsetWidth >= container.scrollWidth) {
-        setRightBtnHide(true);
-        setLeftBtnHide(false);
-      } else if (container.scrollLeft !== 0) {
+      if (container.scrollLeft + containerWidth >= container.scrollWidth) {
         setRightBtnHide(true);
         setLeftBtnHide(false);
       } else {
@@ -229,6 +233,7 @@ const Notice = ({ openNotice, setOpenNotice }) => {
         {data.myGroup.map((el) => (
           <NoticeArtLi
             key={el.groupId}
+            isScroll={isScroll}
             setLeftBtnHide={setLeftBtnHide}
             setRightBtnHide={setRightBtnHide}
             groupName={el.groupName}
