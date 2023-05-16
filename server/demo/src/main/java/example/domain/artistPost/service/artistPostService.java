@@ -20,26 +20,26 @@ import java.util.Optional;
 public class artistPostService {
     private artistPostRepository artistPostRepository;
 
-    public artistPostService(artistPostRepository artistPostRepository){
+    public artistPostService(artistPostRepository artistPostRepository) {
         this.artistPostRepository = artistPostRepository;
     }
 
-    public ArtistPost createArtistPost(ArtistPost artistPost){
+    public ArtistPost createArtistPost(ArtistPost artistPost) {
         return artistPostRepository.save(artistPost);
     }
 
-    public ArtistPost findArtistPost(int artistId){
+    public ArtistPost findArtistPost(int artistId) {
         return artistPostRepository.findById(artistId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND));
     }
 
 
-    public ArtistPost updateArtistPost(ArtistPost artistPost){
+    public ArtistPost updateArtistPost(ArtistPost artistPost) {
         ArtistPost findArtistPost = findArtistPost(artistPost.getId());
 
-        if(artistPost.getArtist().getId() != findArtistPost.getArtist().getId()) {
+        if (artistPost.getArtist().getId() != findArtistPost.getArtist().getId()) {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
-        }else{
+        } else {
             Optional.ofNullable(artistPost.getContent()).ifPresent(content -> findArtistPost.setContent(content));
             Optional.ofNullable(artistPost.getImg()).ifPresent(img -> findArtistPost.setImg(img));
             findArtistPost.setCreatedAt(LocalDateTime.now());
@@ -48,14 +48,15 @@ public class artistPostService {
         return artistPostRepository.save(findArtistPost);
     }
 
-    public void deleteArtistPost(Artist artist, ArtistPost artistPost){
+    public void deleteArtistPost(Artist artist, ArtistPost artistPost) {
         ArtistPost findArtistPost = findArtistPost(artistPost.getId());
-        if(artist.getId() != findArtistPost.getArtist().getId()) {
+        if (artist.getId() != findArtistPost.getArtist().getId()) {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
         }
         artistPostRepository.delete(findArtistPost);
     }
-
+}
+/* 여기 주석!
     public Page<ArtistPost> findArtistPosts(int groupId, int page, int size){
         Page<FeedPost> artistPosts = artistPostRepository.findAllByArtistGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
 
@@ -63,3 +64,4 @@ public class artistPostService {
 //        return artistPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
     }
 }
+*/

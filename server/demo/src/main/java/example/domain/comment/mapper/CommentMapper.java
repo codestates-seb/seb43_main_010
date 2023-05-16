@@ -14,45 +14,41 @@ import example.domain.feedPost.entity.FeedPost;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import example.domain.feedPost.service.feedPostService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "Spring")
 public interface CommentMapper {
+
+
     // feedPost에서 fan 의 경우 : CommentPostDto -> comment
-    default Comment commentPostDtoToComment(Fans fans, FeedPost feedPost, CommentPostDto requestBody){
-        Comment comment = new Comment();
-        comment.setFans(fans);
+    default Comment commentPostDtoToComment(FeedPost feedPost, Fans fans, CommentPostDto requestBody){
+        Comment comment = new Comment(requestBody.getContent(), fans);
         comment.setFeedPost(feedPost);
-        comment.setContent(requestBody.getContent());
         return comment;
     }
 
     // feedPost에서 artist 의 경우 : CommentPostDto -> comment
-    default Comment commentPostDtoToComment(Artist artist, FeedPost feedPost,CommentPostDto requestBody){
-        Comment comment = new Comment();
-        comment.setArtist(artist);
+    default Comment commentPostDtoToComment(FeedPost feedPost, Artist artist, CommentPostDto requestBody){
+        Comment comment = new Comment(requestBody.getContent(), artist);
         comment.setFeedPost(feedPost);
-        comment.setContent(requestBody.getContent());
-
         return comment;
     }
 
     // artistPost에서 fan 의 경우 : CommentPostDto -> comment
     default Comment commentPostDtoToComment(Fans fans, ArtistPost artistPost, CommentPostDto requestBody){
-        Comment comment = new Comment();
-        comment.setFans(fans);
+        Comment comment = new Comment(requestBody.getContent(),fans);
         comment.setArtistPost(artistPost);
-        comment.setContent(requestBody.getContent());
         return comment;
     }
 
     // artistPost에서 artist 의 경우 : CommentPostDto -> comment
     default Comment commentPostDtoToComment(Artist artist, ArtistPost artistPost, CommentPostDto requestBody){
-        Comment comment = new Comment();
-        comment.setArtist(artist);
+        Comment comment = new Comment(requestBody.getContent(),artist);
         comment.setArtistPost(artistPost);
-        comment.setContent(requestBody.getContent());
 
         return comment;
     }
@@ -116,9 +112,17 @@ public interface CommentMapper {
         return commentResponseDto;
     }
 
-    List<CommentResponseDto.Fan> commentsToFanCommentResponseDtos(List<Comment> comments);
+    default List<CommentResponseDto.Fan> commentsToFanCommentResponseDtos(List<Comment> comments) {
+        return comments.stream()
+                .map(this::commentToCommentFanResponseDto)
+                .collect(Collectors.toList());
+    }
 
-    List<CommentResponseDto.Artist> commentsToArtistCommentResponseDtos(List<Comment> comments);
+    default List<CommentResponseDto.Artist> commentsToArtistCommentResponseDtos(List<Comment> comments) {
+        return comments.stream()
+                .map(this::commentToCommentArtistResponseDto)
+                .collect(Collectors.toList());
+    }
 
     List<CommentResponseDto.User> commentsToUserCommentResponseDtos(List<Comment> comments);
 }

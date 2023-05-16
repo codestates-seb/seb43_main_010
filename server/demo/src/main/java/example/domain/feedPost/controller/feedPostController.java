@@ -1,6 +1,5 @@
 package example.domain.feedPost.controller;
 
-import example.domain.feedPost.repository.feedPostRepository;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.fans.entity.Fans;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import example.domain.feedPost.repository.feedPostRepository;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -36,9 +34,9 @@ public class feedPostController {
     }
 
     @PostMapping
-    public ResponseEntity postFeedPost(@Valid @RequestBody feedPostDto.Post requestBody){
+    public ResponseEntity postFeedPost(@Valid @RequestBody feedPostDto.Post requestBody) {
         Fans fans = fansRepository.findById(requestBody.getFanId())
-                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
         FeedPost feedPost = mapper.feedPostDtoToFeed(requestBody, fans);
         FeedPost saveFeedPost = service.createFeedPost(feedPost);
         return new ResponseEntity<>(
@@ -47,9 +45,9 @@ public class feedPostController {
     }
 
 
-//     feed 상세 조회
+    //     feed 상세 조회
     @GetMapping("/{feedPostId}") // 경로 변수 안에는 entity 클래스의 식별자 들어감
-    public ResponseEntity getFeed( @PathVariable("feedPostId") @Positive int feedPostId){
+    public ResponseEntity getFeed(@PathVariable("feedPostId") @Positive int feedPostId) {
         FeedPost feedPost = service.findFeedPost(feedPostId);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.feedToFeedResponseDto(feedPost)),
@@ -59,11 +57,11 @@ public class feedPostController {
 
     @PatchMapping("/{feedPostId}")
     public ResponseEntity patchFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
-                                        @Valid @RequestBody feedPostDto.Patch requestBody){
+                                        @Valid @RequestBody feedPostDto.Patch requestBody) {
         FeedPost findFeedPost = service.findFeedPost(feedPostId);
         Fans fans = fansRepository.findById(requestBody.getFanId())
-                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-        FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost,requestBody, fans);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+        FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fans);
         FeedPost updateFeedPost = service.updateFeedPost(feedPost);
 
         return new ResponseEntity<>(
@@ -71,12 +69,11 @@ public class feedPostController {
     }
 
 
-
     @DeleteMapping("/{feedPostId}")
-    public ResponseEntity deleteFeedPost( @PathVariable("feedPostId") @Positive int feedPostId,
-                                          @Valid @RequestBody feedPostDto.Delete requestBody) {
+    public ResponseEntity deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
+                                         @Valid @RequestBody feedPostDto.Delete requestBody) {
         Fans fans = fansRepository.findById(requestBody.getFanId())
-                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
         FeedPost findFeedPost = service.findFeedPost(feedPostId);
         service.deleteFeedPost(fans, findFeedPost);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -95,4 +92,3 @@ public class feedPostController {
                         mapper.feedPostsToFeedResponseDtos(feedPosts), pageFeedPosts), HttpStatus.OK);
     }
 }
-// 페이지 정보까지만 보내드릴수 있으니 무한스크롤 구현 가능여부 묻기

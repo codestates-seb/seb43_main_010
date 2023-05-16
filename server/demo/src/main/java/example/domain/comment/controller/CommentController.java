@@ -9,34 +9,29 @@ import example.domain.comment.dto.CommentPostDto;
 import example.domain.comment.dto.CommentResponseDto;
 import example.domain.comment.entity.Comment;
 import example.domain.comment.mapper.CommentMapper;
-import example.domain.comment.repository.CommentRepository;
 import example.domain.comment.service.CommentService;
-import example.domain.feedPost.dto.feedPostDto;
 import example.domain.feedPost.service.feedPostService;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.fans.entity.Fans;
-import example.domain.fans.mapper.FansMapper;
 import example.domain.fans.repository.FansRepository;
 import example.domain.feedPost.entity.FeedPost;
 import example.global.response.MultiResponseDto;
 import example.global.response.SingleResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import example.domain.artistPost.repository.artistPostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import example.domain.feedPost.repository.feedPostRepository;
 import example.domain.artistPost.service.artistPostService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Validated
@@ -48,10 +43,7 @@ public class CommentController {
     private artistPostService artistPostService;
     private FansRepository fansRepository;
     private CommentMapper mapper;
-    private feedPostRepository feedPostRepository;
-    private artistPostRepository artistPostRepository;
     private ArtistRepository artistRepository;
-    private CommentRepository commentRepository;
 
 
 ////     feedPost 댓글 작성 (pathVariable -> api 주소로 가지고 온다. requestBody -> 요정 받은거 이용)
@@ -112,7 +104,7 @@ public class CommentController {
                     new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
             FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
             Comment comment = commentService.createComment(
-                    mapper.commentPostDtoToComment(findFan, findFeedPost, requestBody));
+                    mapper.commentPostDtoToComment(findFeedPost, findFan, requestBody));
             return new ResponseEntity<>(mapper.commentToCommentFanResponseDto(comment), HttpStatus.CREATED);
 
         } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
@@ -121,7 +113,7 @@ public class CommentController {
                     new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
             FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
             Comment comment = commentService.createComment(
-                    mapper.commentPostDtoToComment(findArtist, findFeedPost, requestBody));
+                    mapper.commentPostDtoToComment(findFeedPost, findArtist, requestBody));
             return new ResponseEntity<>(mapper.commentToCommentArtistResponseDto(comment), HttpStatus.CREATED);
         } else {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
@@ -158,26 +150,60 @@ public class CommentController {
 
     // feedPost 댓글 리스트 조회(무한 스크롤)
     @GetMapping("feed/{feedPostId}/comments")
-    public ResponseEntity getAllFansComment(@PathVariable("feedPostId") int feedPostId,
-                                            @RequestParam(defaultValue = "1") @Positive int page,
-                                            @RequestParam(defaultValue = "16") @Positive int size) {
+    public ResponseEntity<MultiResponseDto<CommentResponseDto.User>> getAllCommentsByFeedPostId(@PathVariable("feedPostId") int feedPostId,
+                                                        @RequestParam(defaultValue = "1") @Positive int page,
+                                                        @RequestParam(defaultValue = "16") @Positive int size) {
         Page<Comment> feedComments = commentService.findAllCommentsByFeedPostId(feedPostId, page - 1, size);
-        List<Comment> list = feedComments.getContent();
+        List<Comment> comments = new ArrayList<>();
 
-        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), feedComments), HttpStatus.OK);
+        if (feedComments != null) {
+            comments = feedComments.getContent();
+        }
+
+        List<CommentResponseDto.User> commentResponseDtos = mapper.commentsToUserCommentResponseDtos(comments);
+
+        return new ResponseEntity<>(new MultiResponseDto<CommentResponseDto.User>(commentResponseDtos, feedComments), HttpStatus.OK);
     }
+
+
+//    @GetMapping("feed/{feedPostId}/comments")
+//    public ResponseEntity getAllFansComment(@PathVariable("feedPostId") int feedPostId,
+//                                            @RequestParam(defaultValue = "1") @Positive int page,
+//                                            @RequestParam(defaultValue = "16") @Positive int size) {
+//        Page<Comment> feedComments = commentService.findAllCommentsByFeedPostId(feedPostId, page - 1, size);
+//        List<Comment> list = feedComments.getContent();
+//
+//        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), feedComments), HttpStatus.OK);
+//    }
 
 
     // artistPost 댓글 리스트 조회(무한 스크롤)
+
     @GetMapping("artist/{artistPostId}/comments") // artistPost 댓글
-    public ResponseEntity getAllArtistComment(@PathVariable("artistPostId") int artistPostId,
+    public ResponseEntity<MultiResponseDto<CommentResponseDto.User>> getAllArtistComment(@PathVariable("artistPostId") int artistPostId,
                                               @RequestParam(defaultValue = "1") @Positive int page,
                                               @RequestParam(defaultValue = "16") @Positive int size) {
         Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(artistPostId, page - 1, size);
-        List<Comment> list = artistComments.getContent();
+        List<Comment> comments = new ArrayList<>();
 
-        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), artistComments), HttpStatus.OK);
+        if (artistComments != null) {
+            comments = artistComments.getContent();
+        }
+
+        List<CommentResponseDto.User> commentResponseDtos = mapper.commentsToUserCommentResponseDtos(comments);
+
+        return new ResponseEntity<>(new MultiResponseDto<CommentResponseDto.User>(commentResponseDtos, artistComments), HttpStatus.OK);
     }
+
+//    @GetMapping("artist/{artistPostId}/comments") // artistPost 댓글
+//    public ResponseEntity getAllArtistComment(@PathVariable("artistPostId") int artistPostId,
+//                                              @RequestParam(defaultValue = "1") @Positive int page,
+//                                              @RequestParam(defaultValue = "16") @Positive int size) {
+//        Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(artistPostId, page - 1, size);
+//        List<Comment> list = artistComments.getContent();
+//
+//        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), artistComments), HttpStatus.OK);
+//    }
 
 
     // feedPost 에서 댓글 수정

@@ -32,39 +32,39 @@ public class artistPostController {
     private artistPostService service;
 
     public artistPostController(artistPostMapper mapper, ArtistRepository artistRepository, artistPostService service) {
-       this.mapper = mapper;
-       this.artistRepository = artistRepository;
-       this.service = service;
+        this.mapper = mapper;
+        this.artistRepository = artistRepository;
+        this.service = service;
     }
 
     @PostMapping
     public ResponseEntity postArtistPost(@Valid @RequestBody artistPostDto.Post requestBody) {
         Artist artist = artistRepository.findById(requestBody.getArtistId())
-                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         ArtistPost artistPost = mapper.artistPostDtoToArtist(requestBody, artist);
         ArtistPost saveArtistPost = service.createArtistPost(artistPost);
         return new ResponseEntity<>(
-               new SingleResponseDto<>(mapper.artistToArtistResponseDto(saveArtistPost)),
-               HttpStatus.OK);
-        }
+                new SingleResponseDto<>(mapper.artistToArtistResponseDto(saveArtistPost)),
+                HttpStatus.OK);
+    }
 
 
-        // artist post 상세 조회
+    // artist post 상세 조회
     @GetMapping("/{artistPostId}")
     public ResponseEntity getArtist(@PathVariable("artistPostId") @Positive int artistPostId) {
-         ArtistPost artistPost = service.findArtistPost(artistPostId);
-         return new ResponseEntity<>(
+        ArtistPost artistPost = service.findArtistPost(artistPostId);
+        return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.artistToArtistResponseDto(artistPost)),
                 HttpStatus.OK);
-        }
+    }
 
 
     @PatchMapping("/{artistPostId}")
     public ResponseEntity patchFeedPost(@PathVariable("id") @Positive int artistPostId,
-                                        @Valid @RequestBody artistPostDto.Patch requestBody){
+                                        @Valid @RequestBody artistPostDto.Patch requestBody) {
         ArtistPost findArtistPost = service.findArtistPost(artistPostId);
         Artist artist = artistRepository.findById(requestBody.getArtistId())
-                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         ArtistPost artistPost = mapper.artistPatchDtoToArtist(findArtistPost, requestBody, artist);
         ArtistPost updateArtistPost = service.updateArtistPost(artistPost);
 
@@ -74,15 +74,18 @@ public class artistPostController {
 
 
     @DeleteMapping("/{artistPostId}")
-    public ResponseEntity deleteFeedPost( @PathVariable("artistPostId") @Positive int artistPostId,
-                                          @Valid @RequestBody feedPostDto.Delete requestBody) {
+    public ResponseEntity deleteFeedPost(@PathVariable("artistPostId") @Positive int artistPostId,
+                                         @Valid @RequestBody feedPostDto.Delete requestBody) {
         Artist artist = artistRepository.findById(requestBody.getFanId())
-                    .orElseThrow(()-> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
         ArtistPost findArtistPost = service.findArtistPost(artistPostId);
         service.deleteArtistPost(artist, findArtistPost);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+}
 
+
+    /* 여기 주석
 
     // artistPost 리스트 조회(무한 스크롤)
     @GetMapping("{groupId}")
@@ -98,3 +101,4 @@ public class artistPostController {
     }
 
 }
+     */

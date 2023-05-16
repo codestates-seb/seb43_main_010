@@ -19,7 +19,6 @@ import java.util.Optional;
 @Service
 public class feedPostService {
     private feedPostRepository feedPostRepository;
-    private FansRepository fansRepository;
 
     public feedPostService(feedPostRepository feedPostRepository){
         this.feedPostRepository = feedPostRepository;
@@ -56,6 +55,7 @@ public class feedPostService {
         feedPostRepository.delete(findFeedPost);
     }
 
+
     //    @Transactional(readOnly = true)
     public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
         Page<FeedPost> feedPosts = feedPostRepository.findAllByFeedGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
@@ -64,11 +64,12 @@ public class feedPostService {
 //        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
     }
 
+
 //     팬 검증 메서드
-    private Fans findFan(int fanId) {
-        return fansRepository.findById(fanId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-    }
+//    private Fans findFan(int fanId) {
+//        return fansRepository.findById(fanId).orElseThrow(() ->
+//                new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+//    }
 
 //    public feedPostResponseDto getFeedById(int feedPostId) {
 //        Optional<FeedPost> optionalFeedPost = feedPostRepository.findById(feedPostId);
