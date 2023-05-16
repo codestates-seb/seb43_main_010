@@ -175,11 +175,14 @@ const Notice = ({ openNotice, setOpenNotice }) => {
     if (container) {
       container.scrollLeft -= 200;
 
-      if (container.scrollLeft !== 0) {
-        setLeftBtnHide(true);
-        setRightBtnHide(false);
-      } else if (container.scrollLeft === 0) {
+      if (container.scrollLeft <= 0) {
         setLeftBtnHide(false);
+        setRightBtnHide(false);
+      } else if (container.scrollLeft + container.offsetWidth >= container.scrollWidth) {
+        setLeftBtnHide(false);
+        setRightBtnHide(true);
+      } else {
+        setLeftBtnHide(true);
         setRightBtnHide(false);
       }
     }
@@ -191,17 +194,14 @@ const Notice = ({ openNotice, setOpenNotice }) => {
     if (container) {
       container.scrollLeft += 200;
 
-      if (
-        container.scrollLeft + container.offsetWidth < container.scrollWidth &&
-        !container.scrollLeft + container.offsetWidth >= container.scrollWidth
-      ) {
-        setRightBtnHide(false);
+      if (container.scrollLeft + container.offsetWidth >= container.scrollWidth) {
+        setRightBtnHide(true);
         setLeftBtnHide(false);
-      } else if (container.scrollLeft + container.offsetWidth >= container.scrollWidth) {
+      } else if (container.scrollLeft !== 0) {
         setRightBtnHide(true);
         setLeftBtnHide(false);
       } else {
-        setRightBtnHide(true);
+        setRightBtnHide(false);
         setLeftBtnHide(false);
       }
     }
