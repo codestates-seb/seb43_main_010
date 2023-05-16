@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import bubbleTail from '../../../assets/svg-file/bubble-tail.svg';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
 import DetailPost from '../../Feed/FeedMaterial/DetailPost';
@@ -43,17 +45,23 @@ const ArtistPostBox = styled.div`
   height: auto;
   position: relative;
   .bubble-tail {
+    color: ${({ gradColor }) =>
+      gradColor ? `linear-gradient(90deg, transparent, ${gradColor[2]})` : `linear-gradient(to top, transparent, #c9edff)`};
     position: absolute;
     left: -10px;
     top: 1px;
     width: 20px;
     height: 20px;
-    img {
+    svg {
+      path {
+        fill: ${({ gradColor }) => (gradColor ? `${gradColor[2]}` : 'none')};
+      }
     }
   }
   .top-mid {
     min-height: 98px;
-    background: linear-gradient(to left, transparent, #c7e7ff);
+    background: ${({ gradColor }) =>
+      gradColor ? `linear-gradient(to right, ${gradColor[2]},${gradColor[0]})` : `linear-gradient(to top, transparent, #c9edff)`};
     border: 1px solid linear-gradient(#c7e7ff);
     border-radius: 0.5rem;
     box-shadow: 0 0 12px rgb(19, 28, 35, 5%);
@@ -111,7 +119,7 @@ const ArtistPostBox = styled.div`
       line-height: 20px;
       cursor: pointer;
       text-align: start;
-
+      background: none;
       .more {
         color: #bababa;
         font-size: 13.5px;
@@ -264,6 +272,11 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
     setDetailPost(true);
   };
 
+  const { groupId } = useParams();
+  const state = useSelector((state) => state.color);
+  const group = state.allGroup.find((el) => el.groupId === Number(groupId));
+  const gradColor = group ? group.gradColor : [];
+
   return (
     <>
       <Container>
@@ -274,9 +287,12 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
           <div className='created-day'>5</div>
           <div className='created-month'>May</div>
         </ArtistProfile>
-        <ArtistPostBox>
+        <ArtistPostBox gradColor={gradColor}>
           <div className='bubble-tail'>
-            <img src={bubbleTail} alt='bubble-tail-icon'></img>
+            {/* <img src={bubbleTail} alt='bubble-tail-icon'></img> */}
+            <svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
+              <path d='M0.499937 2.00004C-6.33001e-05 2.50004 3.99994 3.50004 6.99994 6.00004C9.39992 8.00002 9.99993 11.8334 9.99994 13.5L12.9999 6.5C13.4999 4.83333 14.2999 1.6 13.4999 2C12.4999 2.5 11.4999 1.50004 7.49994 1.00004C3.49994 0.500041 0.999937 1.50004 0.499937 2.00004Z' />
+            </svg>
           </div>
           <div className='top-mid'>
             {/* 위 */}
