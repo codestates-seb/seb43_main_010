@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Head from '../components/Head/Head';
+import HeadMain from '../components/Head/HeadMain';
 import MyPage from '../components/MyPage/MyPage';
 // import Foot from '../components/Foot/Foot';
 
@@ -12,7 +12,7 @@ const ProfilePage = () => {
   return (
     <>
       <ProfilePageBlock>
-        <Head />
+        <HeadMain />
         <MyPage />
         {/* <Foot /> */}
       </ProfilePageBlock>
