@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import LoginPage from './pages/LoginPage';
-import KaKaoLogin from './components/Login/LoginMaterial/KakaoLogin';
+import KaKaoLogin from './components/Login/LoginMaterial/KaKaoLoginPage';
 import SignupPage from './pages/Signup';
 import FeedPage from './pages/FeedPage';
 import ArtistPage from './pages/ArtistPage';
