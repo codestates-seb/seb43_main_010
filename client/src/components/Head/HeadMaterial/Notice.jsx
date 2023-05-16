@@ -151,8 +151,6 @@ const Notice = ({ openNotice, setOpenNotice }) => {
 
   const noticeRef = useRef(null);
   const containerRef = useRef(null);
-  const leftButtonRef = useRef(null);
-  const rightButtonRef = useRef(null);
 
   useEffect(() => {
     const clickOutside = (e) => {
@@ -216,8 +214,8 @@ const Notice = ({ openNotice, setOpenNotice }) => {
       {/* 위 */}
       <div className='notice-box'>
         <div className='notice-txt'>알림</div>
-        <LeftButton leftBtnHide={leftBtnHide} ref={leftButtonRef} className='left-btn' visible={false} onClick={scrollLeft}></LeftButton>
-        <RightButton rightBtnHide={rightBtnHide} ref={rightButtonRef} className='right-btn' onClick={scrollRight}></RightButton>
+        <LeftButton leftBtnHide={leftBtnHide} className='left-btn' visible={false} onClick={scrollLeft}></LeftButton>
+        <RightButton rightBtnHide={rightBtnHide} className='right-btn' onClick={scrollRight}></RightButton>
       </div>
 
       {/* 중간 */}
