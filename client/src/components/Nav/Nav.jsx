@@ -30,9 +30,15 @@ const StyledLink = styled(NavLink)`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 17px;
     opacity: 0.6;
+    transition: 0.07s ease-in-out;
+
+    &:hover {
+      opacity: 0.8;
+      transition: 0.07s ease-in-out;
+    }
   }
 
   &.active span {
