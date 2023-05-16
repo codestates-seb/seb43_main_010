@@ -227,6 +227,16 @@ const LoginForm = () => {
       password: '',
     });
   };
+  //카카오 로그인 버튼 클릭
+  const loginWithKakao = () => {
+    // eslint-disable-next-line no-undef
+    const REDIRECT_URI = `${process.env.REACT_APP_REDIRECT_URI}`;
+    // eslint-disable-next-line no-undef
+    const CLIENT_ID = `${process.env.REACT_APP_REST_API_APP_KEY}`;
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    window.location.replace(`${KAKAO_AUTH_URL}`);
+  };
+  //
 
   return (
     <>
@@ -266,7 +276,7 @@ const LoginForm = () => {
           </CustomLink>
           <SignupBtn onClick={onClickSignup}>회원가입</SignupBtn>
           <div className='or-tag'>혹은</div>
-          <KakaoBtn>
+          <KakaoBtn onClick={() => loginWithKakao()}>
             <img src={kakaoLogo} alt='카카오로고'></img>
           </KakaoBtn>
         </BtnBox>

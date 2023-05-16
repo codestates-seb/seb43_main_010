@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import LoginPage from './pages/LoginPage';
+import KaKaoLogin from './components/Login/LoginMaterial/KakaoLogin';
 import SignupPage from './pages/Signup';
 import FeedPage from './pages/FeedPage';
 import ArtistPage from './pages/ArtistPage';
@@ -19,6 +20,7 @@ function App() {
         <Route path='/feed/:groupId' element={<FeedPage />} />
         <Route path='/artist/:groupId' element={<ArtistPage />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/oauth/callback/kakao' element={<KaKaoLogin />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/feed' element={<FeedPage />} />
         <Route path='/artist' element={<ArtistPage />} />
