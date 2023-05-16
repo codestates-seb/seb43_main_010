@@ -218,6 +218,30 @@ const data = {
       groupImg: imgs.txt,
       grouplogoImg: imgs.txtPng,
     },
+    {
+      groupId: 21,
+      artistId: 21,
+      groupName: 'LEE YOUNG JI',
+      groupImg: imgs.youngJi,
+      grouplogoImg: imgs.youngJiPng,
+      gradColor: ['#9ca29e', '#1e3034', '#dce4df', '#9ca29e'],
+    },
+    {
+      groupId: 24,
+      artistId: 24,
+      groupName: 'HWANG MIN HYUN',
+      groupImg: imgs.minhyun,
+      grouplogoImg: imgs.minhyunPng,
+      gradColor: ['#a09081', '#493a37', '#d8cfc6', '#a09081'],
+    },
+    {
+      groupId: 25,
+      artistId: 25,
+      groupName: 'PARK BO GUM',
+      groupImg: imgs.bogum,
+      grouplogoImg: imgs.bogumPng,
+      gradColor: ['#616878', '#2d303a', '#cfd7e5', '#616878'],
+    },
   ],
 };
 

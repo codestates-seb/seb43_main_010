@@ -3,12 +3,16 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import SearchInput from './SearchInput';
+import Notice from './Notice';
 
 const RightIconBlock = styled.div`
   display: flex;
   margin-right: 27px;
 
-  button {
+  .search,
+  .bell,
+  .people,
+  .ques {
     width: 62px;
     height: 62px;
     border-radius: 50%;
@@ -30,6 +34,11 @@ const RightIconBlock = styled.div`
     }
   }
 
+  .bell-box {
+    margin-right: 7px;
+    position: relative;
+  }
+
   .search {
     font-size: 25px;
   }
@@ -48,9 +57,14 @@ const StyledLink = styled(Link)`
 
 const RightIcon = () => {
   const [openSearch, setOpenSearch] = useState(false);
+  const [openNotice, setOpenNotice] = useState(false);
 
   const handleChange = () => {
     setOpenSearch(!openSearch);
+  };
+
+  const toggleNotice = () => {
+    setOpenNotice(!openNotice);
   };
 
   return (
@@ -63,9 +77,13 @@ const RightIcon = () => {
         </button>
       )}
 
-      <button className='bell'>
-        <i className='i-bell-icon' />
-      </button>
+      <div className='bell-box'>
+        <button onClick={toggleNotice} className='bell'>
+          <i className='i-bell-icon' />
+        </button>
+        {/* 알림 모달 => Notice 컴포넌트 */}
+        {openNotice && <Notice openNotice={openNotice} setOpenNotice={setOpenNotice} />}
+      </div>
       <StyledLink to={'/profile'}>
         <button className='people' tabIndex='-1'>
           <i className='i-people-icon' />
