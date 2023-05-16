@@ -269,32 +269,55 @@ public class CommentController {
     public ResponseEntity<?> patchArtistPostComment(@PathVariable("artistPostId") @Positive @NotNull int artistPostId,
                                                     @PathVariable("commentId") @Positive @NotNull int commentId,
                                                     @Valid @RequestBody CommentPatchDto requestBody) {
-        if (fansRepository.existsByEmail(requestBody.getEmail())) {
-            // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
-            Fans findFan = fansRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
-                    new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-            // 해당하는 artistPost 정보 조회
-            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
-            Comment comment = mapper.commentPatchDtoToComment(findFan, findArtistPost, requestBody);
-            Comment updateComment = commentService.updateFanComment(commentId, comment);
+        Fans findFan = commentService.findFansByEmail(requestBody.getEmail());
+        Artist findArtist = commentService.findArtistByEmail(requestBody.getEmail());
 
+        ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
+
+        Comment comment;
+        if (findFan != null) {
+            comment = mapper.commentPatchDtoToComment(findFan, findArtistPost, requestBody);
+            Comment updateComment = commentService.updateComment(commentId, comment);
             return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentFanResponseDto(updateComment)), HttpStatus.OK);
-
-        } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
-            // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
-            Artist findArtist = artistRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
-                    new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
-            // 해당하는 artistPost 정보 조회
-            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
-            Comment comment = mapper.commentPatchDtoToComment(findArtist, findArtistPost, requestBody);
-            Comment updateComment = commentService.updateArtistComment(commentId, comment);
-
+        } else if (findArtist != null) {
+            comment = mapper.commentPatchDtoToComment(findArtist, findArtistPost, requestBody);
+            Comment updateComment = commentService.updateComment(commentId, comment);
             return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentArtistResponseDto(updateComment)), HttpStatus.OK);
-
         } else {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         }
     }
+    //  방법2
+//    @PatchMapping("artist/{artistPostId}/comment/{commentId}")
+//    public ResponseEntity<?> patchArtistPostComment(@PathVariable("artistPostId") @Positive @NotNull int artistPostId,
+//                                                    @PathVariable("commentId") @Positive @NotNull int commentId,
+//                                                    @Valid @RequestBody CommentPatchDto requestBody) {
+//        if (fansRepository.existsByEmail(requestBody.getEmail())) {
+//            // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
+//            Fans findFan = fansRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
+//                    new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+//            // 해당하는 artistPost 정보 조회
+//            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
+//            Comment comment = mapper.commentPatchDtoToComment(findFan, findArtistPost, requestBody);
+//            Comment updateComment = commentService.updateFanComment(commentId, comment);
+//
+//            return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentFanResponseDto(updateComment)), HttpStatus.OK);
+//
+//        } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
+//            // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
+//            Artist findArtist = artistRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
+//                    new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+//            // 해당하는 artistPost 정보 조회
+//            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
+//            Comment comment = mapper.commentPatchDtoToComment(findArtist, findArtistPost, requestBody);
+//            Comment updateComment = commentService.updateArtistComment(commentId, comment);
+//
+//            return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentArtistResponseDto(updateComment)), HttpStatus.OK);
+//
+//        } else {
+//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+//        }
+//    }
 
     // fans 댓글 삭제
     @DeleteMapping("feed/{feedPostId}/comments/{commentId}")

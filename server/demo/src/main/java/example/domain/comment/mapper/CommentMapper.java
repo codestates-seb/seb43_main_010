@@ -66,6 +66,19 @@ public interface CommentMapper {
         return comment;
     }
 
+    //artistPost에서 fan(artist) 의 경우 : CommentPatchDto -> Comment
+    default Comment commentPatchDtoToComment(Object author, ArtistPost artistPost, CommentPatchDto requestBody) {
+        Comment comment = new Comment();
+        if (author instanceof Fans) {
+            comment.setFans((Fans) author);
+        } else if (author instanceof Artist) {
+            comment.setArtist((Artist) author);
+        }
+        comment.setArtistPost(artistPost);
+        comment.setContent(requestBody.getContent());
+        return comment;
+    }
+
 //    //  feedPost에서 fan 의 경우 : CommentPatchDto -> Comment
 //    default Comment commentPatchDtoToComment(Fans fans, FeedPost feedPost, CommentPatchDto requestBody){
 //        Comment comment = new Comment();
@@ -84,23 +97,23 @@ public interface CommentMapper {
 //        return comment;
 //    }
 
-    //  artistPost에서 fan 의 경우 : CommentPatchDto -> Comment
-    default Comment commentPatchDtoToComment(Fans fans, ArtistPost artistPost, CommentPatchDto requestBody){
-        Comment comment = new Comment();
-        comment.setFans(fans);
-        comment.setArtistPost(artistPost);
-        comment.setContent(requestBody.getContent());
-        return comment;
-    }
-
-    // artistPost에서 artist 의 경우 :  CommentPatchDto -> Comment
-    default Comment commentPatchDtoToComment(Artist artist, ArtistPost artistPost, CommentPatchDto requestBody){
-        Comment comment = new Comment();
-        comment.setArtist(artist);
-        comment.setArtistPost(artistPost);
-        comment.setContent(requestBody.getContent());
-        return comment;
-    }
+//    //  artistPost에서 fan 의 경우 : CommentPatchDto -> Comment
+//    default Comment commentPatchDtoToComment(Fans fans, ArtistPost artistPost, CommentPatchDto requestBody){
+//        Comment comment = new Comment();
+//        comment.setFans(fans);
+//        comment.setArtistPost(artistPost);
+//        comment.setContent(requestBody.getContent());
+//        return comment;
+//    }
+//
+//    // artistPost에서 artist 의 경우 :  CommentPatchDto -> Comment
+//    default Comment commentPatchDtoToComment(Artist artist, ArtistPost artistPost, CommentPatchDto requestBody){
+//        Comment comment = new Comment();
+//        comment.setArtist(artist);
+//        comment.setArtistPost(artistPost);
+//        comment.setContent(requestBody.getContent());
+//        return comment;
+//    }
 
 
     // Comment -> CommentResponseDto
