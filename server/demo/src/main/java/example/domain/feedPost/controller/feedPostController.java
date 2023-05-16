@@ -33,6 +33,7 @@ public class feedPostController {
         this.service = service;
     }
 
+    // feedPost 등록
     @PostMapping
     public ResponseEntity postFeedPost(@Valid @RequestBody feedPostDto.Post requestBody) {
         Fans fans = fansRepository.findById(requestBody.getFanId())
@@ -45,7 +46,7 @@ public class feedPostController {
     }
 
 
-    //     feed 상세 조회
+    // feedPost 상세 조회
     @GetMapping("/{feedPostId}") // 경로 변수 안에는 entity 클래스의 식별자 들어감
     public ResponseEntity getFeed(@PathVariable("feedPostId") @Positive int feedPostId) {
         FeedPost feedPost = service.findFeedPost(feedPostId);
@@ -55,13 +56,14 @@ public class feedPostController {
     }
 
 
+    // feedPost 수정
     @PatchMapping("/{feedPostId}")
     public ResponseEntity patchFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
                                         @Valid @RequestBody feedPostDto.Patch requestBody) {
         FeedPost findFeedPost = service.findFeedPost(feedPostId);
-        Fans fans = fansRepository.findById(requestBody.getFanId())
+        Fans fan = fansRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-        FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fans);
+        FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fan);
         FeedPost updateFeedPost = service.updateFeedPost(feedPost);
 
         return new ResponseEntity<>(
@@ -69,15 +71,18 @@ public class feedPostController {
     }
 
 
+    // feedPost 삭제
     @DeleteMapping("/{feedPostId}")
     public ResponseEntity deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
                                          @Valid @RequestBody feedPostDto.Delete requestBody) {
-        Fans fans = fansRepository.findById(requestBody.getFanId())
+        Fans fan = fansRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
         FeedPost findFeedPost = service.findFeedPost(feedPostId);
-        service.deleteFeedPost(fans, findFeedPost);
+        service.deleteFeedPost(fan, findFeedPost);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 
     // feedPost 리스트 조회(무한 스크롤)
     @GetMapping("{groupId}")

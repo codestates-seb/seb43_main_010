@@ -37,6 +37,7 @@ public class artistPostController {
         this.service = service;
     }
 
+    // artistPost 등록
     @PostMapping
     public ResponseEntity postArtistPost(@Valid @RequestBody artistPostDto.Post requestBody) {
         Artist artist = artistRepository.findById(requestBody.getArtistId())
@@ -49,7 +50,7 @@ public class artistPostController {
     }
 
 
-    // artist post 상세 조회
+    // artistPost 상세 조회
     @GetMapping("/{artistPostId}")
     public ResponseEntity getArtist(@PathVariable("artistPostId") @Positive int artistPostId) {
         ArtistPost artistPost = service.findArtistPost(artistPostId);
@@ -59,8 +60,9 @@ public class artistPostController {
     }
 
 
+    // artistPost 수정
     @PatchMapping("/{artistPostId}")
-    public ResponseEntity patchFeedPost(@PathVariable("id") @Positive int artistPostId,
+    public ResponseEntity patchFeedPost(@PathVariable("artistPostId") @Positive int artistPostId,
                                         @Valid @RequestBody artistPostDto.Patch requestBody) {
         ArtistPost findArtistPost = service.findArtistPost(artistPostId);
         Artist artist = artistRepository.findById(requestBody.getArtistId())
@@ -73,19 +75,18 @@ public class artistPostController {
     }
 
 
+    // artistPost 삭제
     @DeleteMapping("/{artistPostId}")
     public ResponseEntity deleteFeedPost(@PathVariable("artistPostId") @Positive int artistPostId,
                                          @Valid @RequestBody feedPostDto.Delete requestBody) {
         Artist artist = artistRepository.findById(requestBody.getFanId())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         ArtistPost findArtistPost = service.findArtistPost(artistPostId);
         service.deleteArtistPost(artist, findArtistPost);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-}
 
 
-    /* 여기 주석
 
     // artistPost 리스트 조회(무한 스크롤)
     @GetMapping("{groupId}")
@@ -101,4 +102,3 @@ public class artistPostController {
     }
 
 }
-     */
