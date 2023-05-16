@@ -209,8 +209,8 @@ public class CommentController {
     // feedPost 에서 댓글 수정
 
     @PatchMapping("feed/{feedPostId}/comment/{commentId}")
-    public ResponseEntity<?> patchFeedPostComment(@PathVariable("feedPostId") @Positive @NotNull int feedPostId,
-                                                  @PathVariable("commentId") @Positive @NotNull int commentId,
+    public ResponseEntity<?> patchFeedPostComment(@PathVariable("feedPostId") @Positive int feedPostId,
+                                                  @PathVariable("commentId") @Positive int commentId,
                                                   @Valid @RequestBody CommentPatchDto requestBody) {
         Fans findFan = commentService.findFansByEmail(requestBody.getEmail());
         Artist findArtist = commentService.findArtistByEmail(requestBody.getEmail());

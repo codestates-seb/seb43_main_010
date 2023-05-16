@@ -1,7 +1,6 @@
 package example.domain.artistPost.service;
 
 import example.domain.artist.entity.Artist;
-import example.domain.artist.repository.ArtistRepository;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.artistPost.repository.artistPostRepository;
 import example.domain.feedPost.entity.FeedPost;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -56,7 +54,7 @@ public class artistPostService {
         artistPostRepository.delete(findArtistPost);
     }
 }
-/* 여기 주석!
+/*
     public Page<ArtistPost> findArtistPosts(int groupId, int page, int size){
         Page<FeedPost> artistPosts = artistPostRepository.findAllByArtistGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
 
@@ -64,4 +62,5 @@ public class artistPostService {
 //        return artistPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
     }
 }
-*/
+/*
+ */

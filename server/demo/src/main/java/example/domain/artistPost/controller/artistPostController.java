@@ -85,9 +85,10 @@ public class artistPostController {
         service.deleteArtistPost(artist, findArtistPost);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+}
 
 
-
+/*
     // artistPost 리스트 조회(무한 스크롤)
     @GetMapping("{groupId}")
     public ResponseEntity getFeedPosts(@PathVariable("groupId") int groupId,
@@ -102,3 +103,4 @@ public class artistPostController {
     }
 
 }
+*/

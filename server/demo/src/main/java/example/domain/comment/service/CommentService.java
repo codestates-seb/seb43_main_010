@@ -159,13 +159,10 @@ public class CommentService {
 //    }
 
     public Fans findFansByEmail(String email) {
-        return fansRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+        return fansRepository.findByEmail(email).orElse(null);
     }
 
     public Artist findArtistByEmail(String email) {
-        return artistRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+        return artistRepository.findByEmail(email).orElse(null);
     }
-
 }

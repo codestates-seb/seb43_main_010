@@ -10,7 +10,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -36,7 +35,6 @@ public class ArtistPost extends BaseTimeEntity{
         @Column(name = "created_at")
         private LocalDateTime createdAt = LocalDateTime.now();
 
-        private String group;
 
         @ManyToOne
         @JoinColumn(name = "fan_id")
@@ -46,14 +44,14 @@ public class ArtistPost extends BaseTimeEntity{
         @JoinColumn(name = "artist_id")
         private Artist artist;
 
-        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
-        private List<Like> likes = new ArrayList<>();
+//        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
+//        private List<Like> likes = new ArrayList<>();
 
         @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE) // 엔티티가 삭제 될 때 함께 삭제
         private List<Comment> comments = new ArrayList<>(); // null일 경우도 사용 가능
 
         @ColumnDefault("0")
-        @Column(name = "like_count", nullable = false)
+        @Column(name = "like_count")
         private Integer likeCount;
 
         public ArtistPost(String content, String img, Artist artist) {

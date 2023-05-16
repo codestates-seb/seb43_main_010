@@ -49,7 +49,7 @@ public class Comment {
     private Artist artist;
 
     @ColumnDefault("0")
-    @Column(name = "like_count", nullable = false)
+    @Column(name = "like_count")
     private Integer likeCount;
 
     public Comment(String content, Fans fans) {

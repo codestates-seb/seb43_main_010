@@ -28,7 +28,7 @@ public interface artistPostMapper {
 
 
     // artistPost -> artistPostDto.Response
-    @Mapping(target = "comments", expression = "java(commentMapper.commentsToCommentResponseDtos(artistPost.getComments()))")
+//    @Mapping(target = "comments", expression = "java(commentMapper.commentsToCommentResponseDtos(artistPost.getComments()))")
     artistPostResponseDto artistToArtistResponseDto(ArtistPost artistPost);
 
     List<artistPostResponseDto> artistPostsToArtistResponseDtos(List<ArtistPost> artistPost);

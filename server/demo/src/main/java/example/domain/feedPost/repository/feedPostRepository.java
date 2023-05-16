@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface feedPostRepository extends JpaRepository<FeedPost, Integer>, feedPostCustomRepository{
+public interface feedPostRepository extends JpaRepository<FeedPost, Integer> , feedPostCustomRepository { // , feedPostCustomRepository
 
-    Page<Comment> findAllByFeedGroupId(Integer groupId, Pageable pageable);
+//    Page<Comment> findAllByFeedGroupId(Integer groupId, Pageable pageable);
 
 //
 //    @Modifying

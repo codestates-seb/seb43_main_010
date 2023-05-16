@@ -35,7 +35,6 @@ public class FeedPost extends BaseTimeEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    private String group;
 
     @ManyToOne
     @JoinColumn(name = "fan_id")
@@ -52,7 +51,7 @@ public class FeedPost extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @ColumnDefault("0")
-    @Column(name = "like_count", nullable = false)
+    @Column(name = "like_count")
     private Integer likeCount;
 
     public FeedPost(String content, String img, Fans fans) {

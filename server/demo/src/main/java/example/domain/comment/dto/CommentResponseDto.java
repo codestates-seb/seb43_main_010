@@ -17,7 +17,7 @@ public class CommentResponseDto {
         private long feedPostId;
         private String content;
         private LocalDateTime createdAt;
-        private int likeCount;
+        private Integer likeCount;
     }
 
     @Getter
@@ -27,7 +27,7 @@ public class CommentResponseDto {
         private long feedPostId;
         private String content;
         private LocalDateTime createdAt;
-        private int likeCount;
+        private Integer likeCount;
     }
     @Getter
     @Setter
@@ -37,7 +37,7 @@ public class CommentResponseDto {
         private long feedPostId;
         private String content;
         private LocalDateTime createdAt;
-        private int likeCount;
+        private Integer likeCount;
     }
 }
 

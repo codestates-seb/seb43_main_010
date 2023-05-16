@@ -81,9 +81,10 @@ public class feedPostController {
         service.deleteFeedPost(fan, findFeedPost);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+}
 
 
-
+/*
     // feedPost 리스트 조회(무한 스크롤)
     @GetMapping("{groupId}")
     public ResponseEntity getFeedPosts(@PathVariable("groupId") int groupId,
@@ -97,3 +98,5 @@ public class feedPostController {
                         mapper.feedPostsToFeedResponseDtos(feedPosts), pageFeedPosts), HttpStatus.OK);
     }
 }
+/*
+ */

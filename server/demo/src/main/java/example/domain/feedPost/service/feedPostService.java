@@ -1,8 +1,6 @@
 package example.domain.feedPost.service;
 
 import example.domain.fans.entity.Fans;
-import example.domain.fans.repository.FansRepository;
-//import example.domain.feedPost.dto.feedPostResponseDto;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.feedPost.entity.FeedPost;
@@ -55,7 +53,7 @@ public class feedPostService {
         feedPostRepository.delete(findFeedPost);
     }
 
-
+/*
     //    @Transactional(readOnly = true)
     public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
         Page<FeedPost> feedPosts = feedPostRepository.findAllByFeedGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
@@ -63,7 +61,7 @@ public class feedPostService {
         return feedPosts;
 //        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
     }
-
+*/
 
 //     팬 검증 메서드
 //    private Fans findFan(int fanId) {
