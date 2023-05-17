@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import BTS from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
 import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
 import NewJeans from '../../../assets/jpg-file/card-jpg/3-newJeans.jpg';
+
+import axios from 'axios';
 
 const LeftWrapper = styled.div`
   display: flex;
@@ -231,9 +234,11 @@ const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBt
 
   return (
     <Box>
-      <Img>
-        <img src={imgSrc} alt={imgAlt} />
-      </Img>
+      <Link to='/myprofile/:groupId'>
+        <Img>
+          <img src={imgSrc} alt={imgAlt} />
+        </Img>
+      </Link>
       {editMode ? (
         <form onSubmit={handleNickNameSubmit}>
           <Input type='text' value={newNickName} onChange={handleNickNameChange} />
@@ -256,26 +261,60 @@ const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBt
 const MyProfile = () => {
   const [showModal, setShowModal] = useState(false);
   const [membershipDate, setMembershipDate] = useState('2023-04-28');
+  const [artistCards, setArtistCards] = useState([
+    { imgSrc: BTS, imgAlt: 'BTS', nickName: 'TATA-V', artistName: 'BTS' },
+    { imgSrc: TXT, imgAlt: 'TXT', nickName: 'TATA-T', artistName: 'TXT' },
+    { imgSrc: NewJeans, imgAlt: 'NewJeans', nickName: 'TATA-J', artistName: 'NewJeans' },
+  ]);
 
-  const handleDeleteBtnClick = () => {
-    setShowModal(true);
+  const handleDeleteBtnClick = (index) => () => {
+    setShowModal({ open: true, index });
   };
 
   const handleCancelBtnClick = () => {
     setShowModal(false);
   };
 
-  const handleConfirmBtnClick = () => {
-    setShowModal(false);
+  const handleConfirmBtnClick = async () => {
+    try {
+      const response = await axios.delete('사용자 정보 삭제 API 엔드포인트');
+      if (response.status === 200) {
+        setArtistCards(artistCards.filter((_, i) => i !== showModal.index));
+        setShowModal({ open: false, index: null });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
-  // useEffect(() => {
-  //   // 서버로부터 회원 가입일 가져오기
-  //   fetch('회원가입일자 API 엔드포인트')
-  //     .then(response => response.json())
-  //     .then(data => setMembershipDate(data.membershipDate))
-  //     .catch(error => console.error('Error:', error));
-  // }, []);
+  useEffect(() => {
+    // 회원 가입일 가져오기
+    const fetchMembershipDate = async () => {
+      try {
+        const response = await axios.get('회원가입일자 API 엔드포인트');
+        if (response.status === 200) {
+          setMembershipDate(response.data.membershipDate);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchMembershipDate();
+  }, []);
+
+  const handleLogoutClick = async () => {
+    try {
+      // 로그아웃 API 요청
+      const response = await axios.post('로그아웃 API 엔드포인트');
+      if (response.status === 200) {
+        // 로그아웃 후 화면 전환 로직 추가
+        <Link to='/'></Link>;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <>
@@ -283,34 +322,21 @@ const MyProfile = () => {
         <LeftBox>
           <Name>TATA-V</Name>
           <Email>tata-v@example.com</Email>
-          <LogoutBtn>로그아웃</LogoutBtn>
+          <LogoutBtn onClick={handleLogoutClick}>로그아웃</LogoutBtn>
         </LeftBox>
         <Container>
           <Title>나의 프로필</Title>
-          <ArtistCard
-            imgSrc={BTS}
-            imgAlt='BTS'
-            nickName='TATA-V'
-            artistName='BTS'
-            membershipDate={membershipDate}
-            handleDeleteBtnClick={handleDeleteBtnClick}
-          />
-          <ArtistCard
-            imgSrc={TXT}
-            imgAlt='TXT'
-            nickName='TATA-T'
-            artistName='TXT'
-            membershipDate={membershipDate}
-            handleDeleteBtnClick={handleDeleteBtnClick}
-          />
-          <ArtistCard
-            imgSrc={NewJeans}
-            imgAlt='NewJeans'
-            nickName='TATA-J'
-            artistName='NewJeans'
-            membershipDate={membershipDate}
-            handleDeleteBtnClick={handleDeleteBtnClick}
-          />
+          {artistCards.map((card, index) => (
+            <ArtistCard
+              key={index}
+              imgSrc={card.imgSrc}
+              imgAlt={card.imgAlt}
+              nickName={card.nickName}
+              artistName={card.artistName}
+              membershipDate={membershipDate}
+              handleDeleteBtnClick={handleDeleteBtnClick(index)}
+            />
+          ))}
         </Container>
       </LeftWrapper>
       {showModal && (
