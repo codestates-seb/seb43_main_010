@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 // font-weight
 // 100: Thin
@@ -133,13 +134,39 @@ const MyInfoRight = () => {
     password: false,
   });
 
-  // const handleClick = () => {
-  //   const kakaoAppKey = 'YOUR_KAKAO_APP_KEY'; // 여기에 카카오 앱 키를 넣기
-  //   const redirectUri = 'YOUR_REDIRECT_URI'; // 여기에 리디렉트 URI를 넣기
-  //   const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoAppKey}&redirect_uri=${redirectUri}&response_type=code`;
+  const kakaohandleClick = () => {
+    const kakaoAppKey = 'YOUR_KAKAO_APP_KEY'; // 여기에 카카오 앱 키를 넣기
+    const redirectUri = 'YOUR_REDIRECT_URI'; // 여기에 리디렉트 URI를 넣기
+    const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoAppKey}&redirect_uri=${redirectUri}&response_type=code`;
 
-  //   window.location.assign(authUrl);
-  // };
+    window.location.assign(authUrl);
+  };
+
+  const updateUserInfo = async (field, value) => {
+    try {
+      const response = await axios.patch('서버의 API 엔드포인트', { [field]: value });
+      if (response.status === 200) {
+        console.log('변경 완료');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleWithdrawal = async () => {
+    try {
+      // 탈퇴를 위한 API 호출
+      const response = await axios.delete('서버의 탈퇴 API 엔드포인트');
+
+      // 응답 상태코드가 200인 경우 탈퇴 성공
+      if (response.status === 200) {
+        // 탈퇴가 성공적으로 이루어지면 로그아웃 또는 리디렉션 등을 수행할 수 있습니다.
+        console.log('탈퇴 완료');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const FieldInput = ({ field, label }) => {
     const [inputValue, setInputValue] = useState(info[field]);
@@ -159,6 +186,7 @@ const MyInfoRight = () => {
         ...prevShowInput,
         [field]: false,
       }));
+      updateUserInfo(field, inputValue); // 서버에 변경된 정보 전송
     };
 
     const handleEditButtonClick = () => {
@@ -206,11 +234,10 @@ const MyInfoRight = () => {
               <KakaoIcon className='i-kakao-icon' />
             </button>
             <Kakao>카카오톡</Kakao>
-            <ConnectButton>연결하기</ConnectButton>
-            {/* <ConnectButton onClick={handleClick}>연결하기</ConnectButton> */}
+            <ConnectButton onClick={kakaohandleClick}>연결하기</ConnectButton>
           </KakaoContainer>
         </div>
-        <WithdrawalBtn>루미안 계정 탈퇴하기</WithdrawalBtn>
+        <WithdrawalBtn onClick={handleWithdrawal}>루미안 계정 탈퇴하기</WithdrawalBtn>
       </RightBox>
     </>
   );
