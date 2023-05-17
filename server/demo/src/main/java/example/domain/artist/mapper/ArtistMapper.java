@@ -19,6 +19,9 @@ public interface ArtistMapper {
         if (StringUtils.hasText(artistPostDto.getProfile())) {
             artist.setProfile(artistPostDto.getProfile());
         }
+        if (StringUtils.hasText(artistPostDto.getGroupProfile())) {
+            artist.setGroupProfile(artistPostDto.getGroupProfile());
+        }
         return artist;
     }
 

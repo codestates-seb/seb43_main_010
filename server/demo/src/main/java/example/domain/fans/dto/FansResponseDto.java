@@ -10,4 +10,6 @@ import lombok.Setter;
 public class FansResponseDto {
     private int feedPostId;
 
+
+
 }

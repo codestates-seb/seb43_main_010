@@ -2,8 +2,6 @@ package example.domain.fans.controller;
 import example.domain.fans.dto.FansPostDto;
 import example.domain.fans.entity.Fans;
 import example.domain.fans.service.FansService;
-import example.domain.user.dto.UserPostDto;
-import example.domain.user.entity.User;
 import example.global.response.SingleResponseDto;
 import example.domain.fans.mapper.FansMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +32,6 @@ public class FansController {
         Fans createdFans = fansService.createFans(fans);
         return new ResponseEntity<>(new SingleResponseDto<>("일반유저 회원가입 성공!"), HttpStatus.CREATED);
     }
+
 
 }

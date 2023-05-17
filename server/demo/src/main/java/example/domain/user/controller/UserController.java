@@ -1,44 +1,55 @@
 package example.domain.user.controller;
 
-import example.domain.fans.dto.FansPostDto;
-import example.domain.fans.entity.Fans;
-import example.domain.fans.mapper.FansMapper;
-import example.domain.fans.service.FansService;
+import example.domain.artist.repository.ArtistRepository;
+import example.domain.fans.repository.FansRepository;
 import example.domain.user.dto.UserPostDto;
-import example.domain.user.entity.User;
-import example.domain.user.mapper.UserMapper;
-import example.domain.user.service.UserService;
-import example.global.response.SingleResponseDto;
+import example.global.exception.BusinessLogicException;
+import example.global.exception.ExceptionCode;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
+
+
+
 @RestController
-@RequestMapping
-@Validated
+@AllArgsConstructor
 @Slf4j
 public class UserController {
+    private final FansRepository fansRepository;
+    private final ArtistRepository artistRepository;
 
-    private UserService userService;
-    private UserMapper mapper;
-
-    public UserController(UserService userService, UserMapper mapper) {
-        this.userService = userService;
-        this.mapper = mapper;
-    }
-
-
-    @PostMapping("/email")
+    @PostMapping("/emails")
     public ResponseEntity postEmail(@Valid @RequestBody UserPostDto userDto) {
-        User user = mapper.userPostDtoToUser(userDto);
-        userService.checkFans(user);
+        if(fansRepository.existsByEmail(userDto.getEmail())){
+            throw new BusinessLogicException(ExceptionCode.FANS_EXISTS);
+        }
+        if(artistRepository.existsByEmail(userDto.getEmail())){
+            throw new BusinessLogicException(ExceptionCode.ARTIST_EXISTS);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    /*
+    @GetMapping("/user")
+    public ResponseEntity getUser(){
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            PrincipalDetails principalDetails = (PrincipalDetails)principal;
+
+        if (principalDetails.getUser().getRole().equals("FANS")){
+            Optional <Fans> fans = fansRepository.findByEmail(principalDetails.getUser().getEmail());
+            return new ResponseEntity<>(
+                    new SingleResponseDto<>(mapper.userToUserResponseDto(user)),
+                    HttpStatus.OK);
+        }
+        if (principalDetails.getUser().getRole().equals("FANS")){
+            Optional <Fans> fans = fansRepository.findByEmail(principalDetails.getUser().getEmail());
+            return new ResponseEntity<>(
+                    new SingleResponseDto<>(mapper.userToUserResponseDto(user)),
+                    HttpStatus.OK);
+        }*/
+
+
 }

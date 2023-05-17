@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface FansRepository extends JpaRepository<Fans, Integer> {
     Optional<Fans> findByEmail(String email);
+    boolean existsByEmail(String email);
 }
