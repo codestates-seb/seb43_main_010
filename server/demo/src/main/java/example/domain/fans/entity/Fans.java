@@ -1,5 +1,7 @@
 package example.domain.fans.entity;
 
+import example.domain.artist.entity.Artist;
+import example.domain.group.entity.Group;
 import example.global.audit.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.persistence.Id;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -19,7 +22,6 @@ public class Fans extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
 
     @Column(nullable = false, updatable = false,unique = true,columnDefinition = "VARCHAR(30)")
     private String email;
@@ -38,7 +40,10 @@ public class Fans extends BaseEntity {
     private String profile;
 
     @Column
-    private String community;
+    private List<Group> community;
+    public void addCommunity(Group group) {
+        community.add(group);
+    }
 
     @Column
     private String role="USER";

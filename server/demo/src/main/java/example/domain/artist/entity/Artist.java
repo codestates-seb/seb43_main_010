@@ -40,7 +40,7 @@ public class Artist extends BaseEntity {
     @Lob
     private String groupProfile;
 
-    @Column(name = "\"group\"", nullable = false)
+    @Column(name = "\"GROUP\"", nullable = false)
     private String group;
 
     @ManyToOne
