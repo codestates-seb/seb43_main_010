@@ -1,5 +1,7 @@
 package example.domain.feedPost.mapper;
 
+import example.domain.comment.dto.CommentFanResponseDto;
+import example.domain.comment.entity.Comment;
 import example.domain.fans.dto.FansResponseDto;
 import example.domain.fans.entity.Fans;
 import example.domain.feedPost.dto.feedPostDto;
@@ -30,5 +32,26 @@ public interface feedPostMapper {
     feedPostResponseDto feedToFeedResponseDto(FeedPost feedPost);
 
     List<feedPostResponseDto> feedPostsToFeedResponseDtos(List<FeedPost> feedPost);
+
+    default CommentFanResponseDto commentToCommentFanResponseDto(Comment comment) {
+        if ( comment == null ) {
+            return null;
+        }
+
+        CommentFanResponseDto commentFanResponseDto = new CommentFanResponseDto();
+        Fans fans = comment.getFans();
+        FansResponseDto userDto = new FansResponseDto();
+        userDto.setId(fans.getId());
+        userDto.setNickname(fans.getNickname());
+        userDto.setProfile(fans.getProfile());
+
+        commentFanResponseDto.setUser(userDto);
+        commentFanResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        commentFanResponseDto.setContent( comment.getContent() );
+        commentFanResponseDto.setCreatedAt( comment.getCreatedAt() );
+        commentFanResponseDto.setLikeCount( comment.getLikeCount() );
+
+        return commentFanResponseDto;
+    }
 
 }

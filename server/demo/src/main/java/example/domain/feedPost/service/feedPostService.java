@@ -53,15 +53,15 @@ public class feedPostService {
         feedPostRepository.delete(findFeedPost);
     }
 
-/*
-    //    @Transactional(readOnly = true)
-    public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
-        Page<FeedPost> feedPosts = feedPostRepository.findAllByFeedGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
 
-        return feedPosts;
-//        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
-    }
-*/
+    //    @Transactional(readOnly = true)
+//    public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
+//        Page<FeedPost> feedPosts = feedPostRepository.findAllByFeedGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
+//
+//        return feedPosts;
+////        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
+//    }
+
 
 //     팬 검증 메서드
 //    private Fans findFan(int fanId) {

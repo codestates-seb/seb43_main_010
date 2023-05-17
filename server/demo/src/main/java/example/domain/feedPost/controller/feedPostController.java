@@ -72,6 +72,7 @@ public class feedPostController {
 
 
     // feedPost 삭제
+// 메세지 뺀것 잘 작동 됨.
     @DeleteMapping("/{feedPostId}")
     public ResponseEntity deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
                                          @Valid @RequestBody feedPostDto.Delete requestBody) {
@@ -81,22 +82,41 @@ public class feedPostController {
         service.deleteFeedPost(fan, findFeedPost);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-}
 
 
-/*
+//    @DeleteMapping("/{feedPostId}")
+//    public ResponseEntity<String> deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
+//                                                 @Valid @RequestBody feedPostDto.Delete requestBody) {
+//        Fans fan = fansRepository.findById(requestBody.getFanId())
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+//        FeedPost findFeedPost = service.findFeedPost(feedPostId);
+//        boolean success = service.deleteFeedPost(fan, findFeedPost);
+//
+//        if (success) {
+//            String message = "삭제 성공 되었습니다.";
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+//                    .body(message);
+//        } else {
+//            String message = "삭제 실패 되었습니다.";
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(message);
+//        }
+//    }
+//}
+
+
+
+
     // feedPost 리스트 조회(무한 스크롤)
-    @GetMapping("{groupId}")
-    public ResponseEntity getFeedPosts(@PathVariable("groupId") int groupId,
-                                        @Positive @RequestParam int page,
-                                        @Positive @RequestParam int size) {
-        Page<FeedPost> pageFeedPosts = service.findFeedPosts(groupId,page -1, size);
-        List<FeedPost> feedPosts = pageFeedPosts.getContent();
-
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(
-                        mapper.feedPostsToFeedResponseDtos(feedPosts), pageFeedPosts), HttpStatus.OK);
-    }
+//    @GetMapping("/{groupId}")
+//    public ResponseEntity getFeedPosts(@PathVariable("groupId") int groupId,
+//                                        @Positive @RequestParam int page,
+//                                        @Positive @RequestParam int size) {
+//        Page<FeedPost> pageFeedPosts = service.findFeedPosts(groupId,page -1, size);
+//        List<FeedPost> feedPosts = pageFeedPosts.getContent();
+//
+//        return new ResponseEntity<>(
+//                new MultiResponseDto<>(
+//                        mapper.feedPostsToFeedResponseDtos(feedPosts), pageFeedPosts), HttpStatus.OK);
+//    }
 }
-/*
- */
