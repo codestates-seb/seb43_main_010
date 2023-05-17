@@ -63,7 +63,9 @@ const ArtistPostBox = styled.div`
     background: ${({ gradColor }) =>
       gradColor ? `linear-gradient(to right, ${gradColor[2]},${gradColor[0]})` : `linear-gradient(to top, transparent, #c9edff)`};
     border: 1px solid linear-gradient(#c7e7ff);
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
     box-shadow: 0 0 12px rgb(19, 28, 35, 5%);
     padding: 12px 0 0 12px;
 

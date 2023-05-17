@@ -41,6 +41,18 @@ const data = {
       feedCommentId: [],
       commentNum: 1, // 게시글에 달린 댓글 개수
     },
+    {
+      artistId: 2,
+      userId: 2,
+      nickname: `열일하는개미`, // 작성자 닉네임
+      content: `개미는 뚠뚠🐜🐜 오늘도 뚠뚠🐜🐜 열심히 일을 하네🎵`,
+      img: profileImg,
+      createdAt: `05. 08. 16:22`,
+      feedLikeId: [],
+      likeNum: 0, // 좋아요 개수
+      feedCommentId: [],
+      commentNum: 1, // 게시글에 달린 댓글 개수
+    },
   ],
 };
 
