@@ -144,6 +144,7 @@ const MyprofileComments = ({ createdAt, nickname, content, img, comments }) => {
 
         {/* 중간 */}
         <button onClick={openDetailPost} className='mid'>
+          <div className='nickname'>{nickname}</div>
           {content.length > 670 ? (
             <p className='post-content'>
               {content.slice(0, 670) + '...'}
@@ -152,11 +153,10 @@ const MyprofileComments = ({ createdAt, nickname, content, img, comments }) => {
           ) : (
             <p className='post-content'>{content}</p>
           )}
-          <div className='nickname'>{nickname}</div>
           {comments && (
             <ul className='comments-list'>
               {comments.map((comment) => (
-                <li key={comment.nickname}>
+                <li key={comment.id}>
                   <Comments content={comment.content} createdAt={comment.createdAt} nickname={comment.nickname} />
                 </li>
               ))}
