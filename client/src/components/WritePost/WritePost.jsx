@@ -4,6 +4,7 @@ import HideArtist from './WritePostMaterial/HideArtist';
 import { useState, useRef } from 'react';
 import { BsFillCameraFill } from 'react-icons/bs';
 import WriteImgPreview from './WritePostMaterial/WriteImgPreview';
+import axios from 'axios';
 
 const WritePostBlock = styled.div`
   position: fixed;
@@ -202,18 +203,32 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData }) => {
   };
 
   // submit
-  const submitFn = (e) => {
+  const submitFn = async (e) => {
     e.preventDefault();
     if (content.trim().length > 1) {
       // 이 부분 조건을 바꿔야할까? 컨텐츠나 이미지 둘 다 null 일 경우 submit 안되게??
       // 여기서 서버한테 content 데이터 전송해야 함.
       // 서버에 데이터 전송 되면 내용 비우고 창 닫기
       // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
+
+      let body = { fanId: 1, content, img: imgList[0].url };
+      console.log('디버깅영역');
+      console.log(body);
+      await axios
+        .post('/feed', body)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
       setPostData([{ content, img: imgList }, ...postData]);
       setContent('');
       setImgList([]);
       limitRef.current = 4;
       imgIdRef.current = 1;
+
       setModalOpen(false);
     }
     console.log(imgList);

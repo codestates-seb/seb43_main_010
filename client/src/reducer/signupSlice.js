@@ -4,9 +4,8 @@ import defaultProfile from '../assets/jpg-file/profile-img.jpg';
 // 기능에 따른 리듀서 이름으로 정하느라 그랬어요
 const initialState = {
   calssification: false,
-  fan: { id: 1, email: '', password: '', passwordCheck: '', name: '', nickname: '', profile: defaultProfile, cummunity: [] },
+  fan: { email: '', password: '', passwordCheck: '', name: '', nickname: '', profile: defaultProfile },
   artist: {
-    artistId: 1,
     email: '',
     password: '',
     passwordCheck: '',
