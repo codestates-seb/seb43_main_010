@@ -2,7 +2,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import bubbleTail from '../../../assets/svg-file/bubble-tail.svg';
-
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import ArtistImgPreview from './ArtistImgPreview';
 import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
 import DetailPost from '../../Feed/FeedMaterial/DetailPost';
 import BigDetailPost from '../../Feed/FeedMaterial/BigDetailPost';
@@ -39,23 +41,31 @@ const ArtistProfile = styled.div`
 `;
 
 const ArtistPostBox = styled.div`
-  width: 635px;
+  width: 642px;
   height: auto;
   position: relative;
   .bubble-tail {
+    color: ${({ gradColor }) =>
+      gradColor ? `linear-gradient(90deg, transparent, ${gradColor[2]})` : `linear-gradient(to top, transparent, #c9edff)`};
     position: absolute;
     left: -10px;
     top: 1px;
     width: 20px;
     height: 20px;
-    img {
+    svg {
+      path {
+        fill: ${({ gradColor }) => (gradColor ? `${gradColor[2]}` : 'none')};
+      }
     }
   }
   .top-mid {
     min-height: 98px;
-    background: linear-gradient(to left, transparent, #c7e7ff);
+    background: ${({ gradColor }) =>
+      gradColor ? `linear-gradient(to right, ${gradColor[2]},${gradColor[0]})` : `linear-gradient(to top, transparent, #c9edff)`};
     border: 1px solid linear-gradient(#c7e7ff);
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
     box-shadow: 0 0 12px rgb(19, 28, 35, 5%);
     padding: 12px 0 0 12px;
 
@@ -91,14 +101,14 @@ const ArtistPostBox = styled.div`
         cursor: pointer;
 
         &:hover {
-          background-color: var(--light-gray-100);
+          transform: scale(1.3, 1.3) translateX(-10px);
           transition: 0.15s;
         }
 
         .mini-menu {
           font-size: 16px;
           i::before {
-            color: var(--light-gray-400);
+            color: var(--light-gray-500);
           }
         }
       }
@@ -111,7 +121,7 @@ const ArtistPostBox = styled.div`
       line-height: 20px;
       cursor: pointer;
       text-align: start;
-
+      background: none;
       .more {
         color: #bababa;
         font-size: 13.5px;
@@ -123,7 +133,6 @@ const ArtistPostBox = styled.div`
         font-size: 12px;
         text-shadow: 0 0 0 var(--light-gray-500);
       }
-      /* 이미지 미리보기 추가하기 */
     }
   }
 
@@ -263,6 +272,11 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
   const openDetailPost = () => {
     setDetailPost(true);
   };
+  //그룹별 색상 관리를 위한 처리
+  const { groupId } = useParams();
+  const state = useSelector((state) => state.color);
+  const group = state.allGroup.find((el) => el.groupId === Number(groupId));
+  const gradColor = group ? group.gradColor : [];
 
   return (
     <>
@@ -274,9 +288,11 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
           <div className='created-day'>5</div>
           <div className='created-month'>May</div>
         </ArtistProfile>
-        <ArtistPostBox>
+        <ArtistPostBox gradColor={gradColor}>
           <div className='bubble-tail'>
-            <img src={bubbleTail} alt='bubble-tail-icon'></img>
+            <svg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
+              <path d='M0.499937 2.00004C-6.33001e-05 2.50004 3.99994 3.50004 6.99994 6.00004C9.39992 8.00002 9.99993 11.8334 9.99994 13.5L12.9999 6.5C13.4999 4.83333 14.2999 1.6 13.4999 2C12.4999 2.5 11.4999 1.50004 7.49994 1.00004C3.49994 0.500041 0.999937 1.50004 0.499937 2.00004Z' />
+            </svg>
           </div>
           <div className='top-mid'>
             {/* 위 */}
@@ -322,6 +338,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               <p className='time'>{createdAt}</p>
             </button>
           </div>
+          <ArtistImgPreview></ArtistImgPreview>
 
           {/* 아래 */}
           <div className='bottom'>

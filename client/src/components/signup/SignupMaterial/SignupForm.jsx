@@ -127,7 +127,6 @@ const LoginForm = () => {
         .post('/signup/artist', body)
         .then(() => {
           console.log('성공');
-          dispatch(setArtistId());
         })
         .catch((e) => {
           console.log(e);
@@ -148,7 +147,6 @@ const LoginForm = () => {
         .post('/signup/fans', body)
         .then((res) => {
           console.log(res);
-          dispatch(setFanId());
         })
         .catch((e) => {
           console.log(e);
