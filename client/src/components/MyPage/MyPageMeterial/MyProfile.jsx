@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import BTS from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
 import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
@@ -233,9 +234,11 @@ const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBt
 
   return (
     <Box>
-      <Img>
-        <img src={imgSrc} alt={imgAlt} />
-      </Img>
+      <Link to='/myprofile/:groupId'>
+        <Img>
+          <img src={imgSrc} alt={imgAlt} />
+        </Img>
+      </Link>
       {editMode ? (
         <form onSubmit={handleNickNameSubmit}>
           <Input type='text' value={newNickName} onChange={handleNickNameChange} />
@@ -306,6 +309,7 @@ const MyProfile = () => {
       const response = await axios.post('로그아웃 API 엔드포인트');
       if (response.status === 200) {
         // 로그아웃 후 화면 전환 로직 추가
+        <Link to='/'></Link>;
       }
     } catch (error) {
       console.error('Error:', error);
