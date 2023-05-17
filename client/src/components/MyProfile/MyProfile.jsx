@@ -82,8 +82,9 @@ const TabButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 10px;
-  margin: 0 10px;
+  margin-top: 10px;
   font-weight: ${(props) => (props.selected ? 'bold' : 'normal')};
+  color: ${(props) => (props.selected ? 'var(--skyblue-600)' : 'initial')};
 `;
 
 // 그냥 임시 Post 데이터임
@@ -100,6 +101,7 @@ const data = {
       likeNum: 0, // 좋아요 개수
       feedCommentId: [],
       commentNum: 1, // 게시글에 달린 댓글 개수
+      comments: [{}],
     },
   ],
 };
@@ -108,6 +110,7 @@ const MyProfile = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [profile, setProfile] = useState({ nickname: '', followers: 0, followings: 0, profileImage: '' });
   const [selectedTab, setSelectedTab] = useState('posts');
+  const [posts, setPosts] = useState([]);
 
   const openModal = () => {
     setModalOpen(true);
@@ -131,9 +134,51 @@ const MyProfile = () => {
     setProfile(data);
   };
 
+  // // 프로필 데이터를 불러오는 함수
+  // const fetchProfileData = async () => {
+  //   try {
+  //     const response = await fetch("");
+  //     const data = await response.json();
+
+  //     if (response.ok) {
+  //       setProfile({
+  //         nickname: data.nickname || 'nickname',
+  //         followers: data.followers || 0,
+  //         followings: data.followings || 0,
+  //         profileImage: data.profileImage || profileImg,
+  //       });
+  //     } else {
+  //       throw new Error("profile error");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   // 컴포넌트가 마운트될 때 프로필 데이터를 불러옵니다.
   useEffect(() => {
     fetchProfileData();
+  }, []);
+
+  // 게시글을 불러오는 함수
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch(''); // 여기에 실제 API 주소를 입력해야 합니다.
+      const data = await response.json();
+
+      if (response.ok) {
+        setPosts(data);
+      } else {
+        throw new Error('posts error');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 컴포넌트가 마운트될 때 게시글 데이터를 불러옵니다.
+  useEffect(() => {
+    fetchPosts();
   }, []);
 
   return (
@@ -184,19 +229,33 @@ const MyProfile = () => {
                     commentNum={el.commentNum}
                   />
                 ))}
+                {/* {posts.map((post) => (
+                  <Post
+                    key={post.id}
+                    createdAt={post.createdAt}
+                    nickname={post.nickname}
+                    content={post.content}
+                    img={post.img}
+                    likeNum={post.likeNum}
+                    commentNum={post.commentNum}
+                  />
+                ))} */}
               </PostsBox>
             ) : (
               <CommentsBox>
                 {data.allFeed.map((el) => (
-                  <MyProfileComments
-                    key={el.myprofileId}
-                    createdAt={el.createdAt}
-                    nickname={el.nickname}
-                    content={el.content}
-                    img={el.img}
-                    likeNum={el.likeNum}
-                    commentNum={el.commentNum}
-                  />
+                  <>
+                    <MyProfileComments
+                      key={el.myprofileId}
+                      createdAt={el.createdAt}
+                      nickname={el.nickname}
+                      content={el.content}
+                      img={el.img}
+                      likeNum={el.likeNum}
+                      commentNum={el.commentNum}
+                      comments={el.comments}
+                    />
+                  </>
                 ))}
               </CommentsBox>
             )}
