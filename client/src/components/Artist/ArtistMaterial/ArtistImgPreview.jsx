@@ -47,7 +47,6 @@ const ImgPreviewTwo = styled.div`
 const ImgPreviewThree = styled.div`
   margin-top: 3px;
   width: 100%;
-  height: 430px;
   display: inline-grid;
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(3, 1fr);
@@ -60,20 +59,23 @@ const ImgPreviewThree = styled.div`
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: none;
     }
   }
   .img-box:nth-child(1) {
     grid-area: one;
+    height: 427px;
     .posted-img {
       border-bottom-left-radius: 0.5rem;
     }
   }
   .img-box:nth-child(2) {
     grid-area: two;
+    height: calc(424px / 2);
   }
   .img-box:nth-child(3) {
     grid-area: three;
+    height: calc(424px / 2);
+
     .posted-img {
       border-bottom-right-radius: 0.5rem;
     }
