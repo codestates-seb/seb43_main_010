@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
@@ -9,6 +9,8 @@ import Comments from '../../Feed/FeedMaterial/Comments';
 const PostBlock = styled.div`
   width: 707px;
   height: auto;
+  display: flex;
+  flex-direction: column;
 
   .top {
     display: flex;
@@ -42,8 +44,6 @@ const PostBlock = styled.div`
       text-shadow: 0 0 0 var(--light-gray-500);
       margin-top: 3px;
       position: absolute;
-      bottom: 0;
-      left: 0;
     }
   }
 
@@ -54,7 +54,6 @@ const PostBlock = styled.div`
     padding: 16px 0 0 0;
     line-height: 21px;
     cursor: pointer;
-
     text-align: start;
 
     .more {
@@ -67,7 +66,8 @@ const PostBlock = styled.div`
   .bottom {
     margin-top: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    align-items: center;
     padding-bottom: 18px;
     border-bottom: 1px solid var(--light-gray-200);
 
@@ -75,6 +75,8 @@ const PostBlock = styled.div`
       position: relative;
       display: flex;
       justify-content: flex-end;
+      align-items: flex-end;
+      gap: 10px;
     }
 
     .right-icon {
@@ -101,10 +103,11 @@ const PostBlock = styled.div`
   }
 `;
 
-const MyprofileComments = ({ createdAt, nickname, content, img }) => {
+const MyprofileComments = ({ createdAt, nickname, content, img, comments }) => {
   const [detailPost, setDetailPost] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  // const [comments, setComments] = useState([]);
 
   const clickMiniMenu = () => {
     setOpenModal(!openModal);
@@ -114,11 +117,29 @@ const MyprofileComments = ({ createdAt, nickname, content, img }) => {
     setDetailPost(true);
   };
 
+  // 댓글을 가져오는 함수
+  // const fetchComments = async () => {
+  //   try {
+  //     const response = await fetch('');
+  //     if (!response.ok) {
+  //       throw new Error('comments error');
+  //     }
+  //     const data = await response.json();
+  //     setComments(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchComments();
+  // }, []);
+
   return (
     <>
-      <PostBlock className='post' img={img}>
-        {/* 위
-        <div className='top'>
+      <PostBlock className='post'>
+        {/* 위  */}
+        {/* <div className='top'>
         </div> */}
 
         {/* 중간 */}
@@ -131,12 +152,21 @@ const MyprofileComments = ({ createdAt, nickname, content, img }) => {
           ) : (
             <p className='post-content'>{content}</p>
           )}
+          <div className='nickname'>{nickname}</div>
+          {comments && (
+            <ul className='comments-list'>
+              {comments.map((comment) => (
+                <li key={comment.nickname}>
+                  <Comments content={comment.content} createdAt={comment.createdAt} nickname={comment.nickname} />
+                </li>
+              ))}
+            </ul>
+          )}
         </button>
 
         {/* 아래 */}
         <div className='bottom'>
-          {/* <Comments /> */}
-          <span className='time'>{createdAt}</span>
+          {/* <span className='time'>{createdAt}</span> */}
           <div className='right-icon-box'>
             <button onClick={clickMiniMenu} className='right-icon'>
               <div className='mini-menu'>
