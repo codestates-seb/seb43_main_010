@@ -30,6 +30,9 @@ public class FeedPost extends BaseTimeEntity {
     private Integer id;
     @Column(length = 16000, nullable = false)
     private String content;
+
+    @Column
+    @Lob
     private String img;
     @CreatedDate
     @Column(name = "created_at")

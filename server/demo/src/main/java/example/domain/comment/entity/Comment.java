@@ -52,11 +52,11 @@ public class Comment {
     @Column(name = "like_count")
     private Integer likeCount;
 
-    public Comment(String content, Fans fans) {
+    public Comment(String content) {
         this.content = content;
-        this.fans = fans;
     }
     public Comment(String content, Artist artist) {
+        this.feedPost = feedPost;
         this.content = content;
         this.artist = artist;
     }

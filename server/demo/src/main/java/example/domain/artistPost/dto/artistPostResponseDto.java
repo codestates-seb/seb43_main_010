@@ -1,7 +1,7 @@
 package example.domain.artistPost.dto;
 
 import example.domain.artist.dto.ArtistResponseDto;
-import example.domain.comment.dto.CommentResponseDto;
+import example.domain.comment.dto.CommentUserResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +16,6 @@ public class artistPostResponseDto {
     private String content;
     private String img;
     private LocalDateTime createdAt;
-    private List<CommentResponseDto.User> comments;
+    private List<CommentUserResponseDto> comments;
     private int likeCount;
 }

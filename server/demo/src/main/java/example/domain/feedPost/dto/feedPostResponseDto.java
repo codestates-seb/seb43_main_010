@@ -1,6 +1,7 @@
 package example.domain.feedPost.dto;
 
-import example.domain.comment.dto.CommentResponseDto;
+import example.domain.comment.dto.CommentFanResponseDto;
+//import example.domain.comment.dto.CommentResponseDto;
 import example.domain.fans.dto.FansResponseDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ public class feedPostResponseDto {
     private String content;
     private String img;
     private LocalDateTime createdAt;
-    private List<CommentResponseDto.User> comments;
+    private List<CommentFanResponseDto> comments;
     private int likeCount;
 
     }

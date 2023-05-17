@@ -22,8 +22,8 @@ import java.util.Optional;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    private FansRepository fansRepository;
-    private ArtistRepository artistRepository;
+    private final FansRepository fansRepository;
+    private final ArtistRepository artistRepository;
 
     public CommentService(CommentRepository commentRepository,FansRepository fansRepository, ArtistRepository artistRepository){
         this.commentRepository = commentRepository;
