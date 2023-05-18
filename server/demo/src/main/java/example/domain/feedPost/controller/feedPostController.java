@@ -40,8 +40,7 @@ public class feedPostController {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
         FeedPost feedPost = mapper.feedPostDtoToFeed(requestBody, fans);
         FeedPost saveFeedPost = service.createFeedPost(feedPost);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.feedToFeedResponseDto(saveFeedPost)),
+        return new ResponseEntity<>(mapper.feedToFeedResponseDto(saveFeedPost),
                 HttpStatus.OK);
     }
 
@@ -50,8 +49,7 @@ public class feedPostController {
     @GetMapping("/{feedPostId}") // 경로 변수 안에는 entity 클래스의 식별자 들어감
     public ResponseEntity getFeed(@PathVariable("feedPostId") @Positive int feedPostId) {
         FeedPost feedPost = service.findFeedPost(feedPostId);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.feedToFeedResponseDto(feedPost)),
+        return new ResponseEntity<>(mapper.feedToFeedResponseDto(feedPost),
                 HttpStatus.OK);
     }
 
@@ -66,8 +64,7 @@ public class feedPostController {
         FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fan);
         FeedPost updateFeedPost = service.updateFeedPost(feedPost);
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.feedToFeedResponseDto(updateFeedPost)), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.feedToFeedResponseDto(updateFeedPost), HttpStatus.OK);
     }
 
 

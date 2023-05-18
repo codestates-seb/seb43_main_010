@@ -131,6 +131,8 @@ public interface CommentMapper {
         userDto.setId(fans.getId());
         userDto.setNickname(fans.getNickname());
         userDto.setProfile(fans.getProfile());
+        userDto.setEmail(fans.getEmail());
+        userDto.setName(fans.getName());
 
         commentResponseDto.setUser(userDto);
         commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
@@ -148,6 +150,8 @@ public interface CommentMapper {
         userDto.setId(artist.getId());
         userDto.setNickname(artist.getNickname());
         userDto.setProfile(artist.getProfile());
+        userDto.setEmail(artist.getEmail());
+        userDto.setName(artist.getName());
 
         commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
         commentResponseDto.setContent(comment.getContent());
@@ -164,12 +168,16 @@ public interface CommentMapper {
         userDto1.setId(fans.getId());
         userDto1.setNickname(fans.getNickname());
         userDto1.setProfile(fans.getProfile());
+        userDto1.setEmail(fans.getEmail());
+        userDto1.setName(fans.getName());
 
         Artist artist = comment.getArtist();
         ArtistResponseDto userDto2 = new ArtistResponseDto();
         userDto2.setId(artist.getId());
         userDto2.setNickname(artist.getNickname());
         userDto2.setProfile(artist.getProfile());
+        userDto2.setEmail(artist.getEmail());
+        userDto2.setName(artist.getName());
 
         commentResponseDto.setFan(userDto1);
         commentResponseDto.setArtist(userDto2);
@@ -219,6 +227,8 @@ public interface CommentMapper {
                 fansResponseDto.setId(fans.getId());
                 fansResponseDto.setNickname(fans.getNickname());
                 fansResponseDto.setProfile(fans.getProfile());
+                fansResponseDto.setName(fans.getName());
+                fansResponseDto.setEmail(fans.getEmail());
                 responseDto.setFan(fansResponseDto);
             }
 
@@ -229,6 +239,8 @@ public interface CommentMapper {
                 artistResponseDto.setId(artist.getId());
                 artistResponseDto.setNickname(artist.getNickname());
                 artistResponseDto.setProfile(artist.getProfile());
+                artistResponseDto.setName(artist.getName());
+                artistResponseDto.setEmail(artist.getEmail());
                 responseDto.setArtist(artistResponseDto);
             }
 

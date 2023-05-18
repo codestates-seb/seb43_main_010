@@ -247,7 +247,7 @@ public class CommentController {
             Comment comment = mapper.commentPatchDtoToComment(findFan, findFeedPost, requestBody);
             Comment updateComment = commentService.updateComment(commentId, comment);
 
-            return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentFanResponseDto(updateComment)), HttpStatus.OK);
+            return new ResponseEntity<>(mapper.commentToCommentFanResponseDto(updateComment), HttpStatus.OK);
 
         } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
             // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
@@ -258,7 +258,7 @@ public class CommentController {
             Comment comment = mapper.commentPatchDtoToComment(findArtist, findFeedPost, requestBody);
             Comment updateComment = commentService.updateComment(commentId, comment);
 
-            return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentArtistResponseDto(updateComment)), HttpStatus.OK);
+            return new ResponseEntity<>(mapper.commentToCommentArtistResponseDto(updateComment), HttpStatus.OK);
 
         } else {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
@@ -303,7 +303,7 @@ public class CommentController {
             Comment comment = mapper.commentPatchDtoToComment(findFan, findArtistPost, requestBody);
             Comment updateComment = commentService.updateComment(commentId, comment);
 
-            return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentFanResponseDto(updateComment)), HttpStatus.OK);
+            return new ResponseEntity<>(mapper.commentToCommentFanResponseDto(updateComment), HttpStatus.OK);
 
         } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
             // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
@@ -314,7 +314,7 @@ public class CommentController {
             Comment comment = mapper.commentPatchDtoToComment(findArtist, findArtistPost, requestBody);
             Comment updateComment = commentService.updateComment(commentId, comment);
 
-            return new ResponseEntity<>(new SingleResponseDto<>(mapper.commentToCommentArtistResponseDto(updateComment)), HttpStatus.OK);
+            return new ResponseEntity<>(mapper.commentToCommentArtistResponseDto(updateComment), HttpStatus.OK);
 
         } else {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);

@@ -40,10 +40,10 @@ public class Fans extends BaseEntity {
     private String profile;
 
     @Column
-    private List<Group> community;
-    public void addCommunity(Group group) {
-        community.add(group);
-    }
+    private String community;
+//    public void addCommunity(Group group) {
+//        community.add(group);
+//    }
 
     @Column
     private String role="USER";
