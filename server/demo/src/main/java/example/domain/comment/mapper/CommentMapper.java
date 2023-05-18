@@ -128,7 +128,7 @@ public interface CommentMapper {
         CommentFanResponseDto commentResponseDto = new CommentFanResponseDto();
         Fans fans = comment.getFans();
         FansResponseDto userDto = new FansResponseDto();
-        userDto.setId(fans.getId());
+        userDto.setFanId(fans.getFanId());
         userDto.setNickname(fans.getNickname());
         userDto.setProfile(fans.getProfile());
         userDto.setEmail(fans.getEmail());
@@ -165,7 +165,7 @@ public interface CommentMapper {
         CommentUserResponseDto commentResponseDto = new CommentUserResponseDto();
         Fans fans = comment.getFans();
         FansResponseDto userDto1 = new FansResponseDto();
-        userDto1.setId(fans.getId());
+        userDto1.setFanId(fans.getFanId());
         userDto1.setNickname(fans.getNickname());
         userDto1.setProfile(fans.getProfile());
         userDto1.setEmail(fans.getEmail());
@@ -224,7 +224,7 @@ public interface CommentMapper {
             Fans fans = comment.getFans();
             if (fans != null) {
                 FansResponseDto fansResponseDto = new FansResponseDto();
-                fansResponseDto.setId(fans.getId());
+                fansResponseDto.setFanId(fans.getFanId());
                 fansResponseDto.setNickname(fans.getNickname());
                 fansResponseDto.setProfile(fans.getProfile());
                 fansResponseDto.setName(fans.getName());

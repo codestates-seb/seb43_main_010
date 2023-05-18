@@ -47,7 +47,7 @@ public interface artistPostMapper {
         CommentArtistResponseDto commentArtistResponseDto = new CommentArtistResponseDto();
         Fans fans = comment.getFans();
         ArtistResponseDto userDto = new ArtistResponseDto();
-        userDto.setId(fans.getId());
+        userDto.setId(fans.getFanId());
         userDto.setNickname(fans.getNickname());
         userDto.setProfile(fans.getProfile());
         userDto.setEmail(fans.getEmail());
