@@ -24,7 +24,7 @@ public interface feedPostMapper {
     default FeedPost feedPatchDtoToFeed(FeedPost feedpost, feedPostDto.Patch requestBody, Fans fans){
         FeedPost feedPost = new FeedPost(requestBody.getContent(), requestBody.getImg(), fans);
 //        feedPost.setId(requestBody.getFeedPostId());
-        feedPost.setId(feedpost.getId());
+        feedPost.setFeedPostId(feedpost.getFeedPostId());
         return feedPost;
     }
 
@@ -41,12 +41,12 @@ public interface feedPostMapper {
         CommentFanResponseDto commentFanResponseDto = new CommentFanResponseDto();
         Fans fans = comment.getFans();
         FansResponseDto userDto = new FansResponseDto();
-        userDto.setId(fans.getId());
+        userDto.setFanId(fans.getFanId());
         userDto.setNickname(fans.getNickname());
         userDto.setProfile(fans.getProfile());
 
         commentFanResponseDto.setUser(userDto);
-        commentFanResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        commentFanResponseDto.setFeedPostId(comment.getFeedPost().getFeedPostId());
         commentFanResponseDto.setContent( comment.getContent() );
         commentFanResponseDto.setCreatedAt( comment.getCreatedAt() );
         commentFanResponseDto.setLikeCount( comment.getLikeCount() );

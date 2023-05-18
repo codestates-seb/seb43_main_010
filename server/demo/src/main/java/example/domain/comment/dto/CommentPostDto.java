@@ -15,15 +15,10 @@ import javax.validation.constraints.Positive;
 @Setter
 public class CommentPostDto { // 요청
 
-//        private UserType userType;
         @NotNull
         private String email;
         @NotNull
         private String content;
 
 
-//        public enum UserType {
-//                FANS,
-//                ARTIST
-//        }
 }

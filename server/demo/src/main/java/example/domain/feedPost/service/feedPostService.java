@@ -32,9 +32,9 @@ public class feedPostService {
     }
 
     public FeedPost updateFeedPost(FeedPost feedPost){
-        FeedPost findFeedPost = findFeedPost(feedPost.getId());
+        FeedPost findFeedPost = findFeedPost(feedPost.getFeedPostId());
 
-        if(feedPost.getFans().getId() != findFeedPost.getFans().getId()) {
+        if(feedPost.getFans().getFanId() != findFeedPost.getFans().getFanId()) {
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
         }else{ // feedPost의 content가 null이 아니라면, findFeedPost의 content를 feedPost의 content로 설정
             Optional.ofNullable(feedPost.getContent()).ifPresent(content -> findFeedPost.setContent(content));
@@ -46,35 +46,12 @@ public class feedPostService {
     }
 
     public void deleteFeedPost(Fans fan, FeedPost feedPost){
-        FeedPost findFeedPost = findFeedPost(feedPost.getId());
-        if(fan.getId() != findFeedPost.getFans().getId()) { //  fanId와 findFeedPost의 작성자 ID를 비교하여 일치하지 않으면
+        FeedPost findFeedPost = findFeedPost(feedPost.getFeedPostId());
+        if(fan.getFanId() != findFeedPost.getFans().getFanId()) { //  fanId와 findFeedPost의 작성자 ID를 비교하여 일치하지 않으면
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
         }
         feedPostRepository.delete(findFeedPost);
     }
 
 
-    //    @Transactional(readOnly = true)
-//    public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
-//        Page<FeedPost> feedPosts = feedPostRepository.findAllByFeedGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
-//
-//        return feedPosts;
-////        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
-//    }
-
-
-//     팬 검증 메서드
-//    private Fans findFan(int fanId) {
-//        return fansRepository.findById(fanId).orElseThrow(() ->
-//                new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//    }
-
-//    public feedPostResponseDto getFeedById(int feedPostId) {
-//        Optional<FeedPost> optionalFeedPost = feedPostRepository.findById(feedPostId);
-//        FeedPost feedPost = optionalFeedPost.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
-//
-//        feedPostResponseDto responseDto = new feedPostResponseDto();
-//        responseDto.setFeedPostId(feedPost.getId());
-//        return responseDto;
-//    }
 }

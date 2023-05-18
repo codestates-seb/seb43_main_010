@@ -26,25 +26,26 @@ import java.util.List;
 public class ArtistPost extends BaseTimeEntity{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-//        @Column(name = "artistPost_id")
-        private Integer id;
+        private Integer artistPostId;
         @Column(length = 16000, nullable = false)
         private String content;
 
-        @Column
-        @Lob
-        private String img;
+        @ElementCollection
+        @CollectionTable(name = "artistPost_img", joinColumns = @JoinColumn(name = "artistPostId"))
+        @Column(name = "img")
+        private List<String> img = new ArrayList<>();
+
         @CreatedDate
         @Column(name = "created_at")
         private LocalDateTime createdAt = LocalDateTime.now();
 
 
         @ManyToOne
-        @JoinColumn(name = "fan_id")
+        @JoinColumn(name = "fanId")
         private Fans fans;
 
         @ManyToOne
-        @JoinColumn(name = "artist_id")
+        @JoinColumn(name = "artistId")
         private Artist artist;
 
 //        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
@@ -57,22 +58,22 @@ public class ArtistPost extends BaseTimeEntity{
         @Column(name = "like_count")
         private Integer likeCount;
 
-        public ArtistPost(String content, String img, Artist artist) {
+        public ArtistPost(String content, List<String> img, Artist artist) {
             this.content = content;
             this.img = img;
             this.artist = artist;
         }
 
-        public ArtistPost(int id, Artist artist) {
-                this.id = id;
+        public ArtistPost(int artistPostId, Artist artist) {
+                this.artistPostId = artistPostId;
                 this.artist = artist;
         }
 
 
         @Builder
-        public ArtistPost(Integer id, String content, String img, LocalDateTime createdAt,
+        public ArtistPost(Integer artistPostId, String content, List<String> img, LocalDateTime createdAt,
                           Artist artist, List<Comment> comments, Integer likeCount) {
-                this.id = id;
+                this.artistPostId = artistPostId;
                 this.content = content;
                 this.img = img;
                 this.createdAt = createdAt;

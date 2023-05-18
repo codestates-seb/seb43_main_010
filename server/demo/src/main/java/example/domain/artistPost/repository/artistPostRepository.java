@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface artistPostRepository extends JpaRepository<ArtistPost, Integer> , artistPostCustomRepository { // , artistPostCustomRepository
+public interface artistPostRepository extends JpaRepository<ArtistPost, Integer> , artistPostCustomRepository {
 //    Page<Comment> findAllByArtistGroupId(Integer groupId, Pageable pageable);
 }

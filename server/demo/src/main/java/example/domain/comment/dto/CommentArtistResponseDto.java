@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class CommentArtistResponseDto {
     private ArtistResponseDto user;
-    private long feedPostId;
+    private int feedPostId; // long -> int
     private String content;
     private LocalDateTime createdAt;
     private Integer likeCount;

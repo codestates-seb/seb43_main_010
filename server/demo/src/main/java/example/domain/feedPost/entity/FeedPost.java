@@ -27,24 +27,26 @@ public class FeedPost extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer feedPostId;
     @Column(length = 16000, nullable = false)
     private String content;
 
-    @Column
-    @Lob
-    private String img;
+    @ElementCollection
+    @CollectionTable(name = "feedPost_img", joinColumns = @JoinColumn(name = "feedPostId"))
+    @Column(name = "img")
+    private List<String> img = new ArrayList<>();
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
 
     @ManyToOne
-    @JoinColumn(name = "fan_id")
+    @JoinColumn(name = "fanId")
     private Fans fans;
 
     @ManyToOne
-    @JoinColumn(name = "artist_id")
+    @JoinColumn(name = "artistId")
     private Artist artist;
 
     @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
@@ -57,21 +59,21 @@ public class FeedPost extends BaseTimeEntity {
     @Column(name = "like_count")
     private Integer likeCount;
 
-    public FeedPost(String content, String img, Fans fans) {
+    public FeedPost(String content, List<String> img, Fans fans) {
         this.content = content;
         this.img = img;
         this.fans = fans;
     }
 
-    public FeedPost(int id, Fans fans) {
-        this.id = id;
+    public FeedPost(int feedPostId, Fans fans) {
+        this.feedPostId = feedPostId;
         this.fans = fans;
     }
 
     @Builder
-    public FeedPost(Integer id, String content, String img, LocalDateTime createdAt,
+    public FeedPost(Integer feedPostId, String content, List<String> img, LocalDateTime createdAt,
                     Fans fans, List<Comment> comments, Integer likeCount) {
-        this.id = id;
+        this.feedPostId = feedPostId;
         this.content = content;
         this.img = img;
         this.createdAt = createdAt;

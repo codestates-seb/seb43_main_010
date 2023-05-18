@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class FansResponseDto {
-    private int id;
+    private int fanId;
     private String nickname;
     private String profile;
 

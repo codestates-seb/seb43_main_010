@@ -53,7 +53,7 @@ public class CommentService {
     // feedPost 댓글 (무한 스크롤)
     @Transactional(readOnly = true)
     public Page<Comment> findAllCommentsByFeedPostId(int feedPostId, int page, int size){
-        Page<Comment> fanComments = commentRepository.findAllByFeedPostId(feedPostId, PageRequest.of(page, size, Sort.by("id").descending()));
+        Page<Comment> fanComments = commentRepository.findAllByFeedPostId(feedPostId, PageRequest.of(page, size, Sort.by("commentId").descending()));
 
         return fanComments;
     }
@@ -61,7 +61,7 @@ public class CommentService {
     // artistPost 댓글 (무한 스크롤)
     @Transactional(readOnly = true)
     public Page<Comment> findAllCommentsByArtistPostId(int artistPostId, int page, int size){
-        Page<Comment> artistComments = commentRepository.findAllByArtistPostId(artistPostId, PageRequest.of(page, size, Sort.by("id").descending()));
+        Page<Comment> artistComments = commentRepository.findAllByArtistPostId(artistPostId, PageRequest.of(page, size, Sort.by("commentId").descending()));
 
         return artistComments;
     }
@@ -70,11 +70,11 @@ public class CommentService {
     public Comment updateComment(int commentId, Comment comment) {
         Comment findComment = findVerifiedComment(commentId);
 
-        if (comment.getFans() != null && comment.getFans().getId() != findComment.getFans().getId()) {
+        if (comment.getFans() != null && comment.getFans().getFanId() != findComment.getFans().getFanId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
 
-        if (comment.getArtist() != null && comment.getArtist().getId() != findComment.getArtist().getId()) {
+        if (comment.getArtist() != null && comment.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
 
@@ -88,71 +88,20 @@ public class CommentService {
         return commentRepository.save(findComment);
     }
 
-//    public Comment updateFanComment(int commentId, Comment comment){
-//        Comment findComment = findVerifiedComment(commentId);
-//        if(comment.getFans().getId() != findComment.getFans().getId()) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }else{
-//            Optional.ofNullable(comment.getContent()) // 내용 수정
-//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
-//            Optional.ofNullable(comment.getFeedPost())
-//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
-//            Optional.ofNullable(comment.getCreatedAt())
-//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
-//
-//            return commentRepository.save(findComment);
-//        }
-//    }
-//
-//    public Comment updateArtistComment(int commentId, Comment comment){
-//        Comment findComment = findVerifiedComment(commentId);
-//        if(comment.getArtist().getId() != findComment.getArtist().getId()) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }else{
-//            Optional.ofNullable(comment.getContent()) // 내용 수정
-//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
-//            Optional.ofNullable(comment.getFeedPost())
-//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
-//            Optional.ofNullable(comment.getCreatedAt())
-//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
-//
-//            return commentRepository.save(findComment);
-//        }
-//    }
-
-//    public void deleteFeedPostComment(FeedPost feedPost, int commentId, String userEmail) {
-//        Comment findComment = findVerifiedComment(commentId);
-//        String commentAuthorEmail = findComment.getFans().getEmail();
-//        if (feedPost.getFans().getId() != findComment.getFans().getId() || feedPost.getArtist().getId() != findComment.getArtist().getId()
-//                || !commentAuthorEmail.equals(userEmail)) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }
-//        commentRepository.delete(findComment);
-//    }
 
     public void deleteFeedPostComment(FeedPost feedPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
-        if(feedPost.getFans().getId() != findComment.getFans().getId() && feedPost.getArtist().getId() != findComment.getArtist().getId()) {
+        if(feedPost.getFans().getFanId() != findComment.getFans().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
         commentRepository.delete(findComment);
     }
 
 
-//    public void deleteArtistPostComment(ArtistPost artistPost, int commentId, String userEmail) {
-//        Comment findComment = findVerifiedComment(commentId);
-//        String commentAuthorEmail = findComment.getFans().getEmail();
-//        if (artistPost.getFans().getId() != findComment.getFans().getId() || artistPost.getArtist().getId() != findComment.getArtist().getId()
-//                || !commentAuthorEmail.equals(userEmail)) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }
-//        commentRepository.delete(findComment);
-//    }
-
 
     public void deleteArtistPostComment(ArtistPost artistPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
-        if(artistPost.getFans().getId() != findComment.getFans().getId() || artistPost.getArtist().getId() != findComment.getArtist().getId()) {
+        if(artistPost.getFans().getFanId() != findComment.getFans().getFanId() && artistPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
         commentRepository.delete(findComment);

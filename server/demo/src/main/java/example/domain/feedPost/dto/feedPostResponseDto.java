@@ -7,16 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 public class feedPostResponseDto {
-    private FansResponseDto fans;
+    private FansResponseDto fan;
 //    private int feedPostId = 1; // 초기값을 1로 설정
-    private Integer id; // feedPostId
+    private Integer feedPostId;
     private String content;
-    private String img;
+    private List<String> img;
     private LocalDateTime createdAt;
     private List<CommentFanResponseDto> comments;
     private int likeCount;

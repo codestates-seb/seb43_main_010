@@ -12,9 +12,9 @@ import java.util.List;
 @Setter
 public class artistPostResponseDto {
     private ArtistResponseDto artist;
-    private Integer id; // artistPostId
+    private Integer artistPostId;
     private String content;
-    private String img;
+    private List<String> img;
     private LocalDateTime createdAt;
     private List<CommentUserResponseDto> comments;
     private int likeCount;

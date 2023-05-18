@@ -22,7 +22,7 @@ public interface artistPostMapper {
     // artistPostDto.Patch -> artistPost
     default ArtistPost artistPatchDtoToArtist(ArtistPost artistpost, artistPostDto.Patch requestBody, Artist artist){
         ArtistPost artistPost = new ArtistPost(requestBody.getContent(), requestBody.getImg(), artist);
-        artistPost.setId(artistpost.getId());
+        artistPost.setArtistPostId(artistpost.getArtistPostId());
         return artistPost;
     }
 

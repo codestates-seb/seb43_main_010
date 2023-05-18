@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ArtistResponseDto {
-    private int id;
+    private int artistId;
     private String nickname;
     private String profile;
 

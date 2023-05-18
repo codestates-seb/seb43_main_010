@@ -44,8 +44,7 @@ public class artistPostController {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         ArtistPost artistPost = mapper.artistPostDtoToArtist(requestBody, artist);
         ArtistPost saveArtistPost = service.createArtistPost(artistPost);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.artistToArtistResponseDto(saveArtistPost)),
+        return new ResponseEntity<>(mapper.artistToArtistResponseDto(saveArtistPost),
                 HttpStatus.OK);
     }
 
@@ -54,8 +53,7 @@ public class artistPostController {
     @GetMapping("/{artistPostId}")
     public ResponseEntity getArtist(@PathVariable("artistPostId") @Positive int artistPostId) {
         ArtistPost artistPost = service.findArtistPost(artistPostId);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.artistToArtistResponseDto(artistPost)),
+        return new ResponseEntity<>(mapper.artistToArtistResponseDto(artistPost),
                 HttpStatus.OK);
     }
 
@@ -70,20 +68,26 @@ public class artistPostController {
         ArtistPost artistPost = mapper.artistPatchDtoToArtist(findArtistPost, requestBody, artist);
         ArtistPost updateArtistPost = service.updateArtistPost(artistPost);
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.artistToArtistResponseDto(updateArtistPost)), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.artistToArtistResponseDto(updateArtistPost), HttpStatus.OK);
     }
 
 
     // artistPost 삭제
     @DeleteMapping("/{artistPostId}")
-    public ResponseEntity deleteFeedPost(@PathVariable("artistPostId") @Positive int artistPostId,
+    public ResponseEntity<String> deleteFeedPost(@PathVariable("artistPostId") @Positive int artistPostId,
                                          @Valid @RequestBody feedPostDto.Delete requestBody) {
         Artist artist = artistRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         ArtistPost findArtistPost = service.findArtistPost(artistPostId);
-        service.deleteArtistPost(artist, findArtistPost);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        try {
+            service.deleteArtistPost(artist, findArtistPost);
+            return ResponseEntity.ok("삭제 성공.");
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.DELETE_FAILE);
+        }
+//        service.deleteArtistPost(artist, findArtistPost);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
 

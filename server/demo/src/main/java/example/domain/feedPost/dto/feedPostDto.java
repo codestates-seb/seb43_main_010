@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 public class feedPostDto {
     @NoArgsConstructor
     @Getter
@@ -17,9 +19,9 @@ public class feedPostDto {
         private String content;
 
         @NotNull
-        private String img;
+        private List<String> img;
 
-        public Post(int fansId, String content, String img) {
+        public Post(int fansId, String content, List<String> img) {
             this.fanId = fansId;
             this.content = content;
             this.img = img;
@@ -33,9 +35,9 @@ public class feedPostDto {
         @NotNull
         private int fanId;
         private String content;
-        private String img;
+        private List<String> img;
 
-        public Patch(int fansId, String content, String img) {
+        public Patch(int fansId, String content, List<String> img) {
             this.fanId = fansId;
             this.content = content;
             this.img = img;

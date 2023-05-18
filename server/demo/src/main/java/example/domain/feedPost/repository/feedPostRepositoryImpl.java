@@ -21,7 +21,7 @@ public class feedPostRepositoryImpl implements feedPostCustomRepository {
         QFeedPost qFeedPost = QFeedPost.feedPost;
         queryFactory.update(qFeedPost)
                 .set(qFeedPost.likeCount, qFeedPost.likeCount.add(1))
-                .where(qFeedPost.eq(selectedFeedPost))
+                .where(qFeedPost.feedPostId.eq(selectedFeedPost.getFeedPostId())) // .where(qFeedPost.eq(selectedFeedPost))
                 .execute();
     }
 
@@ -30,7 +30,7 @@ public class feedPostRepositoryImpl implements feedPostCustomRepository {
         QFeedPost qFeedPost = QFeedPost.feedPost;
         queryFactory.update(qFeedPost)
                 .set(qFeedPost.likeCount, qFeedPost.likeCount.subtract(1))
-                .where(qFeedPost.eq(selectedFeedPost))
+                .where(qFeedPost.feedPostId.eq(selectedFeedPost.getFeedPostId())) // .where(qFeedPost.eq(selectedFeedPost))
                 .execute();
     }
 }
