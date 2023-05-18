@@ -24,7 +24,7 @@ const ArtistProfile = styled.div`
   .profile-img {
     width: 46px;
     height: 46px;
-    background: ${({ img }) => `no-repeat url(${img})`};
+    background: ${({ profile }) => `no-repeat url(${profile})`};
     background-size: 46px 46px;
   }
   .created-day {
@@ -101,14 +101,14 @@ const ArtistPostBox = styled.div`
         cursor: pointer;
 
         &:hover {
-          transform: scale(1.3, 1.3) translateX(-10px);
+          transform: scale(1.1, 1.1) translateX(-10px);
           transition: 0.15s;
         }
 
         .mini-menu {
           font-size: 16px;
           i::before {
-            color: var(--light-gray-500);
+            color: var(--light-gray-600);
           }
         }
       }
@@ -246,7 +246,7 @@ const ArtistPostBox = styled.div`
   }
 `;
 
-const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
+const ArtistPost = ({ createdAt, nickname, content, profile, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [detailPost, setDetailPost] = useState(false);
@@ -281,7 +281,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
   return (
     <>
       <Container>
-        <ArtistProfile img={img}>
+        <ArtistProfile profile={profile}>
           <div className='profile'>
             <div className='profile-img'></div>
           </div>
@@ -318,6 +318,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
                     what='포스트를'
                     modalOpen={modalOpen}
                     setModalOpen={setModalOpen}
+                    // 여기서 해당하는 포스트를 내려줘야함
                     postData={postData}
                     setPostData={setPostData}
                   />
@@ -375,7 +376,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               createdAt={createdAt}
               content={content}
               nickname={nickname}
-              img={img}
+              profile={profile}
               liked={liked}
               like={like}
               clickLike={clickLike}
@@ -392,7 +393,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               createdAt={createdAt}
               content={content}
               nickname={nickname}
-              img={img}
+              profile={profile}
               liked={liked}
               like={like}
               clickLike={clickLike}

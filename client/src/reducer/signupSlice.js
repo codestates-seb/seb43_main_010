@@ -16,7 +16,6 @@ const initialState = {
     groupImg: defaultProfile,
   },
 };
-
 const signupSlice = createSlice({
   name: 'signup',
   initialState: initialState,

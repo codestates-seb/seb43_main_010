@@ -5,10 +5,14 @@ import moon from '../../assets/png-file/moon-icon.png';
 import { Link } from 'react-router-dom';
 //쿠키 가져오기
 import { getCookie } from '../Login/LoginMaterial/setCookie';
+//현재 사용자 조회하기 위한 전역변수
+import { useSelector, useDispatch } from 'react-redux';
 // 임시 데이터
 import data from './data';
-
 import Card from './MainMaterial/Card';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { setCurrentUser } from '../../reducer/userSlice';
 
 const MainBlock = styled.div`
   padding: 80px 0 212px 0;
@@ -129,6 +133,17 @@ const Main = () => {
   const filteredData = data.allGroup.filter((el) => {
     return !myGroupIds.has(el.groupId);
   });
+
+  //login한 유저 찾아오기
+  // const currentUser = useSelector((state) => state.currentUser);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   const token = getCookie();
+  //   axios.get('/user', { withCredentials: true }).then((res) => {
+  //     console.log(res);
+  //     dispatch(setCurrentUser(res.data));
+  //   });
+  // }, []);
 
   return (
     <>

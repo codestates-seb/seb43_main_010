@@ -27,40 +27,38 @@ const PostsBox = styled.div`
 `;
 
 // 그냥 임시 Post 데이터임
-const data = {
-  allArtist: [
-    {
-      artistId: 1,
-      userId: 1,
-      nickname: `열일하는개미`, // 작성자 닉네임
-      content: `개미는 뚠뚠🐜🐜 오늘도 뚠뚠🐜🐜 열심히 일을 하네🎵`,
-      img: profileImg,
-      createdAt: `05. 08. 16:22`,
-      feedLikeId: [],
-      likeNum: 0, // 좋아요 개수
-      feedCommentId: [],
-      commentNum: 1, // 게시글에 달린 댓글 개수
-    },
-    {
-      artistId: 2,
-      userId: 2,
-      nickname: `열일하는개미`, // 작성자 닉네임
-      content: `개미는 뚠뚠🐜🐜 오늘도 뚠뚠🐜🐜 열심히 일을 하네🎵`,
-      img: profileImg,
-      createdAt: `05. 08. 16:22`,
-      feedLikeId: [],
-      likeNum: 0, // 좋아요 개수
-      feedCommentId: [],
-      commentNum: 1, // 게시글에 달린 댓글 개수
-    },
-  ],
-};
+const data = [
+  {
+    feedId: 1,
+    userId: 1,
+    nickname: `열일하는개미`, // 작성자 닉네임
+    content: `개미는 뚠뚠🐜🐜 오늘도 뚠뚠🐜🐜 열심히 일을 하네🎵`,
+    profile: profileImg,
+    createdAt: `05. 08. 16:22`,
+    feedLikeId: [],
+    likeNum: 0, // 좋아요 개수
+    feedCommentId: [],
+    commentNum: 1, // 게시글에 달린 댓글 개수
+  },
+  {
+    feedId: 2,
+    userId: 2,
+    nickname: `아무리생각캐도난마늘`, // 작성자 닉네임
+    content: `그거 알아요? 저는 영어 시간에 핸섬 외우기 어려워서 '김태형'이라고 외웠어요💜💜💜`,
+    profile: profileImg,
+    createdAt: `05. 01. 10:22`,
+    feedLikeId: [],
+    likeNum: 1, // 좋아요 개수
+    feedCommentId: [],
+    commentNum: 1, // 게시글에 달린 댓글 개수
+  },
+];
 
 const Artist = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   // 포스트 데이터를 추가하기위한 상태관리 => 이건 writePost 모달창에서 submit시 변경되므로 props전달해야함
-  const [postData, setPostData] = useState([data]);
+  const [postData, setPostData] = useState(data);
 
   const openModal = () => {
     setModalOpen(true);
@@ -79,13 +77,13 @@ const Artist = () => {
             {/* Post 컴포넌트 */}
             {/* 임시 데이터로 <Post />컴포넌트 map 돌림 */}
             <PostsBox>
-              {data.allArtist.map((el) => (
+              {data.map((el) => (
                 <ArtistPost
                   key={el.artistId}
                   createdAt={el.createdAt}
                   nickname={el.nickname}
                   content={el.content}
-                  img={el.img}
+                  profile={el.profile}
                   likeNum={el.likeNum}
                   commentNum={el.commentNum}
                   modalOpen={modalOpen}

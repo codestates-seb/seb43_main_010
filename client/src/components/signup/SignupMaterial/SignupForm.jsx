@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import SignupInput from './SignupInput';
 import SignupImgInput from './SignupImgInput';
 import ArtistInput from './ArtistInput';
-import { BsCheckLg } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import { setFanId, setArtistId, resetInputs, setCalssification } from '../../../reducer/signupSlice';
+import { resetInputs, setCalssification } from '../../../reducer/signupSlice';
 import axios from 'axios';
 import { emailValidation, pwdValidation, checkPwdValidation, commonValidation } from '../validation.js';
 import SwitchButton from './SignupSwitchBtn';
+import hashPwd from './HashingPwd';
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
   /* min-height: 178px; */
@@ -123,10 +123,12 @@ const LoginForm = () => {
         return;
       }
       body = { ...artist };
+      delete body.passwordCheck;
+      //여기서 pwd암호화하기
       await axios
         .post('/signup/artist', body)
-        .then(() => {
-          console.log('성공');
+        .then((res) => {
+          console.log('res');
         })
         .catch((e) => {
           console.log(e);
@@ -143,6 +145,10 @@ const LoginForm = () => {
         return;
       }
       body = { ...fanUser };
+      //여기서 pwd암호화하기
+      // body.password = hashPwd(body.password);
+      delete body.passwordCheck;
+      // console.log(body);
       await axios
         .post('/signup/fans', body)
         .then((res) => {

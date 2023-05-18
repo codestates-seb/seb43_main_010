@@ -210,19 +210,19 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData }) => {
       // 여기서 서버한테 content 데이터 전송해야 함.
       // 서버에 데이터 전송 되면 내용 비우고 창 닫기
       // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
-
-      let body = { fanId: 1, content, img: imgList[0].url };
-      console.log('디버깅영역');
-      console.log(body);
-      await axios
-        .post('/feed', body)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
+      console.log({ content, img: imgList });
+      // 서버와 통신
+      // let body = { fanId: 1, content, img: imgList[0].url };
+      // console.log('디버깅영역');
+      // console.log(body);
+      // await axios
+      //   .post('/feed', body)
+      //   .then((res) => {
+      //     console.log(res.data);
+      //   })
+      //   .catch((e) => {
+      //     console.log(e);
+      //   });
       setPostData([{ content, img: imgList }, ...postData]);
       setContent('');
       setImgList([]);
