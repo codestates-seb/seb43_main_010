@@ -35,7 +35,7 @@ public class artistPostService {
     public ArtistPost updateArtistPost(ArtistPost artistPost) {
         ArtistPost findArtistPost = findArtistPost(artistPost.getId());
 
-        if (artistPost.getArtist().getId() != findArtistPost.getArtist().getId()) {
+        if (artistPost.getArtist().getArtistId() != findArtistPost.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
         } else {
             Optional.ofNullable(artistPost.getContent()).ifPresent(content -> findArtistPost.setContent(content));
@@ -48,7 +48,7 @@ public class artistPostService {
 
     public void deleteArtistPost(Artist artist, ArtistPost artistPost) {
         ArtistPost findArtistPost = findArtistPost(artistPost.getId());
-        if (artist.getId() != findArtistPost.getArtist().getId()) {
+        if (artist.getArtistId() != findArtistPost.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
         }
         artistPostRepository.delete(findArtistPost);

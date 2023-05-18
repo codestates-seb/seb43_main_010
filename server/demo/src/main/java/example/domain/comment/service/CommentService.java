@@ -74,7 +74,7 @@ public class CommentService {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
 
-        if (comment.getArtist() != null && comment.getArtist().getId() != findComment.getArtist().getId()) {
+        if (comment.getArtist() != null && comment.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
 
@@ -132,7 +132,7 @@ public class CommentService {
 
     public void deleteFeedPostComment(FeedPost feedPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
-        if(feedPost.getFans().getFanId() != findComment.getFans().getFanId() && feedPost.getArtist().getId() != findComment.getArtist().getId()) {
+        if(feedPost.getFans().getFanId() != findComment.getFans().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
         commentRepository.delete(findComment);
@@ -152,7 +152,7 @@ public class CommentService {
 
     public void deleteArtistPostComment(ArtistPost artistPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
-        if(artistPost.getFans().getFanId() != findComment.getFans().getFanId() || artistPost.getArtist().getId() != findComment.getArtist().getId()) {
+        if(artistPost.getFans().getFanId() != findComment.getFans().getFanId() || artistPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
         commentRepository.delete(findComment);

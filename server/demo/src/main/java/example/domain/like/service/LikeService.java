@@ -64,7 +64,7 @@ public class LikeService {
         // 이미 좋아요 되어 있으면 에러 반환
         if (likeRepository.findByArtistAndArtistPost(artist, artistPost).isPresent()){
             // todo 409 에러로 변경
-            throw new DuplicateResourceException("already exist data by artist id :" + artist.getId() + " ,"
+            throw new DuplicateResourceException("already exist data by artist id :" + artist.getArtistId() + " ,"
                     + "artistPost id : " + artistPost.getId());
         }
 

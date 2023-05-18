@@ -147,13 +147,13 @@ public interface CommentMapper {
         CommentArtistResponseDto commentResponseDto = new CommentArtistResponseDto();
         Artist artist = comment.getArtist();
         ArtistResponseDto userDto = new ArtistResponseDto();
-        userDto.setId(artist.getId());
+        userDto.setArtistId(artist.getArtistId());
         userDto.setNickname(artist.getNickname());
         userDto.setProfile(artist.getProfile());
         userDto.setEmail(artist.getEmail());
         userDto.setName(artist.getName());
 
-        commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());
         commentResponseDto.setLikeCount(comment.getLikeCount());
@@ -173,7 +173,7 @@ public interface CommentMapper {
 
         Artist artist = comment.getArtist();
         ArtistResponseDto userDto2 = new ArtistResponseDto();
-        userDto2.setId(artist.getId());
+        userDto2.setArtistId(artist.getArtistId());
         userDto2.setNickname(artist.getNickname());
         userDto2.setProfile(artist.getProfile());
         userDto2.setEmail(artist.getEmail());
@@ -236,7 +236,7 @@ public interface CommentMapper {
             Artist artist = comment.getArtist();
             if (artist != null) {
                 ArtistResponseDto artistResponseDto = new ArtistResponseDto();
-                artistResponseDto.setId(artist.getId());
+                artistResponseDto.setArtistId(artist.getArtistId());
                 artistResponseDto.setNickname(artist.getNickname());
                 artistResponseDto.setProfile(artist.getProfile());
                 artistResponseDto.setName(artist.getName());

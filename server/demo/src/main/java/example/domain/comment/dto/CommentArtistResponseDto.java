@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class CommentArtistResponseDto {
-    private ArtistResponseDto user;
-    private long feedPostId;
+public class CommentArtistResponseDto { // feedPost든 artistPost든 artist가 댓글 작성
+    private ArtistResponseDto artist;
+    private long artistPostId;
     private String content;
     private LocalDateTime createdAt;
     private Integer likeCount;
