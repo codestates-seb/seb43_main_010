@@ -69,16 +69,31 @@ public class feedPostController {
 
 
     // feedPost 삭제
-// 메세지 뺀것 잘 작동 됨.
     @DeleteMapping("/{feedPostId}")
-    public ResponseEntity deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
-                                         @Valid @RequestBody feedPostDto.Delete requestBody) {
+    public ResponseEntity<String> deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
+                                                 @Valid @RequestBody feedPostDto.Delete requestBody) {
         Fans fan = fansRepository.findById(requestBody.getFanId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
         FeedPost findFeedPost = service.findFeedPost(feedPostId);
-        service.deleteFeedPost(fan, findFeedPost);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        try {
+            service.deleteFeedPost(fan, findFeedPost);
+            return ResponseEntity.ok("삭제 성공");
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.DELETE_FAILE);
+        }
     }
+
+// 메세지 뺀것 잘 작동 됨.
+//    @DeleteMapping("/{feedPostId}")
+//    public ResponseEntity deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
+//                                         @Valid @RequestBody feedPostDto.Delete requestBody) {
+//        Fans fan = fansRepository.findById(requestBody.getFanId())
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+//        FeedPost findFeedPost = service.findFeedPost(feedPostId);
+//        service.deleteFeedPost(fan, findFeedPost);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
 
 //    @DeleteMapping("/{feedPostId}")
