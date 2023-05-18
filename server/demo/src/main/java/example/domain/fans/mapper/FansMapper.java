@@ -21,15 +21,12 @@ public interface FansMapper {
         return fans;
     }
 
-    default FansResponseDto fansToUserResponseDto(Fans fans) {
+    default FansResponseDto fansToFansResponseDto(Fans fans) {
         FansResponseDto fansResponseDto = new FansResponseDto();
-//        userResponseDto.setUserId(user.getUserId());
-        //userResponseDto.setEmail(user.getEmail());
-        //userResponseDto.setDisplayName(user.getDisplayName());
-//        userResponseDto.setPassword(user.getPassword());
-        //userResponseDto.setImage(user.getImage());
-        //userResponseDto.setUserStatus(user.getUserStatus());
-
+        fansResponseDto.setEmail(fans.getEmail());
+        fansResponseDto.setName(fans.getName());
+        fansResponseDto.setNickname(fans.getNickname());
+        fansResponseDto.setProfile(fans.getProfile());
         return fansResponseDto;
     }
 }

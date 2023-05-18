@@ -1,5 +1,6 @@
 package example.domain.artist.entity;
 
+import example.domain.group.entity.Group;
 import example.global.audit.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +32,26 @@ public class Artist extends BaseEntity {
     @Column(nullable = false,columnDefinition = "VARCHAR(20)")
     private String nickname;
 
-    @Column(nullable = true)
-    private String profile = "https://mblogthumb-phinf.pstatic.net/MjAyMDA2MTBfMTY1/MDAxNTkxNzQ2ODcyOTI2.Yw5WjjU3IuItPtqbegrIBJr3TSDMd_OPhQ2Nw-0-0ksg.8WgVjtB0fy0RCv0XhhUOOWt90Kz_394Zzb6xPjG6I8gg.PNG.lamute/user.png?type=w800";
+    @Column
+    @Lob
+    private String profile;
 
-    @Column(name = "\"group\"", nullable = false)
+    @Column
+    @Lob
+    private String groupProfile;
+
+    @Column(name = "\"GROUP\"", nullable = false)
     private String group;
 
-    @Column(nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "GROUP_ID")
+    private Group groups;
+
+    public void addGroup(Group groups) {
+        this.groups = groups;
+    }
+
+    @Column
     private String role="ARTIST";
 
 }

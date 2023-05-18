@@ -32,4 +32,6 @@ public class FansController {
         Fans createdFans = fansService.createFans(fans);
         return new ResponseEntity<>(new SingleResponseDto<>("일반유저 회원가입 성공!"), HttpStatus.CREATED);
     }
+
+
 }
