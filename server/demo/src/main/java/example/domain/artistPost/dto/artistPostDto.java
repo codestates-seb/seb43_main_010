@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 public class artistPostDto {
     @NoArgsConstructor
     @Getter
@@ -17,9 +19,9 @@ public class artistPostDto {
         private String content;
 
         @NotNull
-        private String img;
+        private List<String> img;
 
-        public Post(int artistId, String content, String img) {
+        public Post(int artistId, String content, List<String> img) {
             this.artistId = artistId;
             this.content = content;
             this.img = img;
@@ -32,14 +34,23 @@ public class artistPostDto {
         @NotNull
         private int artistId;
         private String content;
-        private String img;
-        private int artistPostId;
+        private List<String> img;
 
-        public Patch(int artistId, String content, String img, int artistPostId) {
+        public Patch(int artistId, String content, List<String> img) {
             this.artistId = artistId;
             this.content = content;
             this.img = img;
-            this.artistPostId = artistPostId;
+        }
+    }
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Delete {
+        @NotNull
+        private int artistId;
+
+        public Delete(int fansId) {
+            this.artistId = fansId;
         }
     }
 }

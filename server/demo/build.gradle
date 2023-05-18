@@ -43,6 +43,13 @@ dependencies {
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
 }
 
+//bootJar {
+//	duplicatesStrategy = 'exclude'
+//	manifest {
+//		attributes 'Main-Class': 'java.example.ExampleApplication'
+//	}
+//}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

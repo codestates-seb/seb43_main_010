@@ -1,18 +1,21 @@
 package example.domain.artistPost.dto;
 
 import example.domain.artist.dto.ArtistResponseDto;
+import example.domain.comment.dto.CommentUserResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 public class artistPostResponseDto {
     private ArtistResponseDto artist;
-    private int artistPostId;
+    private Integer artistPostId;
     private String content;
-    private String img;
+    private List<String> img;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private List<CommentUserResponseDto> comments;
+    private int likeCount;
 }

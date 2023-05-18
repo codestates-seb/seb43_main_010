@@ -1,5 +1,7 @@
 package example.domain.comment.dto;
 
+import example.domain.artist.dto.ArtistResponseDto;
+import example.domain.fans.dto.FansResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,23 +10,15 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 public class CommentPostDto { // 요청
-    @NotNull
-    @Positive
-    private int feedPostId;
 
-    @NotNull
-    private int fanId;
+        @NotNull
+        private String email;
+        @NotNull
+        private String content;
 
-    @NotBlank(message = "댓글을 입력하세요.")
-    private String content;
 
-    public CommentPostDto(int feedPostId, int fanId, String content) {
-        this.feedPostId = feedPostId;
-        this.fanId = fanId;
-        this.content = content;
-    }
 }

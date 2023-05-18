@@ -31,8 +31,8 @@ public class LikeService {
         // 이미 좋아요 되어 있으면 에러 반환
         if (likeRepository.findByFansAndFeedPost(fans, feedPost).isPresent()){
             // todo 409 에러로 변경
-            throw new DuplicateResourceException("already exist data by fan id :" + fans.getId() + " ,"
-                    + "feedPost id : " + feedPost.getId());
+            throw new DuplicateResourceException("already exist data by fan id :" + fans.getFanId() + " ,"
+                    + "feedPost id : " + feedPost.getFeedPostId());
         }
 
         // like 객체 생성

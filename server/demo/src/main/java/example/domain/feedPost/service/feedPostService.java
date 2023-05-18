@@ -1,10 +1,15 @@
 package example.domain.feedPost.service;
 
+import example.domain.fans.entity.Fans;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.feedPost.entity.FeedPost;
 import example.domain.feedPost.repository.feedPostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -21,28 +26,32 @@ public class feedPostService {
         return feedPostRepository.save(feedPost);
     }
 
-    public FeedPost findFeedPost(int feedId){
-        Optional<FeedPost> optionalPost = feedPostRepository.findById(feedId); // findById : Optional<T> 객체 반환
-        return optionalPost.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
+    public FeedPost findFeedPost(int feedPostId){
+        return feedPostRepository.findById(feedPostId)
+                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
     }
 
     public FeedPost updateFeedPost(FeedPost feedPost){
-        FeedPost findFeedPost = findFeedPost(feedPost.getId());
+        FeedPost findFeedPost = findFeedPost(feedPost.getFeedPostId());
 
-        if(feedPost.getFans().getId() != findFeedPost.getFans().getId()) {
+        if(feedPost.getFans().getFanId() != findFeedPost.getFans().getFanId()) {
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
-        }else{
+        }else{ // feedPost의 content가 null이 아니라면, findFeedPost의 content를 feedPost의 content로 설정
             Optional.ofNullable(feedPost.getContent()).ifPresent(content -> findFeedPost.setContent(content));
             Optional.ofNullable(feedPost.getImg()).ifPresent(img -> findFeedPost.setImg(img));
-            findFeedPost.setModifiedAt(LocalDateTime.now());
+            findFeedPost.setCreatedAt(LocalDateTime.now());
         }
 
         return feedPostRepository.save(findFeedPost);
     }
 
-    public void deleteFeedPost(int feedId){
-        FeedPost findFeedPost = findFeedPost(feedId);
+    public void deleteFeedPost(Fans fan, FeedPost feedPost){
+        FeedPost findFeedPost = findFeedPost(feedPost.getFeedPostId());
+        if(fan.getFanId() != findFeedPost.getFans().getFanId()) { //  fanId와 findFeedPost의 작성자 ID를 비교하여 일치하지 않으면
+            throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
+        }
         feedPostRepository.delete(findFeedPost);
     }
+
 
 }
