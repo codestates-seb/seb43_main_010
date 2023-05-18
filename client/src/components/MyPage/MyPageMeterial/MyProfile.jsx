@@ -115,7 +115,6 @@ const Box = styled.div`
 `;
 
 const DeleteBtn = styled.button`
-  width: 60px;
   position: absolute;
   top: 0;
   right: 0;
@@ -125,6 +124,7 @@ const DeleteBtn = styled.button`
   font-weight: 500;
   cursor: pointer;
   text-decoration: underline;
+  margin-right: 10px;
 `;
 
 const ModalWrapper = styled.div`
@@ -253,7 +253,11 @@ const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBt
       )}
       <ArtistName>{artistName}</ArtistName>
       <MembershipDate>{membershipDate} 가입</MembershipDate>
-      <DeleteBtn onClick={handleDeleteBtnClick}>커뮤니티 탈퇴하기</DeleteBtn>
+      <DeleteBtn onClick={handleDeleteBtnClick}>
+        커뮤니티
+        <br />
+        탈퇴하기
+      </DeleteBtn>
     </Box>
   );
 };
@@ -263,8 +267,8 @@ const MyProfile = () => {
   const [membershipDate, setMembershipDate] = useState('2023-04-28');
   const [artistCards, setArtistCards] = useState([
     { imgSrc: BTS, imgAlt: 'BTS', nickName: 'TATA-V', artistName: 'BTS' },
-    { imgSrc: TXT, imgAlt: 'TXT', nickName: 'TATA-T', artistName: 'TXT' },
-    { imgSrc: NewJeans, imgAlt: 'NewJeans', nickName: 'TATA-J', artistName: 'NewJeans' },
+    { imgSrc: TXT, imgAlt: 'TXT', nickName: 'TATA-V', artistName: 'TXT' },
+    { imgSrc: NewJeans, imgAlt: 'NewJeans', nickName: 'TATA-V', artistName: 'NewJeans' },
   ]);
 
   const handleDeleteBtnClick = (index) => () => {
