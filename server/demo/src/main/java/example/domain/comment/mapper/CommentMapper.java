@@ -30,7 +30,7 @@ public interface CommentMapper {
     // feedPost에서 fan 의 경우 : CommentPostDto -> comment
     default Comment commentPostDtoToComment(FeedPost feedPost, Fans fans, CommentPostDto requestBody) {
         Comment comment = new Comment(requestBody.getContent());
-        comment.setFans(fans);
+        comment.setFan(fans);
         comment.setFeedPost(feedPost);
         return comment;
     }
@@ -46,7 +46,7 @@ public interface CommentMapper {
     // artistPost에서 fan 의 경우 : CommentPostDto -> comment
     default Comment commentPostDtoToComment(Fans fans, ArtistPost artistPost, CommentPostDto requestBody) {
         Comment comment = new Comment(requestBody.getContent());
-        comment.setFans(fans);
+        comment.setFan(fans);
         comment.setArtistPost(artistPost);
         return comment;
     }
@@ -64,7 +64,7 @@ public interface CommentMapper {
     default Comment commentPatchDtoToComment(Object author, FeedPost feedPost, CommentPatchDto requestBody) {
         Comment comment = new Comment();
         if (author instanceof Fans) {
-            comment.setFans((Fans) author);
+            comment.setFan((Fans) author);
         } else if (author instanceof Artist) {
             comment.setArtist((Artist) author);
         }
@@ -77,7 +77,7 @@ public interface CommentMapper {
     default Comment commentPatchDtoToComment(Object author, ArtistPost artistPost, CommentPatchDto requestBody) {
         Comment comment = new Comment();
         if (author instanceof Fans) {
-            comment.setFans((Fans) author);
+            comment.setFan((Fans) author);
         } else if (author instanceof Artist) {
             comment.setArtist((Artist) author);
         }
@@ -126,7 +126,7 @@ public interface CommentMapper {
     // Comment -> CommentResponseDto
     default CommentFanResponseDto commentToCommentFanResponseDto(Comment comment) {
         CommentFanResponseDto commentResponseDto = new CommentFanResponseDto();
-        Fans fans = comment.getFans();
+        Fans fans = comment.getFan();
         FansResponseDto userDto = new FansResponseDto();
         userDto.setFanId(fans.getFanId());
         userDto.setNickname(fans.getNickname());
@@ -134,7 +134,7 @@ public interface CommentMapper {
         userDto.setEmail(fans.getEmail());
         userDto.setName(fans.getName());
 
-        commentResponseDto.setFans(userDto);
+        commentResponseDto.setFan(userDto);
         commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());
@@ -163,7 +163,7 @@ public interface CommentMapper {
 
     default CommentUserResponseDto commentToUserCommentResponseDto(Comment comment) {
         CommentUserResponseDto commentResponseDto = new CommentUserResponseDto();
-        Fans fans = comment.getFans();
+        Fans fans = comment.getFan();
         FansResponseDto userDto1 = new FansResponseDto();
         userDto1.setFanId(fans.getFanId());
         userDto1.setNickname(fans.getNickname());
@@ -221,7 +221,7 @@ public interface CommentMapper {
             CommentUserResponseDto responseDto = new CommentUserResponseDto();
 
             // Fans 정보 설정
-            Fans fans = comment.getFans();
+            Fans fans = comment.getFan();
             if (fans != null) {
                 FansResponseDto fansResponseDto = new FansResponseDto();
                 fansResponseDto.setFanId(fans.getFanId());

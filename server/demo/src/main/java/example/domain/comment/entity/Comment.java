@@ -39,7 +39,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fan_id")
-    private Fans fans;
+    private Fans fan;
 
 //    @Column(name = "fan_comment_id")
 //    private int fanCommentId;

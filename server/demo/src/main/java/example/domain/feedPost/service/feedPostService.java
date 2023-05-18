@@ -34,7 +34,7 @@ public class feedPostService {
     public FeedPost updateFeedPost(FeedPost feedPost){
         FeedPost findFeedPost = findFeedPost(feedPost.getId());
 
-        if(feedPost.getFans().getFanId() != findFeedPost.getFans().getFanId()) {
+        if(feedPost.getFan().getFanId() != findFeedPost.getFan().getFanId()) {
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
         }else{ // feedPost의 content가 null이 아니라면, findFeedPost의 content를 feedPost의 content로 설정
             Optional.ofNullable(feedPost.getContent()).ifPresent(content -> findFeedPost.setContent(content));
@@ -47,7 +47,7 @@ public class feedPostService {
 
     public void deleteFeedPost(Fans fan, FeedPost feedPost){
         FeedPost findFeedPost = findFeedPost(feedPost.getId());
-        if(fan.getFanId() != findFeedPost.getFans().getFanId()) { //  fanId와 findFeedPost의 작성자 ID를 비교하여 일치하지 않으면
+        if(fan.getFanId() != findFeedPost.getFan().getFanId()) { //  fanId와 findFeedPost의 작성자 ID를 비교하여 일치하지 않으면
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_AUTHOR_NOT_MATCH);
         }
         feedPostRepository.delete(findFeedPost);

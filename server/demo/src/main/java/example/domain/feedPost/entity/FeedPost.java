@@ -41,7 +41,7 @@ public class FeedPost extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "fan_id")
-    private Fans fans;
+    private Fans fan;
 
     @ManyToOne
     @JoinColumn(name = "artist_id")
@@ -57,25 +57,25 @@ public class FeedPost extends BaseTimeEntity {
     @Column(name = "like_count")
     private Integer likeCount;
 
-    public FeedPost(String content, String img, Fans fans) {
+    public FeedPost(String content, String img, Fans fan) {
         this.content = content;
         this.img = img;
-        this.fans = fans;
+        this.fan = fan;
     }
 
     public FeedPost(int id, Fans fans) {
         this.id = id;
-        this.fans = fans;
+        this.fan = fan;
     }
 
     @Builder
     public FeedPost(Integer id, String content, String img, LocalDateTime createdAt,
-                    Fans fans, List<Comment> comments, Integer likeCount) {
+                    Fans fan, List<Comment> comments, Integer likeCount) {
         this.id = id;
         this.content = content;
         this.img = img;
         this.createdAt = createdAt;
-        this.fans = fans;
+        this.fan = fan;
         this.comments = comments;
         this.likeCount = likeCount;
     }

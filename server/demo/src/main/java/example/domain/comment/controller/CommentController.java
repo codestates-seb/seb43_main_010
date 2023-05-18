@@ -347,7 +347,7 @@ public class CommentController {
             FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
             Comment findComment = commentService.findVerifiedComment(commentId);
 
-            if (findComment.getFans().getEmail().equals(requestBody.getEmail())) {
+            if (findComment.getFan().getEmail().equals(requestBody.getEmail())) {
                 commentService.deleteFeedPostComment(findFeedPost, commentId);
                 return ResponseEntity.ok("삭제 성공"); // 삭제 성공 시 응답 본문에 "삭제 성공" 메시지 반환
             } else {
@@ -424,7 +424,7 @@ public class CommentController {
             ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId); // artistPostId에 해당하는 artistPost 정보 조회
             Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
 
-            if (findComment.getFans().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
+            if (findComment.getFan().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
                 commentService.deleteArtistPostComment(findArtistPost, commentId); //
                 return ResponseEntity.ok("삭제 성공"); // 삭제 성공 시 응답 본문에 "삭제 성공" 메시지 반환
             } else {

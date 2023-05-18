@@ -46,7 +46,7 @@ public interface feedPostMapper {
         }
 
         CommentFanResponseDto commentFanResponseDto = new CommentFanResponseDto();
-        Fans fans = comment.getFans();
+        Fans fans = comment.getFan();
         FansResponseDto userDto = new FansResponseDto();
         userDto.setFanId(fans.getFanId());
         userDto.setNickname(fans.getNickname());
@@ -54,7 +54,7 @@ public interface feedPostMapper {
         userDto.setEmail(fans.getEmail());
         userDto.setName(fans.getName());
 
-        commentFanResponseDto.setFans(userDto);
+        commentFanResponseDto.setFan(userDto);
         commentFanResponseDto.setFeedPostId(comment.getFeedPost().getId());
         commentFanResponseDto.setContent( comment.getContent() );
         commentFanResponseDto.setCreatedAt( comment.getCreatedAt() );

@@ -41,7 +41,7 @@ public class ArtistPost extends BaseTimeEntity{
 
         @ManyToOne
         @JoinColumn(name = "fan_id")
-        private Fans fans;
+        private Fans fan;
 
         @ManyToOne
         @JoinColumn(name = "artist_id")
