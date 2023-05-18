@@ -8,8 +8,8 @@ import example.domain.feedPost.dto.feedPostDto;
 import example.domain.feedPost.dto.feedPostResponseDto;
 import example.domain.feedPost.entity.FeedPost;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
@@ -29,8 +29,15 @@ public interface feedPostMapper {
     }
 
     // feedPost -> feedPostDto.Response
-    feedPostResponseDto feedToFeedResponseDto(FeedPost feedPost);
+//    feedPostResponseDto feedToFeedResponseDto(FeedPost feedPost);
 
+    default feedPostResponseDto feedToFeedResponseDto(FeedPost feedPost) {
+        ModelMapper modelMapper = new ModelMapper();
+        feedPostResponseDto feedPostResponseDto = modelMapper.map(feedPost, feedPostResponseDto.class);
+        feedPostResponseDto.setFeedPostId(feedPost.getId());
+
+        return feedPostResponseDto;
+    }
     List<feedPostResponseDto> feedPostsToFeedResponseDtos(List<FeedPost> feedPost);
 
     default CommentFanResponseDto commentToCommentFanResponseDto(Comment comment) {
@@ -47,7 +54,7 @@ public interface feedPostMapper {
         userDto.setEmail(fans.getEmail());
         userDto.setName(fans.getName());
 
-        commentFanResponseDto.setUser(userDto);
+        commentFanResponseDto.setFans(userDto);
         commentFanResponseDto.setFeedPostId(comment.getFeedPost().getId());
         commentFanResponseDto.setContent( comment.getContent() );
         commentFanResponseDto.setCreatedAt( comment.getCreatedAt() );

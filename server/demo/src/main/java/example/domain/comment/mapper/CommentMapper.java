@@ -134,7 +134,7 @@ public interface CommentMapper {
         userDto.setEmail(fans.getEmail());
         userDto.setName(fans.getName());
 
-        commentResponseDto.setUser(userDto);
+        commentResponseDto.setFans(userDto);
         commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());

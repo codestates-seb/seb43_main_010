@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class CommentFanResponseDto {
-    private FansResponseDto user;
+    private FansResponseDto fans;
     private long feedPostId;
     private String content;
     private LocalDateTime createdAt;
