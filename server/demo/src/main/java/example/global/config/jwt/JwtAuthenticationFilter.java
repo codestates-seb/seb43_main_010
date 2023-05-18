@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
+        //PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
         return authentication;
     }
     @Override
@@ -47,8 +47,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String jwtToken = JWT.create()
                 .withSubject(principalDetailis.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
-                .withClaim("userId", principalDetailis.getFans().getFanId())
-                .withClaim("email", principalDetailis.getFans().getEmail())
+                .withClaim("userId", principalDetailis.getUser().getId())
+                .withClaim("email", principalDetailis.getUser().getEmail())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);

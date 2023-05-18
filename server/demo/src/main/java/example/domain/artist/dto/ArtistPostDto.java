@@ -33,4 +33,6 @@ public class ArtistPostDto {
     private String group;
 
     private String profile;
+
+    private String groupProfile;
 }

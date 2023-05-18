@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ArtistRepository extends JpaRepository<Artist, Integer> {
     Optional<Artist> findByEmail(String email);
-
+   
     boolean existsByEmail(String email);
 }

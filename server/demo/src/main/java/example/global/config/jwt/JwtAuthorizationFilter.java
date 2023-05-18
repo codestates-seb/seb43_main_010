@@ -1,5 +1,8 @@
 package example.global.config.jwt;
 
+import example.domain.artist.entity.Artist;
+import example.domain.artist.repository.ArtistRepository;
+import example.domain.user.entity.User;
 import example.global.config.auth.PrincipalDetails;
 import example.domain.fans.entity.Fans;
 import example.domain.fans.repository.FansRepository;
@@ -16,13 +19,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private FansRepository fansRepository;
+    private ArtistRepository artistRepository;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, FansRepository fansRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
+                                  FansRepository fansRepository ,ArtistRepository artistRepository) {
         super(authenticationManager);
         this.fansRepository = fansRepository;
+        this.artistRepository = artistRepository;
     }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -35,8 +42,24 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
         String email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("email").asString();
         if (email != null) {
-            Fans fans = fansRepository.findByEmail(email).get();
-            PrincipalDetails principalDetails = new PrincipalDetails(fans);
+            Optional<Fans> fansEntity  = fansRepository.findByEmail(email);
+            User user = new User();
+            if(fansEntity.isPresent()){
+                Fans fans=fansEntity.get();
+                user.setEmail(fans.getEmail());
+                user.setPassword(fans.getPassword());
+                user.setRole(fans.getRole());
+            }
+            else{
+                Optional<Artist> artistEntity  = artistRepository.findByEmail(email);
+                if(artistEntity.isPresent()){
+                    Artist artist=artistEntity.get();
+                    user.setEmail(artist.getEmail());
+                    user.setPassword(artist.getPassword());
+                    user.setRole(artist.getRole());
+                }
+            }
+            PrincipalDetails principalDetails = new PrincipalDetails(user);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
