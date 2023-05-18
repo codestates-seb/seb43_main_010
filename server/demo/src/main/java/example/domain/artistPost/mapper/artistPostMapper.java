@@ -1,9 +1,15 @@
 package example.domain.artistPost.mapper;
 
+import example.domain.artist.dto.ArtistResponseDto;
 import example.domain.artist.entity.Artist;
 import example.domain.artistPost.dto.artistPostDto;
 import example.domain.artistPost.dto.artistPostResponseDto;
 import example.domain.artistPost.entity.ArtistPost;
+import example.domain.comment.dto.CommentArtistResponseDto;
+import example.domain.comment.dto.CommentFanResponseDto;
+import example.domain.comment.entity.Comment;
+import example.domain.fans.dto.FansResponseDto;
+import example.domain.fans.entity.Fans;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -32,5 +38,28 @@ public interface artistPostMapper {
     artistPostResponseDto artistToArtistResponseDto(ArtistPost artistPost);
 
     List<artistPostResponseDto> artistPostsToArtistResponseDtos(List<ArtistPost> artistPost);
+
+    default CommentArtistResponseDto commentToCommentArtistResponseDto(Comment comment) {
+        if ( comment == null ) {
+            return null;
+        }
+
+        CommentArtistResponseDto commentArtistResponseDto = new CommentArtistResponseDto();
+        Fans fans = comment.getFans();
+        ArtistResponseDto userDto = new ArtistResponseDto();
+        userDto.setId(fans.getId());
+        userDto.setNickname(fans.getNickname());
+        userDto.setProfile(fans.getProfile());
+        userDto.setEmail(fans.getEmail());
+        userDto.setName(fans.getName());
+
+        commentArtistResponseDto.setUser(userDto);
+        commentArtistResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        commentArtistResponseDto.setContent( comment.getContent() );
+        commentArtistResponseDto.setCreatedAt( comment.getCreatedAt() );
+        commentArtistResponseDto.setLikeCount( comment.getLikeCount() );
+
+        return commentArtistResponseDto;
+    }
 
 }

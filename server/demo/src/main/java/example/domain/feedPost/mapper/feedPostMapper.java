@@ -44,6 +44,8 @@ public interface feedPostMapper {
         userDto.setId(fans.getId());
         userDto.setNickname(fans.getNickname());
         userDto.setProfile(fans.getProfile());
+        userDto.setEmail(fans.getEmail());
+        userDto.setName(fans.getName());
 
         commentFanResponseDto.setUser(userDto);
         commentFanResponseDto.setFeedPostId(comment.getFeedPost().getId());
