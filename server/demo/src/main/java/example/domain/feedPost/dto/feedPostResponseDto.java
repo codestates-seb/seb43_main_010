@@ -1,22 +1,27 @@
 package example.domain.feedPost.dto;
 
+import example.domain.comment.dto.CommentFanResponseDto;
+//import example.domain.comment.dto.CommentResponseDto;
 import example.domain.fans.dto.FansResponseDto;
-//import com.example.demo.likes.dto.LikeResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 @Getter
 @Setter
 public class feedPostResponseDto {
     private FansResponseDto fans;
-    private int feedPostId;
+//    private int feedPostId = 1; // 초기값을 1로 설정
+    private Integer id; // feedPostId
     private String content;
     private String img;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private List<CommentFanResponseDto> comments;
+    private int likeCount;
+
+    }
 //
 //    // feedPost 일때 좋아요 응답
 //    public static LikeResponseDto feedPostCreateByEntity(feedPost entity){
@@ -31,4 +36,3 @@ public class feedPostResponseDto {
 //                .sum());
 //        return dto;
 //    }
-}

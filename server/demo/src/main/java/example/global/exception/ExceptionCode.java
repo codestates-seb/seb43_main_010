@@ -7,6 +7,8 @@ public enum ExceptionCode {
     FANS_EXISTS(409, "Fans exists"),
     ARTIST_NOT_FOUND(404, "Artist not found"),
     ARTIST_EXISTS(409, "Artist exists"),
+    USER_NOT_FOUND(404, "User not found"),
+    USER_EXISTS(409, "User exists"),
     FEEDPOST_NOT_FOUND(404, "feedpost not found"),
     FEEDPOST_AUTHOR_NOT_MATCH(404, "The author of the feedpost does not match"),
     FEEDPOST_EXISTS(409, "feedpost exists"),

@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class FansResponseDto {
+    private int id;
     private int feedPostId;
     private String email;
     private String name;

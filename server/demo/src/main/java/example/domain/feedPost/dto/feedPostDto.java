@@ -9,9 +9,9 @@ public class feedPostDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Post{
+    public static class Post {
         @NotNull
-        private int fansId;
+        private int fanId;
 
         @NotNull
         private String content;
@@ -20,26 +20,37 @@ public class feedPostDto {
         private String img;
 
         public Post(int fansId, String content, String img) {
-            this.fansId = fansId;
+            this.fanId = fansId;
             this.content = content;
             this.img = img;
         }
     }
+
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Patch{
+    public static class Patch {
         @NotNull
-        private int fansId;
+        private int fanId;
         private String content;
         private String img;
-        private int feedPostId;
 
-        public Patch(int fansId, String content, String img, int feedPostId) {
-            this.fansId = fansId;
+        public Patch(int fansId, String content, String img) {
+            this.fanId = fansId;
             this.content = content;
             this.img = img;
-            this.feedPostId = feedPostId;
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Delete {
+        @NotNull
+        private int fanId;
+
+        public Delete(int fansId) {
+            this.fanId = fansId;
         }
     }
 }
