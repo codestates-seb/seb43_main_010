@@ -47,8 +47,8 @@ public class ArtistPost extends BaseTimeEntity{
         @JoinColumn(name = "artist_id")
         private Artist artist;
 
-//        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
-//        private List<Like> likes = new ArrayList<>();
+        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
+        private List<Like> likes = new ArrayList<>();
 
         @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE) // 엔티티가 삭제 될 때 함께 삭제
         private List<Comment> comments = new ArrayList<>(); // null일 경우도 사용 가능
