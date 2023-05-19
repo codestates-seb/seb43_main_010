@@ -47,54 +47,6 @@ public class CommentController {
     private ArtistRepository artistRepository;
 
 
-////     feedPost 댓글 작성 (pathVariable -> api 주소로 가지고 온다. requestBody -> 요정 받은거 이용)
-//    @PostMapping("feed/{feedPostId}/comment")
-//    public ResponseEntity<CommentResponseDto> feedPostComment(@PathVariable("feedPostId") int feedPostId,
-//                                                              @Valid @RequestBody CommentPostDto requestBody){
-//        Fans fans = fansRepository.findById(requestBody.getUserId())
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//        Artist artist = artistRepository.findById(requestBody.getUserId()) // requestBody
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
-//        FeedPost findFeedPost = service.findFeedPost(feedPostId); // pathVariable
-//        Comment comment = commentService.createComment(
-//                mapper.commentPostDtoToComment(requestBody, fans, artist, findFeedPost));
-//
-//        return new ResponseEntity<>(mapper.commentToCommentResponseDto(comment), HttpStatus.CREATED);
-//    }
-
-
-//    @PostMapping("feed/{feedPostId}/comment")
-//    public ResponseEntity<CommentResponseDto> feedPostComment(@PathVariable("feedPostId") int feedPostId,
-//                                                              @Valid @RequestBody CommentPostDto requestBody){
-//        if (requestBody.getUserType() == CommentPostDto.UserType.FANS) {
-//            Fans fans = fansRepository.findById(requestBody.getUserId())
-//                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//            Comment comment = commentService.createComment(
-//                    mapper.commentPostDtoToComment(requestBody, fans, null, service.findFeedPost(feedPostId)));
-//            return new ResponseEntity<>(mapper.commentToCommentResponseDto(comment), HttpStatus.CREATED);
-//        } else if (requestBody.getUserType() == CommentPostDto.UserType.ARTIST) {
-//            Artist artist = artistRepository.findById(requestBody.getUserId())
-//                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
-//            Comment comment = commentService.createComment(
-//                    mapper.commentPostDtoToComment(requestBody, null, artist, service.findFeedPost(feedPostId)));
-//            return new ResponseEntity<>(mapper.commentToCommentResponseDto(comment), HttpStatus.CREATED);
-//        } else {
-//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
-//        }
-//    }
-/*
-    userId = 1 (로그인 된 Id : 보안)(userId만 받아서 구분해서 보낼 방법 X)
-    아티스트, 팬 구분해서 등록 -> post 때문
-    방법 : 로그인된 정보에서 이메일을 빼와야 된다.(수진님께 받아와야됨 또는 프론트분께 request로 받아야됨) //(Authentication..?).getprincipal.-> 이메일 뽑아옴
-            팬 이메일, 아티스트 이메일 을 뽑아온 이메일과 비교(if 문으로 선택)-> 하나로 선택
-            팬 레파지토리, 아티스트 레파지토리 이메일이 존재하는지 검색
-            선택된게 팬이면 -> fanresponseDto로 빼옴
-            아티스트면 -> artistresponseDto로로 빼옴
-            userId 로 통일해서 response 가능
-    // 이메일로 보내주실수 있나요? > 아티스트 레파지토리 이메일이 존재하는지 검색 >  Dto 를 펜즈로 보내줌.
-
-
-*/
 
     @PostMapping("feed/{feedPostId}/comment")
     public ResponseEntity<?> feedPostComment(@PathVariable("feedPostId") int feedPostId,
