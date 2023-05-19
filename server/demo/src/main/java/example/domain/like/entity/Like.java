@@ -47,24 +47,51 @@ public class Like {
     private Comment comment;
 
     @Builder
-    public Like(Fans fans, FeedPost feedPost){
+    public Like(Fans fans, FeedPost feedPost) {
         this.fans = fans;
         this.feedPost = feedPost;
     }
 
     @Builder
-    public Like(Artist artist, ArtistPost artistPost){
+    public Like(Artist artist, ArtistPost artistPost) {
         this.artist = artist;
         this.artistPost = artistPost;
     }
 
-    //  @Builder 어노테이션을 사용할 때, 다중 매개변수를 가진 경우에는 직접 빌더 메서드를 추가해야 됨.
+    @Builder
+    public Like(Fans fans, FeedPost feedPost, Artist artist, ArtistPost artistPost) {
+        if ((fans == null && artist == null) || (fans != null && artist != null)) {
+            throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
+        }
+
+        if ((feedPost == null && artistPost == null) || (feedPost != null && artistPost != null)) {
+            throw new IllegalArgumentException("Invalid Like construction. Either feedPost and artistPost should be provided or neither should be provided.");
+        }
+
+        this.fans = fans;
+        this.feedPost = feedPost;
+        this.artist = artist;
+        this.artistPost = artistPost;
+    }
     public static LikeBuilder builder() {
         return new LikeBuilder();
     }
+
     public static class LikeBuilder {
+        private Fans fans;
+        private FeedPost feedPost;
         private Artist artist;
         private ArtistPost artistPost;
+
+        public LikeBuilder fans(Fans fans) {
+            this.fans = fans;
+            return this;
+        }
+
+        public LikeBuilder feedPost(FeedPost feedPost) {
+            this.feedPost = feedPost;
+            return this;
+        }
 
         public LikeBuilder artist(Artist artist) {
             this.artist = artist;
@@ -77,7 +104,15 @@ public class Like {
         }
 
         public Like build() {
-            return new Like(artist, artistPost);
+            if ((fans == null && artist == null) || (fans != null && artist != null)) {
+                throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
+            }
+
+            if ((feedPost == null && artistPost == null) || (feedPost != null && artistPost != null)) {
+                throw new IllegalArgumentException("Invalid Like construction. Either feedPost and artistPost should be provided or neither should be provided.");
+            }
+
+            return new Like(fans, feedPost, artist, artistPost);
         }
     }
 }
