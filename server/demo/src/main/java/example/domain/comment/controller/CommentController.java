@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import example.domain.artistPost.service.artistPostService;
 import example.domain.group.repository.GroupRepository;
 import example.domain.feedPost.repository.feedPostRepository;
+import example.domain.artistPost.repository.artistPostRepository;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -46,15 +47,13 @@ public class CommentController {
     private ArtistRepository artistRepository;
     private GroupRepository groupRepository;
     private feedPostRepository feedPostRepository;
-
+    private artistPostRepository artistPostRepository;
 
 
     @PostMapping("feed/{groupId}/{feedPostId}/comment")
-    public ResponseEntity<?> feedPostComment(
-            @PathVariable("groupId") @Positive int groupId,
-            @PathVariable("feedPostId") int feedPostId,
-            @Valid @RequestBody CommentPostDto requestBody
-    ) {
+    public ResponseEntity<?> feedPostComment(@PathVariable("groupId") @Positive int groupId,
+                                            @PathVariable("feedPostId") int feedPostId,
+                                            @Valid @RequestBody CommentPostDto requestBody) {
         // 그룹 조회
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
@@ -88,6 +87,7 @@ public class CommentController {
 
 
 
+
 //    @PostMapping("feed/{feedPostId}/comment")
 //    public ResponseEntity<?> feedPostComment(@PathVariable("feedPostId") int feedPostId,
 //                                             @Valid @RequestBody CommentPostDto requestBody) {
@@ -115,16 +115,26 @@ public class CommentController {
 
 
     // artistPost 댓글 작성
-    @PostMapping("artist/{artistPostId}/comment")
-    public ResponseEntity<?> artistPostComment(@PathVariable("artistPostId") int artistPostId,
-                                               @Valid @RequestBody CommentPostDto requestBody) {
+    @PostMapping("artist/{groupId}/{artistPostId}/comment")
+    public ResponseEntity<?> artistPostComment(@PathVariable("groupId") @Positive int groupId,
+                                             @PathVariable("artistPostId") int artistPostId,
+                                             @Valid @RequestBody CommentPostDto requestBody) {
+        // 그룹 조회
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
+
+        // 게시글 조회
+        ArtistPost artistPost = artistPostRepository.findById(artistPostId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
+
+        // 댓글 등록 사용자 확인
         if (fansRepository.existsByEmail(requestBody.getEmail())) {
             // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
             Fans findFan = fansRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
                     new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
             ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
             Comment comment = commentService.createComment(
-                    mapper.commentPostDtoToComment(findFan, findArtistPost, requestBody));
+                    mapper.commentPostDtoToComment(findFan,findArtistPost,requestBody));
             return new ResponseEntity<>(mapper.commentToCommentFanResponseDto(comment), HttpStatus.CREATED);
 
         } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
@@ -133,7 +143,7 @@ public class CommentController {
                     new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
             ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
             Comment comment = commentService.createComment(
-                    mapper.commentPostDtoToComment(findArtist, findArtistPost, requestBody));
+                    mapper.commentPostDtoToComment(findArtist,findArtistPost,requestBody));
             return new ResponseEntity<>(mapper.commentToCommentArtistResponseDto(comment), HttpStatus.CREATED);
         } else {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
@@ -159,16 +169,40 @@ public class CommentController {
 //    }
 
 
-    @GetMapping("feed/{feedPostId}/comment")
-    public ResponseEntity getAllFansComment(@PathVariable("feedPostId") int feedPostId,
+//    @GetMapping("feed/{feedPostId}/comment")
+//    public ResponseEntity getAllFansComment(@PathVariable("feedPostId") int feedPostId,
+//                                            @RequestParam(defaultValue = "1") @Positive int page,
+//                                            @RequestParam(defaultValue = "16") @Positive int size) {
+//        Page<Comment> feedComments = commentService.findAllCommentsByFeedPostId(feedPostId, page - 1, size);
+//        List<Comment> list = feedComments.getContent();
+//
+//        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), feedComments), HttpStatus.OK);
+//    }
+
+    @GetMapping("feed/{groupId}/{feedPostId}/comment")
+    public ResponseEntity getAllFansComment(@PathVariable("groupId") @Positive int groupId,
+                                            @PathVariable("feedPostId") int feedPostId,
                                             @RequestParam(defaultValue = "1") @Positive int page,
                                             @RequestParam(defaultValue = "16") @Positive int size) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
+
+        if (group.getId() != groupId) {
+            throw new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND);
+        }
+
+        FeedPost feedPost = feedPostRepository.findById(feedPostId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
+
+        if (feedPost.getGroup().getId() != groupId) {
+            throw new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND);
+        }
+
         Page<Comment> feedComments = commentService.findAllCommentsByFeedPostId(feedPostId, page - 1, size);
         List<Comment> list = feedComments.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), feedComments), HttpStatus.OK);
     }
-
 
     // artistPost 댓글 리스트 조회(무한 스크롤)
 
@@ -189,15 +223,41 @@ public class CommentController {
 //        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), artistComments), HttpStatus.OK);
 //    }
 
-    @GetMapping("artist/{artistPostId}/comment") // artistPost 댓글
-    public ResponseEntity getAllArtistComment(@PathVariable("artistPostId") int artistPostId,
-                                              @RequestParam(defaultValue = "1") @Positive int page,
-                                              @RequestParam(defaultValue = "16") @Positive int size) {
+
+
+    @GetMapping("artist/{groupId}/{artistPostId}/comment")
+    public ResponseEntity getAllArtistsComment(@PathVariable("groupId") @Positive int groupId,
+                                            @PathVariable("artistPostId") int artistPostId,
+                                            @RequestParam(defaultValue = "1") @Positive int page,
+                                            @RequestParam(defaultValue = "16") @Positive int size) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
+
+        if (group.getId() != groupId) {
+            throw new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND);
+        }
+
+        ArtistPost artistPost = artistPostRepository.findById(artistPostId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND));
+
+        if (artistPost.getGroup().getId() != groupId) {
+            throw new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND);
+        }
+
         Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(artistPostId, page - 1, size);
         List<Comment> list = artistComments.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), artistComments), HttpStatus.OK);
     }
+//    @GetMapping("artist/{artistPostId}/comment") // artistPost 댓글
+//    public ResponseEntity getAllArtistComment(@PathVariable("artistPostId") int artistPostId,
+//                                              @RequestParam(defaultValue = "1") @Positive int page,
+//                                              @RequestParam(defaultValue = "16") @Positive int size) {
+//        Page<Comment> artistComments = commentService.findAllCommentsByArtistPostId(artistPostId, page - 1, size);
+//        List<Comment> list = artistComments.getContent();
+//
+//        return new ResponseEntity(new MultiResponseDto<>(mapper.commentsToUserCommentResponseDtos(list), artistComments), HttpStatus.OK);
+//    }
 
 
     // feedPost 에서 댓글 수정

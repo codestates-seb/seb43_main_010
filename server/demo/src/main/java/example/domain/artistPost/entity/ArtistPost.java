@@ -3,6 +3,7 @@ package example.domain.artistPost.entity;
 import example.domain.artist.entity.Artist;
 import example.domain.comment.entity.Comment;
 import example.domain.fans.entity.Fans;
+import example.domain.group.entity.Group;
 import example.domain.like.entity.Like;
 import example.global.common.global.BaseTimeEntity;
 import lombok.*;
@@ -45,6 +46,10 @@ public class ArtistPost extends BaseTimeEntity{
         @ManyToOne
         @JoinColumn(name = "artist_id")
         private Artist artist;
+
+        @ManyToOne
+        @JoinColumn(name = "group_id")
+        private Group group;
 
         @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
         private List<Like> likes = new ArrayList<>();
