@@ -57,15 +57,6 @@ public class feedPostController {
     }
 
 
-//    @PostMapping("/{groupId}")
-//    public ResponseEntity postFeedPost(@Valid @RequestBody feedPostDto.Post requestBody) {
-//        Fans fans = fansRepository.findById(requestBody.getFanId())
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//        FeedPost feedPost = mapper.feedPostDtoToFeed(requestBody, fans);
-//        FeedPost saveFeedPost = service.createFeedPost(feedPost);
-//        return new ResponseEntity<>(mapper.feedToFeedResponseDto(saveFeedPost),
-//                HttpStatus.OK);
-//    }
 
 
     // feedPost 상세 조회
@@ -92,13 +83,6 @@ public class feedPostController {
 
 
 
-//    @GetMapping("/{feedPostId}") // 경로 변수 안에는 entity 클래스의 식별자 들어감
-//    public ResponseEntity getFeed(@PathVariable("feedPostId") @Positive int feedPostId) {
-//        FeedPost feedPost = service.findFeedPost(feedPostId);
-//        return new ResponseEntity<>(mapper.feedToFeedResponseDto(feedPost),
-//                HttpStatus.OK);
-//    }
-
 
     // feedPost 수정
     @PatchMapping("/{groupId}/{feedPostId}")
@@ -122,17 +106,7 @@ public class feedPostController {
 
         return new ResponseEntity<>(mapper.feedToFeedResponseDto(updateFeedPost), HttpStatus.OK);
     }
-//    @PatchMapping("/{feedPostId}")
-//    public ResponseEntity patchFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
-//                                        @Valid @RequestBody feedPostDto.Patch requestBody) {
-//        FeedPost findFeedPost = service.findFeedPost(feedPostId);
-//        Fans fan = fansRepository.findById(requestBody.getFanId())
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//        FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fan);
-//        FeedPost updateFeedPost = service.updateFeedPost(feedPost);
-//
-//        return new ResponseEntity<>(mapper.feedToFeedResponseDto(updateFeedPost), HttpStatus.OK);
-//    }
+
 
 
     // feedPost 삭제
@@ -159,59 +133,6 @@ public class feedPostController {
         service.deleteFeedPost(fan, findFeedPost);
         return ResponseEntity.ok("삭제 성공");
     }
-
-
-
-
-
-
-//    @DeleteMapping("/{feedPostId}")
-//    public ResponseEntity<String> deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
-//                                                 @Valid @RequestBody feedPostDto.Delete requestBody) {
-//        Fans fan = fansRepository.findById(requestBody.getFanId())
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//        FeedPost findFeedPost = service.findFeedPost(feedPostId);
-//
-//        try {
-//            service.deleteFeedPost(fan, findFeedPost);
-//            return ResponseEntity.ok("삭제 성공");
-//        } catch (Exception e) {
-//            throw new BusinessLogicException(ExceptionCode.DELETE_FAILE);
-//        }
-//    }
-
-// 메세지 뺀것 잘 작동 됨.
-//    @DeleteMapping("/{feedPostId}")
-//    public ResponseEntity deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
-//                                         @Valid @RequestBody feedPostDto.Delete requestBody) {
-//        Fans fan = fansRepository.findById(requestBody.getFanId())
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//        FeedPost findFeedPost = service.findFeedPost(feedPostId);
-//        service.deleteFeedPost(fan, findFeedPost);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-
-
-//    @DeleteMapping("/{feedPostId}")
-//    public ResponseEntity<String> deleteFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,
-//                                                 @Valid @RequestBody feedPostDto.Delete requestBody) {
-//        Fans fan = fansRepository.findById(requestBody.getFanId())
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//        FeedPost findFeedPost = service.findFeedPost(feedPostId);
-//        boolean success = service.deleteFeedPost(fan, findFeedPost);
-//
-//        if (success) {
-//            String message = "삭제 성공 되었습니다.";
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-//                    .body(message);
-//        } else {
-//            String message = "삭제 실패 되었습니다.";
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(message);
-//        }
-//    }
-//}
-
 
 
 

@@ -62,31 +62,4 @@ public class feedPostService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return feedPostRepository.findAllByGroupId(groupId, pageable);
     }
-//    public Page<FeedPost> findAllFeedPostsByGroupId(Integer groupId, int page, int size) {
-//        Page<FeedPost> groupFeedPost = feedPostRepository.findAllByGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
-//
-//        return groupFeedPost;
-//    }
-//    public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
-//        Page<FeedPost> feedPosts = feedPostRepository.findAllByGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
-//
-//        return feedPosts;
-////        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
-//    }
-
-
-//     팬 검증 메서드
-//    private Fans findFan(int fanId) {
-//        return fansRepository.findById(fanId).orElseThrow(() ->
-//                new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//    }
-
-//    public feedPostResponseDto getFeedById(int feedPostId) {
-//        Optional<FeedPost> optionalFeedPost = feedPostRepository.findById(feedPostId);
-//        FeedPost feedPost = optionalFeedPost.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
-//
-//        feedPostResponseDto responseDto = new feedPostResponseDto();
-//        responseDto.setFeedPostId(feedPost.getId());
-//        return responseDto;
-//    }
 }

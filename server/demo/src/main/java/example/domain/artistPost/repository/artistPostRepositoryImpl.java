@@ -3,8 +3,6 @@ package example.domain.artistPost.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.artistPost.entity.QArtistPost;
-import example.domain.feedPost.entity.FeedPost;
-import example.domain.feedPost.entity.QFeedPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

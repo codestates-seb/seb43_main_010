@@ -32,9 +32,6 @@ public class FeedPost extends BaseTimeEntity {
     @Column(length = 16000, nullable = false)
     private String content;
 
-//    @Column
-//    @Lob
-//    private String img;
 
     @ElementCollection
     private List<String> img;

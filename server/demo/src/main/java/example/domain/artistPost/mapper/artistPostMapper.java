@@ -6,12 +6,9 @@ import example.domain.artistPost.dto.artistPostDto;
 import example.domain.artistPost.dto.artistPostResponseDto;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.comment.dto.CommentArtistResponseDto;
-import example.domain.comment.dto.CommentFanResponseDto;
+
 import example.domain.comment.entity.Comment;
-import example.domain.fans.dto.FansResponseDto;
-import example.domain.fans.entity.Fans;
-import example.domain.feedPost.dto.feedPostResponseDto;
-import example.domain.feedPost.entity.FeedPost;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
