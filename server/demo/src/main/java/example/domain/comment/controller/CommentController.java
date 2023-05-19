@@ -6,18 +6,17 @@ import example.domain.artistPost.entity.ArtistPost;
 import example.domain.comment.dto.CommentDeleteDto;
 import example.domain.comment.dto.CommentPatchDto;
 import example.domain.comment.dto.CommentPostDto;
-import example.domain.comment.dto.CommentUserResponseDto;
 import example.domain.comment.entity.Comment;
 import example.domain.comment.mapper.CommentMapper;
 import example.domain.comment.service.CommentService;
 import example.domain.feedPost.service.feedPostService;
+import example.domain.group.entity.Group;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import example.domain.fans.entity.Fans;
 import example.domain.fans.repository.FansRepository;
 import example.domain.feedPost.entity.FeedPost;
 import example.global.response.MultiResponseDto;
-import example.global.response.SingleResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -26,12 +25,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import example.domain.artistPost.service.artistPostService;
+import example.domain.group.repository.GroupRepository;
+import example.domain.feedPost.repository.feedPostRepository;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,12 +44,26 @@ public class CommentController {
     private FansRepository fansRepository;
     private CommentMapper mapper;
     private ArtistRepository artistRepository;
+    private GroupRepository groupRepository;
+    private feedPostRepository feedPostRepository;
 
 
 
-    @PostMapping("feed/{feedPostId}/comment")
-    public ResponseEntity<?> feedPostComment(@PathVariable("feedPostId") int feedPostId,
-                                             @Valid @RequestBody CommentPostDto requestBody) {
+    @PostMapping("feed/{groupId}/{feedPostId}/comment")
+    public ResponseEntity<?> feedPostComment(
+            @PathVariable("groupId") @Positive int groupId,
+            @PathVariable("feedPostId") int feedPostId,
+            @Valid @RequestBody CommentPostDto requestBody
+    ) {
+        // 그룹 조회
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
+
+        // 게시글 조회
+        FeedPost feedPost = feedPostRepository.findById(feedPostId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
+
+        // 댓글 등록 사용자 확인
         if (fansRepository.existsByEmail(requestBody.getEmail())) {
             // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
             Fans findFan = fansRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
@@ -72,6 +85,33 @@ public class CommentController {
             throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
         }
     }
+
+
+
+//    @PostMapping("feed/{feedPostId}/comment")
+//    public ResponseEntity<?> feedPostComment(@PathVariable("feedPostId") int feedPostId,
+//                                             @Valid @RequestBody CommentPostDto requestBody) {
+//        if (fansRepository.existsByEmail(requestBody.getEmail())) {
+//            // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
+//            Fans findFan = fansRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
+//                    new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
+//            FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
+//            Comment comment = commentService.createComment(
+//                    mapper.commentPostDtoToComment(findFeedPost, findFan, requestBody));
+//            return new ResponseEntity<>(mapper.commentToCommentFanResponseDto(comment), HttpStatus.CREATED);
+//
+//        } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
+//            // FansRepository 인터페이스에서 findByEmail() 메소드를 사용하여 이메일 주소를 가진 팬 정보를 조회함
+//            Artist findArtist = artistRepository.findByEmail(requestBody.getEmail()).orElseThrow(() ->
+//                    new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+//            FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
+//            Comment comment = commentService.createComment(
+//                    mapper.commentPostDtoToComment(findFeedPost, findArtist, requestBody));
+//            return new ResponseEntity<>(mapper.commentToCommentArtistResponseDto(comment), HttpStatus.CREATED);
+//        } else {
+//            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+//        }
+//    }
 
 
     // artistPost 댓글 작성
