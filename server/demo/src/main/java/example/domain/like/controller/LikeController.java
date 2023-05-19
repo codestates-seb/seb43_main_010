@@ -4,6 +4,7 @@ import example.domain.like.dto.LikeRequestDto;
 import example.domain.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import example.global.common.global.HttpResponseEntity.ResponseError.ResponseResult;
 
@@ -22,7 +23,7 @@ public class LikeController {
 
     // feedPost 좋아요 기능 (fan, artist 둘다 가능)
     @PostMapping("feed/{groupId}/{feedPostId}/like")
-    public ResponseResult<?> likeFanPost(@PathVariable("groupId") Integer groupId,
+    public ResponseEntity<String> likeFanPost(@PathVariable("groupId") Integer groupId,
                                     @PathVariable("feedPostId") Integer feedPostId,
                                     @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
         if (likeRequestDto.getFanId() != null) {
@@ -41,14 +42,15 @@ public class LikeController {
         }
 
         // 성공 응답 반환
-        return success(null);
+//        return success(null);
+        return ResponseEntity.ok().body("좋아요 성공");
     }
 
 
 
     // artistPost 좋아요 기능 (fan, artist 둘다 가능)
     @PostMapping("artist/{groupId}/{artistPostId}/like")
-    public ResponseResult<?> likeArtistPost(@PathVariable("groupId") Integer groupId,
+    public ResponseEntity<String> likeArtistPost(@PathVariable("groupId") Integer groupId,
                                             @PathVariable("artistPostId") Integer artistPostId,
                                             @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
         if (likeRequestDto.getFanId() != null) {
@@ -67,13 +69,14 @@ public class LikeController {
         }
 
         // 성공 응답 반환
-        return success(null);
+//        return success(null);
+        return ResponseEntity.ok().body("좋아요 성공");
     }
 
 
     // feedPost 좋아요 취소 기능
     @DeleteMapping("feed/{groupId}/{feedPostId}/cancelLike")
-    public ResponseResult<?> likeFanDelete(@PathVariable("groupId") Integer groupId,
+    public ResponseEntity<String> likeFanDelete(@PathVariable("groupId") Integer groupId,
                                     @PathVariable("feedPostId") Integer feedPostId,
                                     @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
         if (likeRequestDto.getFanId() != null) {
@@ -92,13 +95,14 @@ public class LikeController {
         }
 
         // 성공 응답 반환
-        return success(null);
+//        return success(null);
+        return ResponseEntity.ok().body("좋아요 취소");
     }
 
 
     // artistPost 좋아요 취소 기능
     @DeleteMapping("artist/{groupId}/{artistPostId}/cancelLike")
-    public ResponseResult<?> likeArtistDelete(@PathVariable("groupId") Integer groupId,
+    public ResponseEntity<String> likeArtistDelete(@PathVariable("groupId") Integer groupId,
                                               @PathVariable("artistPostId") Integer artistPostId,
                                               @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
         if (likeRequestDto.getFanId() != null) {
@@ -117,7 +121,8 @@ public class LikeController {
         }
 
         // 성공 응답 반환
-        return success(null);
+//        return success(null);
+        return ResponseEntity.ok().body("좋아요 취소");
     }
 
 
