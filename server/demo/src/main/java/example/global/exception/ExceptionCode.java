@@ -17,6 +17,7 @@ public enum ExceptionCode {
     COMMENT_NOT_FOUND(404,"comment not found"),
     COMMENT_EXISTS(409, "comment exists"),
     COMMENT_AUTHOR_NOT_MATCH(404, "The author of the comment does not match"),
+    GROUP_NOT_FOUND(404,"group not found"),
     DELETE_FAILE(404,"삭제 실패");
 //    ACCESS_DENIED_USER(403,"Access Denied Fans"),
 //    CANNOT_CHANGE_ORDER(403, "Order can not change"),

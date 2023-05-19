@@ -19,7 +19,7 @@ public class Group extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer groupId;
+    private Integer id;
 
     @OneToMany(mappedBy = "groups")
     private List<Artist> artists;

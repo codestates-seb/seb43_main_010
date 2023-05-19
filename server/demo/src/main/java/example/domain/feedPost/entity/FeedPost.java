@@ -1,6 +1,7 @@
 package example.domain.feedPost.entity;
 
 import example.domain.artist.entity.Artist;
+import example.domain.group.entity.Group;
 import example.global.common.global.BaseTimeEntity;
 import example.domain.fans.entity.Fans;
 import example.domain.like.entity.Like;
@@ -51,6 +52,10 @@ public class FeedPost extends BaseTimeEntity {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
+
     @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
     private List<Like> likes = new ArrayList<>();
 
@@ -73,13 +78,14 @@ public class FeedPost extends BaseTimeEntity {
     }
 
     @Builder
-    public FeedPost(Integer id, String content, List<String> img, LocalDateTime createdAt,
+    public FeedPost(Integer id, String content, List<String> img, Group group, LocalDateTime createdAt,
                     Fans fan, List<Comment> comments, Integer likeCount) {
         this.id = id;
         this.content = content;
         this.img = img;
         this.createdAt = createdAt;
         this.fan = fan;
+        this.group = group;
         this.comments = comments;
         this.likeCount = likeCount;
     }

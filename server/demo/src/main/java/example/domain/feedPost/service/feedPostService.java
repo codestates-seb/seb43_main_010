@@ -1,5 +1,6 @@
 package example.domain.feedPost.service;
 
+import example.domain.comment.entity.Comment;
 import example.domain.fans.entity.Fans;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
@@ -7,8 +8,10 @@ import example.domain.feedPost.entity.FeedPost;
 import example.domain.feedPost.repository.feedPostRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
@@ -54,9 +57,18 @@ public class feedPostService {
     }
 
 
-    //    @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
+    public Page<FeedPost> findFeedPosts(Integer groupId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return feedPostRepository.findAllByGroupId(groupId, pageable);
+    }
+//    public Page<FeedPost> findAllFeedPostsByGroupId(Integer groupId, int page, int size) {
+//        Page<FeedPost> groupFeedPost = feedPostRepository.findAllByGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
+//
+//        return groupFeedPost;
+//    }
 //    public Page<FeedPost> findFeedPosts(int groupId, int page, int size){
-//        Page<FeedPost> feedPosts = feedPostRepository.findAllByFeedGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
+//        Page<FeedPost> feedPosts = feedPostRepository.findAllByGroupId(groupId, PageRequest.of(page, size, Sort.by("id").descending()));
 //
 //        return feedPosts;
 ////        return feedPostRepository.findAll(PageRequest.of(page, size,Sort.by("id").descending()));
