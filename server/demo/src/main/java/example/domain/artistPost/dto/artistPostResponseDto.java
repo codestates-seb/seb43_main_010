@@ -12,7 +12,8 @@ import java.util.List;
 @Setter
 public class artistPostResponseDto {
     private ArtistResponseDto artist;
-    private Integer artistPostId;
+    //    private Integer feedPostId;
+    private Integer artistPostId; // artistPostId
     private String content;
     private List<String> img;
     private LocalDateTime createdAt;

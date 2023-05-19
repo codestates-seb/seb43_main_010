@@ -17,11 +17,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int commentId;
+    private int id;
 
     @Column(length = 16000, nullable = false)
     private String content;
@@ -31,22 +30,22 @@ public class Comment {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedPostId")
+    @JoinColumn(name = "feedPost_id")
     private FeedPost feedPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artistPostId")
+    @JoinColumn(name = "artistPost_id")
     private ArtistPost artistPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fanId")
-    private Fans fans;
+    @JoinColumn(name = "fan_id")
+    private Fans fan;
 
 //    @Column(name = "fan_comment_id")
 //    private int fanCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artistId")
+    @JoinColumn(name = "artist_id")
     private Artist artist;
 
     @ColumnDefault("0")
@@ -57,6 +56,7 @@ public class Comment {
         this.content = content;
     }
     public Comment(String content, Artist artist) {
+        this.feedPost = feedPost;
         this.content = content;
         this.artist = artist;
     }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface feedPostRepository extends JpaRepository<FeedPost, Integer> , feedPostCustomRepository {
 
-//    Page<FeedPost> findAllByFeedGroupId(int groupId, Pageable pageable);
+    Page<FeedPost> findAllByGroupId(Integer groupId, Pageable pageable);
 
 //
 //    @Modifying

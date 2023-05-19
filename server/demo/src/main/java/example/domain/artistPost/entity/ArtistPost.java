@@ -26,30 +26,28 @@ import java.util.List;
 public class ArtistPost extends BaseTimeEntity{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer artistPostId;
+//        @Column(name = "artistPost_id")
+        private Integer id;
         @Column(length = 16000, nullable = false)
         private String content;
 
         @ElementCollection
-        @CollectionTable(name = "artistPost_img", joinColumns = @JoinColumn(name = "artistPostId"))
-        @Column(name = "img")
-        private List<String> img = new ArrayList<>();
-
+        private List<String> img;
         @CreatedDate
         @Column(name = "created_at")
         private LocalDateTime createdAt = LocalDateTime.now();
 
 
         @ManyToOne
-        @JoinColumn(name = "fanId")
-        private Fans fans;
+        @JoinColumn(name = "fan_id")
+        private Fans fan;
 
         @ManyToOne
-        @JoinColumn(name = "artistId")
+        @JoinColumn(name = "artist_id")
         private Artist artist;
 
-//        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
-//        private List<Like> likes = new ArrayList<>();
+        @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE)
+        private List<Like> likes = new ArrayList<>();
 
         @OneToMany(mappedBy = "artistPost", cascade = CascadeType.REMOVE) // 엔티티가 삭제 될 때 함께 삭제
         private List<Comment> comments = new ArrayList<>(); // null일 경우도 사용 가능
@@ -59,21 +57,21 @@ public class ArtistPost extends BaseTimeEntity{
         private Integer likeCount;
 
         public ArtistPost(String content, List<String> img, Artist artist) {
-            this.content = content;
-            this.img = img;
-            this.artist = artist;
+                this.content = content;
+                this.img = img;
+                this.artist = artist;
         }
 
-        public ArtistPost(int artistPostId, Artist artist) {
-                this.artistPostId = artistPostId;
+        public ArtistPost(int id, Artist artist) {
+                this.id = id;
                 this.artist = artist;
         }
 
 
         @Builder
-        public ArtistPost(Integer artistPostId, String content, List<String> img, LocalDateTime createdAt,
+        public ArtistPost(Integer id, String content, List<String> img, LocalDateTime createdAt,
                           Artist artist, List<Comment> comments, Integer likeCount) {
-                this.artistPostId = artistPostId;
+                this.id = id;
                 this.content = content;
                 this.img = img;
                 this.createdAt = createdAt;

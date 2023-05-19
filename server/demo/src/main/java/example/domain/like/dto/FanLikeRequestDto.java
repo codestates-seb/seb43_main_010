@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LikeRequestDto {
+public class FanLikeRequestDto {
     private int fanId;
     private int feedPostId;
 
-    public LikeRequestDto(int fanId, int feedPostId){
+    public FanLikeRequestDto(int fanId, int feedPostId){
         this.fanId = fanId;
         this.feedPostId = feedPostId;
     }

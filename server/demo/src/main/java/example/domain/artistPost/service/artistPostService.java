@@ -33,7 +33,7 @@ public class artistPostService {
 
 
     public ArtistPost updateArtistPost(ArtistPost artistPost) {
-        ArtistPost findArtistPost = findArtistPost(artistPost.getArtistPostId());
+        ArtistPost findArtistPost = findArtistPost(artistPost.getId());
 
         if (artistPost.getArtist().getArtistId() != findArtistPost.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
@@ -47,7 +47,7 @@ public class artistPostService {
     }
 
     public void deleteArtistPost(Artist artist, ArtistPost artistPost) {
-        ArtistPost findArtistPost = findArtistPost(artistPost.getArtistPostId());
+        ArtistPost findArtistPost = findArtistPost(artistPost.getId());
         if (artist.getArtistId() != findArtistPost.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_AUTHOR_NOT_MATCH);
         }

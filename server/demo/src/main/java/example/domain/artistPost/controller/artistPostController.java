@@ -5,24 +5,15 @@ import example.domain.artist.repository.ArtistRepository;
 import example.domain.artistPost.dto.artistPostDto;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.artistPost.mapper.artistPostMapper;
-import example.domain.artistPost.repository.artistPostRepository;
 import example.domain.artistPost.service.artistPostService;
-import example.domain.fans.entity.Fans;
-import example.domain.feedPost.dto.feedPostDto;
-import example.domain.feedPost.entity.FeedPost;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
-import example.global.response.MultiResponseDto;
-import example.global.response.SingleResponseDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.List;
 
 @RestController
 @RequestMapping("/artist")
@@ -60,8 +51,8 @@ public class artistPostController {
 
     // artistPost 수정
     @PatchMapping("/{artistPostId}")
-    public ResponseEntity patchFeedPost(@PathVariable("artistPostId") @Positive int artistPostId,
-                                        @Valid @RequestBody artistPostDto.Patch requestBody) {
+    public ResponseEntity patchArtistPost(@PathVariable("artistPostId") @Positive int artistPostId,
+                                          @Valid @RequestBody artistPostDto.Patch requestBody) {
         ArtistPost findArtistPost = service.findArtistPost(artistPostId);
         Artist artist = artistRepository.findById(requestBody.getArtistId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
@@ -72,30 +63,39 @@ public class artistPostController {
     }
 
 
-    // artistPost 삭제
     @DeleteMapping("/{artistPostId}")
-    public ResponseEntity<String> deleteFeedPost(@PathVariable("artistPostId") @Positive int artistPostId,
-                                         @Valid @RequestBody feedPostDto.Delete requestBody) {
-        Artist artist = artistRepository.findById(requestBody.getFanId())
+    public ResponseEntity<String> deleteArtistPost(@PathVariable("artistPostId") @Positive int artistPostId,
+                                                   @Valid @RequestBody artistPostDto.Delete requestBody) {
+        Artist artist = artistRepository.findById(requestBody.getArtistId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
         ArtistPost findArtistPost = service.findArtistPost(artistPostId);
-
         try {
             service.deleteArtistPost(artist, findArtistPost);
-            return ResponseEntity.ok("삭제 성공.");
+            return ResponseEntity.ok("삭제 성공");
         } catch (Exception e) {
             throw new BusinessLogicException(ExceptionCode.DELETE_FAILE);
         }
-//        service.deleteArtistPost(artist, findArtistPost);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
+
+
+//    // artistPost 삭제 (메세지 x) 잘동 잘됨
+//    @DeleteMapping("/{artistPostId}")
+//    public ResponseEntity deleteArtistPost(@PathVariable("artistPostId") @Positive int artistPostId,
+//                                         @Valid @RequestBody artistPostDto.Delete requestBody) {
+//        Artist artist = artistRepository.findById(requestBody.getArtistId())
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTIST_NOT_FOUND));
+//        ArtistPost findArtistPost = service.findArtistPost(artistPostId);
+//        service.deleteArtistPost(artist, findArtistPost);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
+//}
 
 
 /*
     // artistPost 리스트 조회(무한 스크롤)
     @GetMapping("{groupId}")
-    public ResponseEntity getFeedPosts(@PathVariable("groupId") int groupId,
+    public ResponseEntity getArtistPosts(@PathVariable("groupId") int groupId,
                                        @Positive @RequestParam int page,
                                        @Positive @RequestParam int size) {
         Page<ArtistPost> pageArtistPosts = service.findArtistPosts(groupId,page -1, size);

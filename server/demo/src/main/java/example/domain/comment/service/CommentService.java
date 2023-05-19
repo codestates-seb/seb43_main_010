@@ -3,11 +3,14 @@ package example.domain.comment.service;
 import example.domain.artist.entity.Artist;
 import example.domain.artist.repository.ArtistRepository;
 import example.domain.artistPost.entity.ArtistPost;
+import example.domain.comment.dto.CommentPostDto;
 import example.domain.comment.entity.Comment;
 import example.domain.comment.repository.CommentRepository;
 import example.domain.fans.entity.Fans;
 import example.domain.fans.repository.FansRepository;
 import example.domain.feedPost.entity.FeedPost;
+import example.domain.group.entity.Group;
+import example.domain.group.repository.GroupRepository;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import org.springframework.data.domain.Page;
@@ -53,7 +56,7 @@ public class CommentService {
     // feedPost 댓글 (무한 스크롤)
     @Transactional(readOnly = true)
     public Page<Comment> findAllCommentsByFeedPostId(int feedPostId, int page, int size){
-        Page<Comment> fanComments = commentRepository.findAllByFeedPostId(feedPostId, PageRequest.of(page, size, Sort.by("commentId").descending()));
+        Page<Comment> fanComments = commentRepository.findAllByFeedPostId(feedPostId, PageRequest.of(page, size, Sort.by("id").descending()));
 
         return fanComments;
     }
@@ -61,7 +64,7 @@ public class CommentService {
     // artistPost 댓글 (무한 스크롤)
     @Transactional(readOnly = true)
     public Page<Comment> findAllCommentsByArtistPostId(int artistPostId, int page, int size){
-        Page<Comment> artistComments = commentRepository.findAllByArtistPostId(artistPostId, PageRequest.of(page, size, Sort.by("commentId").descending()));
+        Page<Comment> artistComments = commentRepository.findAllByArtistPostId(artistPostId, PageRequest.of(page, size, Sort.by("id").descending()));
 
         return artistComments;
     }
@@ -70,7 +73,7 @@ public class CommentService {
     public Comment updateComment(int commentId, Comment comment) {
         Comment findComment = findVerifiedComment(commentId);
 
-        if (comment.getFans() != null && comment.getFans().getFanId() != findComment.getFans().getFanId()) {
+        if (comment.getFan() != null && comment.getFan().getFanId() != findComment.getFan().getFanId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
 
@@ -88,20 +91,71 @@ public class CommentService {
         return commentRepository.save(findComment);
     }
 
+//    public Comment updateFanComment(int commentId, Comment comment){
+//        Comment findComment = findVerifiedComment(commentId);
+//        if(comment.getFans().getId() != findComment.getFans().getId()) {
+//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//        }else{
+//            Optional.ofNullable(comment.getContent()) // 내용 수정
+//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
+//            Optional.ofNullable(comment.getFeedPost())
+//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
+//            Optional.ofNullable(comment.getCreatedAt())
+//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
+//
+//            return commentRepository.save(findComment);
+//        }
+//    }
+//
+//    public Comment updateArtistComment(int commentId, Comment comment){
+//        Comment findComment = findVerifiedComment(commentId);
+//        if(comment.getArtist().getId() != findComment.getArtist().getId()) {
+//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//        }else{
+//            Optional.ofNullable(comment.getContent()) // 내용 수정
+//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
+//            Optional.ofNullable(comment.getFeedPost())
+//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
+//            Optional.ofNullable(comment.getCreatedAt())
+//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
+//
+//            return commentRepository.save(findComment);
+//        }
+//    }
+
+//    public void deleteFeedPostComment(FeedPost feedPost, int commentId, String userEmail) {
+//        Comment findComment = findVerifiedComment(commentId);
+//        String commentAuthorEmail = findComment.getFans().getEmail();
+//        if (feedPost.getFans().getId() != findComment.getFans().getId() || feedPost.getArtist().getId() != findComment.getArtist().getId()
+//                || !commentAuthorEmail.equals(userEmail)) {
+//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//        }
+//        commentRepository.delete(findComment);
+//    }
 
     public void deleteFeedPostComment(FeedPost feedPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
-        if(feedPost.getFans().getFanId() != findComment.getFans().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
+        if(feedPost.getFan().getFanId() != findComment.getFan().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
         commentRepository.delete(findComment);
     }
 
 
+//    public void deleteArtistPostComment(ArtistPost artistPost, int commentId, String userEmail) {
+//        Comment findComment = findVerifiedComment(commentId);
+//        String commentAuthorEmail = findComment.getFans().getEmail();
+//        if (artistPost.getFans().getId() != findComment.getFans().getId() || artistPost.getArtist().getId() != findComment.getArtist().getId()
+//                || !commentAuthorEmail.equals(userEmail)) {
+//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+//        }
+//        commentRepository.delete(findComment);
+//    }
+
 
     public void deleteArtistPostComment(ArtistPost artistPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
-        if(artistPost.getFans().getFanId() != findComment.getFans().getFanId() && artistPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
+        if(artistPost.getFan().getFanId() != findComment.getFan().getFanId() || artistPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
         commentRepository.delete(findComment);

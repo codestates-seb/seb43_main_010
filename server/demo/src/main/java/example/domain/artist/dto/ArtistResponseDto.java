@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class ArtistResponseDto {
+    private int artistId;
     private String content;
     private String email;
     private String name;

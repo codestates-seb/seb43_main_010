@@ -1,6 +1,7 @@
 package example.domain.feedPost.entity;
 
 import example.domain.artist.entity.Artist;
+import example.domain.group.entity.Group;
 import example.global.common.global.BaseTimeEntity;
 import example.domain.fans.entity.Fans;
 import example.domain.like.entity.Like;
@@ -27,14 +28,16 @@ public class FeedPost extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer feedPostId;
+    private Integer id;
     @Column(length = 16000, nullable = false)
     private String content;
 
+//    @Column
+//    @Lob
+//    private String img;
+
     @ElementCollection
-    @CollectionTable(name = "feedPost_img", joinColumns = @JoinColumn(name = "feedPostId"))
-    @Column(name = "img")
-    private List<String> img = new ArrayList<>();
+    private List<String> img;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -42,12 +45,16 @@ public class FeedPost extends BaseTimeEntity {
 
 
     @ManyToOne
-    @JoinColumn(name = "fanId")
-    private Fans fans;
+    @JoinColumn(name = "fan_id")
+    private Fans fan;
 
     @ManyToOne
-    @JoinColumn(name = "artistId")
+    @JoinColumn(name = "artist_id")
     private Artist artist;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     @OneToMany(mappedBy = "feedPost", cascade = CascadeType.REMOVE)
     private List<Like> likes = new ArrayList<>();
@@ -59,25 +66,26 @@ public class FeedPost extends BaseTimeEntity {
     @Column(name = "like_count")
     private Integer likeCount;
 
-    public FeedPost(String content, List<String> img, Fans fans) {
+    public FeedPost(String content, List<String> img, Fans fan) {
         this.content = content;
         this.img = img;
-        this.fans = fans;
+        this.fan = fan;
     }
 
-    public FeedPost(int feedPostId, Fans fans) {
-        this.feedPostId = feedPostId;
-        this.fans = fans;
+    public FeedPost(int id, Fans fan) {
+        this.id = id;
+        this.fan = fan;
     }
 
     @Builder
-    public FeedPost(Integer feedPostId, String content, List<String> img, LocalDateTime createdAt,
-                    Fans fans, List<Comment> comments, Integer likeCount) {
-        this.feedPostId = feedPostId;
+    public FeedPost(Integer id, String content, List<String> img, Group group, LocalDateTime createdAt,
+                    Fans fan, List<Comment> comments, Integer likeCount) {
+        this.id = id;
         this.content = content;
         this.img = img;
         this.createdAt = createdAt;
-        this.fans = fans;
+        this.fan = fan;
+        this.group = group;
         this.comments = comments;
         this.likeCount = likeCount;
     }
