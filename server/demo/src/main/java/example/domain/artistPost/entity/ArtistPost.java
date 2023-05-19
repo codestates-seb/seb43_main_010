@@ -31,9 +31,8 @@ public class ArtistPost extends BaseTimeEntity{
         @Column(length = 16000, nullable = false)
         private String content;
 
-        @Column
-        @Lob
-        private String img;
+        @ElementCollection
+        private List<String> img;
         @CreatedDate
         @Column(name = "created_at")
         private LocalDateTime createdAt = LocalDateTime.now();
@@ -57,7 +56,7 @@ public class ArtistPost extends BaseTimeEntity{
         @Column(name = "like_count")
         private Integer likeCount;
 
-        public ArtistPost(String content, String img, Artist artist) {
+        public ArtistPost(String content, List<String> img, Artist artist) {
             this.content = content;
             this.img = img;
             this.artist = artist;
@@ -70,7 +69,7 @@ public class ArtistPost extends BaseTimeEntity{
 
 
         @Builder
-        public ArtistPost(Integer id, String content, String img, LocalDateTime createdAt,
+        public ArtistPost(Integer id, String content, List<String> img, LocalDateTime createdAt,
                           Artist artist, List<Comment> comments, Integer likeCount) {
                 this.id = id;
                 this.content = content;
