@@ -19,8 +19,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
+
     @Autowired
     private FansRepository fansRepository;
+    @Autowired
     private ArtistRepository artistRepository;
     @Autowired
     private CorsConfig corsConfig;

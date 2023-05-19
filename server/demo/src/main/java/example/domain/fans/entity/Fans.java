@@ -39,12 +39,15 @@ public class Fans extends BaseEntity {
     @Lob
     private String profile;
 
+    /*
     @Column
     private List<Group> community;
     public void addCommunity(Group group) {
         community.add(group);
     }
-
+    */
+    @Column
+    private String community;
     @Column
     private String role="USER";
 

@@ -15,6 +15,7 @@ public class ArtistResponseDto {
     private String email;
     private String name;
     private String nickname;
+    private String Color;
     private String group;
     private String profile;
     private String groupProfile;
