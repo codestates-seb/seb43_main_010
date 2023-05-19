@@ -12,7 +12,7 @@ import java.util.Optional;
 @Mapper(componentModel = "spring")
 public interface ArtistMapper {
 
-    default Artist artistPostDtoToUser(ArtistPostDto artistPostDto) {
+    default Artist artistPostDtoToArtist(ArtistPostDto artistPostDto) {
         Artist artist = new Artist();
         artist.setEmail(artistPostDto.getEmail());
         artist.setPassword(artistPostDto.getPassword());
@@ -28,17 +28,18 @@ public interface ArtistMapper {
         return artist;
     }
 
-    default ArtistResponseDto artistToArtistResponseDto(Artist artist, String group_profile) {
+    default ArtistResponseDto artistToArtistResponseDto(Artist artist, String group_profile, String group_color) {
         ArtistResponseDto artistResponseDto = new ArtistResponseDto();
         artistResponseDto.setEmail(artist.getEmail());
         artistResponseDto.setName(artist.getName());
         artistResponseDto.setNickname(artist.getNickname());
         artistResponseDto.setGroup(artist.getGroup());
+        artistResponseDto.setColor(group_color);
         if(StringUtils.hasText(artist.getProfile())){
             artistResponseDto.setProfile(artist.getProfile());
         }
         if(StringUtils.hasText(group_profile)){
-            artistResponseDto.setProfile(group_profile);
+            artistResponseDto.setGroupProfile(group_profile);
         }
         return artistResponseDto;
     }

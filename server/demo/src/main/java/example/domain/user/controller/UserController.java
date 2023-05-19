@@ -46,14 +46,16 @@ public class UserController {
     public ResponseEntity getUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PrincipalDetails principalDetails = (PrincipalDetails) principal;
-        if (principalDetails.getUser().getRole().equals("FANS")) {
+        System.out.println(principalDetails.getUser().getRole());
+        System.out.println(principalDetails.getUser().getRole().equals("USER"));
+        if (principalDetails.getUser().getRole().equals("USER")) {
             Fans fans = fansRepository.findByEmail(principalDetails.getUser().getEmail()).get();
             return new ResponseEntity<>(new SingleResponseDto<>(fansMapper.fansToFansResponseDto(fans)),HttpStatus.OK);
         }
         if (principalDetails.getUser().getRole().equals("ARTIST")) {
             Artist artist = artistRepository.findByEmail(principalDetails.getUser().getEmail()).get();
             Group group_info = groupRepository.findByGroupName(artist.getGroup()).get();
-            return new ResponseEntity<>(new SingleResponseDto<>(artistMapper.artistToArtistResponseDto(artist,group_info.getProfile())),HttpStatus.OK);
+            return new ResponseEntity<>(new SingleResponseDto<>(artistMapper.artistToArtistResponseDto(artist,group_info.getProfile(),group_info.getColor())),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

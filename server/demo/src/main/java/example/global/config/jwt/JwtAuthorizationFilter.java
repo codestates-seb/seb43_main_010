@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -42,23 +43,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
         String email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("email").asString();
         if (email != null) {
-            Optional<Fans> fansEntity  = fansRepository.findByEmail(email);
             User user = new User();
+            Optional<Fans> fansEntity  = fansRepository.findByEmail(email);
+            Optional<Artist> artistEntity = artistRepository.findByEmail(email);
             if(fansEntity.isPresent()){
                 Fans fans=fansEntity.get();
                 user.setEmail(fans.getEmail());
                 user.setPassword(fans.getPassword());
                 user.setRole(fans.getRole());
             }
-            else{
-                Optional<Artist> artistEntity  = artistRepository.findByEmail(email);
-                if(artistEntity.isPresent()){
-                    Artist artist=artistEntity.get();
-                    user.setEmail(artist.getEmail());
-                    user.setPassword(artist.getPassword());
-                    user.setRole(artist.getRole());
-                }
+            if(artistEntity.isPresent()){
+                Artist artist=artistEntity.get();
+                user.setEmail(artist.getEmail());
+                user.setPassword(artist.getPassword());
+                user.setRole(artist.getRole());
             }
+
             PrincipalDetails principalDetails = new PrincipalDetails(user);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());

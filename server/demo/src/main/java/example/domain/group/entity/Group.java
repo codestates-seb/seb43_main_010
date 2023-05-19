@@ -19,10 +19,10 @@ public class Group extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer groupId;
+    private Integer id;
 
     @OneToMany(mappedBy = "groups")
-    private List<Artist> artists;
+    private List<Artist> artists=new ArrayList<>();
 
     public void addArtist(Artist artist) {
         artists.add(artist);
@@ -30,6 +30,9 @@ public class Group extends BaseEntity {
 
     @Column(nullable = false,columnDefinition = "VARCHAR(20)")
     private String groupName;
+
+    @Column
+    private String Color;
 
     @Column
     @Lob

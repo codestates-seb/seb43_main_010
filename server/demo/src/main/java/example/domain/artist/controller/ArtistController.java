@@ -32,7 +32,7 @@ public class ArtistController {
 
     @PostMapping("/signup/artist")
     public ResponseEntity postArtist(@Valid @RequestBody ArtistPostDto artistDto) {
-        Artist artist = mapper.artistPostDtoToUser(artistDto);
+        Artist artist = mapper.artistPostDtoToArtist(artistDto);
         Artist createdArtist = artistService.createArtist(artist);
         return new ResponseEntity<>(new SingleResponseDto<>("아티스트 회원가입 성공!"), HttpStatus.CREATED);
     }
