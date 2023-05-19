@@ -52,8 +52,7 @@ public class feedPostController {
         FeedPost savedFeedPost = service.createFeedPost(feedPost);
 
         FeedPost saveFeedPost = service.createFeedPost(feedPost);
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.feedToFeedResponseDto(saveFeedPost)),
+        return new ResponseEntity<>(mapper.feedToFeedResponseDto(saveFeedPost),
                 HttpStatus.OK);
     }
 
@@ -86,8 +85,7 @@ public class feedPostController {
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND);
         }
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.feedToFeedResponseDto(feedPost)),
+        return new ResponseEntity<>(mapper.feedToFeedResponseDto(feedPost),
                 HttpStatus.OK);
     }
 
@@ -122,8 +120,7 @@ public class feedPostController {
 
         FeedPost updateFeedPost = service.updateFeedPost(feedPost);
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.feedToFeedResponseDto(updateFeedPost)), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.feedToFeedResponseDto(updateFeedPost), HttpStatus.OK);
     }
 //    @PatchMapping("/{feedPostId}")
 //    public ResponseEntity patchFeedPost(@PathVariable("feedPostId") @Positive int feedPostId,

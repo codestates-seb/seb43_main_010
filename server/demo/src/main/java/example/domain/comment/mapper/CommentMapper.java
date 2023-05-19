@@ -186,32 +186,71 @@ public interface CommentMapper {
 
     default CommentUserResponseDto commentToUserCommentResponseDto(Comment comment) {
         CommentUserResponseDto commentResponseDto = new CommentUserResponseDto();
-        Fans fans = comment.getFan();
-        FansResponseDto userDto1 = new FansResponseDto();
-        userDto1.setFanId(fans.getFanId());
-        userDto1.setNickname(fans.getNickname());
-        userDto1.setProfile(fans.getProfile());
-        userDto1.setEmail(fans.getEmail());
-        userDto1.setName(fans.getName());
 
-        Artist artist = comment.getArtist();
-        ArtistResponseDto userDto2 = new ArtistResponseDto();
-        userDto2.setArtistId(artist.getArtistId());
-        userDto2.setNickname(artist.getNickname());
-        userDto2.setProfile(artist.getProfile());
-        userDto2.setEmail(artist.getEmail());
-        userDto2.setName(artist.getName());
+        if (comment != null) {
+            Fans fans = comment.getFan();
+            if (fans != null) {
+                FansResponseDto userDto1 = new FansResponseDto();
+                userDto1.setFanId(fans.getFanId());
+                userDto1.setNickname(fans.getNickname());
+                userDto1.setProfile(fans.getProfile());
+                userDto1.setEmail(fans.getEmail());
+                userDto1.setName(fans.getName());
+                commentResponseDto.setFan(userDto1);
+            } else {
+                commentResponseDto.setFan(null);
+            }
 
-        commentResponseDto.setFan(userDto1);
-        commentResponseDto.setArtist(userDto2);
-        commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
-        commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
-        commentResponseDto.setContent(comment.getContent());
-        commentResponseDto.setCreatedAt(comment.getCreatedAt());
-        commentResponseDto.setLikeCount(comment.getLikeCount());
+            Artist artist = comment.getArtist();
+            if (artist != null) {
+                ArtistResponseDto userDto2 = new ArtistResponseDto();
+                userDto2.setArtistId(artist.getArtistId());
+                userDto2.setNickname(artist.getNickname());
+                userDto2.setProfile(artist.getProfile());
+                userDto2.setEmail(artist.getEmail());
+                userDto2.setName(artist.getName());
+                commentResponseDto.setArtist(userDto2);
+            } else {
+                commentResponseDto.setArtist(null);
+            }
+
+            commentResponseDto.setFeedPostId(comment.getFeedPost() != null ? comment.getFeedPost().getId() : null);
+            commentResponseDto.setArtistPostId(comment.getArtistPost() != null ? comment.getArtistPost().getId() : null);
+            commentResponseDto.setContent(comment.getContent());
+            commentResponseDto.setCreatedAt(comment.getCreatedAt());
+            commentResponseDto.setLikeCount(comment.getLikeCount());
+        }
 
         return commentResponseDto;
     }
+//    default CommentUserResponseDto commentToUserCommentResponseDto(Comment comment) {
+//        CommentUserResponseDto commentResponseDto = new CommentUserResponseDto();
+//        Fans fans = comment.getFan();
+//        FansResponseDto userDto1 = new FansResponseDto();
+//        userDto1.setFanId(fans.getFanId());
+//        userDto1.setNickname(fans.getNickname());
+//        userDto1.setProfile(fans.getProfile());
+//        userDto1.setEmail(fans.getEmail());
+//        userDto1.setName(fans.getName());
+//
+//        Artist artist = comment.getArtist();
+//        ArtistResponseDto userDto2 = new ArtistResponseDto();
+//        userDto2.setArtistId(artist.getArtistId());
+//        userDto2.setNickname(artist.getNickname());
+//        userDto2.setProfile(artist.getProfile());
+//        userDto2.setEmail(artist.getEmail());
+//        userDto2.setName(artist.getName());
+//
+//        commentResponseDto.setFan(userDto1);
+//        commentResponseDto.setArtist(userDto2);
+//        commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
+//        commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
+//        commentResponseDto.setContent(comment.getContent());
+//        commentResponseDto.setCreatedAt(comment.getCreatedAt());
+//        commentResponseDto.setLikeCount(comment.getLikeCount());
+//
+//        return commentResponseDto;
+//    }
 
 
 //    List<CommentFanResponseDto> commentsToFanCommentResponseDtos(List<Comment> comments);

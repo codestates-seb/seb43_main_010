@@ -3,6 +3,7 @@ package example.domain.comment.entity;
 import example.domain.artist.entity.Artist;
 import example.domain.artistPost.entity.ArtistPost;
 import example.domain.fans.entity.Fans;
+import example.domain.group.entity.Group;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,6 +41,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fan_id")
     private Fans fan;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
 //    @Column(name = "fan_comment_id")
 //    private int fanCommentId;
