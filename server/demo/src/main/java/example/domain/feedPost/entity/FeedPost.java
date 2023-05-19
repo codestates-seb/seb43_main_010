@@ -31,11 +31,12 @@ public class FeedPost extends BaseTimeEntity {
     @Column(length = 16000, nullable = false)
     private String content;
 
-    @Column
-    @Lob
-    private String img;
+//    @Column
+//    @Lob
+//    private String img;
 
-//    private List<String> img;
+    @ElementCollection
+    private List<String> img;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -60,19 +61,19 @@ public class FeedPost extends BaseTimeEntity {
     @Column(name = "like_count")
     private Integer likeCount;
 
-    public FeedPost(String content, String img, Fans fan) {
+    public FeedPost(String content, List<String> img, Fans fan) {
         this.content = content;
         this.img = img;
         this.fan = fan;
     }
 
-    public FeedPost(int id, Fans fans) {
+    public FeedPost(int id, Fans fan) {
         this.id = id;
         this.fan = fan;
     }
 
     @Builder
-    public FeedPost(Integer id, String content, String img, LocalDateTime createdAt,
+    public FeedPost(Integer id, String content, List<String> img, LocalDateTime createdAt,
                     Fans fan, List<Comment> comments, Integer likeCount) {
         this.id = id;
         this.content = content;

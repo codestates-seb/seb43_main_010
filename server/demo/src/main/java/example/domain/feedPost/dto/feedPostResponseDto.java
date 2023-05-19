@@ -17,9 +17,9 @@ public class feedPostResponseDto {
     private Integer feedPostId; // feedPostId
 //    private Integer artistPostId;
 //    private Integer id;
-    private long artistPostId;
+    private Integer artistPostId;
     private String content;
-    private String img;
+    private List<String> img;
     private LocalDateTime createdAt;
     private List<CommentFanResponseDto> comments;
     private int likeCount;
