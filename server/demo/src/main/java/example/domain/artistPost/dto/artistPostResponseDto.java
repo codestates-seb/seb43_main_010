@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class artistPostResponseDto {
     private ArtistResponseDto artist;
+//    private Integer feedPostId;
     private Integer artistPostId; // artistPostId
     private String content;
     private String img;

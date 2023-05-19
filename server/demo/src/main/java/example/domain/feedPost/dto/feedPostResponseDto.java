@@ -15,7 +15,9 @@ public class feedPostResponseDto {
     private FansResponseDto fan;  //여기서  fan로 이름 변경하면 null값 나옴
 //    private int feedPostId = 1; // 초기값을 1로 설정
     private Integer feedPostId; // feedPostId
+//    private Integer artistPostId;
 //    private Integer id;
+    private long artistPostId;
     private String content;
     private String img;
     private LocalDateTime createdAt;

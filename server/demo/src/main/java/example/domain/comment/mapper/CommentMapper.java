@@ -135,7 +135,18 @@ public interface CommentMapper {
         userDto.setName(fans.getName());
 
         commentResponseDto.setFan(userDto);
-        commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
+
+        if (comment.getFeedPost() != null) {
+            commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        } else {
+            commentResponseDto.setFeedPostId(null);
+        }
+
+        if (comment.getArtistPost() != null) {
+            commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
+        } else {
+            commentResponseDto.setArtistPostId(null);
+        }
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());
         commentResponseDto.setLikeCount(comment.getLikeCount());
@@ -153,7 +164,19 @@ public interface CommentMapper {
         userDto.setEmail(artist.getEmail());
         userDto.setName(artist.getName());
 
-        commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
+
+        commentResponseDto.setArtist(userDto);
+        if (comment.getFeedPost() != null) {
+            commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        } else {
+            commentResponseDto.setFeedPostId(null);
+        }
+
+        if (comment.getArtistPost() != null) {
+            commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
+        } else {
+            commentResponseDto.setArtistPostId(null);
+        }
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());
         commentResponseDto.setLikeCount(comment.getLikeCount());
@@ -182,6 +205,7 @@ public interface CommentMapper {
         commentResponseDto.setFan(userDto1);
         commentResponseDto.setArtist(userDto2);
         commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setCreatedAt(comment.getCreatedAt());
         commentResponseDto.setLikeCount(comment.getLikeCount());
@@ -245,7 +269,17 @@ public interface CommentMapper {
             }
 
             // Comment 정보 설정
-            responseDto.setFeedPostId(comment.getFeedPost().getId());
+            if (comment.getFeedPost() != null) {
+                responseDto.setFeedPostId(comment.getFeedPost().getId());
+            } else {
+                responseDto.setFeedPostId(null);
+            }
+
+            if (comment.getArtistPost() != null) {
+                responseDto.setArtistPostId(comment.getArtistPost().getId());
+            } else {
+                responseDto.setArtistPostId(null);
+            }
             responseDto.setContent(comment.getContent());
             responseDto.setCreatedAt(comment.getCreatedAt());
             responseDto.setLikeCount(comment.getLikeCount());

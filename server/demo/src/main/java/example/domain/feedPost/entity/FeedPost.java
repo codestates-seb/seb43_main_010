@@ -34,6 +34,9 @@ public class FeedPost extends BaseTimeEntity {
     @Column
     @Lob
     private String img;
+
+//    private List<String> img;
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();

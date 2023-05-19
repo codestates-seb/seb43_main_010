@@ -22,7 +22,7 @@ public class LikeController {
 
 
     // feedPost 좋아요 기능
-    @PostMapping("/feedPost")
+    @PostMapping("/{feedPostId}")
     public ResponseResult<?> insert(@RequestBody @Valid FanLikeRequestDto fanLikeRequestDto)throws Exception{
         likeService.insert(fanLikeRequestDto);
         return success(null);
