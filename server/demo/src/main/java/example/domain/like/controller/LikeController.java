@@ -29,12 +29,12 @@ public class LikeController {
             // fanLikeRequestDto 처리
             // fanLikeRequestDto에 feedPostId 설정
             likeRequestDto.setFeedPostId(feedPostId);
-            likeService.insertFanLike(groupId, likeRequestDto);
+            likeService.insertFeedFanLike(groupId, likeRequestDto);
         } else if (likeRequestDto.getArtistId() != null) {
             // artistLikeRequestDto 처리
             // artistLikeRequestDto에 artistPostId 설정
-            likeRequestDto.setArtistPostId(feedPostId);
-            likeService.insertArtistLike(groupId, likeRequestDto);
+            likeRequestDto.setFeedPostId(feedPostId);
+            likeService.insertFeedArtistLike(groupId, likeRequestDto);
         } else {
             // fanId나 artistId가 둘 다 null인 경우에 대한 처리
             throw new IllegalArgumentException("Invalid request. Either fanId or artistId should be provided.");
@@ -43,49 +43,33 @@ public class LikeController {
         // 성공 응답 반환
         return success(null);
     }
-//    @PostMapping("/{feedPostId}")
-//    public ResponseResult<?> insert(@PathVariable("feedPostId") Integer feedPostId,
-//                                    @RequestBody @Valid LikeRequestDto LikeRequestDto)throws Exception{
-//        // fanLikeRequestDto에 feedPostId 설정
-//        LikeRequestDto.setFeedPostId(feedPostId);
-//
-//        // 좋아요 기능을 처리하는 likeService.insert() 메서드 호출
-//        likeService.insert(LikeRequestDto);
+
+
+
+//    // artistPost 좋아요 기능 (fan, artist 둘다 가능)
+//    @PostMapping("artist/{groupId}/{artistPostId}/like")
+//    public ResponseResult<?> likeArtistPost(@PathVariable("groupId") Integer groupId,
+//                                            @PathVariable("artistPostId") Integer artistPostId,
+//                                            @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
+//        if (likeRequestDto.getFanId() != null) {
+//            // fanLikeRequestDto 처리
+//            // fanLikeRequestDto에 artistPostId 설정
+//            likeRequestDto.setArtistPostId(artistPostId);
+//            likeService.insertFanLike(groupId,likeRequestDto);
+//        } else if (likeRequestDto.getArtistId() != null) {
+//            // artistLikeRequestDto 처리
+//            // artistLikeRequestDto에 artistPostId 설정
+//            likeRequestDto.setArtistPostId(artistPostId);
+//            likeService.insertArtistLike(groupId, likeRequestDto);
+//        } else {
+//            // fanId나 artistId가 둘 다 null인 경우에 대한 처리
+//            throw new IllegalArgumentException("Invalid request. Either fanId or artistId should be provided.");
+//        }
 //
 //        // 성공 응답 반환
 //        return success(null);
 //    }
 
-    // artistPost 좋아요 기능 (fan, artist 둘다 가능)
-
-    @PostMapping("/artist/{artistPostId}/like")
-    public ResponseResult<?> likeArtistPost(@PathVariable("groupId") Integer groupId,
-                                            @PathVariable("artistPostId") Integer artistPostId,
-                                            @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
-        if (likeRequestDto.getFanId() != null) {
-            // fanLikeRequestDto 처리
-            // fanLikeRequestDto에 artistPostId 설정
-            likeRequestDto.setArtistPostId(artistPostId);
-            likeService.insertFanLike(groupId,likeRequestDto);
-        } else if (likeRequestDto.getArtistId() != null) {
-            // artistLikeRequestDto 처리
-            // artistLikeRequestDto에 artistPostId 설정
-            likeRequestDto.setArtistPostId(artistPostId);
-            likeService.insertArtistLike(groupId, likeRequestDto);
-        } else {
-            // fanId나 artistId가 둘 다 null인 경우에 대한 처리
-            throw new IllegalArgumentException("Invalid request. Either fanId or artistId should be provided.");
-        }
-
-        // 성공 응답 반환
-        return success(null);
-    }
-//    @PostMapping("/artistPost")
-//    public ResponseResult<?> insert(@PathVariable("artistPostId") Integer artistPostId,
-//                                    @RequestBody @Valid ArtistLikeRequestDto artistLikeRequestDto)throws Exception{
-//        likeService.insert(artistLikeRequestDto);
-//        return success(null);
-//    }
 //
 //
 //

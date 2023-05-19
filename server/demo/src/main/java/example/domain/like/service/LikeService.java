@@ -29,7 +29,7 @@ public class LikeService {
 
     // feedPost fan이 좋아요
     @Transactional
-    public void insertFanLike(Integer groupId, LikeRequestDto likeRequestDto) throws Exception {
+    public void insertFeedFanLike(Integer groupId, LikeRequestDto likeRequestDto) throws Exception {
         FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
                 .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물을 찾을 수 없습니다."));
 
@@ -56,7 +56,7 @@ public class LikeService {
 
 //    // feedPost artist가 좋아요
 @Transactional
-public void insertArtistLike(Integer groupId, LikeRequestDto likeRequestDto) throws Exception {
+public void insertFeedArtistLike(Integer groupId, LikeRequestDto likeRequestDto) throws Exception {
     FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
             .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물을 찾을 수 없습니다."));
 
