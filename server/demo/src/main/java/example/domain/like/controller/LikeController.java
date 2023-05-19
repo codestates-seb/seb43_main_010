@@ -22,7 +22,7 @@ public class LikeController {
 
     // feedPost 좋아요 기능 (fan, artist 둘다 가능)
     @PostMapping("feed/{groupId}/{feedPostId}/like")
-    public ResponseResult<?> insert(@PathVariable("groupId") Integer groupId,
+    public ResponseResult<?> likeFanPost(@PathVariable("groupId") Integer groupId,
                                     @PathVariable("feedPostId") Integer feedPostId,
                                     @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
         if (likeRequestDto.getFanId() != null) {
@@ -46,39 +46,81 @@ public class LikeController {
 
 
 
-//    // artistPost 좋아요 기능 (fan, artist 둘다 가능)
-//    @PostMapping("artist/{groupId}/{artistPostId}/like")
-//    public ResponseResult<?> likeArtistPost(@PathVariable("groupId") Integer groupId,
-//                                            @PathVariable("artistPostId") Integer artistPostId,
-//                                            @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
-//        if (likeRequestDto.getFanId() != null) {
-//            // fanLikeRequestDto 처리
-//            // fanLikeRequestDto에 artistPostId 설정
-//            likeRequestDto.setArtistPostId(artistPostId);
-//            likeService.insertFanLike(groupId,likeRequestDto);
-//        } else if (likeRequestDto.getArtistId() != null) {
-//            // artistLikeRequestDto 처리
-//            // artistLikeRequestDto에 artistPostId 설정
-//            likeRequestDto.setArtistPostId(artistPostId);
-//            likeService.insertArtistLike(groupId, likeRequestDto);
-//        } else {
-//            // fanId나 artistId가 둘 다 null인 경우에 대한 처리
-//            throw new IllegalArgumentException("Invalid request. Either fanId or artistId should be provided.");
-//        }
-//
-//        // 성공 응답 반환
-//        return success(null);
-//    }
+    // artistPost 좋아요 기능 (fan, artist 둘다 가능)
+    @PostMapping("artist/{groupId}/{artistPostId}/like")
+    public ResponseResult<?> likeArtistPost(@PathVariable("groupId") Integer groupId,
+                                            @PathVariable("artistPostId") Integer artistPostId,
+                                            @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
+        if (likeRequestDto.getFanId() != null) {
+            // fanLikeRequestDto 처리
+            // fanLikeRequestDto에 artistPostId 설정
+            likeRequestDto.setArtistPostId(artistPostId);
+            likeService.insertArtistFanLike(groupId,likeRequestDto);
+        } else if (likeRequestDto.getArtistId() != null) {
+            // artistLikeRequestDto 처리
+            // artistLikeRequestDto에 artistPostId 설정
+            likeRequestDto.setArtistPostId(artistPostId);
+            likeService.insertArtistArtistLike(groupId, likeRequestDto);
+        } else {
+            // fanId나 artistId가 둘 다 null인 경우에 대한 처리
+            throw new IllegalArgumentException("Invalid request. Either fanId or artistId should be provided.");
+        }
 
-//
-//
-//
-//    // feedPost 좋아요 취소 기능
-//    @DeleteMapping("/feedPost")
-//    public ResponseResult<?> delete(@RequestBody @Valid FanLikeRequestDto fanLikeRequestDto){
-//        likeService.delete(fanLikeRequestDto);
-//        return success(null);
-//    }
+        // 성공 응답 반환
+        return success(null);
+    }
+
+
+    // feedPost 좋아요 취소 기능
+    @DeleteMapping("feed/{groupId}/{feedPostId}/cancelLike")
+    public ResponseResult<?> likeFanDelete(@PathVariable("groupId") Integer groupId,
+                                    @PathVariable("feedPostId") Integer feedPostId,
+                                    @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
+        if (likeRequestDto.getFanId() != null) {
+            // fanLikeRequestDto 처리
+            // fanLikeRequestDto에 feedPostId 설정
+            likeRequestDto.setFeedPostId(feedPostId);
+            likeService.deleteFeedFanLike(groupId, likeRequestDto);
+        } else if (likeRequestDto.getArtistId() != null) {
+            // artistLikeRequestDto 처리
+            // artistLikeRequestDto에 artistPostId 설정
+            likeRequestDto.setFeedPostId(feedPostId);
+            likeService.deleteFeedArtistLike(groupId, likeRequestDto);
+        } else {
+            // fanId나 artistId가 둘 다 null인 경우에 대한 처리
+            throw new IllegalArgumentException("Invalid request. Either fanId or artistId should be provided.");
+        }
+
+        // 성공 응답 반환
+        return success(null);
+    }
+
+
+    // artistPost 좋아요 취소 기능
+    @DeleteMapping("artist/{groupId}/{artistPostId}/cancelLike")
+    public ResponseResult<?> likeArtistDelete(@PathVariable("groupId") Integer groupId,
+                                              @PathVariable("artistPostId") Integer artistPostId,
+                                              @RequestBody @Valid LikeRequestDto likeRequestDto) throws Exception {
+        if (likeRequestDto.getFanId() != null) {
+            // fanLikeRequestDto 처리
+            // fanLikeRequestDto에 feedPostId 설정
+            likeRequestDto.setArtistPostId(artistPostId);
+            likeService.deleteArtistFanLike(groupId, likeRequestDto);
+        } else if (likeRequestDto.getArtistId() != null) {
+            // artistLikeRequestDto 처리
+            // artistLikeRequestDto에 artistPostId 설정
+            likeRequestDto.setArtistPostId(artistPostId);
+            likeService.deleteArtistArtistLike(groupId, likeRequestDto);
+        } else {
+            // fanId나 artistId가 둘 다 null인 경우에 대한 처리
+            throw new IllegalArgumentException("Invalid request. Either fanId or artistId should be provided.");
+        }
+
+        // 성공 응답 반환
+        return success(null);
+    }
+
+
 //
 //    // artistPost 좋아요 취소 기능
 //    @DeleteMapping("/artistPost")
