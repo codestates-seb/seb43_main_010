@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { setAccessToken } from './setCookie';
 import { useNavigate } from 'react-router-dom';
+
 const KaKaoLogin = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -33,14 +34,32 @@ const KaKaoLogin = () => {
               },
             )
             .then((res) => {
-              const { id } = res.data;
+              // const { id } = res.data;
               const { email } = res.data.kakao_account;
               const { nickname, profile_image } = res.data.properties;
-              //여기서 이제 회원가입으로 요청하기!!!! 아티스트냐 팬이냐 부터??.. 개오바임 프로필못줌 그냥 팬만가능하게 하기
+              //받아온 카카오 정보로 fanUser 세팅
+              axios
+                .post('/signup/fans', {
+                  email,
+                  password: 'kakaoLogin',
+                  name: nickname,
+                  nickname,
+                  profile: profile_image,
+                })
+                .then((res) => {
+                  console.log(res);
+                  alert('카카오 회원가입 및 로그인 성공');
+                })
+                .catch((e) => {
+                  console.log(e);
+                  alert('카카오 회원가입 실패');
+                  return;
+                });
             });
+
           navigate('/');
         } else {
-          alert('카카오 access_token을 받아오지 못했습니다');
+          alert('카카오 로그인 실패');
           navigate('/login');
         }
       });

@@ -1,13 +1,14 @@
 /* eslint-disable no-undef */
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
+//디비
 import { getFirestore } from 'firebase/firestore';
+//회원가입 로그인 및 인증
+import { getAuth } from 'firebase/auth';
+// 파일 처리하는 스토리지
+import { getStorage } from 'firebase/storage';
 import { getAnalytics } from 'firebase/analytics';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -19,9 +20,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebase = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const authService = getAuth(app);
+const dbService = getFirestore(app);
 
-const fireStore = getFirestore(firebase);
-
-const analytics = getAnalytics(firebase);
-export { fireStore };
+const analytics = getAnalytics(app);
+export { app, authService, dbService };

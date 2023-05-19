@@ -23,18 +23,14 @@ const signupSlice = createSlice({
     setCalssification(state, action) {
       state.calssification = action.payload;
     },
-    setFanId(state) {
-      state.fan.id++;
-    },
-    setArtistId(state) {
-      state.artist.artistId++;
-    },
     setFan(state, action) {
+      console.log(action.payload);
       state.fan = action.payload;
     },
     setArtist(state, action) {
       state.artist = action.payload;
     },
+
     resetInputs(state) {
       Object.assign(state, initialState);
     },

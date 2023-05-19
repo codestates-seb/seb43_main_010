@@ -1,4 +1,4 @@
-import { fireStore } from './firebase';
+import { dbService } from './firebase';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -15,8 +15,8 @@ import MyProfilePage from './pages/MyProfilePage';
 
 function App() {
   useEffect(() => {
-    console.log(fireStore);
-  });
+    // console.log(dbService);
+  }, []);
 
   return (
     <BrowserRouter>

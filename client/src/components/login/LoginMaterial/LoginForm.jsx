@@ -2,11 +2,8 @@ import styled from 'styled-components';
 import kakaoLogo from '../../../assets/png-file/kakaoLogo.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { emailValidation, pwdValidation } from '../../Signup/validation';
-import { setToken } from '../../../reducer/authSlice';
 import axios from 'axios';
-import tempAuth from './tempAuth.js';
 import { setAccessToken, getCookie } from './setCookie';
 //div : h1 form div(btn)
 const LoginFormBox = styled.div`

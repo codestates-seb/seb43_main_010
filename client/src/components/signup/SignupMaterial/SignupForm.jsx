@@ -9,7 +9,7 @@ import { resetInputs, setCalssification } from '../../../reducer/signupSlice';
 import axios from 'axios';
 import { emailValidation, pwdValidation, checkPwdValidation, commonValidation } from '../validation.js';
 import SwitchButton from './SignupSwitchBtn';
-import hashPwd from './HashingPwd';
+
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
   /* min-height: 178px; */
@@ -91,10 +91,7 @@ const LoginForm = () => {
   const isArtist = useSelector((state) => state.signup.calssification);
   //회원가입 확인 시 상태를 post에 날리기 위해 모든 전역 상태 가져오기
   const fanUser = useSelector((state) => state.signup.fan);
-  // const fanProfile = useSelector((state) => state.signup.fan.profile);
   const artist = useSelector((state) => state.signup.artist);
-  // const artistProfile = useSelector((state) => state.signup.artist.profile);
-  // const artistGroupImg = useSelector((state) => state.signup.artist.groupImg);
 
   // switch 클릭시 setUser
   const handleChange = () => {
@@ -106,7 +103,7 @@ const LoginForm = () => {
   // 확인 버튼 클릭과 취소 클릭 시 경로를 주기 위함
   const navigate = useNavigate();
 
-  //이때 회원가입 Post 요청 날리기
+  //이때 회원가입 버튼 클릭
   const onClickSubmit = async (e) => {
     e.preventDefault();
     //아티스트인지 팬인지 구분해서 날리기
@@ -128,10 +125,11 @@ const LoginForm = () => {
       await axios
         .post('/signup/artist', body)
         .then((res) => {
-          console.log('res');
+          alert('회원가입 성공');
         })
         .catch((e) => {
-          console.log(e);
+          alert('회원가입 실패');
+          return;
         });
     } else {
       if (
@@ -145,20 +143,17 @@ const LoginForm = () => {
         return;
       }
       body = { ...fanUser };
-      //여기서 pwd암호화하기
-      // body.password = hashPwd(body.password);
       delete body.passwordCheck;
-      // console.log(body);
       await axios
         .post('/signup/fans', body)
         .then((res) => {
-          console.log(res);
+          alert('회원가입 성공');
         })
         .catch((e) => {
-          console.log(e);
+          alert('회원가입 실패');
+          return;
         });
     }
-
     onReset();
     onInputReset();
     navigate('/login');

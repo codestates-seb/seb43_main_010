@@ -108,7 +108,6 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
         return;
       }
       curEmail = fanUser.email;
-      console.log(curEmail);
     }
     //중복확인
     await axios
@@ -116,8 +115,10 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
         email: curEmail,
       })
       .then((res) => {
-        console.log(res);
-        // alert(res.data.msg);
+        alert('사용할 수 있는 이메일입니다.');
+      })
+      .catch((err) => {
+        alert('이미 존재하는 이메일입니다.');
       });
   };
 

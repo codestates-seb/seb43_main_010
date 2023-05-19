@@ -7,7 +7,7 @@ const store = configureStore({
   reducer: {
     signup: signupSlice,
     auth: authSlice,
-    currentUser: userSlice,
+    user: userSlice,
     color: colorSlice,
   },
 });
