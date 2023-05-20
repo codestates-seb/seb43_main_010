@@ -33,6 +33,7 @@ public class ArtistPost extends BaseTimeEntity{
         private String content;
 
         @ElementCollection
+        @Lob
         private List<String> img;
         @CreatedDate
         @Column(name = "created_at")
