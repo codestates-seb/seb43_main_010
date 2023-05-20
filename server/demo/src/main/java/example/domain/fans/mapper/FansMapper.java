@@ -23,6 +23,7 @@ public interface FansMapper {
 
     default FansResponseDto fansToFansResponseDto(Fans fans) {
         FansResponseDto fansResponseDto = new FansResponseDto();
+        fansResponseDto.setFanId(fans.getFanId());
         fansResponseDto.setEmail(fans.getEmail());
         fansResponseDto.setName(fans.getName());
         fansResponseDto.setNickname(fans.getNickname());

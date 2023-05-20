@@ -55,7 +55,7 @@ public class UserController {
         if (principalDetails.getUser().getRole().equals("ARTIST")) {
             Artist artist = artistRepository.findByEmail(principalDetails.getUser().getEmail()).get();
             Group group_info = groupRepository.findByGroupName(artist.getGroup()).get();
-            return new ResponseEntity<>(new SingleResponseDto<>(artistMapper.artistToArtistResponseDto(artist,group_info.getProfile(),group_info.getColor())),HttpStatus.OK);
+            return new ResponseEntity<>(new SingleResponseDto<>(artistMapper.artistToArtistResponseDto(artist,group_info.getId(),group_info.getProfile(),group_info.getColor())),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

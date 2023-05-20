@@ -25,7 +25,7 @@ public class FansService {
     }
 
     public Fans createFans(Fans fans) {
-//        verifyExistsEmail(fans.getEmail());
+        verifyExistsEmail(fans.getEmail());
         fans.setPassword(bCryptPasswordEncoder.encode(fans.getPassword()));
         return fansRepository.save(fans);
     }

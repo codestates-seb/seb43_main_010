@@ -1,6 +1,7 @@
 package example.domain.fans.entity;
 
 import example.domain.artist.entity.Artist;
+import example.domain.community.entity.Community;
 import example.domain.group.entity.Group;
 import example.global.audit.BaseEntity;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -39,15 +41,15 @@ public class Fans extends BaseEntity {
     @Lob
     private String profile;
 
-    /*
-    @Column
-    private List<Group> community;
-    public void addCommunity(Group group) {
-        community.add(group);
+    @OneToMany(mappedBy = "fans")
+    private List<Community> communitys=new ArrayList<>();
+
+    public void addCommunity(Community community) {
+        communitys.add(community);
     }
-    */
-    @Column
-    private String community;
+
+    //@Column
+    //private String community;
     @Column
     private String role="USER";
 

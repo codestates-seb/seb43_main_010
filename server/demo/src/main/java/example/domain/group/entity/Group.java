@@ -1,5 +1,6 @@
 package example.domain.group.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import example.domain.artist.entity.Artist;
 import example.global.audit.BaseEntity;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class Group extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "groups")
     private List<Artist> artists=new ArrayList<>();
 

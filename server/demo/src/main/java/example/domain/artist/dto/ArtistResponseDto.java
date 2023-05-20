@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class ArtistResponseDto {
     private int artistId;
+    private int groupId;
     private String content;
     private String email;
     private String name;

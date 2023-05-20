@@ -28,12 +28,14 @@ public interface ArtistMapper {
         return artist;
     }
 
-    default ArtistResponseDto artistToArtistResponseDto(Artist artist, String group_profile, String group_color) {
+    default ArtistResponseDto artistToArtistResponseDto(Artist artist, int group_id, String group_profile, String group_color) {
         ArtistResponseDto artistResponseDto = new ArtistResponseDto();
         artistResponseDto.setEmail(artist.getEmail());
         artistResponseDto.setName(artist.getName());
         artistResponseDto.setNickname(artist.getNickname());
         artistResponseDto.setGroup(artist.getGroup());
+        artistResponseDto.setArtistId(artist.getArtistId());
+        artistResponseDto.setGroupId(group_id);
         artistResponseDto.setColor(group_color);
         if(StringUtils.hasText(artist.getProfile())){
             artistResponseDto.setProfile(artist.getProfile());
