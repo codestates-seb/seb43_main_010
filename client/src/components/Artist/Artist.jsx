@@ -32,23 +32,23 @@ const PostsBox = styled.div`
 `;
 
 // 그냥 임시 Post 데이터임
-const data = [
-  {
-    artist: {
-      artistId: 3,
-      nickname: '아티스트ㄷ호',
-      group: '아티스트2호',
-      profile: profileImg,
-    },
-    feedPostId: null,
-    artistPostId: 88,
-    content: '아티스트ㄷ호가 작성한 더미 게시물',
-    img: [],
-    createdAt: '2023-05-20T16:25:14.151027',
-    comments: [],
-    likeCount: 0,
-  },
-];
+// const data = [
+//   {
+//     artist: {
+//       artistId: 3,
+//       nickname: '아티스트ㄷ호',
+//       group: '아티스트2호',
+//       profile: profileImg,
+//     },
+//     feedPostId: null,
+//     artistPostId: 88,
+//     content: '아티스트ㄷ호가 작성한 더미 게시물',
+//     img: [],
+//     createdAt: '2023-05-20T16:25:14.151027',
+//     comments: [],
+//     likeCount: 0,
+//   },
+// ];
 
 const Artist = () => {
   const dispatch = useDispatch();
@@ -63,7 +63,6 @@ const Artist = () => {
   //현재 GroupID 받아오기
   let { groupId } = useParams();
   authFn();
-  console.log(currentUser);
 
   useEffect(() => {
     // if (!currentUser) {
