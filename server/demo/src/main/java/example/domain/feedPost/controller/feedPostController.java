@@ -131,7 +131,7 @@ public class feedPostController {
         }
 
         service.deleteFeedPost(fan, findFeedPost);
-        return ResponseEntity.ok("삭제 성공");
+        return ResponseEntity.ok("feedPost 게시글 삭제 성공");
     }
 
 

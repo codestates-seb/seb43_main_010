@@ -123,11 +123,11 @@ public class CommentService {
 //        }
 //    }
 
-//    public void deleteFeedPostComment(FeedPost feedPost, int commentId, String userEmail) {
+
+
+//    public void deleteFeedPostComment(FeedPost feedPost, int commentId){ -> 원래 코드
 //        Comment findComment = findVerifiedComment(commentId);
-//        String commentAuthorEmail = findComment.getFans().getEmail();
-//        if (feedPost.getFans().getId() != findComment.getFans().getId() || feedPost.getArtist().getId() != findComment.getArtist().getId()
-//                || !commentAuthorEmail.equals(userEmail)) {
+//        if(feedPost.getFan().getFanId() != findComment.getFan().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
 //            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
 //        }
 //        commentRepository.delete(findComment);
@@ -135,6 +135,10 @@ public class CommentService {
 
     public void deleteFeedPostComment(FeedPost feedPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
+
+        if(findComment.getFan() == null && findComment.getArtist() == null){
+            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+        }
         if(feedPost.getFan().getFanId() != findComment.getFan().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
@@ -142,22 +146,20 @@ public class CommentService {
     }
 
 
-//    public void deleteArtistPostComment(ArtistPost artistPost, int commentId, String userEmail) {
-//        Comment findComment = findVerifiedComment(commentId);
-//        String commentAuthorEmail = findComment.getFans().getEmail();
-//        if (artistPost.getFans().getId() != findComment.getFans().getId() || artistPost.getArtist().getId() != findComment.getArtist().getId()
-//                || !commentAuthorEmail.equals(userEmail)) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }
-//        commentRepository.delete(findComment);
-//    }
 
 
     public void deleteArtistPostComment(ArtistPost artistPost, int commentId){
         Comment findComment = findVerifiedComment(commentId);
-        if(artistPost.getFan().getFanId() != findComment.getFan().getFanId() || artistPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
+
+        if (findComment.getArtist() == null && findComment.getFan() == null) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
         }
+
+        if (artistPost.getArtist().getArtistId() != findComment.getArtist().getArtistId() &&
+                artistPost.getFan().getFanId() != findComment.getFan().getFanId()) {
+            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+        }
+
         commentRepository.delete(findComment);
     }
 

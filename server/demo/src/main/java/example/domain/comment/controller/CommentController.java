@@ -368,7 +368,7 @@ public class CommentController {
 
             if (findComment.getFan().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
                 commentService.deleteFeedPostComment(findFeedPost, commentId);
-                return ResponseEntity.ok("삭제 성공");
+                return ResponseEntity.ok("feedPost 댓글 삭제 성공");
             } else {
                 throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
             }
@@ -378,7 +378,7 @@ public class CommentController {
 
             if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
                 commentService.deleteFeedPostComment(findFeedPost, commentId);
-                return ResponseEntity.ok("삭제 성공");
+                return ResponseEntity.ok("feedPost 댓글 삭제 성공");
             } else {
                 throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
             }
@@ -414,7 +414,7 @@ public class CommentController {
 
             if (findComment.getFan().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
                 commentService.deleteArtistPostComment(findArtistPost, commentId);
-                return ResponseEntity.ok("삭제 성공");
+                return ResponseEntity.ok("artistPost 댓글 삭제 성공");
             } else {
                 throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
             }
@@ -424,7 +424,7 @@ public class CommentController {
 
             if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
                 commentService.deleteArtistPostComment(findArtistPost, commentId);
-                return ResponseEntity.ok("삭제 성공");
+                return ResponseEntity.ok("artistPost 댓글 삭제 성공");
             } else {
                 throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
             }
