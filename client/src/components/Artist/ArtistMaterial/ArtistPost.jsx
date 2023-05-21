@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import bubbleTail from '../../../assets/svg-file/bubble-tail.svg';
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ArtistImgPreview from './ArtistImgPreview';
 import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
@@ -24,7 +23,7 @@ const ArtistProfile = styled.div`
   .profile-img {
     width: 46px;
     height: 46px;
-    background: ${({ img }) => `no-repeat url(${img})`};
+    background: ${({ profile }) => `no-repeat url(${profile})`};
     background-size: 46px 46px;
   }
   .created-day {
@@ -67,8 +66,7 @@ const ArtistPostBox = styled.div`
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
     box-shadow: 0 0 12px rgb(19, 28, 35, 5%);
-    padding: 12px 0 0 12px;
-
+    padding: 12px;
     .top {
       display: flex;
       justify-content: space-between;
@@ -97,18 +95,17 @@ const ArtistPostBox = styled.div`
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        transform: translateX(-10px);
         cursor: pointer;
 
         &:hover {
-          transform: scale(1.3, 1.3) translateX(-10px);
+          transform: scale(1.1, 1.1);
           transition: 0.15s;
         }
 
         .mini-menu {
           font-size: 16px;
           i::before {
-            color: var(--light-gray-500);
+            color: var(--light-gray-600);
           }
         }
       }
@@ -122,6 +119,15 @@ const ArtistPostBox = styled.div`
       cursor: pointer;
       text-align: start;
       background: none;
+      .post-content {
+        white-space: pre-line;
+        word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
       .more {
         color: #bababa;
         font-size: 13.5px;
@@ -209,33 +215,6 @@ const ArtistPostBox = styled.div`
         }
       }
     }
-    /* 
-    .right-icon-box {
-      position: relative;
-    }
-
-    .right-icon {
-      width: 37px;
-      height: 37px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-      transform: translateX(14px);
-      cursor: pointer;
-
-      &:hover {
-        background-color: var(--light-gray-100);
-        transition: 0.15s;
-      }
-
-      .mini-menu {
-        font-size: 16px;
-        i::before {
-          color: var(--light-gray-400);
-        }
-      }
-    } */
 
     .comment-num {
       color: var(--gray-900);
@@ -246,9 +225,9 @@ const ArtistPostBox = styled.div`
   }
 `;
 
-const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
+const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments, img, modalOpen, setModalOpen, postData, setPostData, groupId }) => {
   const [liked, setLiked] = useState(false);
-  const [like, setLike] = useState(likeNum);
+  const [like, setLike] = useState(likeCount);
   const [detailPost, setDetailPost] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -273,17 +252,16 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
     setDetailPost(true);
   };
   //그룹별 색상 관리를 위한 처리
-  const { groupId } = useParams();
+
   const state = useSelector((state) => state.color);
   const group = state.allGroup.find((el) => el.groupId === Number(groupId));
   const gradColor = group ? group.gradColor : [];
-
   return (
     <>
       <Container>
-        <ArtistProfile img={img}>
+        <ArtistProfile>
           <div className='profile'>
-            <div className='profile-img'></div>
+            <img src={profile} alt='profile' className='profile-img'></img>
           </div>
           <div className='created-day'>5</div>
           <div className='created-month'>May</div>
@@ -318,6 +296,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
                     what='포스트를'
                     modalOpen={modalOpen}
                     setModalOpen={setModalOpen}
+                    // 여기서 해당하는 포스트를 내려줘야함
                     postData={postData}
                     setPostData={setPostData}
                   />
@@ -338,7 +317,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               <p className='time'>{createdAt}</p>
             </button>
           </div>
-          <ArtistImgPreview></ArtistImgPreview>
+          <ArtistImgPreview imgList={img}></ArtistImgPreview>
 
           {/* 아래 */}
           <div className='bottom'>
@@ -359,7 +338,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               <button onClick={openDetailPost} className='bubble-up'>
                 <i className='i-bubble-icon' />
               </button>
-              {commentNum === 0 ? null : <span className='comment-num'>{commentNum}</span>}
+              {comments.length === 0 ? null : <span className='comment-num'>{comments.length}</span>}
             </div>
           </div>
         </ArtistPostBox>
@@ -375,7 +354,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               createdAt={createdAt}
               content={content}
               nickname={nickname}
-              img={img}
+              profile={profile}
               liked={liked}
               like={like}
               clickLike={clickLike}
@@ -384,6 +363,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               setModalOpen={setModalOpen}
               postData={postData}
               setPostData={setPostData}
+              groupId={groupId}
             />
           ) : (
             <DetailPost
@@ -392,7 +372,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               createdAt={createdAt}
               content={content}
               nickname={nickname}
-              img={img}
+              profile={profile}
               liked={liked}
               like={like}
               clickLike={clickLike}
@@ -401,6 +381,7 @@ const ArtistPost = ({ createdAt, nickname, content, img, likeNum, commentNum, mo
               setModalOpen={setModalOpen}
               postData={postData}
               setPostData={setPostData}
+              groupId={groupId}
             />
           )}
         </>

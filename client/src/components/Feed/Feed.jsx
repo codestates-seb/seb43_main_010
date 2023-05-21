@@ -7,7 +7,10 @@ import Gradation from './FeedMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
 import RightImg from './FeedMaterial/RightImg';
 import Post from './FeedMaterial/Post';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
+import authFn from '../auth';
 const FeedBlock = styled.div`
   display: flex;
   justify-content: center;
@@ -150,6 +153,12 @@ const Feed = () => {
   const openModal = () => {
     setModalOpen(true);
   };
+  //여기서 로그인후 받아온 사용자가 아티스트가 아니라면 포스트 작성하는 부분을 안보여주기 위해 전역 변수를 가져와야함
+  const currentUser = useSelector((state) => state.user.currentUser);
+  //만약 currentUser에 group이란 속성이 없다면 포스팅 못하게 안보이게하기
+  //현재 GroupID 받아오기
+  let { groupId } = useParams();
+  authFn(); //로그인후 사용해주세요
 
   return (
     <>
@@ -183,6 +192,7 @@ const Feed = () => {
                   setModalOpen={setModalOpen}
                   postData={postData}
                   setPostData={setPostData}
+                  groupId={groupId}
                 />
               ))}
             </PostsBox>
@@ -193,7 +203,16 @@ const Feed = () => {
         </RealFeedBlock>
       </FeedBlock>
       {/* 포스트 작성 컴포넌트임 => WritePost 컴포넌트 */}
-      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
+      {modalOpen ? (
+        <WritePost
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          postData={postData}
+          setPostData={setPostData}
+          groupId={groupId}
+          currentUser={currentUser}
+        />
+      ) : null}
     </>
   );
 };

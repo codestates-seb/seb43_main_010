@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFan, setArtist } from '../../../reducer/signupSlice';
 import { emailValidation, pwdValidation, checkPwdValidation } from '../validation.js';
-import { BsCheckLg } from 'react-icons/bs';
 import axios from 'axios';
-import { useRef } from 'react';
 
 const InputForm = styled.form`
   hr {
@@ -80,13 +78,13 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
   const isArtist = useSelector((state) => state.signup.calssification);
   const fanUser = useSelector((state) => state.signup.fan);
   const artist = useSelector((state) => state.signup.artist);
+  // 비번체크
   const dispatch = useDispatch();
 
   //input제어
 
   const onChange = (e) => {
     const { value, name } = e.target;
-
     if (isArtist) {
       dispatch(setArtist({ ...artist, [name]: value }));
     } else {
@@ -103,22 +101,23 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
         return;
       }
       curEmail = artist.email;
-      console.log(curEmail);
     } else {
       if (emailValidation(fanUser.email)[0] === false) {
         alert(emailValidation(fanUser.email)[1]);
         return;
       }
       curEmail = fanUser.email;
-      console.log(curEmail);
     }
-
+    //중복확인
     await axios
-      .post('http://localhost:4000/signup/email', {
+      .post('/emails', {
         email: curEmail,
       })
       .then((res) => {
-        alert(res.data.msg);
+        alert('사용할 수 있는 이메일입니다.');
+      })
+      .catch((err) => {
+        alert('이미 존재하는 이메일입니다.');
       });
   };
 
@@ -128,12 +127,7 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
         <label htmlFor='email'>이메일</label>
         <div className='input-box'>
           <input ref={emailRef} type='email' id='email' name='email' onChange={onChange} placeholder='your@email.com'></input>
-          <EmailCheck onClick={onClickCheckBox}>
-            중복확인
-            {/* <CheckBox onClick={onClickCheckBox}>
-              <CheckIcon />
-            </CheckBox> */}
-          </EmailCheck>
+          <EmailCheck onClick={onClickCheckBox}>중복확인</EmailCheck>
           <HrTag className='hrtag' />
         </div>
         {isArtist ? (

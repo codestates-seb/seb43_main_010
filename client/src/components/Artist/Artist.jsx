@@ -1,12 +1,15 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
 import PostInput from '../PostInput/PostInput';
 import ArtistPost from '../Artist/ArtistMaterial/ArtistPost';
 import Gradation from '../Artist/ArtistMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
 import RightArea from './ArtistMaterial/Rightarea';
-
+import authFn from '../auth';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 const Container = styled.div`
   width: 100vw;
   min-width: 1440px;
@@ -23,44 +26,50 @@ const ArtistBox = styled.div`
 const PostContextBox = styled.div``;
 
 const PostsBox = styled.div`
-  margin: 50px 0 71px;
+  margin: ${({ isArtist }) => (isArtist ? '50px 0 71px' : '0 0 71px')};
 `;
 
 // 그냥 임시 Post 데이터임
-const data = {
-  allArtist: [
-    {
-      artistId: 1,
-      userId: 1,
-      nickname: `열일하는개미`, // 작성자 닉네임
-      content: `개미는 뚠뚠🐜🐜 오늘도 뚠뚠🐜🐜 열심히 일을 하네🎵`,
-      img: profileImg,
-      createdAt: `05. 08. 16:22`,
-      feedLikeId: [],
-      likeNum: 0, // 좋아요 개수
-      feedCommentId: [],
-      commentNum: 1, // 게시글에 달린 댓글 개수
+const data = [
+  {
+    artist: {
+      artistId: 3,
+      nickname: '아티스트ㄷ호',
+      group: '아티스트2호',
+      profile: profileImg,
     },
-    {
-      artistId: 2,
-      userId: 2,
-      nickname: `열일하는개미`, // 작성자 닉네임
-      content: `개미는 뚠뚠🐜🐜 오늘도 뚠뚠🐜🐜 열심히 일을 하네🎵`,
-      img: profileImg,
-      createdAt: `05. 08. 16:22`,
-      feedLikeId: [],
-      likeNum: 0, // 좋아요 개수
-      feedCommentId: [],
-      commentNum: 1, // 게시글에 달린 댓글 개수
-    },
-  ],
-};
+    feedPostId: null,
+    artistPostId: 88,
+    content: '아티스트ㄷ호가 작성한 더미 게시물',
+    img: [],
+    createdAt: '2023-05-20T16:25:14.151027',
+    comments: [],
+    likeCount: 0,
+  },
+];
 
 const Artist = () => {
+  //여기서 로그인후 받아온 사용자가 아티스트가 아니라면 포스트 작성하는 부분을 안보여주기 위해 전역 변수를 가져와야함
+  const currentUser = useSelector((state) => state.user.currentUser);
+  //만약 currentUser에 group이란 속성이 없다면 포스팅 못하게 안보이게하기
+  const [isArtist, setIsArtist] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
   // 포스트 데이터를 추가하기위한 상태관리 => 이건 writePost 모달창에서 submit시 변경되므로 props전달해야함
-  const [postData, setPostData] = useState([data]);
+  const [postData, setPostData] = useState([]);
+  const [artistPost, setArtistPost] = useState([]);
+  //현재 GroupID 받아오기
+  let { groupId } = useParams();
+  authFn();
+  console.log(currentUser);
+  useEffect(() => {
+    if (currentUser.group) {
+      setIsArtist(true);
+    }
+    console.log('effect실행되는곳');
+    axios.get(`http://localhost:8080/artist/${groupId}?page=1&size=16`).then((res) => {
+      setArtistPost(res.data.data);
+    });
+  }, [postData]);
 
   const openModal = () => {
     setModalOpen(true);
@@ -72,37 +81,55 @@ const Artist = () => {
         <ArtistBox>
           <PostContextBox>
             {/* 공용 input입니다! => PostInput 컴포넌트*/}
-            <button onClick={openModal}>
-              <PostInput transparent='transparent' pointer='pointer' placeholder='커뮤니티에 포스트를 남겨보세요.' />
-            </button>
-
-            {/* Post 컴포넌트 */}
-            {/* 임시 데이터로 <Post />컴포넌트 map 돌림 */}
-            <PostsBox>
-              {data.allArtist.map((el) => (
-                <ArtistPost
-                  key={el.artistId}
-                  createdAt={el.createdAt}
-                  nickname={el.nickname}
-                  content={el.content}
-                  img={el.img}
-                  likeNum={el.likeNum}
-                  commentNum={el.commentNum}
-                  modalOpen={modalOpen}
-                  setModalOpen={setModalOpen}
-                  postData={postData}
-                  setPostData={setPostData}
+            {isArtist && currentUser.groupId === Number(groupId) ? (
+              <button onClick={openModal}>
+                <PostInput
+                  transparent='transparent'
+                  pointer='pointer'
+                  placeholder='커뮤니티에 포스트를 남겨보세요.'
+                  currentUser={currentUser.profile}
                 />
-              ))}
-            </PostsBox>
+              </button>
+            ) : null}
+            {/* Post 컴포넌트 */}
+            {artistPost.length !== 0 ? (
+              <PostsBox isArtist={isArtist}>
+                {artistPost.map((el) => (
+                  <ArtistPost
+                    key={el.artistPostId}
+                    createdAt={el.createdAt}
+                    nickname={el.artist.nickname}
+                    content={el.content}
+                    profile={el.artist.profile}
+                    likeCount={el.likeCount}
+                    comments={el.comments}
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    postData={postData}
+                    setPostData={setPostData}
+                    groupId={groupId}
+                    img={el.img}
+                  />
+                ))}
+              </PostsBox>
+            ) : null}
           </PostContextBox>
 
           {/* 오른쪽 아티스트 이미지 => RightImg 컴포넌트 */}
-          <RightArea />
+          <RightArea currentUser={currentUser} />
         </ArtistBox>
       </Container>
       {/* 포스트 작성 컴포넌트임 => WritePost 컴포넌트 */}
-      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
+      {modalOpen ? (
+        <WritePost
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          postData={postData}
+          setPostData={setPostData}
+          groupId={groupId}
+          currentUser={currentUser}
+        />
+      ) : null}
     </>
   );
 };

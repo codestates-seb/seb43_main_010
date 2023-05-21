@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import CdPlayer from './MusicMaterial/CDPlayer';
 import MusicInfoBox from './MusicMaterial/MusicInfoBox';
-
+import authFn from '../auth';
 const Body = styled.div`
   height: 100vh;
   display: flex;
@@ -25,6 +25,7 @@ const Music = () => {
   const handlePlayToggle = () => {
     setIsPlaying(!isPlaying);
   };
+  authFn(); //로그인후 사용해주세요
 
   return (
     <Body>

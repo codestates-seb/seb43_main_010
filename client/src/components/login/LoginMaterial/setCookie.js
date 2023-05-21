@@ -9,7 +9,7 @@ const cookies = new Cookies();
 const setAccessToken = (accessToken) => {
   const today = new Date();
   const expireDate = today.setDate(today.getDate() + 1);
-
+  // const token = accessToken.slice(7); //공백없는애
   return cookies.set('accessToken', accessToken, {
     sameSite: 'strict',
     path: '/',

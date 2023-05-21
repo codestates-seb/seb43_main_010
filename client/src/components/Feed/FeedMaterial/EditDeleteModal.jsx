@@ -4,6 +4,7 @@ import WritePost from '../../WritePost/WritePost';
 import axios from 'axios';
 
 const EditDeleteModalBlock = styled.div`
+  z-index: 10;
   position: absolute;
   min-width: 150px;
   height: 93px;
@@ -160,6 +161,7 @@ const EditDeleteModal = ({
   setModalOpen,
   postData,
   setPostData,
+  groupId,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
@@ -170,6 +172,7 @@ const EditDeleteModal = ({
     //여기서 수정하기 위해  이전에 작성된 데이터를 axios로 받아서 WritePost에 전달해야함
     //받아온 데이터를 props로 전달해주고
     //해당 props가 있다면 WritePost에서 할당시켜주고 이전 값을 보여주면된다.
+    console.log(postData);
     setModalOpen(true);
   };
 
@@ -243,7 +246,9 @@ const EditDeleteModal = ({
       </EditDeleteModalBlock>
 
       {/* 포스트 작성/수정 컴포넌트 => WritePost 컴포넌트 */}
-      {modalOpen ? <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} /> : null}
+      {modalOpen ? (
+        <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} groupId={groupId} />
+      ) : null}
 
       {/* 포스트 삭제 여부 모달 */}
 

@@ -8,7 +8,7 @@ import WritePost from '../WritePost/WritePost';
 import RightImg from '../Feed/FeedMaterial/RightImg';
 import Post from '../Feed/FeedMaterial/Post';
 import MyProfileComments from './MyProfileMaterial/MyProfileComments';
-
+import authFn from '../auth';
 const MyProfileBlock = styled.div`
   display: flex;
   justify-content: center;
@@ -111,6 +111,7 @@ const MyProfile = () => {
   const [profile, setProfile] = useState({ nickname: '', followers: 0, followings: 0, profileImage: '' });
   const [selectedTab, setSelectedTab] = useState('posts');
   const [posts, setPosts] = useState([]);
+  // authFn(); //로그인후 사용해주세요
 
   const openModal = () => {
     setModalOpen(true);

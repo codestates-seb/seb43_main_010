@@ -147,7 +147,7 @@ const AuthorContentBox = styled.li`
     .profile-img {
       width: 46px;
       height: 46px;
-      background: ${({ img }) => `no-repeat url(${img})`};
+      background: ${({ profile }) => `no-repeat url(${profile})`};
       background-size: 46px 46px;
       border-radius: 50%;
     }
@@ -290,7 +290,7 @@ const BigDetailPost = ({
   createdAt,
   content,
   nickname,
-  img,
+  profile,
   liked,
   like,
   clickLike,
@@ -353,7 +353,7 @@ const BigDetailPost = ({
           {/* 왼쪽 */}
           <LeftPost>
             <ul className='author-post-box'>
-              <AuthorContentBox img={img}>
+              <AuthorContentBox profile={profile}>
                 <div className='author'>
                   <div className='author-img-txt'>
                     <div className='profile-img'></div>

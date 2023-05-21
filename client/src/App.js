@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import LoginPage from './pages/LoginPage';
@@ -12,6 +13,10 @@ import JoinPage from './pages/JoinPage';
 import MyProfilePage from './pages/MyProfilePage';
 
 function App() {
+  useEffect(() => {
+    // console.log(dbService);
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

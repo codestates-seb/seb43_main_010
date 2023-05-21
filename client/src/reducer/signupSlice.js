@@ -16,7 +16,6 @@ const initialState = {
     groupImg: defaultProfile,
   },
 };
-
 const signupSlice = createSlice({
   name: 'signup',
   initialState: initialState,
@@ -24,18 +23,13 @@ const signupSlice = createSlice({
     setCalssification(state, action) {
       state.calssification = action.payload;
     },
-    setFanId(state) {
-      state.fan.id++;
-    },
-    setArtistId(state) {
-      state.artist.artistId++;
-    },
     setFan(state, action) {
       state.fan = action.payload;
     },
     setArtist(state, action) {
       state.artist = action.payload;
     },
+
     resetInputs(state) {
       Object.assign(state, initialState);
     },

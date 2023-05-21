@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import SignupInput from './SignupInput';
 import SignupImgInput from './SignupImgInput';
 import ArtistInput from './ArtistInput';
-import { BsCheckLg } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import { setFanId, setArtistId, resetInputs, setCalssification } from '../../../reducer/signupSlice';
+import { resetInputs, setCalssification } from '../../../reducer/signupSlice';
 import axios from 'axios';
 import { emailValidation, pwdValidation, checkPwdValidation, commonValidation } from '../validation.js';
 import SwitchButton from './SignupSwitchBtn';
+
 //div : h1 form div(btn)
 const SignupFormBox = styled.div`
   /* min-height: 178px; */
@@ -91,10 +91,7 @@ const LoginForm = () => {
   const isArtist = useSelector((state) => state.signup.calssification);
   //회원가입 확인 시 상태를 post에 날리기 위해 모든 전역 상태 가져오기
   const fanUser = useSelector((state) => state.signup.fan);
-  // const fanProfile = useSelector((state) => state.signup.fan.profile);
   const artist = useSelector((state) => state.signup.artist);
-  // const artistProfile = useSelector((state) => state.signup.artist.profile);
-  // const artistGroupImg = useSelector((state) => state.signup.artist.groupImg);
 
   // switch 클릭시 setUser
   const handleChange = () => {
@@ -106,7 +103,7 @@ const LoginForm = () => {
   // 확인 버튼 클릭과 취소 클릭 시 경로를 주기 위함
   const navigate = useNavigate();
 
-  //이때 회원가입 Post 요청 날리기
+  //이때 회원가입 버튼 클릭
   const onClickSubmit = async (e) => {
     e.preventDefault();
     //아티스트인지 팬인지 구분해서 날리기
@@ -123,13 +120,19 @@ const LoginForm = () => {
         return;
       }
       body = { ...artist };
+      delete body.passwordCheck;
+      //여기서 pwd암호화하기
       await axios
         .post('/signup/artist', body)
-        .then(() => {
-          console.log('성공');
+        .then((res) => {
+          alert('회원가입 성공');
+          onReset();
+          onInputReset();
+          navigate('/login');
         })
         .catch((e) => {
-          console.log(e);
+          alert('회원가입 실패');
+          return;
         });
     } else {
       if (
@@ -143,19 +146,20 @@ const LoginForm = () => {
         return;
       }
       body = { ...fanUser };
+      delete body.passwordCheck;
       await axios
         .post('/signup/fans', body)
         .then((res) => {
-          console.log(res);
+          alert('회원가입 성공');
+          onReset();
+          onInputReset();
+          navigate('/login');
         })
         .catch((e) => {
-          console.log(e);
+          alert('회원가입 실패');
+          return;
         });
     }
-
-    onReset();
-    onInputReset();
-    navigate('/login');
   };
   const onClickCancle = () => {
     onReset();
