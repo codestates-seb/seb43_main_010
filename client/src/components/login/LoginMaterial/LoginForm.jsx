@@ -193,15 +193,14 @@ const LoginForm = () => {
     await axios
       .post('/login', body)
       .then((res) => {
-        console.log(res);
         let token = res.headers.get('authorization');
         setAccessToken(token);
+        onReset();
+        navigate('/');
       })
       .catch((error) => {
-        console.log(error);
+        alert('존재하지 않는 회원입니다.');
       });
-    onReset();
-    navigate('/');
   };
 
   const [inputs, setInputs] = useState({

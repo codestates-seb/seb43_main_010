@@ -50,16 +50,17 @@ const StyledMiniFoot = styled(MiniFoot)`
   transform: translateX(11px) translateY(34px);
 `;
 
-const RightArea = () => {
-  const user = useSelector((state) => state.signup.fan);
+const RightArea = ({ currentUser }) => {
   return (
     <RightContainer>
       <RightMyPageBox>
         {/* 로그인 유저의 닉네임과 프로필 보여주기 */}
         <div className='user-profile'>
-          <img src={user.profile} alt='프로필이미지'></img>
+          {/* <img src={''} alt='프로필이미지'></img> */}
+          <img src={currentUser.profile} alt='프로필이미지'></img>
         </div>
-        <div className='user-nickname'>닉네임</div>
+        {/* <div className='user-nickname'>nickname</div> */}
+        <div className='user-nickname'>{currentUser.nickname}</div>
       </RightMyPageBox>
       <StyledMiniFoot />
     </RightContainer>

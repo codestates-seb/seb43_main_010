@@ -129,9 +129,9 @@ const test1 = [testImg, testImg, testImg];
 const ArtistImgPreview = ({ imgList }) => {
   return (
     <>
-      {test1.length === 1 ? (
+      {imgList.length === 1 ? (
         <ImgPreviewOne>
-          {test1.map((el, idx) => {
+          {imgList.map((el, idx) => {
             return (
               <li key={idx} className='img-box'>
                 <img className='posted-img' src={el} alt='posted-img' />
@@ -140,9 +140,9 @@ const ArtistImgPreview = ({ imgList }) => {
           })}
         </ImgPreviewOne>
       ) : null}
-      {test1.length === 2 ? (
+      {imgList.length === 2 ? (
         <ImgPreviewTwo>
-          {test1.map((el, idx) => {
+          {imgList.map((el, idx) => {
             return (
               <li key={idx} className='img-box'>
                 <img className='posted-img' src={el} alt='posted-img' />
@@ -151,9 +151,9 @@ const ArtistImgPreview = ({ imgList }) => {
           })}
         </ImgPreviewTwo>
       ) : null}
-      {test1.length === 3 ? (
+      {imgList.length === 3 ? (
         <ImgPreviewThree>
-          {test1.map((el, idx) => {
+          {imgList.map((el, idx) => {
             return (
               <li key={idx} className='img-box'>
                 <img className='posted-img' src={el} alt='posted-img' />
@@ -162,9 +162,9 @@ const ArtistImgPreview = ({ imgList }) => {
           })}
         </ImgPreviewThree>
       ) : null}
-      {test1.length === 4 ? (
+      {imgList.length === 4 ? (
         <ImgPreviewFour>
-          {test1.map((el, idx) => {
+          {imgList.map((el, idx) => {
             return (
               <li key={idx} className='img-box'>
                 <img className='posted-img' src={el} alt='posted-img' />

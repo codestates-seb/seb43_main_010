@@ -101,7 +101,6 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
         return;
       }
       curEmail = artist.email;
-      console.log(curEmail);
     } else {
       if (emailValidation(fanUser.email)[0] === false) {
         alert(emailValidation(fanUser.email)[1]);

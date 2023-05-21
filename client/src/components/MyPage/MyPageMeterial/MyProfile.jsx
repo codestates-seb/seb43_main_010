@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import BTS from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
 import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
 import NewJeans from '../../../assets/jpg-file/card-jpg/3-newJeans.jpg';
-
+import { removeCookie } from '../../Login/LoginMaterial/setCookie';
 import axios from 'axios';
 
 const LeftWrapper = styled.div`
@@ -302,18 +302,20 @@ const MyProfile = () => {
 
     fetchMembershipDate();
   }, []);
-
+  const navigate = useNavigate();
   const handleLogoutClick = async () => {
-    try {
-      // 로그아웃 API 요청
-      const response = await axios.post('로그아웃 API 엔드포인트');
-      if (response.status === 200) {
-        // 로그아웃 후 화면 전환 로직 추가
-        <Link to='/'></Link>;
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    removeCookie();
+    navigate('/login');
+    // try {
+    //   // 로그아웃 API 요청
+    //   const response = await axios.post('로그아웃 API 엔드포인트');
+    //   if (response.status === 200) {
+    //     // 로그아웃 후 화면 전환 로직 추가
+    //     <Link to='/'></Link>;
+    //   }
+    // } catch (error) {
+    //   console.error('Error:', error);
+    // }
   };
 
   return (

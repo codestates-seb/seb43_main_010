@@ -126,6 +126,9 @@ const LoginForm = () => {
         .post('/signup/artist', body)
         .then((res) => {
           alert('회원가입 성공');
+          onReset();
+          onInputReset();
+          navigate('/login');
         })
         .catch((e) => {
           alert('회원가입 실패');
@@ -148,15 +151,15 @@ const LoginForm = () => {
         .post('/signup/fans', body)
         .then((res) => {
           alert('회원가입 성공');
+          onReset();
+          onInputReset();
+          navigate('/login');
         })
         .catch((e) => {
           alert('회원가입 실패');
           return;
         });
     }
-    onReset();
-    onInputReset();
-    navigate('/login');
   };
   const onClickCancle = () => {
     onReset();

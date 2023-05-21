@@ -5,6 +5,8 @@ import { useState, useRef } from 'react';
 import { BsFillCameraFill } from 'react-icons/bs';
 import WriteImgPreview from './WritePostMaterial/WriteImgPreview';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { getCookie } from '../Login/LoginMaterial/setCookie';
 
 const WritePostBlock = styled.div`
   position: fixed;
@@ -159,7 +161,7 @@ const ImgInput = styled.input`
 
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
 // 사용하실 때 const [modalOpen, setModalOpen] = useState(false)를 상위에서 사용해 주세요!
-const WritePost = ({ modalOpen, setModalOpen, postData, setPostData }) => {
+const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, currentUser }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
@@ -201,37 +203,69 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData }) => {
     limitRef.current = 4;
     // imgIdRef.current = 1;
   };
-
   // submit
   const submitFn = async (e) => {
     e.preventDefault();
-    if (content.trim().length > 1) {
-      // 이 부분 조건을 바꿔야할까? 컨텐츠나 이미지 둘 다 null 일 경우 submit 안되게??
-      // 여기서 서버한테 content 데이터 전송해야 함.
-      // 서버에 데이터 전송 되면 내용 비우고 창 닫기
-      // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
-      console.log({ content, img: imgList });
-      // 서버와 통신
-      // let body = { fanId: 1, content, img: imgList[0].url };
-      // console.log('디버깅영역');
-      // console.log(body);
-      // await axios
-      //   .post('/feed', body)
-      //   .then((res) => {
-      //     console.log(res.data);
-      //   })
-      //   .catch((e) => {
-      //     console.log(e);
-      //   });
-      setPostData([{ content, img: imgList }, ...postData]);
-      setContent('');
-      setImgList([]);
-      limitRef.current = 4;
-      imgIdRef.current = 1;
-
-      setModalOpen(false);
+    if (content.trim().length < 1) {
+      alert('내용을 작성해주세욘');
+      return;
     }
-    console.log(imgList);
+    let body = {};
+    let postUrl = '';
+    const imgArr = imgList.map((el) => el.url);
+    //아티스트 포스트 제출
+    if (currentUser.group) {
+      body = { artistId: currentUser.artistId, content, img: imgArr };
+      postUrl = '/artist';
+    } else {
+      // 피트포스트 제출
+      body = { fanId: currentUser.fanId, content, img: imgArr };
+      postUrl = '/feed';
+    }
+    await axios
+      .post(`${postUrl}/${groupId}`, body, {
+        headers: {
+          Authorization: getCookie(),
+        },
+      })
+      .then((res) => {
+        //여길 없애도댐
+        setPostData([res.data, ...postData]);
+        setContent('');
+        setImgList([]);
+        limitRef.current = 4;
+        imgIdRef.current = 1;
+
+        setModalOpen(false);
+      })
+      .catch((e) => {
+        alert('등록 실패');
+        return;
+      });
+    setPostData([{ content, img: imgList }, ...postData]);
+    // setPostData([
+    //   {
+    //     artist: {
+    //       artistId: currentUser.artistId,
+    //       nickname: currentUser.nickname,
+    //       group: currentUser.group,
+    //       profile: currentUser.profile,
+    //     },
+    //     feedPostId: null,
+    //     artistPostId: 2,
+    //     content: content,
+    //     img: imgList,
+    //     createdAt: '2023-05-20T16:25:14.151027',
+    //     comments: [],
+    //     likeCount: 0,
+    //   },
+    //   ...postData,
+    // ]);
+    // setContent('');
+    // setImgList([]);
+    // limitRef.current = 4;
+    // imgIdRef.current = 1;
+    // setModalOpen(false);
   };
 
   //이미지 아이콘 누르면 imgInput에 접근

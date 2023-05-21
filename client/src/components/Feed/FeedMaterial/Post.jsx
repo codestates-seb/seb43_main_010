@@ -172,7 +172,7 @@ const PostBlock = styled.div`
   }
 `;
 
-const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
+const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData, groupId }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [detailPost, setDetailPost] = useState(false);
@@ -266,6 +266,7 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
                 setModalOpen={setModalOpen}
                 postData={postData}
                 setPostData={setPostData}
+                groupId={groupId}
               />
             ) : null}
           </div>
@@ -291,6 +292,7 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
               setModalOpen={setModalOpen}
               postData={postData}
               setPostData={setPostData}
+              groupId={groupId}
             />
           ) : (
             <DetailPost
@@ -308,6 +310,7 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
               setModalOpen={setModalOpen}
               postData={postData}
               setPostData={setPostData}
+              groupId={groupId}
             />
           )}
         </>

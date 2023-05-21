@@ -16,7 +16,6 @@ const userSlice = createSlice({
     },
     setCurrentUser(state, action) {
       state.currentUser = action.payload;
-      // Object.assign(state, initialState);
     },
   },
 });

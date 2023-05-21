@@ -135,15 +135,21 @@ const Main = () => {
   });
 
   //login한 유저 찾아오기
-  // const currentUser = useSelector((state) => state.currentUser);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   const token = getCookie();
-  //   axios.get('/user', { withCredentials: true }).then((res) => {
-  //     console.log(res);
-  //     dispatch(setCurrentUser(res.data));
-  //   });
-  // }, []);
+  const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const token = getCookie();
+    axios
+      .get('/user', {
+        headers: {
+          Authorization: `${token}`,
+        },
+      })
+      .then((res) => {
+        // console.log(res.data.data);
+        dispatch(setCurrentUser(res.data.data));
+      });
+  }, []);
 
   return (
     <>

@@ -24,7 +24,6 @@ const signupSlice = createSlice({
       state.calssification = action.payload;
     },
     setFan(state, action) {
-      console.log(action.payload);
       state.fan = action.payload;
     },
     setArtist(state, action) {

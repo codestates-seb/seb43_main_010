@@ -14,7 +14,8 @@ const PostInputBlock = styled.form`
     color: var(--dark-blue-900);
     font-size: 15.5px;
 
-    background: no-repeat url('${profileImg}'), no-repeat url('${doubleStars}');
+    /* background: no-repeat url('${profileImg}'), no-repeat url('${doubleStars}'); */
+    background: ${({ currentUser }) => `no-repeat url('${currentUser}'), no-repeat url('${doubleStars}')`};
     background-size: 46px 46px, 23px 27px;
     background-position: 10px 10px, 649px 20px;
 
@@ -38,7 +39,7 @@ const Input = styled.input.attrs((props) => ({
 `;
 
 /* 공용 input입니다! transparent와 placeholder, pointer를 props로 받고 있어요. */
-const PostInput = ({ transparent, placeholder, pointer }) => {
+const PostInput = ({ transparent, placeholder, pointer, currentUser }) => {
   const [content, setContent] = useState('');
 
   const changeContent = (e) => {
@@ -52,7 +53,7 @@ const PostInput = ({ transparent, placeholder, pointer }) => {
   };
 
   return (
-    <PostInputBlock onSubmit={submitFn}>
+    <PostInputBlock onSubmit={submitFn} currentUser={currentUser}>
       <Input
         onChange={changeContent}
         transparent={transparent}
