@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> , commentCustomRepository {
     @Query(value = "SELECT * FROM comment WHERE feedPost_Id = :feedPostId", nativeQuery = true)
     List<Comment> findAllByFeedPostId(@Param("feedPostId") int feedPostId);
 

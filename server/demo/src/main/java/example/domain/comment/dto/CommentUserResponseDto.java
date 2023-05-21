@@ -16,5 +16,5 @@ public class CommentUserResponseDto {
     private Integer artistPostId;
     private String content;
     private LocalDateTime createdAt;
-    private Integer likeCount;
+    private int likeCount;
 }

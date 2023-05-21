@@ -3,6 +3,7 @@ package example.domain.like.service;
 import example.domain.artist.entity.Artist;
 import example.domain.artist.repository.ArtistRepository;
 import example.domain.artistPost.entity.ArtistPost;
+import example.domain.comment.entity.Comment;
 import example.domain.like.dto.LikeRequestDto;
 import example.domain.like.entity.Like;
 import example.domain.like.repository.LikeRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import example.domain.feedPost.repository.feedPostRepository;
 import org.springframework.transaction.annotation.Transactional;
 import example.domain.artistPost.repository.artistPostRepository;
+import example.domain.comment.repository.CommentRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ public class LikeService {
     private final ArtistRepository artistRepository;
     private final feedPostRepository feedPostRepository;
     private final artistPostRepository artistPostRepository;
+    private final CommentRepository commentRepository;
 
     // feedPost fan이 좋아요
     @Transactional
@@ -238,19 +241,198 @@ public void insertFeedArtistLike(Integer groupId, LikeRequestDto likeRequestDto)
     }
 
 
+
+
+    // feedPost에서 fan이 comment 좋아요
+    @Transactional
+    public void insertFeedCommentFanLike(LikeRequestDto likeRequestDto) throws Exception {
+        Comment comment = commentRepository.findById(likeRequestDto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getCommentId() + "인 댓글을 찾을 수 없습니다."));
+
+        // 특정 피드 게시물에 속하는지 확인
+        if (!comment.getFeedPost().getId().equals(likeRequestDto.getFeedPostId())) {
+            throw new IllegalArgumentException("ID가 " + likeRequestDto.getCommentId() + "인 댓글은 피드 게시물 ID " + likeRequestDto.getFeedPostId() + "에 속하지 않습니다.");
+        }
+
+
+        // 이미 좋아요가 되어 있는 경우 예외 처리
+        if (likeRepository.findByFansAndComment(comment.getFan(), comment).isPresent()) {
+            throw new DuplicateResourceException("팬 id: " + comment.getFan().getFanId() + "로 이미 좋아요가 눌러진 댓글 Id: " + comment.getId());
+        }
+
+        // like 객체 생성
+        Like like = Like.builder()
+                .comment(comment)
+                .fans(comment.getFan())
+                .buildWithComment();
+
+        likeRepository.save(like);
+        commentRepository.addLikeCount(comment);
+
+    }
 //
-//    // artistPost 좋아요 취소
-//    @Transactional
-//    public void delete(ArtistLikeRequestDto artistLikeRequestDto){
-//        Artist artist = artistRepository.findById(artistLikeRequestDto.getArtistId())
-//                .orElseThrow(() -> new NotFoundException("Could not found artist id : " + artistLikeRequestDto.getArtistId()));
-//        ArtistPost artistPost = artistPostRepository.findById(artistLikeRequestDto.getArtistPostId())
-//                .orElseThrow(() -> new NotFoundException("Could not found artistPost id : " + artistLikeRequestDto.getArtistPostId()));
-//        Like like = likeRepository.findByArtistAndArtistPost(artist, artistPost)
-//                .orElseThrow(() -> new NotFoundException("Could not found like id"));
 //
-//        likeRepository.delete(like);
-//        artistPostRepository.subLikeCount(artistPost);
-//    }
+//
+    // feedPost에서 artist가 comment 좋아요
+    @Transactional
+    public void insertFeedCommentArtistLike(LikeRequestDto likeRequestDto) throws Exception {
+        Comment comment = commentRepository.findById(likeRequestDto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getCommentId() + "인 댓글을 찾을 수 없습니다."));
+
+        // 특정 피드 게시물에 속하는지 확인
+        if (!comment.getFeedPost().getId().equals(likeRequestDto.getFeedPostId())) {
+            throw new IllegalArgumentException("ID가 " + likeRequestDto.getCommentId() + "인 댓글은 피드 게시물 ID " + likeRequestDto.getFeedPostId() + "에 속하지 않습니다.");
+        }
+
+        // 이미 좋아요가 되어 있는 경우 예외 처리
+        if (likeRepository.findByArtistAndComment(comment.getArtist(), comment).isPresent()) {
+            throw new DuplicateResourceException("아티스트 id: " + comment.getArtist().getArtistId() + "로 이미 좋아요가 눌러진 댓글 Id: " + comment.getId());
+        }
+
+        // like 객체 생성
+        Like like = Like.builder()
+                .comment(comment)
+                .artist(comment.getArtist())
+                .buildWithComment();
+
+        likeRepository.save(like);
+        commentRepository.addLikeCount(comment);
+
+    }
+
+    // artistPost fan이 comment 좋아요
+    @Transactional
+    public void insertArtistCommentFanLike(LikeRequestDto likeRequestDto) throws Exception {
+        Comment comment = commentRepository.findById(likeRequestDto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getCommentId() + "인 댓글을 찾을 수 없습니다."));
+
+        // 특정 피드 게시물에 속하는지 확인
+        if (!comment.getArtistPost().getId().equals(likeRequestDto.getArtistPostId())) {
+            throw new IllegalArgumentException("ID가 " + likeRequestDto.getCommentId() + "인 댓글은 피드 게시물 ID " + likeRequestDto.getArtistPostId() + "에 속하지 않습니다.");
+        }
+
+
+        // 이미 좋아요가 되어 있는 경우 예외 처리
+        if (likeRepository.findByFansAndComment(comment.getFan(), comment).isPresent()) {
+            throw new DuplicateResourceException("팬 id: " + comment.getFan().getFanId() + "로 이미 좋아요가 눌러진 댓글 Id: " + comment.getId());
+        }
+
+        // like 객체 생성
+        Like like = Like.builder()
+                .comment(comment)
+                .fans(comment.getFan())
+                .buildWithComment();
+
+        likeRepository.save(like);
+        commentRepository.addLikeCount(comment);
+    }
+
+
+
+
+
+    // artistPost artist가 comment 좋아요
+    @Transactional
+    public void insertArtistCommentArtistLike(LikeRequestDto likeRequestDto) throws Exception {
+        Comment comment = commentRepository.findById(likeRequestDto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getCommentId() + "인 댓글을 찾을 수 없습니다."));
+
+        // 특정 피드 게시물에 속하는지 확인
+        if (!comment.getArtistPost().getId().equals(likeRequestDto.getArtistPostId())) {
+            throw new IllegalArgumentException("ID가 " + likeRequestDto.getCommentId() + "인 댓글은 피드 게시물 ID " + likeRequestDto.getArtistPostId() + "에 속하지 않습니다.");
+        }
+
+
+        // 이미 좋아요가 되어 있는 경우 예외 처리
+        if (likeRepository.findByArtistAndComment(comment.getArtist(), comment).isPresent()) {
+            throw new DuplicateResourceException("팬 id: " + comment.getArtist().getArtistId() + "로 이미 좋아요가 눌러진 댓글 Id: " + comment.getId());
+        }
+
+        // like 객체 생성
+        Like like = Like.builder()
+                .comment(comment)
+                .artist(comment.getArtist())
+                .buildWithComment();
+
+        likeRepository.save(like);
+        commentRepository.addLikeCount(comment);
+    }
+
+
+    // feedPost comment에서 fan이 좋아요 취소
+    @Transactional
+    public void deleteFeedCommentFanLike(LikeRequestDto likeRequestDto) {
+        Fans fans = fansRepository.findById(likeRequestDto.getFanId())
+                .orElseThrow(() -> new NotFoundException("Could not find fan with id: " + likeRequestDto.getFanId()));
+
+        Comment comment = commentRepository.findById(likeRequestDto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getCommentId() + "인 댓글을 찾을 수 없습니다."));
+
+
+        Like like = likeRepository.findByFansAndComment(fans, comment)
+                .orElseThrow(() -> new NotFoundException("Could not find like"));
+
+        likeRepository.delete(like);
+        commentRepository.subLikeCount(comment);
+    }
+
+
+
+    //     feedPost comment에서 artist가 좋아요 취소
+    @Transactional
+    public void deleteFeedCommentArtistLike(LikeRequestDto likeRequestDto) {
+        Artist artist = artistRepository.findById(likeRequestDto.getArtistId())
+                .orElseThrow(() -> new NotFoundException("Could not find artist with id: " + likeRequestDto.getArtistId()));
+
+        FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
+                .orElseThrow(() -> new NotFoundException("Could not find feedPost with id: " + likeRequestDto.getFeedPostId()));
+
+        Like like = likeRepository.findByArtistAndFeedPost(artist, feedPost)
+                .orElseThrow(() -> new NotFoundException("Could not find like"));
+
+        likeRepository.delete(like);
+        feedPostRepository.subLikeCount(feedPost);
+    }
+
+
+
+
+
+    // artistPost fan이 comment 좋아요 취소
+    @Transactional
+    public void deleteArtistCommentFanLike(LikeRequestDto likeRequestDto) {
+        Fans fans = fansRepository.findById(likeRequestDto.getFanId())
+                .orElseThrow(() -> new NotFoundException("Could not find fan with id: " + likeRequestDto.getFanId()));
+
+        Comment comment = commentRepository.findById(likeRequestDto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getCommentId() + "인 댓글을 찾을 수 없습니다."));
+
+        Like like = likeRepository.findByFansAndComment(fans, comment)
+                .orElseThrow(() -> new NotFoundException("Could not find like"));
+
+        likeRepository.delete(like);
+        commentRepository.subLikeCount(comment);
+    }
+
+
+
+
+    // artistPost artist가 comment 좋아요 취소
+
+    @Transactional
+    public void deleteArtistCommentArtistLike(LikeRequestDto likeRequestDto) {
+        Artist artist = artistRepository.findById(likeRequestDto.getArtistId())
+                .orElseThrow(() -> new NotFoundException("Could not find artist with id: " + likeRequestDto.getArtistId()));
+
+        Comment comment = commentRepository.findById(likeRequestDto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getCommentId() + "인 댓글을 찾을 수 없습니다."));
+
+
+        Like like = likeRepository.findByArtistAndComment(artist, comment)
+                .orElseThrow(() -> new NotFoundException("Could not find like"));
+
+        likeRepository.delete(like);
+        commentRepository.subLikeCount(comment);
+    }
 
 }

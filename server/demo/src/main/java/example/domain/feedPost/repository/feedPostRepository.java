@@ -1,6 +1,5 @@
 package example.domain.feedPost.repository;
 
-import example.domain.comment.entity.Comment;
 import example.domain.feedPost.entity.FeedPost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

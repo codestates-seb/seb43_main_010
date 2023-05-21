@@ -14,5 +14,5 @@ public class CommentFanResponseDto {
     private Integer artistPostId;
     private String content;
     private LocalDateTime createdAt;
-    private Integer likeCount;
+    private int likeCount;
 }

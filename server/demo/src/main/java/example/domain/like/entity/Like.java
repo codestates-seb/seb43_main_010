@@ -73,6 +73,20 @@ public class Like {
         this.artist = artist;
         this.artistPost = artistPost;
     }
+
+
+    @Builder
+    public Like(Fans fans, FeedPost feedPost, Artist artist, ArtistPost artistPost, Comment comment) {
+
+
+        this.fans = fans;
+        this.feedPost = feedPost;
+        this.artist = artist;
+        this.artistPost = artistPost;
+        this.comment = comment;
+    }
+
+
     public static LikeBuilder builder() {
         return new LikeBuilder();
     }
@@ -82,6 +96,7 @@ public class Like {
         private FeedPost feedPost;
         private Artist artist;
         private ArtistPost artistPost;
+        private Comment comment;
 
         public LikeBuilder fans(Fans fans) {
             this.fans = fans;
@@ -103,6 +118,12 @@ public class Like {
             return this;
         }
 
+        public LikeBuilder comment(Comment comment) {
+            this.comment = comment;
+            return this;
+        }
+
+
         public Like build() {
             if ((fans == null && artist == null) || (fans != null && artist != null)) {
                 throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
@@ -113,6 +134,19 @@ public class Like {
             }
 
             return new Like(fans, feedPost, artist, artistPost);
+        }
+
+        public Like buildWithComment() {
+
+            if ((fans == null && artist == null) || (fans != null && artist != null)) {
+                throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
+            }
+
+            if (comment == null) {
+                throw new IllegalArgumentException("Invalid Like construction. comment should be provided.");
+            }
+
+            return new Like(fans, feedPost, artist, artistPost, comment);
         }
     }
 }

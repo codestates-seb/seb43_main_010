@@ -12,10 +12,13 @@ import example.domain.comment.dto.CommentPostDto;
 import example.domain.comment.entity.Comment;
 import example.domain.fans.dto.FansResponseDto;
 import example.domain.fans.entity.Fans;
+import example.domain.feedPost.dto.feedPostResponseDto;
 import example.domain.feedPost.entity.FeedPost;
 import example.global.exception.BusinessLogicException;
 import example.global.exception.ExceptionCode;
 import org.mapstruct.Mapper;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import example.domain.feedPost.service.feedPostService;
 
@@ -86,42 +89,44 @@ public interface CommentMapper {
         return comment;
     }
 
-//    //  feedPost에서 fan 의 경우 : CommentPatchDto -> Comment
-//    default Comment commentPatchDtoToComment(Fans fans, FeedPost feedPost, CommentPatchDto requestBody){
-//        Comment comment = new Comment();
-//        comment.setFans(fans);
-//        comment.setFeedPost(feedPost);
-//        comment.setContent(requestBody.getContent());
-//        return comment;
-//    }
-//
-//    // feedPost에서 artist 의 경우 :  CommentPatchDto -> Comment
-//    default Comment commentPatchDtoToComment(Artist artist, FeedPost feedPost, CommentPatchDto requestBody){
-//        Comment comment = new Comment();
-//        comment.setArtist(artist);
-//        comment.setFeedPost(feedPost);
-//        comment.setContent(requestBody.getContent());
-//        return comment;
-//    }
 
-//    //  artistPost에서 fan 의 경우 : CommentPatchDto -> Comment
-//    default Comment commentPatchDtoToComment(Fans fans, ArtistPost artistPost, CommentPatchDto requestBody){
-//        Comment comment = new Comment();
-//        comment.setFans(fans);
-//        comment.setArtistPost(artistPost);
-//        comment.setContent(requestBody.getContent());
-//        return comment;
-//    }
-//
-//    // artistPost에서 artist 의 경우 :  CommentPatchDto -> Comment
-//    default Comment commentPatchDtoToComment(Artist artist, ArtistPost artistPost, CommentPatchDto requestBody){
-//        Comment comment = new Comment();
-//        comment.setArtist(artist);
-//        comment.setArtistPost(artistPost);
-//        comment.setContent(requestBody.getContent());
-//        return comment;
-//    }
 
+    default CommentFanResponseDto commentToCommentFanResponseDto(Comment comment){
+        ModelMapper modelMapper = new ModelMapper();
+        CommentFanResponseDto commentFanResponseDto = modelMapper.map(comment, CommentFanResponseDto.class);
+        commentFanResponseDto.setFeedPostId(comment.getFeedPost().getId());
+
+        return commentFanResponseDto;
+    }
+
+    default CommentArtistResponseDto commentToCommentArtistResponseDto(Comment comment){
+        ModelMapper modelMapper = new ModelMapper();
+        CommentArtistResponseDto commentArtistResponseDto = modelMapper.map(comment, CommentArtistResponseDto.class);
+        commentArtistResponseDto.setArtistPostId(comment.getArtistPost().getId());
+
+        return commentArtistResponseDto;
+    }
+
+    default CommentUserResponseDto commentToUserCommentResponseDto(Comment comment){
+        ModelMapper modelMapper = new ModelMapper();
+        CommentUserResponseDto commentUserResponseDto = modelMapper.map(comment, CommentUserResponseDto.class);
+//        commentUserResponseDto.setFeedPostId(comment.getFeedPost().getId());
+//        commentUserResponseDto.setArtistPostId(comment.getArtistPost().getId());
+
+        return commentUserResponseDto;
+    }
+
+
+    default List<CommentUserResponseDto> commentsToUserCommentResponseDtos(List<Comment> comments) {
+        ModelMapper modelMapper = new ModelMapper();
+        TypeToken<List<CommentUserResponseDto>> typeToken = new TypeToken<List<CommentUserResponseDto>>() {};
+        List<CommentUserResponseDto> commentUserResponseDto = modelMapper.map(comments, typeToken.getType());
+
+        return commentUserResponseDto;
+    }
+
+
+    /* 여기서부터 쭉 잘되는 코드
 
     // Comment -> CommentResponseDto
     default CommentFanResponseDto commentToCommentFanResponseDto(Comment comment) {
@@ -223,41 +228,7 @@ public interface CommentMapper {
 
         return commentResponseDto;
     }
-//    default CommentUserResponseDto commentToUserCommentResponseDto(Comment comment) {
-//        CommentUserResponseDto commentResponseDto = new CommentUserResponseDto();
-//        Fans fans = comment.getFan();
-//        FansResponseDto userDto1 = new FansResponseDto();
-//        userDto1.setFanId(fans.getFanId());
-//        userDto1.setNickname(fans.getNickname());
-//        userDto1.setProfile(fans.getProfile());
-//        userDto1.setEmail(fans.getEmail());
-//        userDto1.setName(fans.getName());
-//
-//        Artist artist = comment.getArtist();
-//        ArtistResponseDto userDto2 = new ArtistResponseDto();
-//        userDto2.setArtistId(artist.getArtistId());
-//        userDto2.setNickname(artist.getNickname());
-//        userDto2.setProfile(artist.getProfile());
-//        userDto2.setEmail(artist.getEmail());
-//        userDto2.setName(artist.getName());
-//
-//        commentResponseDto.setFan(userDto1);
-//        commentResponseDto.setArtist(userDto2);
-//        commentResponseDto.setFeedPostId(comment.getFeedPost().getId());
-//        commentResponseDto.setArtistPostId(comment.getArtistPost().getId());
-//        commentResponseDto.setContent(comment.getContent());
-//        commentResponseDto.setCreatedAt(comment.getCreatedAt());
-//        commentResponseDto.setLikeCount(comment.getLikeCount());
-//
-//        return commentResponseDto;
-//    }
 
-
-//    List<CommentFanResponseDto> commentsToFanCommentResponseDtos(List<Comment> comments);
-//
-//    List<CommentArtistResponseDto> commentsToArtistCommentResponseDtos(List<Comment> comments);
-//
-//    List<CommentUserResponseDto> commentsToUserCommentResponseDtos(List<Comment> comments);
 
     default List<CommentFanResponseDto> commentsToFanCommentResponseDtos(List<Comment> comments) {
         return comments.stream()
@@ -271,11 +242,7 @@ public interface CommentMapper {
                 .collect(Collectors.toList());
     }
 
-//    default List<CommentUserResponseDto> commentsToUserCommentResponseDtos(List<Comment> comments){
-//        return comments.stream()
-//                .map(this::commentToUserCommentResponseDto)
-//                .collect(Collectors.toList());
-//    }
+
 
     default List<CommentUserResponseDto> commentsToUserCommentResponseDtos(List<Comment> comments) {
         List<CommentUserResponseDto> responseDtos = new ArrayList<>();
@@ -329,41 +296,5 @@ public interface CommentMapper {
         return responseDtos;
     }
 
-
-//    default List<CommentUserResponseDto> commentsToUserCommentResponseDtos(List<Comment> comments) {
-//        List<CommentUserResponseDto> responseDtos = new ArrayList<>();
-//
-//        for (Comment comment : comments) {
-//            CommentUserResponseDto responseDto = commentToUserCommentResponseDto(comment);
-//            FansResponseDto fansResponseDto = createFansResponseDto(comment.getFans());
-//            ArtistResponseDto artistResponseDto = createArtistResponseDto(comment.getArtist());
-//
-//            responseDto.setFan(fansResponseDto);
-//            responseDto.setArtist(artistResponseDto);
-//            responseDto.setFeedPostId(comment.getFeedPost().getId());
-//            responseDto.setContent(comment.getContent());
-//            responseDto.setCreatedAt(comment.getCreatedAt());
-//            responseDto.setLikeCount(comment.getLikeCount());
-//
-//            responseDtos.add(responseDto);
-//        }
-//
-//        return responseDtos;
-//    }
-//
-//    private FansResponseDto createFansResponseDto(Fans fans) {
-//        FansResponseDto fansResponseDto = new FansResponseDto();
-//        fansResponseDto.setId(fans.getId());
-//        fansResponseDto.setNickname(fans.getNickname());
-//        fansResponseDto.setProfile(fans.getProfile());
-//        return fansResponseDto;
-//    }
-//
-//    private ArtistResponseDto createArtistResponseDto(Artist artist) {
-//        ArtistResponseDto artistResponseDto = new ArtistResponseDto();
-//        artistResponseDto.setId(artist.getId());
-//        artistResponseDto.setNickname(artist.getNickname());
-//        artistResponseDto.setProfile(artist.getProfile());
-//        return artistResponseDto;
-//    }
+     */
 }
