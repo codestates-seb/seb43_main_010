@@ -34,6 +34,7 @@ public class FeedPost extends BaseTimeEntity {
 
 
     @ElementCollection
+    @Lob
     private List<String> img;
 
     @CreatedDate
