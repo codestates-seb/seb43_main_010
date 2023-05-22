@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 import leftIcon from '../../../assets/svg-file/left-icon.svg';
 import rightIcon from '../../../assets/svg-file/right-icon.svg';
+import { Link } from 'react-router-dom';
 
 // 임시 데이터
 import data from '../../Main/data.js';
@@ -144,6 +145,10 @@ const RightButton = styled(LRButton)`
   }
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const Notice = ({ openNotice, setOpenNotice }) => {
   const [selected, setSelected] = useState('전체');
   const [leftBtnHide, setLeftBtnHide] = useState(true);
@@ -251,11 +256,19 @@ const Notice = ({ openNotice, setOpenNotice }) => {
             const createdAt = el.createdAt || '오늘'; // 임시로 '오늘'을 사용
             const hideDate = prevCreatedAt === createdAt; // 이전 항목과 현재 항목의 createdAt 값 비교
             prevCreatedAt = createdAt; // 현재 항목의 createdAt 값을 이전 항목으로 설정
-            return <NoticeArtContentAllLi key={el.groupId} groupName={el.groupName} hide={hideDate} />;
+            return (
+              <StyledLink to={`/artist/${el.groupId}`} key={el.groupId}>
+                <NoticeArtContentAllLi groupName={el.groupName} hide={hideDate} />
+              </StyledLink>
+            );
           })}
-        {data.myGroup.map((el) => (
-          <NoticeArtContentLi key={el.groupId} groupName={el.groupName} selected={selected} />
-        ))}
+        {data.myGroup.map((el) => {
+          return (
+            <StyledLink to={`/artist/${el.groupId}`} key={el.groupId}>
+              <NoticeArtContentLi groupName={el.groupName} selected={selected} />
+            </StyledLink>
+          );
+        })}
       </ul>
     </NoticeBlock>
   );
