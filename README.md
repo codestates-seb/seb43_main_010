@@ -30,6 +30,8 @@
 |:--------:| :--------: | :--------: |
 | **`Discord`**<br>**`Github`**<br>**`Notion`** | **`JavaScript`**<br>**`React`**<br>**`React-Router`**<br>**`Redux-ToolKit`**<br>**`Styled-Components`**<br>**`Axios`**<br>**`ESLint`**<br>**`Prettier`**<br>**`Figma`** | **`Java`**<br>**`JPA`**<br>**`Intellijidea`**<br>**`Spring-MVC`**<br>**`Spring-Boot`**<br>**`Spring-Security`**<br>**`Gradle`**<br>**`JWT`**<br>**`AmazoneC2`**<br>**`Mysql`**<br>**`H2`**<br>
 
+</br>
+
 ## 🗂️ Pages
 | Signup Page | Login Page |
 | :--------: | :--------: |
@@ -51,6 +53,8 @@
 | :--------: | :--------: |
 |  |  |
 
+</br>
+
 ## 📎Git
 ### 🌲 Branch
 `main` : 서비스 운영 브랜치 dev : 메인 브랜치 배포전 릴리즈 브랜치
@@ -60,6 +64,7 @@
 `dev-be` : BE 개발 환경 브랜치
 </br>
 `f/b-feat` : 기능 개발 브랜치
+
 </br>
 
 ### ✉️ Commit Message
@@ -72,3 +77,5 @@
 |  rename  |             파일 및폴더명/ 경로 변경 시              |
 |  style   |  컨벤션에 맞춘 코드 스타일 또는 포맷 등에 관한 커밋  |
 |   docs   |                  문서 및 주석 수정                   |
+
+</br>
