@@ -10,5 +10,7 @@ import java.util.Optional;
 public interface CommunityRepository extends JpaRepository<Community, Integer> {
     List<Community> findByFanId(Integer fanId);
 
+    List<Community> findByGroupName(String groupName);
+
     boolean existsByGroupName(String groupName);
 }

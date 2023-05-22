@@ -4,11 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="935dd20a-916f-4e9d-aecc-20e8d9372a9f" name="변경" comment="" />
+    <list default="true" id="935dd20a-916f-4e9d-aecc-20e8d9372a9f" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/demo/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/demo/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/demo/src/main/java/example/ExampleApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/demo/src/main/java/example/ExampleApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/demo/src/main/java/example/domain/community/repository/CommunityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/demo/src/main/java/example/domain/community/repository/CommunityRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/demo/src/main/java/example/domain/fans/entity/Fans.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/demo/src/main/java/example/domain/fans/entity/Fans.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/server/demo">
@@ -50,8 +59,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -69,21 +79,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/tr-pr/Desktop&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;모듈&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.Mappings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "last_opened_file_path": "C:/Users/tr-pr/Desktop",
+    "project.structure.last.edited": "모듈",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.Mappings"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="example.domain.artist.controller" />
+    </key>
+  </component>
   <component name="RunManager" selected="애플리케이션.ExampleApplication">
-    <configuration name="ExampleApplication (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="ExampleApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="example.ExampleApplication" />
-      <module name="com.example.demo.main" />
+      <module name="demo.main" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="example.*" />
@@ -96,7 +116,7 @@
     </configuration>
     <configuration name="ExampleApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="example.ExampleApplication" />
-      <module name="demo.main" />
+      <module name="com.example.demo.main" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="example.*" />
@@ -204,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684567409169</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="init:메인페이지(Re)">
+      <created>1684654343291</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1684654343291</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -213,7 +240,8 @@
     <MESSAGE value="fix:그룹이미지 안들어감/그룹색상/사용자 정보 불러오기" />
     <MESSAGE value="init:사용자정보불러오기" />
     <MESSAGE value="init:메인페이지" />
-    <option name="LAST_COMMIT_MESSAGE" value="init:메인페이지" />
+    <MESSAGE value="init:메인페이지(Re)" />
+    <option name="LAST_COMMIT_MESSAGE" value="init:메인페이지(Re)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,5 +1,6 @@
 package example.domain.fans.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import example.domain.artist.entity.Artist;
 import example.domain.community.entity.Community;
 import example.domain.group.entity.Group;
@@ -40,7 +41,7 @@ public class Fans extends BaseEntity {
     @Column
     @Lob
     private String profile;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "fans")
     private List<Community> communitys=new ArrayList<>();
 
