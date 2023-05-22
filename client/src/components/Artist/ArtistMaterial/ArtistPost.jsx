@@ -7,7 +7,7 @@ import ArtistImgPreview from './ArtistImgPreview';
 import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
 import DetailPost from '../../Feed/FeedMaterial/DetailPost';
 import BigDetailPost from '../../Feed/FeedMaterial/BigDetailPost';
-
+import { showDate, showMonthDay } from './showDate';
 const Container = styled.div`
   width: 707px;
   display: flex;
@@ -23,6 +23,7 @@ const ArtistProfile = styled.div`
   .profile-img {
     width: 46px;
     height: 46px;
+    border-radius: 1.5rem;
     background: ${({ profile }) => `no-repeat url(${profile})`};
     background-size: 46px 46px;
   }
@@ -256,6 +257,7 @@ const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments
   const state = useSelector((state) => state.color);
   const group = state.allGroup.find((el) => el.groupId === Number(groupId));
   const gradColor = group ? group.gradColor : [];
+
   return (
     <>
       <Container>
@@ -263,8 +265,8 @@ const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments
           <div className='profile'>
             <img src={profile} alt='profile' className='profile-img'></img>
           </div>
-          <div className='created-day'>5</div>
-          <div className='created-month'>May</div>
+          <div className='created-day'>{showMonthDay(createdAt)[1]}</div>
+          <div className='created-month'>{showMonthDay(createdAt)[0]}</div>
         </ArtistProfile>
         <ArtistPostBox gradColor={gradColor}>
           <div className='bubble-tail'>
@@ -314,7 +316,7 @@ const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments
               ) : (
                 <p className='post-content'>{content}</p>
               )}
-              <p className='time'>{createdAt}</p>
+              <p className='time'>{showDate(createdAt)}</p>
             </button>
           </div>
           <ArtistImgPreview imgList={img}></ArtistImgPreview>

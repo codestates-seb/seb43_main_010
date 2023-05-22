@@ -10,7 +10,7 @@ import authFn from '../auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getCookie } from '../Login/LoginMaterial/setCookie';
-import { setCurrentUser } from '../../reducer/userSlice';
+import { setCurrentGroupId } from '../../reducer/userSlice';
 import axios from 'axios';
 const Container = styled.div`
   width: 100vw;
@@ -62,26 +62,14 @@ const Artist = () => {
   const [artistPost, setArtistPost] = useState([]);
   //현재 GroupID 받아오기
   let { groupId } = useParams();
+  const currentGroupId = useSelector((state) => state.user.groupId);
+  dispatch(setCurrentGroupId(Number(groupId)));
   authFn();
-
   useEffect(() => {
-    // if (!currentUser) {
-    //   const token = getCookie();
-    //   axios
-    //     .get('/user', {
-    //       headers: {
-    //         Authorization: `${token}`,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       dispatch(setCurrentUser(res.data.data));
-    //     });
-    // }
     if (currentUser.group) {
       setIsArtist(true);
     }
-    console.log('effect실행되는곳');
-    axios.get(`http://localhost:8080/artist/${groupId}?page=1&size=16`).then((res) => {
+    axios.get(`http://localhost:8080/artist/${currentGroupId}?page=1&size=16`).then((res) => {
       setArtistPost(res.data.data);
     });
   }, [postData]);
@@ -96,7 +84,7 @@ const Artist = () => {
         <ArtistBox>
           <PostContextBox>
             {/* 공용 input입니다! => PostInput 컴포넌트*/}
-            {isArtist && currentUser.groupId === Number(groupId) ? (
+            {isArtist && currentUser.groupId === currentGroupId ? (
               <button onClick={openModal}>
                 <PostInput
                   transparent='transparent'
@@ -108,7 +96,7 @@ const Artist = () => {
             ) : null}
             {/* Post 컴포넌트 */}
             {artistPost.length !== 0 ? (
-              <PostsBox isArtist={isArtist} curGroup={currentUser.groupId} pageGroup={Number(groupId)}>
+              <PostsBox isArtist={isArtist} curGroup={currentUser.groupId} pageGroup={currentGroupId}>
                 {artistPost.map((el) => (
                   <ArtistPost
                     key={el.artistPostId}
@@ -122,7 +110,7 @@ const Artist = () => {
                     setModalOpen={setModalOpen}
                     postData={postData}
                     setPostData={setPostData}
-                    groupId={groupId}
+                    groupId={currentGroupId}
                     img={el.img}
                   />
                 ))}
@@ -141,7 +129,7 @@ const Artist = () => {
           setModalOpen={setModalOpen}
           postData={postData}
           setPostData={setPostData}
-          groupId={groupId}
+          groupId={currentGroupId}
           currentUser={currentUser}
         />
       ) : null}
