@@ -6,6 +6,9 @@ import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import Comments from './Comments';
 import EditDeleteModal from './EditDeleteModal';
 
+// 임시 댓글 데이터
+import commentFeedData from '../commentFeedData.js';
+
 const DetailPostBlock = styled.div`
   position: fixed;
   top: 0;
@@ -15,7 +18,7 @@ const DetailPostBlock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 2;
   background-color: ${({ deleteModal }) => (deleteModal ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.7)')};
 `;
 
@@ -78,7 +81,7 @@ const AuthorContentBox = styled.li`
     .profile-img {
       width: 46px;
       height: 46px;
-      background: ${({ profile }) => `no-repeat url(${profile})`};
+      background: ${({ img }) => `no-repeat url(${img})`};
       background-size: 46px 46px;
       border-radius: 50%;
     }
@@ -283,6 +286,11 @@ const InputSubmit = styled.li`
   }
 `;
 
+const CommentMusicUl = styled.ul`
+  max-height: 38vh;
+  overflow: auto;
+`;
+
 // 여기에선 해당하는 게시글의 댓글 데이터를 서버한테 받아와야 함.
 const DetailPost = ({
   detailPost,
@@ -290,7 +298,7 @@ const DetailPost = ({
   createdAt,
   content,
   nickname,
-  profile,
+  img,
   liked,
   like,
   clickLike,
@@ -352,7 +360,7 @@ const DetailPost = ({
         <DetailContent>
           <ul className='detail-post-ul'>
             <ul className='top-mid-ul'>
-              <AuthorContentBox profile={profile}>
+              <AuthorContentBox img={img}>
                 <div className='author'>
                   <div className='author-img-txt'>
                     <div className='profile-img'></div>
@@ -380,10 +388,9 @@ const DetailPost = ({
                         setDeleteModal={setDeleteModal}
                         what='포스트를'
                         //추가
-                        modalOpen={modalOpen}
-                        setModalOpen={setModalOpen}
-                        postData={postData}
-                        setPostData={setPostData}
+                        detailPost={detailPost}
+                        setDetailPost={setDetailPost}
+                        postContent={content}
                       />
                     ) : null}
                   </div>
@@ -394,11 +401,23 @@ const DetailPost = ({
               </AuthorContentBox>
 
               <ConmmentsNum>
-                <div>1개의 댓글</div>
+                <div>{commentFeedData.comments.length}개의 댓글</div>
               </ConmmentsNum>
 
               {/* 여기서 댓글 데이터 map 돌려야 함 => Comments 댓글 컴포넌트 */}
-              <Comments deleteModal={deleteModal} setDeleteModal={setDeleteModal} />
+              <CommentMusicUl>
+                {commentFeedData.comments.map((el) => (
+                  <Comments
+                    key={el.commentId}
+                    deleteModal={deleteModal}
+                    setDeleteModal={setDeleteModal}
+                    commentName={el.commentName}
+                    commentContent={el.commentContent}
+                    likeNum={el.likeNum}
+                    createAt={el.createAt}
+                  />
+                ))}
+              </CommentMusicUl>
             </ul>
 
             <InputSubmit comment={comment.trim().length > 0}>

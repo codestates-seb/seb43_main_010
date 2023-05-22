@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { useRef, useEffect, useState } from 'react';
-import WritePost from '../../WritePost/WritePost';
-import axios from 'axios';
+import { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { editpostOpen, setCommentContent } from '../../../reducer/editpostSlice';
 
 const EditDeleteModalBlock = styled.div`
-  z-index: 10;
   position: absolute;
   min-width: 150px;
   height: 93px;
@@ -157,23 +156,21 @@ const EditDeleteModal = ({
   deleteModal,
   setDeleteModal,
   what,
-  modalOpen,
-  setModalOpen,
-  postData,
-  setPostData,
-  groupId,
+  detailPost,
+  setDetailPost,
+  postContent,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
-  //포스트 수정을 위함
-  // 포스트 수정 버튼 누르면 WritePost 컴포넌트 들고오기위함
-  const openWriteModal = () => {
-    //여기서 수정하기 위해  이전에 작성된 데이터를 axios로 받아서 WritePost에 전달해야함
-    //받아온 데이터를 props로 전달해주고
-    //해당 props가 있다면 WritePost에서 할당시켜주고 이전 값을 보여주면된다.
-    console.log(postData);
-    setModalOpen(true);
+  const dispatch = useDispatch();
+
+  const handleEdit = () => {
+    dispatch(editpostOpen());
+    dispatch(setCommentContent(postContent));
+    if (detailPost) {
+      setDetailPost(false);
+    }
   };
 
   // 수정, 삭제가 뜨는 미니 모달
@@ -226,11 +223,12 @@ const EditDeleteModal = ({
     setDeleteModal(false);
     setOpenModal(false);
   };
+
   return (
     <>
       <EditDeleteModalBlock ref={modalRef} top={top} left={left} right={right} transform={transform} deleteModal={deleteModal}>
         {/* 여길 누르면 post의 수정이 일어나야함 */}
-        <button className='edit' onClick={openWriteModal}>
+        <button onClick={handleEdit} className='edit'>
           <div className='pen'>
             <i className='i-pen-icon' />
             <span>수정하기</span>
@@ -245,13 +243,7 @@ const EditDeleteModal = ({
         </button>
       </EditDeleteModalBlock>
 
-      {/* 포스트 작성/수정 컴포넌트 => WritePost 컴포넌트 */}
-      {modalOpen ? (
-        <WritePost modalOpen={modalOpen} setModalOpen={setModalOpen} postData={postData} setPostData={setPostData} groupId={groupId} />
-      ) : null}
-
       {/* 포스트 삭제 여부 모달 */}
-
       {deleteModal ? (
         <DeleteModal height={height} bgColor={bgColor} radius={radius}>
           <ModalBg ref={deleteRef}>

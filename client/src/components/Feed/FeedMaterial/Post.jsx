@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
+import { useSelector } from 'react-redux';
 
 import EditDeleteModal from './EditDeleteModal';
 import DetailPost from './DetailPost';
 import BigDetailPost from './BigDetailPost';
+import EditPost from '../../WritePost/EditPost';
 
 const PostBlock = styled.div`
   width: 707px;
@@ -172,12 +174,14 @@ const PostBlock = styled.div`
   }
 `;
 
-const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData, groupId }) => {
+const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [detailPost, setDetailPost] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+
+  const { isOpen } = useSelector((state) => state.editpost);
 
   const clickLike = () => {
     setLiked(!liked);
@@ -266,12 +270,15 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
                 setModalOpen={setModalOpen}
                 postData={postData}
                 setPostData={setPostData}
-                groupId={groupId}
+                postContent={content}
               />
             ) : null}
           </div>
         </div>
       </PostBlock>
+
+      {/* 수정하는 모달 창 */}
+      {isOpen && <EditPost bgc05={true} />}
 
       {/* 디테일 포스트 컴포넌트임 => BigDetailPost, DetailPost 컴포넌트 */}
       {detailPost && (
@@ -287,12 +294,6 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
               liked={liked}
               like={like}
               clickLike={clickLike}
-              // 추가
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              postData={postData}
-              setPostData={setPostData}
-              groupId={groupId}
             />
           ) : (
             <DetailPost
@@ -305,12 +306,6 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
               liked={liked}
               like={like}
               clickLike={clickLike}
-              //추가
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              postData={postData}
-              setPostData={setPostData}
-              groupId={groupId}
             />
           )}
         </>
