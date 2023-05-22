@@ -1,7 +1,7 @@
 ## ✨ LUMIAN
 <p align="center">
   <br>
-  <img src="">
+  <img width="100" alt="LUMIAN" src="https://github.com/codestates-seb/seb43_main_010/assets/120363595/036934bd-7c47-4330-a8e1-b90c95b89eba">
   <br>
 </p>
 
@@ -20,7 +20,7 @@
 |:--------:| :--------: | :--------: |
 | FE | FE | FE | 
 
-| [김현지]() | [정수진]() |
+| [김현지](https://github.com/HJKKIM) | [정수진](https://github.com/sujin13) |
 |:--------:| :--------: |
 | BE | BE |
 
@@ -29,7 +29,7 @@
 ## ⚙️ 툴소개
 | 공통 | Front End | Back End |
 |:--------:| :--------: | :--------: |
-| **`Discord`**<br>**`Github`**<br>**`Notion`** | **`JavaScript`**<br>**`React`**<br>**`React-Router`**<br>**`Redux-ToolKit`**<br>**`Styled-Components`**<br>**`Axios`**<br>**`ESLint`**<br>**`Prettier`**<br>**`Figma`** | **`Java`**<br>
+| **`Discord`**<br>**`Github`**<br>**`Notion`** | **`JavaScript`**<br>**`React`**<br>**`React-Router`**<br>**`Redux-ToolKit`**<br>**`Styled-Components`**<br>**`Axios`**<br>**`ESLint`**<br>**`Prettier`**<br>**`Figma`** | **`Java`**<br>**`JPA`**<br>**`Intellijidea`**<br>**`Spring-MVC`**<br>**`Spring-Boot`**<br>**`Spring-Security`**<br>**`Gradle`**<br>**`JWT`**<br>**`AmazoneC2`**<br>**`Mysql`**<br>**`H2`**<br>
 
 ## 🗂️ Pages
 | Signup Page | Login Page |
@@ -40,9 +40,17 @@
 | :--------: | :--------: |
 |  |  |
 
-| Feed Page | Artist Page | Profile Page |
-| :--------: | :--------: | :--------: |
-|  |  |  |
+| Feed Page | Artist Page |
+| :--------: | :--------: |
+|  |  |
+
+| Profile Page | Introduction Page |
+| :--------: | :--------: |
+|  |  |
+
+| Search | Notice |
+| :--------: | :--------: |
+|  |  |
 
 ## 📎Git
 ### 🌲 Branch
