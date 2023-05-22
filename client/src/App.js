@@ -32,7 +32,6 @@ function App() {
         <Route path='/music' element={<MusicPage />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/music/:groupId' element={<MusicPage />} />
-        <Route path='/myprofile/:groupId' element={<MyProfilePage />} />
       </Routes>
     </BrowserRouter>
   );

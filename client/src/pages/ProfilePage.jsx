@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import HeadMain from '../components/Head/HeadMain';
 import MyPage from '../components/MyPage/MyPage';
-// import Foot from '../components/Foot/Foot';
 
 const ProfilePageBlock = styled.div`
   min-height: 100vh;
@@ -14,7 +13,6 @@ const ProfilePage = () => {
       <ProfilePageBlock>
         <HeadMain />
         <MyPage />
-        {/* <Foot /> */}
       </ProfilePageBlock>
     </>
   );

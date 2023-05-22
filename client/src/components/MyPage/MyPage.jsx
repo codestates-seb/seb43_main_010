@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import MyProfile from './MyPageMeterial/MyProfile';
 import MyInfo from './MyPageMeterial/MyInfo';
 import authFn from '../auth';
+
 const Body = styled.div`
   display: flex;
   justify-content: center;

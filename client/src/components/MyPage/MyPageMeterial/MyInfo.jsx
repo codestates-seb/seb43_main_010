@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import profile from '../../../assets/jpg-file/profile-img.jpg';
@@ -221,22 +222,26 @@ const MyInfoRight = () => {
   }
 
   //루미안 탈퇴하기
+  const navigate = useNavigate();
   const handleWithdrawal = async () => {
-    try {
-      // 탈퇴를 위한 API 호출
-      const response = await axios.delete('서버의 탈퇴 API 엔드포인트');
+    //   try {
+    //     // 탈퇴를 위한 API 호출
+    //     const response = await axios.delete('서버의 탈퇴 API 엔드포인트');
 
-      // 응답 상태코드가 200인 경우 탈퇴 성공
-      if (response.status === 200) {
-        // 탈퇴가 성공적으로 이루어지면 로그아웃 또는 리디렉션 등을 수행할 수 있습니다.
-        alert('탈퇴되었습니다.');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1000);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    //     // 응답 상태코드가 200인 경우 탈퇴 성공
+    //     if (response.status === 200) {
+    //       // 탈퇴가 성공적으로 이루어지면 로그아웃 또는 리디렉션 등을 수행할 수 있습니다.
+    //       alert('탈퇴되었습니다.');
+    //       setTimeout(() => {
+    //         window.location.href = '/';
+    //       }, 1000);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //   }
+    // };
+    alert('루미안 탈퇴되었습니다.');
+    navigate('/');
   };
 
   const FieldInput = ({ field, label }) => {
