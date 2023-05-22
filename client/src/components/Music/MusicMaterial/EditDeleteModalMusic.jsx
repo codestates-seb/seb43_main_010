@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { editpostOpen, setCommentContent } from '../../../reducer/editpostSlice';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -50,9 +52,6 @@ const EditDeleteModalBlock = styled.div`
     justify-content: center;
     align-items: center;
     transform: translateX(-20px);
-    i {
-      font-size: 17px;
-    }
   }
 
   .trash {
@@ -131,22 +130,6 @@ const ModalBg = styled.div`
   }
 `;
 
-const SuccessMsg = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 130px;
-  height: 39.5px;
-  border-radius: 35px;
-  color: var(--white-100);
-  font-size: 13.5px;
-  font-weight: 700;
-  background: linear-gradient(-45deg, #1cbec8, #ffc022);
-  border-radius: 5px;
-  transform: translateX(20px);
-`;
-
 function openDeleteModalBg() {
   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
   document.body.style.overflow = 'hidden';
@@ -160,7 +143,7 @@ function closeDeleteModalBg() {
 
 // 상위에서 const [openModal, setOpenModal] = useState(false);와
 // const [deleteModal, setDeleteModal] = useState(false);를 써주고, props로 받아와야 함.
-const CopyDeleteModal = ({
+const EditDeleteModalMusic = ({
   top,
   left,
   right,
@@ -173,27 +156,21 @@ const CopyDeleteModal = ({
   deleteModal,
   setDeleteModal,
   what,
-  commentContent,
+  detailPost,
+  setDetailPost,
+  postContent,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
-  const [clipboard, setClipboard] = useState(false);
+  const dispatch = useDispatch();
 
-  // 댓글 복사
-  const handleCopy = (text) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        setClipboard(true);
-        setTimeout(() => {
-          setClipboard(false);
-          setOpenModal(false);
-        }, 3000);
-      })
-      .catch(() => {
-        alert('복사에 실패했습니다.');
-      });
+  const handleEdit = () => {
+    dispatch(editpostOpen());
+    dispatch(setCommentContent(postContent));
+    if (detailPost) {
+      setDetailPost(false);
+    }
   };
 
   // 수정, 삭제가 뜨는 미니 모달
@@ -250,11 +227,11 @@ const CopyDeleteModal = ({
   return (
     <>
       <EditDeleteModalBlock ref={modalRef} top={top} left={left} right={right} transform={transform} deleteModal={deleteModal}>
-        <button onClick={() => handleCopy(commentContent)} className='edit'>
+        {/* 여길 누르면 post의 수정이 일어나야함 */}
+        <button onClick={handleEdit} className='edit'>
           <div className='pen'>
-            {!clipboard && <i className='i-share-icon' />}
-
-            {clipboard ? <SuccessMsg>복사 완료</SuccessMsg> : <span>복사하기</span>}
+            <i className='i-pen-icon' />
+            <span>수정하기</span>
           </div>
         </button>
         {/* 포스트가 삭제되는 곳 */}
@@ -282,10 +259,8 @@ const CopyDeleteModal = ({
           </ModalBg>
         </DeleteModal>
       ) : null}
-
-      {/* 복사 */}
     </>
   );
 };
 
-export default CopyDeleteModal;
+export default EditDeleteModalMusic;

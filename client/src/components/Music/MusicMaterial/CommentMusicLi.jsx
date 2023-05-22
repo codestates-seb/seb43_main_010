@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 
-import CopyDeleteModal from '../../Feed/FeedMaterial/CopyDeleteModal';
+import CopyDeleteModalMusic from './CopyDeleteModalMusic';
 
 const CommentMusicLiBlock = styled.li`
   min-height: 120px;
@@ -138,7 +138,7 @@ const CommentMusicLi = ({ commentName, commentContent, likeNum, createAt }) => {
             </div>
           </button>
           {openModal ? (
-            <CopyDeleteModal
+            <CopyDeleteModalMusic
               top='100%'
               right='0'
               openModal={openModal}

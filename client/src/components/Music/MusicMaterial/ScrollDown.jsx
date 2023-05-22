@@ -12,8 +12,8 @@ const ScrollBottomBlock = styled.button`
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 
   position: absolute;
-  right: 27%;
-  bottom: 23.4%;
+  right: 45%;
+  bottom: 12.7%;
 `;
 
 const ScrollDown = ({ onClick }) => {

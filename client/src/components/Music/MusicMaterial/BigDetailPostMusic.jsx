@@ -4,7 +4,7 @@ import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useRef, useState, useEffect } from 'react';
 
 import MiniCommentMusic from './MiniCommentMusic';
-import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
+import EditDeleteModalMusic from './EditDeleteModalMusic';
 
 // 임시 댓글 데이터
 import commentData from '../commentData';
@@ -377,7 +377,7 @@ const BigDetailPostMusic = ({
                     </button>
                     {/* 게시글 수정, 삭제 모달 */}
                     {openModal ? (
-                      <EditDeleteModal
+                      <EditDeleteModalMusic
                         right='7%'
                         bgColor='rgba(0, 0, 0, 0.75)'
                         openModal={openModal}

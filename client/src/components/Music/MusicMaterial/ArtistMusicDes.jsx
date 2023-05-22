@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 
 import DetailPostMusic from './DetailPostMusic';
 import BigDetailPostMusic from './BigDetailPostMusic';
-import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
-import EditPost from '../../WritePost/EditPost';
+import EditDeleteModalMusic from './EditDeleteModalMusic';
+import EditPostMusic from './EditPostMusic';
 
 const ArtistMusicDesBlock = styled.div`
   width: 495px;
@@ -210,7 +210,7 @@ const ArtistMusicDes = ({ nickname, content, img, likeNum, createdAt }) => {
                 </div>
               </button>
               {openModal ? (
-                <EditDeleteModal
+                <EditDeleteModalMusic
                   top='100%'
                   right='0'
                   openModal={openModal}
@@ -240,7 +240,7 @@ const ArtistMusicDes = ({ nickname, content, img, likeNum, createdAt }) => {
       </ArtistMusicDesBlock>
 
       {/* 수정하는 모달 창 */}
-      {isOpen && <EditPost postContent={content} />}
+      {isOpen && <EditPostMusic postContent={content} />}
 
       {detailPost && (
         <>

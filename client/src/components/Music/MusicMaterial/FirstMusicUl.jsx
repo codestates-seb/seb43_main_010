@@ -189,6 +189,8 @@ const FirstMusicUl = ({ playBoolean, onMusicEnd, musicId, musicTitle, singer, mu
 
     dispatch(resetPlaying()); // 페이지 이동 시 음악 재생 상태 초기화
 
+    setIsPlaying(false);
+
     audioEl.addEventListener('loadedmetadata', handleTimeUpdate);
     return () => {
       audioEl.removeEventListener('loadedmetadata', handleTimeUpdate);

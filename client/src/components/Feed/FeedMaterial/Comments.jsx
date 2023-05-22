@@ -204,6 +204,7 @@ const Comments = ({ deleteModal, setDeleteModal, commentName, commentContent, li
                   deleteModal={deleteModal}
                   setDeleteModal={setDeleteModal}
                   what='댓글을'
+                  commentContent={commentContent}
                 />
               ) : null}
             </div>
