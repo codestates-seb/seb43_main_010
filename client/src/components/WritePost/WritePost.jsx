@@ -222,7 +222,7 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
       postUrl = '/feed';
     }
     await axios
-      .post(`${postUrl}/${groupId}`, body, {
+      .post(`http://localhost:8080/${postUrl}/${groupId}`, body, {
         headers: {
           Authorization: getCookie(),
         },

@@ -133,9 +133,9 @@ const Main = () => {
   const filteredData = data.allGroup.filter((el) => {
     return !myGroupIds.has(el.groupId);
   });
-
   //login한 유저 찾아오기
   const currentUser = useSelector((state) => state.currentUser);
+
   const dispatch = useDispatch();
   useEffect(() => {
     const token = getCookie();
