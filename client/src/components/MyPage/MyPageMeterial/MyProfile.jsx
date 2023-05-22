@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import BTS from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
 import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
@@ -234,11 +234,9 @@ const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBt
 
   return (
     <Box>
-      <Link to='/myprofile/:groupId'>
-        <Img>
-          <img src={imgSrc} alt={imgAlt} />
-        </Img>
-      </Link>
+      <Img>
+        <img src={imgSrc} alt={imgAlt} />
+      </Img>
       {editMode ? (
         <form onSubmit={handleNickNameSubmit}>
           <Input type='text' value={newNickName} onChange={handleNickNameChange} />
@@ -309,6 +307,7 @@ const MyProfile = () => {
   const navigate = useNavigate();
   const handleLogoutClick = async () => {
     removeCookie();
+    alert('로그아웃되었습니다.');
     navigate('/login');
     // try {
     //   // 로그아웃 API 요청
