@@ -120,6 +120,7 @@ const LoginForm = () => {
         return;
       }
       body = { ...artist };
+      console.log(body);
       delete body.passwordCheck;
       //여기서 pwd암호화하기
       await axios
@@ -128,7 +129,7 @@ const LoginForm = () => {
           alert('회원가입 성공');
           onReset();
           onInputReset();
-          navigate('/login');
+          // navigate('/login');
         })
         .catch((e) => {
           alert('회원가입 실패');

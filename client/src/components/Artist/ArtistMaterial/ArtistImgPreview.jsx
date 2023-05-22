@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import testImg from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
 
 const ImgPreviewOne = styled.div`
   margin-top: 3px;
@@ -123,8 +122,6 @@ const ImgPreviewFour = styled.div`
     }
   }
 `;
-
-const test1 = [testImg, testImg, testImg];
 
 const ArtistImgPreview = ({ imgList }) => {
   return (

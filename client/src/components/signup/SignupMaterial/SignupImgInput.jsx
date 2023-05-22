@@ -79,7 +79,7 @@ const SignupImgInput = ({ label, name }) => {
   const isArtist = useSelector((state) => state.signup.calssification);
   const fanProfile = useSelector((state) => state.signup.fan.profile);
   const artistProfile = useSelector((state) => state.signup.artist.profile);
-  const artistGroupImg = useSelector((state) => state.signup.artist.groupImg);
+  const artistGroupProfile = useSelector((state) => state.signup.artist.groupProfile);
   const dispatch = useDispatch();
 
   //전역 상태에 저장
@@ -141,7 +141,7 @@ const SignupImgInput = ({ label, name }) => {
         ></input>
       </ImgInputBox>
       <Preview>
-        <img src={isArtist ? (name === 'group' ? artistGroupImg : artistProfile) : fanProfile} alt='profile-img'></img>
+        <img src={isArtist ? (name === 'group' ? artistGroupProfile : artistProfile) : fanProfile} alt='profile-img'></img>
       </Preview>
     </>
   );
