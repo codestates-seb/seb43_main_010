@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import example.domain.feedPost.entity.FeedPost;
 
@@ -22,6 +24,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor
 public class Comment extends BaseTimeEntity {
     @Id
@@ -66,7 +70,6 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
     }
     public Comment(String content, Artist artist) {
-        this.feedPost = feedPost;
         this.content = content;
         this.artist = artist;
     }
