@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { editpostOpen, setCommentContent } from '../../../reducer/editpostSlice';
+import { useParams } from 'react-router-dom';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -164,6 +165,7 @@ const EditDeleteModalMusic = ({
   const deleteRef = useRef(null);
 
   const dispatch = useDispatch();
+  const { groupId } = useParams();
 
   const handleEdit = () => {
     dispatch(editpostOpen());
