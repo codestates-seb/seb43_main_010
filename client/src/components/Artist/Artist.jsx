@@ -1,17 +1,15 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import profileImg from '../../assets/jpg-file/profile-img.jpg';
-import PostInput from '../PostInput/PostInput';
 import ArtistPost from '../Artist/ArtistMaterial/ArtistPost';
 import Gradation from '../Artist/ArtistMaterial/Gradation';
-import WritePost from '../WritePost/WritePost';
 import RightArea from './ArtistMaterial/Rightarea';
 import authFn from '../auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getCookie } from '../Login/LoginMaterial/setCookie';
 import { setCurrentGroupId } from '../../reducer/userSlice';
 import axios from 'axios';
+import WritePost from './SplitForder/WritePost';
+import PostInput from './SplitForder/PostInput';
 const Container = styled.div`
   width: 100vw;
   min-width: 1440px;
@@ -31,24 +29,9 @@ const PostsBox = styled.div`
   margin: ${({ isArtist, curGroup, pageGroup }) => (isArtist && curGroup === pageGroup ? '50px 0 71px' : '0 0 71px')};
 `;
 
-// 그냥 임시 Post 데이터임
-// const data = [
-//   {
-//     artist: {
-//       artistId: 3,
-//       nickname: '아티스트ㄷ호',
-//       group: '아티스트2호',
-//       profile: profileImg,
-//     },
-//     feedPostId: null,
-//     artistPostId: 88,
-//     content: '아티스트ㄷ호가 작성한 더미 게시물',
-//     img: [],
-//     createdAt: '2023-05-20T16:25:14.151027',
-//     comments: [],
-//     likeCount: 0,
-//   },
-// ];
+const TempPostBox = styled.div`
+  width: 707px;
+`;
 
 const Artist = () => {
   const dispatch = useDispatch();
@@ -62,14 +45,13 @@ const Artist = () => {
   const [artistPost, setArtistPost] = useState([]);
   //현재 GroupID 받아오기
   let { groupId } = useParams();
-  const currentGroupId = useSelector((state) => state.user.groupId);
-  dispatch(setCurrentGroupId(Number(groupId)));
   authFn();
   useEffect(() => {
     if (currentUser.group) {
       setIsArtist(true);
     }
-    axios.get(`http://localhost:8080/artist/${currentGroupId}?page=1&size=16`).then((res) => {
+    axios.get(`http://localhost:8080/artist/${groupId}?page=1&size=16`).then((res) => {
+      console.log(res.data);
       setArtistPost(res.data.data);
     });
   }, [postData]);
@@ -83,8 +65,7 @@ const Artist = () => {
       <Container>
         <ArtistBox>
           <PostContextBox>
-            {/* 공용 input입니다! => PostInput 컴포넌트*/}
-            {isArtist && currentUser.groupId === currentGroupId ? (
+            {currentUser.groupId === Number(groupId) ? (
               <button onClick={openModal}>
                 <PostInput
                   transparent='transparent'
@@ -96,7 +77,7 @@ const Artist = () => {
             ) : null}
             {/* Post 컴포넌트 */}
             {artistPost.length !== 0 ? (
-              <PostsBox isArtist={isArtist} curGroup={currentUser.groupId} pageGroup={currentGroupId}>
+              <PostsBox isArtist={isArtist} curGroup={currentUser.groupId} pageGroup={Number(groupId)}>
                 {artistPost.map((el) => (
                   <ArtistPost
                     key={el.artistPostId}
@@ -110,12 +91,14 @@ const Artist = () => {
                     setModalOpen={setModalOpen}
                     postData={postData}
                     setPostData={setPostData}
-                    groupId={currentGroupId}
+                    groupId={Number(groupId)}
                     img={el.img}
                   />
                 ))}
               </PostsBox>
-            ) : null}
+            ) : (
+              <TempPostBox />
+            )}
           </PostContextBox>
 
           {/* 오른쪽 아티스트 이미지 => RightImg 컴포넌트 */}
@@ -129,7 +112,7 @@ const Artist = () => {
           setModalOpen={setModalOpen}
           postData={postData}
           setPostData={setPostData}
-          groupId={currentGroupId}
+          groupId={Number(groupId)}
           currentUser={currentUser}
         />
       ) : null}

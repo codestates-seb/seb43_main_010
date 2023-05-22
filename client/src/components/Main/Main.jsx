@@ -146,11 +146,16 @@ const Main = () => {
         },
       })
       .then((res) => {
-        // console.log(res.data.data);
+        console.log(res.data.data);
         dispatch(setCurrentUser(res.data.data));
       });
-  }, []);
+  }, [currentUser]);
 
+  useEffect(() => {
+    axios.get('/home').then((res) => {
+      console.log(res.data);
+    });
+  }, []);
   return (
     <>
       <MainBlock>

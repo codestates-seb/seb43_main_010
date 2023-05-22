@@ -13,7 +13,7 @@ const initialState = {
     nickname: '',
     profile: defaultProfile,
     group: '',
-    groupImg: defaultProfile,
+    groupProfile: defaultProfile,
   },
 };
 const signupSlice = createSlice({
@@ -40,7 +40,7 @@ const signupSlice = createSlice({
       state.artist.profile = action.payload;
     },
     setArtistGroupImg(state, action) {
-      state.artist.groupImg = action.payload;
+      state.artist.groupProfile = action.payload;
     },
     resetProfile(state, action) {
       if (action.payload === 'fan') {
@@ -48,7 +48,7 @@ const signupSlice = createSlice({
       } else if (action.payload === 'artist') {
         state.artist.profile = initialState.artist.profile;
       } else if (action.payload === 'group') {
-        state.artist.groupImg = initialState.artist.groupImg;
+        state.artist.groupProfile = initialState.artist.groupProfile;
         console.log('3초기화');
       }
 
