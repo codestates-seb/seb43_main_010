@@ -171,7 +171,7 @@ const Main = () => {
               <CardBlock className='card-block'>
                 {/* 여기서 My artist가 있으면 map 돌려야 함 => Card 컴포넌트*/}
                 {data.myGroup.map((el) => (
-                  <StyledLink to={`/feed/${el.groupId}`} key={el.groupId}>
+                  <StyledLink to={`/music/${el.groupId}`} key={el.groupId}>
                     <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
                   </StyledLink>
                 ))}

@@ -168,7 +168,7 @@ const formatTime = (time) => {
 };
 
 const FirstMusicUl = ({ playBoolean, onMusicEnd, musicId, musicTitle, singer, musicImg, musicMp3, likeNum }) => {
-  const [isPlaying, setIsPlaying] = useState(playBoolean);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
@@ -188,8 +188,6 @@ const FirstMusicUl = ({ playBoolean, onMusicEnd, musicId, musicTitle, singer, mu
     };
 
     dispatch(resetPlaying()); // 페이지 이동 시 음악 재생 상태 초기화
-
-    setIsPlaying(false);
 
     audioEl.addEventListener('loadedmetadata', handleTimeUpdate);
     return () => {

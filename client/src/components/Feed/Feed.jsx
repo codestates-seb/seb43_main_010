@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import axios from 'axios';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
 
 import PostInput from '../PostInput/PostInput';

@@ -60,6 +60,12 @@ const Nav = () => {
 
   return (
     <NavBlock gradColor={gradColor}>
+      <StyledLink to={`/music/${groupId}`}>
+        <button>
+          <span>Music</span>
+        </button>
+      </StyledLink>
+
       <StyledLink to={`/feed/${groupId}`}>
         <button>
           <span>Feed</span>
@@ -69,18 +75,6 @@ const Nav = () => {
       <StyledLink to={`/artist/${groupId}`}>
         <button>
           <span>Artist</span>
-        </button>
-      </StyledLink>
-
-      <StyledLink to={`/music/${groupId}`}>
-        <button>
-          <span>Music</span>
-        </button>
-      </StyledLink>
-
-      <StyledLink to={`/chat/${groupId}`}>
-        <button>
-          <span>Chat</span>
         </button>
       </StyledLink>
     </NavBlock>

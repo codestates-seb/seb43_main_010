@@ -88,7 +88,7 @@ const JoinForm = () => {
   const submitNickname = (e) => {
     e.preventDefault();
     // !!!여기에서 commuNickname을 서버에 전송해야 함!!!
-    navigate(`/feed/${groupId}`);
+    navigate(`/music/${groupId}`);
   };
 
   return (
