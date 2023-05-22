@@ -177,7 +177,7 @@ const formatTime = (time) => {
 };
 
 const MusicLi = ({ playBoolean, onMusicEnd, musicId, musicTitle, singer, musicImg, musicMp3, likeNum }) => {
-  const [isPlaying, setIsPlaying] = useState(playBoolean);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
