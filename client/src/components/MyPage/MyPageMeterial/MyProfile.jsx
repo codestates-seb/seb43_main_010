@@ -277,16 +277,26 @@ const MyProfile = () => {
     setShowModal(false);
   };
 
-  const handleConfirmBtnClick = async () => {
-    try {
-      const response = await axios.delete('사용자 정보 삭제 API 엔드포인트');
-      if (response.status === 200) {
-        setArtistCards(artistCards.filter((_, i) => i !== showModal.index));
-        setShowModal({ open: false, index: null });
-      }
-    } catch (error) {
-      console.error('Error:', error);
+  // const handleConfirmBtnClick = async () => {
+  // try {
+  //   const response = await axios.delete('사용자 정보 삭제 API 엔드포인트');
+  //   if (response.status === 200) {
+  //     setArtistCards(artistCards.filter((_, i) => i !== showModal.index));
+  //     setShowModal({ open: false, index: null });
+  //   }
+  // } catch (error) {
+  //   console.error('Error:', error);
+  // }
+  // };
+
+  const handleConfirmBtnClick = () => {
+    // showModal이 객체이고 index 프로퍼티를 가지고 있을 때만 배열에서 제거
+    if (typeof showModal === 'object' && Object.prototype.hasOwnProperty.call(showModal, 'index')) {
+      const updatedArtistCards = artistCards.filter((_, i) => i !== showModal.index);
+      setArtistCards(updatedArtistCards);
     }
+
+    setShowModal(false);
   };
 
   useEffect(() => {
