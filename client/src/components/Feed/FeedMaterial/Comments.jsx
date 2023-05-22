@@ -3,12 +3,10 @@ import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useState } from 'react';
 
-import EditDeleteModal from './EditDeleteModal';
+import CopyDeleteModal from './CopyDeleteModal';
 
 const CommentsBlock = styled.li`
   overflow-y: auto;
-  min-height: 15vh;
-  max-height: 36.3vh;
   overflow-x: hidden;
   background-color: var(--white-100);
 `;
@@ -152,7 +150,7 @@ const commentContentData = `
 `;
 
 // 댓글 컴포넌트임
-const Comments = ({ deleteModal, setDeleteModal, commentContent = commentContentData, likeNum = 0 }) => {
+const Comments = ({ deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
@@ -184,8 +182,8 @@ const Comments = ({ deleteModal, setDeleteModal, commentContent = commentContent
             <div className='user-img-txt'>
               <div className='profile-img'></div>
               <div className='user-txt'>
-                <span className='nickname'>유저 닉네임1</span>
-                <span className='time'>05. 01. 10:26</span>
+                <span className='nickname'>{commentName}</span>
+                <span className='time'>{createAt}</span>
               </div>
             </div>
             <div className='right-icon-box'>
@@ -194,9 +192,9 @@ const Comments = ({ deleteModal, setDeleteModal, commentContent = commentContent
               </button>
               {/* 게시글 수정, 삭제 모달 */}
               {openModal ? (
-                <EditDeleteModal
-                  top='100%'
-                  right='0%'
+                <CopyDeleteModal
+                  top='23%'
+                  right='60%'
                   transform='translate(-21%, -13%)'
                   bgColor='rgba(0, 0, 0, 0.75)'
                   height='132'
@@ -225,7 +223,7 @@ const Comments = ({ deleteModal, setDeleteModal, commentContent = commentContent
                     </div>
                   </>
                 ) : (
-                  <p>{commentContent}</p>
+                  <pre>{commentContent}</pre>
                 )}
               </>
             )}

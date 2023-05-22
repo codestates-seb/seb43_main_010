@@ -5,7 +5,6 @@ import { useState, useRef } from 'react';
 import { BsFillCameraFill } from 'react-icons/bs';
 import WriteImgPreview from './WritePostMaterial/WriteImgPreview';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import { getCookie } from '../Login/LoginMaterial/setCookie';
 
 const WritePostBlock = styled.div`
@@ -17,7 +16,7 @@ const WritePostBlock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 2;
   background-color: rgba(0, 0, 0, 0.7);
 `;
 
@@ -42,7 +41,7 @@ const PostContent = styled.div`
   background-color: var(--white-100);
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0px 5px 15px rgb(19, 28, 35, 15%);
+  box-shadow: 0px 5px 15px rgb(19, 28, 35, 0.1%);
 
   .top-txt-box {
     height: 91px;
@@ -82,7 +81,8 @@ const PostContent = styled.div`
       color: var(--dark-blue-900);
       text-shadow: 0 0 0 var(--dark-blue-900);
       font-size: 15px;
-      border: 1px solid var(--light-gray-500);
+      border: 1px solid var(--light-gray-200);
+      padding: 13.5px;
       border-radius: 0.3rem;
       resize: none;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
@@ -106,7 +106,6 @@ const BottomBox = styled.div`
   background-color: var(--white-100);
   transform: translateX(-20px) translateY(-20px);
   position: absolute;
-  /* border-top: 1px solid var(--light-gray-150); */
 
   display: flex;
   justify-content: space-between;

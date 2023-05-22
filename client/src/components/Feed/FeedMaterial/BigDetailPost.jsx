@@ -6,6 +6,9 @@ import { useRef, useState, useEffect } from 'react';
 import MiniComments from './MiniComments';
 import EditDeleteModal from './EditDeleteModal';
 
+// 임시 댓글 데이터
+import commentFeedData from '../commentFeedData.js';
+
 const BigDetailPostBlock = styled.div`
   position: fixed;
   top: 0;
@@ -15,7 +18,7 @@ const BigDetailPostBlock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 2;
   background-color: ${({ deleteModal }) => (deleteModal ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.7)')};
 
   .big-detail-post {
@@ -69,7 +72,7 @@ const RightComments = styled.div`
   }
 
   .input-box {
-    width: 333px;
+    width: 332px;
     height: 75px;
     border-radius: 0 0 20px 0;
     border-top: 1px solid var(--light-gray-150);
@@ -147,7 +150,7 @@ const AuthorContentBox = styled.li`
     .profile-img {
       width: 46px;
       height: 46px;
-      background: ${({ profile }) => `no-repeat url(${profile})`};
+      background: ${({ img }) => `no-repeat url(${img})`};
       background-size: 46px 46px;
       border-radius: 50%;
     }
@@ -284,13 +287,19 @@ const LikeShare = styled.div`
   }
 `;
 
+const CommentListUl = styled.div`
+  max-height: 73.4vh;
+  overflow: auto;
+  list-style-type: none;
+`;
+
 const BigDetailPost = ({
   detailPost,
   setDetailPost,
   createdAt,
   content,
   nickname,
-  profile,
+  img,
   liked,
   like,
   clickLike,
@@ -353,7 +362,7 @@ const BigDetailPost = ({
           {/* 왼쪽 */}
           <LeftPost>
             <ul className='author-post-box'>
-              <AuthorContentBox profile={profile}>
+              <AuthorContentBox img={img}>
                 <div className='author'>
                   <div className='author-img-txt'>
                     <div className='profile-img'></div>
@@ -377,10 +386,9 @@ const BigDetailPost = ({
                         setDeleteModal={setDeleteModal}
                         what='포스트를'
                         //추가
-                        modalOpen={modalOpen}
-                        setModalOpen={setModalOpen}
-                        postData={postData}
-                        setPostData={setPostData}
+                        detailPost={detailPost}
+                        setDetailPost={setDetailPost}
+                        postContent={content}
                       />
                     ) : null}
                   </div>
@@ -413,13 +421,24 @@ const BigDetailPost = ({
 
           {/* 오른쪽 */}
           <RightComments comment={comment.trim().length > 0}>
-            <ul className='comments'>
-              <li className='comments-num'>
-                <div>1개의 댓글</div>
-              </li>
+            <div className='comments'>
+              <div className='comments-num'>{commentFeedData.comments.length}개의 댓글</div>
+
               {/* 여기서 댓글 데이터 map 돌려야 함 => MiniComments 댓글 컴포넌트 */}
-              <MiniComments deleteModal={deleteModal} setDeleteModal={setDeleteModal} />
-            </ul>
+              <CommentListUl>
+                {commentFeedData.comments.map((el) => (
+                  <MiniComments
+                    key={el.commentId}
+                    deleteModal={deleteModal}
+                    setDeleteModal={setDeleteModal}
+                    commentName={el.commentName}
+                    commentContent={el.commentContent}
+                    likeNum={el.likeNum}
+                    createAt={el.createAt}
+                  />
+                ))}
+              </CommentListUl>
+            </div>
 
             <div className='input-box'>
               <form onSubmit={submitComment}>

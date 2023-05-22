@@ -9,7 +9,7 @@ const HeadBlock = styled.header`
   height: 80px;
   background-color: var(--dark-blue-900);
   position: fixed;
-  z-index: 1;
+  z-index: 2;
 
   display: flex;
   align-items: center;

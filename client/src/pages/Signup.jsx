@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Signup from '../components/Signup/Signup';
-import { useSelector } from 'react-redux';
 import { getCookie } from '../components/Login/LoginMaterial/setCookie';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';

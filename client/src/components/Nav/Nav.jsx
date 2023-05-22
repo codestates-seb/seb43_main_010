@@ -14,7 +14,7 @@ const NavBlock = styled.nav`
   align-items: center;
   position: fixed;
   margin-top: 80px;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const StyledLink = styled(NavLink)`

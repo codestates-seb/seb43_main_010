@@ -1,39 +1,64 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
-import CdPlayer from './MusicMaterial/CDPlayer';
-import MusicInfoBox from './MusicMaterial/MusicInfoBox';
-import authFn from '../auth';
-const Body = styled.div`
-  height: 100vh;
+import { useState, useEffect } from 'react';
+
+import CdDisk from './MusicMaterial/CdDisk';
+import Loading from '../Loading/Loading';
+import LeftMusic from './MusicMaterial/LeftMusic';
+import RightMusic from './MusicMaterial/RightMusic';
+
+const MusicBlock = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: var(--dark-blue-800);
+  justify-content: center;
+  align-items: center;
+  visibility: ${({ isLoading }) => (isLoading ? 'hidden' : 'visible')};
+  position: relative;
 `;
 
-const MusicContainer = styled.div`
+const RealMusicBlock = styled.div`
+  width: 1100px;
+  height: auto;
   display: flex;
-  align-items: center;
   justify-content: center;
-  height: 100%;
-  margin-top: 85px;
+  flex-direction: column;
+`;
+
+const CdBottom = styled.div`
+  display: flex;
+  /* padding-top: 393px; */
+  padding-top: 379px;
 `;
 
 const Music = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handlePlayToggle = () => {
-    setIsPlaying(!isPlaying);
-  };
-  authFn(); //로그인후 사용해주세요
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
+  // 그냥 보여주기용 로딩
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
-    <Body>
-      <MusicContainer>
-        <CdPlayer isPlaying={isPlaying} handlePlayToggle={handlePlayToggle} />
-        <MusicInfoBox />
-      </MusicContainer>
-    </Body>
+    <>
+      <MusicBlock isLoading={isLoading}>
+        {/* CD => CdDisk 컴포넌트 */}
+        <CdDisk />
+        <RealMusicBlock>
+          {/* CD 아래 영역 */}
+          <CdBottom>
+            {/* 왼쪽 영역 => LeftMusic 컴포넌트 */}
+            <LeftMusic />
+
+            {/* 오른쪽 영역 => RightMusic 컴포넌트 */}
+            <RightMusic />
+          </CdBottom>
+        </RealMusicBlock>
+      </MusicBlock>
+    </>
   );
 };
 
