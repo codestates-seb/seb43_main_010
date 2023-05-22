@@ -3,7 +3,7 @@ import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useState } from 'react';
 
-import CopyDeleteModal from '../../Feed/FeedMaterial/CopyDeleteModal';
+import CopyDeleteModalMusic from './CopyDeleteModalMusic';
 
 const CommentsBlock = styled.li`
   overflow-y: hidden;
@@ -187,7 +187,7 @@ const CommentMusic = ({ deleteModal, setDeleteModal, commentName, commentContent
               </button>
               {/* 게시글 수정, 삭제 모달 */}
               {openModal ? (
-                <CopyDeleteModal
+                <CopyDeleteModalMusic
                   top='23%'
                   right='60%'
                   transform='translate(-21%, -13%)'

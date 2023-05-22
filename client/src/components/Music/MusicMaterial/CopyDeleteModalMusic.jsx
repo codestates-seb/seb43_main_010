@@ -160,7 +160,7 @@ function closeDeleteModalBg() {
 
 // 상위에서 const [openModal, setOpenModal] = useState(false);와
 // const [deleteModal, setDeleteModal] = useState(false);를 써주고, props로 받아와야 함.
-const CopyDeleteModal = ({
+const CopyDeleteModalMusic = ({
   top,
   left,
   right,
@@ -288,4 +288,4 @@ const CopyDeleteModal = ({
   );
 };
 
-export default CopyDeleteModal;
+export default CopyDeleteModalMusic;

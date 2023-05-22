@@ -24,7 +24,6 @@ const RealMusicBlock = styled.div`
 
 const CdBottom = styled.div`
   display: flex;
-  /* padding-top: 393px; */
   padding-top: 379px;
 `;
 

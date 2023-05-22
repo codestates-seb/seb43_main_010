@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import vImg from '../../../assets/jpg-file/artist-profile/v-profile.jpg';
 import { useState } from 'react';
 
-import WritePost from '../../WritePost/WritePost';
+import WritePostMusic from './WritePostMusic';
 
 const PostInputMusicBlock = styled.div`
   padding-top: 68px;
@@ -12,7 +12,6 @@ const RealPostInputMusic = styled.div`
   width: 495px;
   height: 66px;
   border-radius: 35px;
-  /* background-color: var(--dark-blue-500); */
   background-color: #4a5258;
   box-shadow: 0 0 12px rgba(208, 222, 236, 0.2);
   padding: 10px 31.18px 10px 12.91px;
@@ -38,11 +37,11 @@ const RealPostInputMusic = styled.div`
   }
 
   .placeholder-txt {
-    /* color: var(--gray-blue-400); */
-    color: #727d86;
+    color: #848484;
     font-size: 14.5px;
     font-weight: 800;
     padding-left: 16px;
+    text-shadow: 0 0 12px rgba(208, 222, 236, 0.05);
   }
 
   .i-double-stars-icon {
@@ -72,7 +71,7 @@ const PostInputMusic = () => {
           <i className='i-double-stars-icon' />
         </RealPostInputMusic>
       </PostInputMusicBlock>
-      {writePostOpen && <WritePost modalOpen={writePostOpen} setModalOpen={setWritePostOpen} />}
+      {writePostOpen && <WritePostMusic modalOpen={writePostOpen} setModalOpen={setWritePostOpen} />}
     </>
   );
 };

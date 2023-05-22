@@ -4,7 +4,7 @@ import deleteBtn from '../../../assets/png-file/x-btn.png';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 
 import CommentMusic from './CommentMusic';
-import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
+import EditDeleteModalMusic from './EditDeleteModalMusic';
 
 // 임시 데이터
 import commentData from '../commentData';
@@ -361,7 +361,7 @@ const DetailPostMusic = ({ detailPost, setDetailPost, createdAt, content, nickna
                     </button>
                     {/* 게시글 수정, 삭제 모달 */}
                     {openModal ? (
-                      <EditDeleteModal
+                      <EditDeleteModalMusic
                         top='100%'
                         right='0%'
                         transform='translateY(-28%)'

@@ -30,6 +30,7 @@ const CommentsAndInput = styled.div`
   margin-top: ${({ isPlaying }) => (isPlaying ? '32px' : '40px')};
   background-color: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 14px rgb(255, 255, 255, 0.02);
+  position: relative;
 
   &::before {
     content: '';
@@ -48,7 +49,7 @@ const CommentMusicUl = styled.ul`
   max-height: 760px;
   border-radius: 5px;
   padding: 12px 11px 0 11px;
-  scroll-behavior: smooth;
+  scroll-behavior: ${({ firstScroll }) => (firstScroll ? 'none' : 'smooth')};
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -67,11 +68,19 @@ const RightMusic = () => {
   const commentUlRef = useRef(null);
 
   const [scrollDown, setScrollDown] = useState(true);
+  const [firstScroll, setFirstScroll] = useState(true);
 
   // 처음 로드 될 때, 댓글부분이 아래부터 잡히게 하는 부분
   useEffect(() => {
     const container = commentUlRef.current;
     container.scrollTop = container.scrollHeight;
+
+    // 처음에는 스크롤 부드러움 없앰
+    if (firstScroll) {
+      setTimeout(() => {
+        setFirstScroll(false);
+      }, 1000);
+    }
 
     if (container.scrollHeight <= 760) {
       setScrollDown(false);
@@ -108,7 +117,7 @@ const RightMusic = () => {
       </div>
 
       <CommentsAndInput isPlaying={isPlaying}>
-        <CommentMusicUl onScroll={handleScroll} ref={commentUlRef}>
+        <CommentMusicUl firstScroll={firstScroll} onScroll={handleScroll} ref={commentUlRef}>
           {/* 뮤직 댓글들 => CommentMusicLi 컴포넌트 */}
           {commentData.comments.map((el) => (
             <CommentMusicLi
@@ -123,7 +132,6 @@ const RightMusic = () => {
 
         {/* 댓글 작성 input => CommentInput 컴포넌트 */}
         <CommentInput />
-
         {/* ScrollBottom 컴포넌트 */}
         {scrollDown && <ScrollDown onClick={handleScrollDown} />}
       </CommentsAndInput>
