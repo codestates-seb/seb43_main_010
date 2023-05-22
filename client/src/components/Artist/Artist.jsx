@@ -7,8 +7,10 @@ import Gradation from '../Artist/ArtistMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
 import RightArea from './ArtistMaterial/Rightarea';
 import authFn from '../auth';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { getCookie } from '../Login/LoginMaterial/setCookie';
+import { setCurrentUser } from '../../reducer/userSlice';
 import axios from 'axios';
 const Container = styled.div`
   width: 100vw;
@@ -26,29 +28,30 @@ const ArtistBox = styled.div`
 const PostContextBox = styled.div``;
 
 const PostsBox = styled.div`
-  margin: ${({ isArtist }) => (isArtist ? '50px 0 71px' : '0 0 71px')};
+  margin: ${({ isArtist, curGroup, pageGroup }) => (isArtist && curGroup === pageGroup ? '50px 0 71px' : '0 0 71px')};
 `;
 
 // 그냥 임시 Post 데이터임
-const data = [
-  {
-    artist: {
-      artistId: 3,
-      nickname: '아티스트ㄷ호',
-      group: '아티스트2호',
-      profile: profileImg,
-    },
-    feedPostId: null,
-    artistPostId: 88,
-    content: '아티스트ㄷ호가 작성한 더미 게시물',
-    img: [],
-    createdAt: '2023-05-20T16:25:14.151027',
-    comments: [],
-    likeCount: 0,
-  },
-];
+// const data = [
+//   {
+//     artist: {
+//       artistId: 3,
+//       nickname: '아티스트ㄷ호',
+//       group: '아티스트2호',
+//       profile: profileImg,
+//     },
+//     feedPostId: null,
+//     artistPostId: 88,
+//     content: '아티스트ㄷ호가 작성한 더미 게시물',
+//     img: [],
+//     createdAt: '2023-05-20T16:25:14.151027',
+//     comments: [],
+//     likeCount: 0,
+//   },
+// ];
 
 const Artist = () => {
+  const dispatch = useDispatch();
   //여기서 로그인후 받아온 사용자가 아티스트가 아니라면 포스트 작성하는 부분을 안보여주기 위해 전역 변수를 가져와야함
   const currentUser = useSelector((state) => state.user.currentUser);
   //만약 currentUser에 group이란 속성이 없다면 포스팅 못하게 안보이게하기
@@ -60,8 +63,20 @@ const Artist = () => {
   //현재 GroupID 받아오기
   let { groupId } = useParams();
   authFn();
-  console.log(currentUser);
+
   useEffect(() => {
+    // if (!currentUser) {
+    //   const token = getCookie();
+    //   axios
+    //     .get('/user', {
+    //       headers: {
+    //         Authorization: `${token}`,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       dispatch(setCurrentUser(res.data.data));
+    //     });
+    // }
     if (currentUser.group) {
       setIsArtist(true);
     }
@@ -93,7 +108,7 @@ const Artist = () => {
             ) : null}
             {/* Post 컴포넌트 */}
             {artistPost.length !== 0 ? (
-              <PostsBox isArtist={isArtist}>
+              <PostsBox isArtist={isArtist} curGroup={currentUser.groupId} pageGroup={Number(groupId)}>
                 {artistPost.map((el) => (
                   <ArtistPost
                     key={el.artistPostId}
@@ -116,7 +131,7 @@ const Artist = () => {
           </PostContextBox>
 
           {/* 오른쪽 아티스트 이미지 => RightImg 컴포넌트 */}
-          <RightArea currentUser={currentUser} />
+          {currentUser ? <RightArea currentUser={currentUser} /> : null}
         </ArtistBox>
       </Container>
       {/* 포스트 작성 컴포넌트임 => WritePost 컴포넌트 */}
