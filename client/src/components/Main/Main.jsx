@@ -146,15 +146,12 @@ const Main = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.data);
         dispatch(setCurrentUser(res.data.data));
       });
   }, [currentUser]);
 
   useEffect(() => {
-    axios.get('/home').then((res) => {
-      console.log(res.data);
-    });
+    axios.get('/home').then((res) => {});
   }, []);
   return (
     <>

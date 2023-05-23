@@ -1,11 +1,14 @@
 import styled from 'styled-components';
 import deleteBtn from '../../../assets/png-file/x-btn.png';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { BsFillCameraFill } from 'react-icons/bs';
 import WriteImgPreview from './WritePostMaterial/WriteImgPreview';
 import { useSelector, useDispatch } from 'react-redux';
 import { editpostClose } from '../../../reducer/editpostSlice';
 
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 const WritePostBlock = styled.div`
   position: fixed;
   top: 0;
@@ -23,12 +26,15 @@ const PostContentBox = styled.div`
   display: flex;
   transform: translateX(0);
   position: relative;
-
   .delete-btn {
     width: 45px;
     position: absolute;
     top: 9%;
-    right: -45px;
+    right: -40px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 `;
 
@@ -128,6 +134,7 @@ const BottomBox = styled.div`
       font-size: 14.5px;
       font-weight: 800;
       transition: 0.3s ease-in;
+      transform: translateX(-5px);
     }
   }
 
@@ -158,11 +165,12 @@ const ImgInput = styled.input`
 `;
 
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
-const EditPost = ({ postData, setPostData, bgc05 }) => {
-  const [content, setContent] = useState('');
+const EditPost = ({ postData, setPostData, bgc05, artistPostId, preContent, preImg }) => {
+  const [content, setContent] = useState(preContent);
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
-
+  const currentUser = useSelector((state) => state.currentUser);
+  const { groupId } = useParams();
   const { isOpen, commentContent } = useSelector((state) => state.editpost);
   const dispatch = useDispatch();
 
@@ -174,6 +182,18 @@ const EditPost = ({ postData, setPostData, bgc05 }) => {
   const imgInput = useRef();
   // 이미지를 {id: x, img: string} 객체로 관리하기 위한 이미지 하나의 고유 id 관리를 위한 변수
   const imgIdRef = useRef(1);
+
+  useEffect(() => {
+    let tempObj = {};
+    let tempArr = [];
+    limitRef.current -= preImg.length;
+    for (let i = 0; i < preImg.length; i++) {
+      tempObj = { id: imgIdRef.current, url: preImg[i] };
+      tempArr.push(tempObj);
+      imgIdRef.current++;
+      setImgList([...imgList, ...tempArr]);
+    }
+  }, []);
 
   const autoResizeTextarea = () => {
     let textarea = document.querySelector('.autoTextarea');
@@ -205,17 +225,31 @@ const EditPost = ({ postData, setPostData, bgc05 }) => {
   };
 
   // submit
-  const submitFn = (e) => {
-    e.preventDefault();
-    if (content.trim().length > 1) {
-      setPostData([{ content, img: imgList }, ...postData]);
-      setContent('');
-      setImgList([]);
-      limitRef.current = 4;
-      imgIdRef.current = 1;
-      dispatch(editpostClose());
+  const submitFn = async (e) => {
+    let body = {};
+    const imgArr = imgList.map((el) => el.url);
+    //아티스트 포스트 제출
+    if (currentUser.group) {
+      body = { artistId: currentUser.artistId, content, img: imgArr };
     }
-    console.log(imgList);
+    await axios
+      .post(`/artist/${groupId}`, body, {
+        headers: {
+          Authorization: getCookie(),
+        },
+      })
+      .then((res) => {
+        setPostData([res.data, ...postData]);
+        setContent('');
+        setImgList([]);
+        limitRef.current = 4;
+        imgIdRef.current = 1;
+        dispatch(editpostClose());
+      })
+      .catch((e) => {
+        alert('등록 실패');
+        return;
+      });
   };
 
   //이미지 아이콘 누르면 imgInput에 접근
@@ -293,7 +327,7 @@ const EditPost = ({ postData, setPostData, bgc05 }) => {
                   placeholder='내용을 입력해 주세요.'
                   name='content'
                   autoComplete='off'
-                  defaultValue={commentContent}
+                  defaultValue={content}
                   required
                 />
                 <ImgInput

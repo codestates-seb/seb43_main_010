@@ -157,8 +157,6 @@ const ImgInput = styled.input`
   display: none;
 `;
 
-// Feed와 Artist에서 쓰는 포스트 작성 창입니다.
-// 사용하실 때 const [modalOpen, setModalOpen] = useState(false)를 상위에서 사용해 주세요!
 const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, currentUser }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
