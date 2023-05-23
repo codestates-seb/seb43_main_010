@@ -8,7 +8,9 @@ import WritePost from '../WritePost/WritePost';
 import RightImg from '../Feed/FeedMaterial/RightImg';
 import Post from '../Feed/FeedMaterial/Post';
 import MyProfileComments from './MyProfileMaterial/MyProfileComments';
+import Profile from './MyProfileMaterial/Profile';
 import authFn from '../auth';
+
 const MyProfileBlock = styled.div`
   display: flex;
   justify-content: center;
@@ -38,43 +40,6 @@ const PostsBox = styled.div`
 
 const CommentsBox = styled.div`
   margin-bottom: 71px;
-`;
-
-const ProfileInfo = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 1100px;
-  margin-bottom: 36px;
-`;
-
-const ProfileImage = styled.img`
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-right: 26px;
-`;
-
-const ProfileDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const Nickname = styled.div`
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const FollowDetails = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-
-const FollowStyle = styled.div`
-  color: var(--light-gray-400);
-  font-weight: 500;
 `;
 
 const TabButton = styled.button`
@@ -186,17 +151,7 @@ const MyProfile = () => {
     <>
       <Gradation /> {/* 그라데이션 컴포넌트임 => FeedBlock 컴포넌트 */}
       <MyProfileBlock>
-        <ProfileInfo>
-          <ProfileImage src={profile.profileImage} alt='Profile' />
-          <ProfileDetails>
-            <Nickname>{profile.nickname}</Nickname>
-            <FollowDetails>
-              {profile.followings} <FollowStyle>팔로잉</FollowStyle>
-              <div>&gt;</div>
-              {profile.followers} <FollowStyle>팔로워</FollowStyle>
-            </FollowDetails>
-          </ProfileDetails>
-        </ProfileInfo>
+        <Profile profile={profile} />
         <RealMyProfileBlock>
           <PostContextBox>
             {/* 공용 input입니다! => PostInput 컴포넌트 */}
