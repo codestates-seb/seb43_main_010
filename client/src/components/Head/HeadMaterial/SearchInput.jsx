@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import searchIcon from '../../../assets/svg-file/search-input-icon.svg';
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-// 임시 데이터
-import data from '../../Main/data.js';
 import SearchArtistLi from './SearchArtistLi';
 
 const SearchInputBlock = styled.form`
@@ -98,6 +97,9 @@ const SearchInput = ({ openSearch, setOpenSearch }) => {
   const inputRef = useRef(null);
   const artUlRef = useRef(null);
 
+  const { myCommunity, isUserFan } = useSelector((state) => state.community);
+  const { allGroup } = useSelector((state) => state.color);
+
   // 검색 input 창
   useEffect(() => {
     const clickOutInput = (e) => {
@@ -134,13 +136,9 @@ const SearchInput = ({ openSearch, setOpenSearch }) => {
   }, [openSearch, searchModal]);
 
   // 함수 영역
-  const filterId = new Set(
-    data.myGroup.map((el) => {
-      return el.groupId;
-    }),
-  );
+  const filterId = new Set(myCommunity);
 
-  const filterName = data.allGroup.filter((el) => {
+  const filterName = allGroup.filter((el) => {
     const findGroupName = new Set(el.groupName.toLocaleLowerCase().replace(' ', ''));
     return findGroupName.has(searchName.toLocaleLowerCase().replace(' ', ''));
   });
@@ -174,7 +172,10 @@ const SearchInput = ({ openSearch, setOpenSearch }) => {
         <SearchArtistUl ref={artUlRef}>
           {filterName.length > 0 ? (
             filterName.map((el) => (
-              <StyledLink to={filterId.has(el.groupId) ? `/feed/${el.groupId}` : `/join/${el.groupId}`} key={el.groupId}>
+              <StyledLink
+                to={filterId.has(el.groupId) ? `/feed/${el.groupId}` : isUserFan ? `/join/${el.groupId}` : `/feed/${el.groupId}`}
+                key={el.groupId}
+              >
                 <SearchArtistLi groupName={el.groupName} grouplogoImg={el.grouplogoImg} />
               </StyledLink>
             ))

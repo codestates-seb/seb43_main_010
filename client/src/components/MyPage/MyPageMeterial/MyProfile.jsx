@@ -9,7 +9,6 @@ import axios from 'axios';
 import { logout, setCurrentUser } from '../../../reducer/userSlice';
 import { resetCommunity } from '../../../reducer/communitySlice';
 import { useSelector, useDispatch } from 'react-redux';
-
 const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
