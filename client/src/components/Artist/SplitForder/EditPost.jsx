@@ -8,7 +8,7 @@ import { editpostClose } from '../../../reducer/editpostSlice';
 
 import { getCookie } from '../../Login/LoginMaterial/setCookie';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 const WritePostBlock = styled.div`
   position: fixed;
   top: 0;
@@ -169,7 +169,7 @@ const EditPost = ({ postData, setPostData, bgc05, artistPostId, preContent, preI
   const [content, setContent] = useState(preContent);
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
-  const currentUser = useSelector((state) => state.currentUser);
+  const { currentUser } = useSelector((state) => state.user);
   const { groupId } = useParams();
   const { isOpen, commentContent } = useSelector((state) => state.editpost);
   const dispatch = useDispatch();
@@ -182,6 +182,8 @@ const EditPost = ({ postData, setPostData, bgc05, artistPostId, preContent, preI
   const imgInput = useRef();
   // 이미지를 {id: x, img: string} 객체로 관리하기 위한 이미지 하나의 고유 id 관리를 위한 변수
   const imgIdRef = useRef(1);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     let tempObj = {};
@@ -233,18 +235,18 @@ const EditPost = ({ postData, setPostData, bgc05, artistPostId, preContent, preI
       body = { artistId: currentUser.artistId, content, img: imgArr };
     }
     await axios
-      .post(`/artist/${groupId}`, body, {
+      .patch(`/artist/${groupId}/${artistPostId}`, body, {
         headers: {
           Authorization: getCookie(),
         },
       })
-      .then((res) => {
-        setPostData([res.data, ...postData]);
+      .then(() => {
         setContent('');
         setImgList([]);
         limitRef.current = 4;
         imgIdRef.current = 1;
         dispatch(editpostClose());
+        window.location.href = `/artist/${groupId}`;
       })
       .catch((e) => {
         alert('등록 실패');
