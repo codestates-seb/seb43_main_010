@@ -131,17 +131,18 @@ const StyledLink = styled(Link)`
 const Main = () => {
   // login한 유저 찾아오기
   // 그럼 로그인 여부를 알려면 매번 쿠키로 확인하고, 리덕스에서 값 가져와서 확인해야 하나?
-  const { currentUser, isLogined } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const { myCommunity, isUserFan } = useSelector((state) => state.community);
   const { allGroup } = useSelector((state) => state.color);
 
-  const token = getCookie();
+  console.log(currentUser);
 
   const dispatch = useDispatch();
   useEffect(() => {
+    const token = getCookie();
     // 로그인한 유저 찾아오기
     axios
-      .get('http://localhost:8080/user', {
+      .get('/user', {
         headers: {
           Authorization: `${token}`,
         },
@@ -154,7 +155,8 @@ const Main = () => {
   // 로그인한 유저가 가입되어 있는 커뮤니티 그룹 확인하는 곳
   // fanId라는 키를 가지고 있느냐 => 로그인한 유저가 팬이냐?
   useEffect(() => {
-    axios.get('http://localhost:8080/home', { headers: { Authorization: `${token}` } }).then((res) => {
+    const token = getCookie();
+    axios.get('/home', { headers: { Authorization: `${token}` } }).then((res) => {
       if ('fanId' in currentUser) {
         dispatch(checkUserFan(true)); // 현재 로그인한 유저는 팬
         const community = res.data.community.map((item) => item.id); // 가입되어 있는 커뮤니티의 id를 추출
