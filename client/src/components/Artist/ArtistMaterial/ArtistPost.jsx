@@ -4,10 +4,9 @@ import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useSelector } from 'react-redux';
 import ArtistImgPreview from './ArtistImgPreview';
 import EditDeleteModal from '../SplitForder/EditDeleteModal';
-import DetailPost from '../../Feed/FeedMaterial/DetailPost';
-import BigDetailPost from '../../Feed/FeedMaterial/BigDetailPost';
+import DetailPost from '../SplitForder/DetailPost';
+import BigDetailPost from '../SplitForder/BigDetailPost';
 import { showDate, showMonthDay } from './showDate';
-import EditPost from '../SplitForder/EditPost';
 
 const Container = styled.div`
   width: 707px;
@@ -276,8 +275,6 @@ const ArtistPost = ({
   const group = state.allGroup.find((el) => el.groupId === Number(groupId));
   const gradColor = group ? group.gradColor : [];
 
-  const handleEdit = () => {};
-
   return (
     <>
       <Container>
@@ -370,47 +367,43 @@ const ArtistPost = ({
         </ArtistPostBox>
       </Container>
 
-      {/* 수정하는 모달 창 */}
-      {/* {isOpen && <EditPost bgc05={true} artistPostId={artistPostId} preContent={content} preImg={img} />} */}
-
       {/* 디테일 포스트 컴포넌트임 => BigDetailPost, DetailPost 컴포넌트 */}
       {detailPost && (
         <>
-          {content.length > 308 ? (
+          {content.length > 308 || img.length !== 0 ? (
             <BigDetailPost
               detailPost={detailPost}
               setDetailPost={setDetailPost}
-              createdAt={createdAt}
+              createdAt={showDate(createdAt)}
               content={content}
               nickname={nickname}
               profile={profile}
+              imgList={img}
               liked={liked}
               like={like}
               clickLike={clickLike}
+              groupId={groupId}
               // 추가
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
-              postData={postData}
-              setPostData={setPostData}
-              groupId={groupId}
             />
           ) : (
             <DetailPost
               detailPost={detailPost}
               setDetailPost={setDetailPost}
-              createdAt={createdAt}
+              createdAt={showDate(createdAt)}
               content={content}
               nickname={nickname}
               profile={profile}
+              imgList={img}
+              groupId={groupId}
+              //dddd
               liked={liked}
               like={like}
               clickLike={clickLike}
               // 추가
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
-              postData={postData}
-              setPostData={setPostData}
-              groupId={groupId}
             />
           )}
         </>

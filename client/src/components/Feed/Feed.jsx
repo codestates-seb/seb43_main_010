@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
-
 import PostInput from '../PostInput/PostInput';
 import Gradation from './FeedMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
@@ -10,7 +9,6 @@ import RightImg from './FeedMaterial/RightImg';
 import Post from './FeedMaterial/Post';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
 import authFn from '../auth';
 const FeedBlock = styled.div`
   display: flex;
@@ -150,7 +148,9 @@ const data = [
 const Feed = () => {
   const [modalOpen, setModalOpen] = useState(false);
   // WritePost 컴포넌트에 담길 data입니다 {content:string,imgList:[] 이렇게 담깁니다}
-  const [postData, setPostData] = useState([data]);
+  const [postData, setPostData] = useState([]);
+  //get요청 후 저장되는 곳은 feedPost고 이걸로 map 돌리시면 됩니다.
+  const [feedPost, setFeedPost] = useState([]);
   const openModal = () => {
     setModalOpen(true);
   };
@@ -159,7 +159,14 @@ const Feed = () => {
   //만약 currentUser에 group이란 속성이 없다면 포스팅 못하게 안보이게하기
   //현재 GroupID 받아오기
   let { groupId } = useParams();
+  console.log(groupId);
   authFn(); //로그인후 사용해주세요
+  useEffect(() => {
+    axios.get(`/feed/${groupId}?page=1&size=16`).then((res) => {
+      setFeedPost(res.data.data);
+    });
+  }, [postData]);
+  console.log(feedPost);
 
   return (
     <>

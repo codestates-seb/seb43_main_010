@@ -210,25 +210,17 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
       return;
     }
     let body = {};
-    let postUrl = '';
     const imgArr = imgList.map((el) => el.url);
     //아티스트 포스트 제출
-    if (currentUser.group) {
-      body = { artistId: currentUser.artistId, content, img: imgArr };
-      postUrl = '/artist';
-    } else {
-      // 피트포스트 제출
-      body = { fanId: currentUser.fanId, content, img: imgArr };
-      postUrl = '/feed';
-    }
+    // 피트포스트 제출
+    body = { fanId: currentUser.fanId, content, img: imgArr };
     await axios
-      .post(`http://localhost:8080/${postUrl}/${groupId}`, body, {
+      .post(`/feed/${groupId}`, body, {
         headers: {
           Authorization: getCookie(),
         },
       })
       .then((res) => {
-        //여길 없애도댐
         setPostData([res.data, ...postData]);
         setContent('');
         setImgList([]);
@@ -241,30 +233,6 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
         alert('등록 실패');
         return;
       });
-    setPostData([{ content, img: imgList }, ...postData]);
-    // setPostData([
-    //   {
-    //     artist: {
-    //       artistId: currentUser.artistId,
-    //       nickname: currentUser.nickname,
-    //       group: currentUser.group,
-    //       profile: currentUser.profile,
-    //     },
-    //     feedPostId: null,
-    //     artistPostId: 2,
-    //     content: content,
-    //     img: imgList,
-    //     createdAt: '2023-05-20T16:25:14.151027',
-    //     comments: [],
-    //     likeCount: 0,
-    //   },
-    //   ...postData,
-    // ]);
-    // setContent('');
-    // setImgList([]);
-    // limitRef.current = 4;
-    // imgIdRef.current = 1;
-    // setModalOpen(false);
   };
 
   //이미지 아이콘 누르면 imgInput에 접근

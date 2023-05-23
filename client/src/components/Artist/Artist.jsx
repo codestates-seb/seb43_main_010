@@ -33,8 +33,6 @@ const TempPostBox = styled.div`
 `;
 
 const Artist = () => {
-  const dispatch = useDispatch();
-  //여기서 로그인후 받아온 사용자가 아티스트가 아니라면 포스트 작성하는 부분을 안보여주기 위해 전역 변수를 가져와야함
   const currentUser = useSelector((state) => state.user.currentUser);
   //만약 currentUser에 group이란 속성이 없다면 포스팅 못하게 안보이게하기
   const [isArtist, setIsArtist] = useState(false);
@@ -43,19 +41,16 @@ const Artist = () => {
   const [postData, setPostData] = useState([]);
   const [artistPost, setArtistPost] = useState([]);
   //현재 GroupID 받아오기
-  let { groupId } = useParams();
+  const { groupId } = useParams();
   authFn();
   useEffect(() => {
     if (currentUser.group) {
       setIsArtist(true);
     }
-    axios.get(`http://localhost:8080/artist/${groupId}?page=1&size=16`).then((res) => {
+    axios.get(`/artist/${groupId}?page=1&size=16`).then((res) => {
       setArtistPost(res.data.data);
     });
   }, [postData]);
-  // console.log(currentUser);
-  // console.log(groupId);
-  // console.log(artistPost);
   const openModal = () => {
     setModalOpen(true);
   };
