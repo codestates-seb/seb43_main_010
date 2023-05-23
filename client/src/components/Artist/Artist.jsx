@@ -47,9 +47,14 @@ const Artist = () => {
     if (currentUser.group) {
       setIsArtist(true);
     }
-    axios.get(`/artist/${groupId}?page=1&size=16`).then((res) => {
-      setArtistPost(res.data.data);
-    });
+    axios
+      .get(`/artist/${groupId}?page=1&size=16`)
+      .then((res) => {
+        setArtistPost(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [postData]);
   const openModal = () => {
     setModalOpen(true);
@@ -74,25 +79,26 @@ const Artist = () => {
             {/* Post 컴포넌트 */}
             {artistPost.length !== 0 ? (
               <PostsBox isArtist={isArtist} curGroup={currentUser.groupId} pageGroup={Number(groupId)}>
-                {artistPost.map((el) => (
-                  <ArtistPost
-                    key={el.artistPostId}
-                    artistPostId={el.artistPostId}
-                    createdAt={el.createdAt}
-                    nickname={el.artist.nickname}
-                    content={el.content}
-                    profile={el.artist.profile}
-                    likeCount={el.likeCount}
-                    comments={el.comments}
-                    modalOpen={modalOpen}
-                    setModalOpen={setModalOpen}
-                    postData={postData}
-                    setPostData={setPostData}
-                    groupId={Number(groupId)}
-                    img={el.img}
-                    artistId={el.artist.artistId}
-                  />
-                ))}
+                {artistPost &&
+                  artistPost.map((el) => (
+                    <ArtistPost
+                      key={el.artistPostId}
+                      artistPostId={el.artistPostId}
+                      createdAt={el.createdAt}
+                      nickname={el.artist.nickname}
+                      content={el.content}
+                      profile={el.artist.profile}
+                      likeCount={el.likeCount}
+                      comments={el.comments}
+                      modalOpen={modalOpen}
+                      setModalOpen={setModalOpen}
+                      postData={postData}
+                      setPostData={setPostData}
+                      groupId={Number(groupId)}
+                      img={el.img}
+                      artistId={el.artist.artistId}
+                    />
+                  ))}
               </PostsBox>
             ) : (
               <TempPostBox />

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const ImgPreviewBox = styled.div`
+const ImgPreviewBox = styled.ul`
   margin: 5px auto;
   width: 90%;
   /* height: 600px; */

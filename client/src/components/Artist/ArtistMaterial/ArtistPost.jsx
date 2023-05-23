@@ -383,14 +383,13 @@ const ArtistPost = ({
               like={like}
               clickLike={clickLike}
               groupId={groupId}
-              // 추가
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
+              artistPostId={artistPostId}
             />
           ) : (
             <DetailPost
               detailPost={detailPost}
               setDetailPost={setDetailPost}
+              artistPostId={artistPostId}
               createdAt={showDate(createdAt)}
               content={content}
               nickname={nickname}

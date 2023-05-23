@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
-
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
 const EditDeleteModalBlock = styled.div`
   position: absolute;
   min-width: 150px;
@@ -173,13 +176,19 @@ const CopyDeleteModal = ({
   deleteModal,
   setDeleteModal,
   what,
-  commentContent,
+  content,
+  commentId,
+  userEmail,
+  artistPostId,
+  setData,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
   const [clipboard, setClipboard] = useState(false);
 
+  const { groupId } = useParams();
+  const { currentUser } = useSelector((state) => state.user);
   // 댓글 복사
   const handleCopy = (text) => {
     navigator.clipboard
@@ -235,12 +244,32 @@ const CopyDeleteModal = ({
     setOpenModal(false);
   };
 
-  const clickOkFn = () => {
+  const clickOkFn = async () => {
     // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
     if (what === '포스트를') {
       // 포스트 삭제
     } else {
       // 댓글 삭제
+      let body = { email: currentUser.email };
+      if (currentUser.email !== userEmail) return;
+      await axios
+        .delete(
+          `/artist/${groupId}/${artistPostId}/comment/${commentId}`,
+          { data: body },
+          {
+            headers: {
+              Authorization: getCookie(),
+            },
+          },
+        )
+        .then(() => {
+          setData(body);
+          console.log('삭제성공');
+        })
+        .catch((e) => {
+          alert('삭제 실패');
+          return;
+        });
     }
     closeDeleteModalBg();
     setDeleteModal(false);
@@ -250,7 +279,7 @@ const CopyDeleteModal = ({
   return (
     <>
       <EditDeleteModalBlock ref={modalRef} top={top} left={left} right={right} transform={transform} deleteModal={deleteModal}>
-        <button onClick={() => handleCopy(commentContent)} className='edit'>
+        <button onClick={() => handleCopy(content)} className='edit'>
           <div className='pen'>
             {!clipboard && <i className='i-share-icon' />}
 

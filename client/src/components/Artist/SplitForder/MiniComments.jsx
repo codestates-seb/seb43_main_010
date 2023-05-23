@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useState } from 'react';
-
+import { useSelector } from 'react-redux';
 import CopyDeleteModal from './CopyDeleteModal';
 
 const CommentsBlock = styled.li`
@@ -39,8 +39,12 @@ const Comment = styled.div`
     .profile-img {
       width: 32px;
       height: 32px;
-      background: no-repeat url('${profileImg}');
       background-size: 32px 32px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 1.5rem;
+      }
     }
 
     .user-txt {
@@ -147,13 +151,31 @@ const Comment = styled.div`
 `;
 
 // 댓글 컴포넌트임
-const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
+const MiniComments = ({
+  deleteModal,
+  setDeleteModal,
+  likeNum,
+  nickname,
+  commentId,
+  createdAt,
+  content,
+  profile,
+  userEmail,
+  likeCount,
+  artistPostId,
+  setData,
+}) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
   const [showAll, setShowAll] = useState(false); // 전체 내용 보여주는 여부
+  const { currentUser } = useSelector((state) => state.user);
 
   const clickMiniMenu = () => {
+    if (currentUser.email !== userEmail) {
+      alert('사용자가 다릅니다');
+      return;
+    }
     setOpenModal(!openModal);
   };
 
@@ -170,17 +192,18 @@ const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent
     }
     // 서버한테 바뀐 좋아요 데이터 전송 해야함
   };
-
   return (
     <>
       <CommentsBlock>
         <Comment>
           <div className='comments-author'>
             <div className='user-img-txt'>
-              <div className='profile-img'></div>
+              <div className='profile-img'>
+                <img src={profile} alt='프로필' />
+              </div>
               <div className='user-txt'>
-                <span className='nickname'>{commentName}</span>
-                <span className='time'>{createAt}</span>
+                <span className='nickname'>{nickname}</span>
+                <span className='time'>{createdAt}</span>
               </div>
             </div>
             <div className='right-icon-box'>
@@ -198,27 +221,31 @@ const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent
                   deleteModal={deleteModal}
                   setDeleteModal={setDeleteModal}
                   what='댓글을'
-                  commentContent={commentContent}
+                  content={content}
+                  commentId={commentId}
+                  userEmail={userEmail}
+                  artistPostId={artistPostId}
+                  setData={setData}
                 />
               ) : null}
             </div>
           </div>
           <div className='comments-content'>
             {showAll ? (
-              <p>{commentContent}</p>
+              <p>{content}</p>
             ) : (
               <>
-                {commentContent.length > 236 ? (
+                {content.length > 236 ? (
                   <>
                     <div>
-                      {commentContent.slice(0, 236)}...
+                      {content.slice(0, 236)}...
                       <button className='more' onClick={toggleShowAll}>
                         more
                       </button>
                     </div>
                   </>
                 ) : (
-                  <pre>{commentContent}</pre>
+                  <pre>{content}</pre>
                 )}
               </>
             )}

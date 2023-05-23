@@ -120,7 +120,6 @@ const LoginForm = () => {
         return;
       }
       body = { ...artist };
-      console.log(body);
       delete body.passwordCheck;
       //여기서 pwd암호화하기
       await axios
