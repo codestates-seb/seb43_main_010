@@ -13,6 +13,7 @@ import Card from './MainMaterial/Card';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { setCurrentUser } from '../../reducer/userSlice';
+import { setMyCommunity, checkUserFan } from '../../reducer/communitySlice';
 
 const MainBlock = styled.div`
   padding: 80px 0 212px 0;
@@ -128,34 +129,54 @@ const StyledLink = styled(Link)`
 `;
 
 const Main = () => {
-  const myGroupIds = new Set(data.myGroup.map((el) => el.groupId));
+  // login한 유저 찾아오기
+  // 그럼 로그인 여부를 알려면 매번 쿠키로 확인하고, 리덕스에서 값 가져와서 확인해야 하나?
+  const { currentUser, isLogined } = useSelector((state) => state.user);
+  const { myCommunity, isUserFan } = useSelector((state) => state.community);
+  const { allGroup } = useSelector((state) => state.color);
 
-  const filteredData = data.allGroup.filter((el) => {
-    return !myGroupIds.has(el.groupId);
-  });
-  //login한 유저 찾아오기
-  const currentUser = useSelector((state) => state.currentUser);
+  const token = getCookie();
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = getCookie();
+    // 로그인한 유저 찾아오기
     axios
-      .get('/user', {
+      .get('http://localhost:8080/user', {
         headers: {
           Authorization: `${token}`,
         },
       })
       .then((res) => {
-        console.log(res.data.data);
         dispatch(setCurrentUser(res.data.data));
       });
+  }, []);
+
+  // 로그인한 유저가 가입되어 있는 커뮤니티 그룹 확인하는 곳
+  // fanId라는 키를 가지고 있느냐 => 로그인한 유저가 팬이냐?
+  useEffect(() => {
+    axios.get('http://localhost:8080/home', { headers: { Authorization: `${token}` } }).then((res) => {
+      if ('fanId' in currentUser) {
+        dispatch(checkUserFan(true)); // 현재 로그인한 유저는 팬
+        const community = res.data.community.map((item) => item.id); // 가입되어 있는 커뮤니티의 id를 추출
+        dispatch(setMyCommunity(community)); // 현재 로그인한 유저가 가입된 커뮤니티들
+      } else {
+        dispatch(checkUserFan(false)); // 현재 로그인한 유저는 아티스트
+      }
+    });
   }, [currentUser]);
 
-  useEffect(() => {
-    axios.get('/home').then((res) => {
-      console.log(res.data);
-    });
-  }, []);
+  const myGroupIds = new Set(myCommunity);
+
+  // My artist, 여기는 내 아티스트
+  const filteredMyCommuData = allGroup.filter((el) => {
+    return myGroupIds.has(el.groupId);
+  });
+
+  // Find a new artist!, 여기는 내 아티스트 아님
+  const filteredData = allGroup.filter((el) => {
+    return !myGroupIds.has(el.groupId);
+  });
+
   return (
     <>
       <MainBlock>
@@ -163,7 +184,7 @@ const Main = () => {
         <BigImgBox />
 
         {/* My artist가 없으면 안보이게 처리해야 함 */}
-        {data.myGroup.length === 0 ? null : (
+        {myCommunity.length === 0 ? null : (
           <MyArtistCardsBlock>
             <MyArtistCards className='my-cards'>
               <div className='my-artist'>
@@ -175,7 +196,7 @@ const Main = () => {
 
               <CardBlock className='card-block'>
                 {/* 여기서 My artist가 있으면 map 돌려야 함 => Card 컴포넌트*/}
-                {data.myGroup.map((el) => (
+                {filteredMyCommuData.map((el) => (
                   <StyledLink to={`/music/${el.groupId}`} key={el.groupId}>
                     <Card key={el.groupId} groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
                   </StyledLink>
@@ -197,7 +218,7 @@ const Main = () => {
             <CardBlock className='card-block'>
               {/* 여기서 artist들을 map 돌려야 함 => Card 컴포넌트 */}
               {filteredData.map((el) => (
-                <StyledLink to={`/join/${el.groupId}`} key={el.groupId}>
+                <StyledLink to={currentUser === null ? `/login` : isUserFan ? `/join/${el.groupId}` : `/music/${el.groupId}`} key={el.groupId}>
                   <Card groupName={el.groupName} groupImg={el.groupImg} grouplogoImg={el.grouplogoImg} />
                 </StyledLink>
               ))}

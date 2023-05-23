@@ -21,7 +21,10 @@ const userSlice = createSlice({
     setCurrentGroupId(state, action) {
       state.groupId = action.payload;
     },
+    logout(state) {
+      return { ...state, currentUser: null, isLogined: false, groupId: null };
+    },
   },
 });
-export const { setCurrentUser, setisLogined, setCurrentGroupId } = userSlice.actions;
+export const { setCurrentUser, setisLogined, setCurrentGroupId, logout, changeName } = userSlice.actions;
 export default userSlice.reducer;

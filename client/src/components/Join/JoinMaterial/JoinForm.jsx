@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
+import axios from 'axios';
+import { setMyCommunity } from '../../../reducer/communitySlice';
 
 const JoinFormBlock = styled.div`
   width: 448px;
@@ -76,19 +80,22 @@ const Form = styled.form`
 `;
 
 const JoinForm = () => {
-  const [commuNickname, setCommuNickname] = useState('');
+  const { currentUser } = useSelector((state) => state.user);
 
   const { groupId } = useParams();
   const navigate = useNavigate();
 
-  const updateNickname = (e) => {
-    setCommuNickname(e.target.value);
-  };
+  const dispatch = useDispatch();
 
   const submitNickname = (e) => {
     e.preventDefault();
     // !!!여기에서 commuNickname을 서버에 전송해야 함!!!
-    navigate(`/music/${groupId}`);
+    const token = getCookie();
+    // 그룹 추가
+    axios.post(`http://localhost:8080/home/check/${groupId}`, { Headers: { Authorization: `${token}` } }).then((res) => {
+      navigate(`/music/${groupId}`);
+      console.log(res.data);
+    });
   };
 
   return (
@@ -97,7 +104,7 @@ const JoinForm = () => {
       <Form onSubmit={submitNickname}>
         <label htmlFor='nickname'>닉네임</label>
         {/* 나중에 여기서 defaultValue를 유저 닉네임으로 바꾸어야 함 */}
-        <input onChange={updateNickname} defaultValue='TATA-V' type='text' id='nickname' name='nickname' autoComplete='off' required />
+        <input value={currentUser.nickname} type='text' id='nickname' name='nickname' autoComplete='off' readOnly />
         <button className='done'>완료</button>
       </Form>
     </JoinFormBlock>

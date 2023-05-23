@@ -129,7 +129,7 @@ const LoginForm = () => {
           alert('회원가입 성공');
           onReset();
           onInputReset();
-          // navigate('/login');
+          navigate('/login');
         })
         .catch((e) => {
           alert('회원가입 실패');

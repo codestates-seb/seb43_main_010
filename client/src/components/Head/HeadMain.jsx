@@ -1,8 +1,14 @@
 import styled from 'styled-components';
 import logo from '../../assets/svg-file/white-logo.svg';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setCurrentUser } from '../../reducer/userSlice';
+import axios from 'axios';
+import { getCookie } from '../Login/LoginMaterial/setCookie';
 
 import RightIcon from './HeadMaterial/RightIcon';
+import Signin from './HeadMaterial/Signin';
 
 const HeadBlock = styled.header`
   width: 100%;
@@ -29,6 +35,8 @@ const LeftBox = styled.div`
 `;
 
 const HeadMain = () => {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <HeadBlock>
       <LeftBox>
@@ -40,7 +48,7 @@ const HeadMain = () => {
       </LeftBox>
 
       {/* 오른쪽 search, bell, people, ques 아이콘들이 있는 곳 => RightIcon 컴포넌트 */}
-      <RightIcon />
+      {currentUser === null ? <Signin /> : <RightIcon />}
     </HeadBlock>
   );
 };
