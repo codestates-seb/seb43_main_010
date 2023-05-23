@@ -135,8 +135,6 @@ const Main = () => {
   const { myCommunity, isUserFan } = useSelector((state) => state.community);
   const { allGroup } = useSelector((state) => state.color);
 
-  console.log(currentUser);
-
   const dispatch = useDispatch();
   useEffect(() => {
     const token = getCookie();

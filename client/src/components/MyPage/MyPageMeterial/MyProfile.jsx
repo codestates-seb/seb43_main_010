@@ -6,9 +6,10 @@ import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
 import NewJeans from '../../../assets/jpg-file/card-jpg/3-newJeans.jpg';
 import { removeCookie } from '../../Login/LoginMaterial/setCookie';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { logout } from '../../../reducer/userSlice';
 import { resetCommunity } from '../../../reducer/communitySlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentUser } from '../../../reducer/userSlice';
 
 const LeftWrapper = styled.div`
   display: flex;
@@ -272,6 +273,9 @@ const MyProfile = () => {
     { imgSrc: NewJeans, imgAlt: 'NewJeans', nickName: 'TATA-V', artistName: 'NewJeans' },
   ]);
 
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+
   const handleDeleteBtnClick = (index) => () => {
     setShowModal({ open: true, index });
   };
@@ -320,6 +324,7 @@ const MyProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogoutClick = async () => {
+    dispatch(setCurrentUser(null));
     removeCookie();
     dispatch(logout());
     dispatch(resetCommunity());

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
-import bubbleTail from '../../../assets/svg-file/bubble-tail.svg';
 import { useSelector } from 'react-redux';
 import ArtistImgPreview from './ArtistImgPreview';
-import EditDeleteModal from '../../Feed/FeedMaterial/EditDeleteModal';
+import EditDeleteModal from '../SplitForder/EditDeleteModal';
 import DetailPost from '../../Feed/FeedMaterial/DetailPost';
 import BigDetailPost from '../../Feed/FeedMaterial/BigDetailPost';
 import { showDate, showMonthDay } from './showDate';
+import EditPost from '../SplitForder/EditPost';
+
 const Container = styled.div`
   width: 707px;
   display: flex;
@@ -226,12 +227,29 @@ const ArtistPostBox = styled.div`
   }
 `;
 
-const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments, img, modalOpen, setModalOpen, postData, setPostData, groupId }) => {
+const ArtistPost = ({
+  artistPostId,
+  createdAt,
+  nickname,
+  content,
+  profile,
+  likeCount,
+  comments,
+  img,
+  modalOpen,
+  setModalOpen,
+  postData,
+  setPostData,
+  groupId,
+  artistId,
+}) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeCount);
   const [detailPost, setDetailPost] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+
+  const { isOpen } = useSelector((state) => state.editpost);
 
   const clickLike = () => {
     setLiked(!liked);
@@ -257,6 +275,8 @@ const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments
   const state = useSelector((state) => state.color);
   const group = state.allGroup.find((el) => el.groupId === Number(groupId));
   const gradColor = group ? group.gradColor : [];
+
+  const handleEdit = () => {};
 
   return (
     <>
@@ -299,8 +319,12 @@ const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments
                     modalOpen={modalOpen}
                     setModalOpen={setModalOpen}
                     // 여기서 해당하는 포스트를 내려줘야함
+                    artistPostId={artistPostId}
+                    preContent={content}
+                    preImg={img}
                     postData={postData}
                     setPostData={setPostData}
+                    artistId={artistId}
                   />
                 ) : null}
               </div>
@@ -345,6 +369,9 @@ const ArtistPost = ({ createdAt, nickname, content, profile, likeCount, comments
           </div>
         </ArtistPostBox>
       </Container>
+
+      {/* 수정하는 모달 창 */}
+      {/* {isOpen && <EditPost bgc05={true} artistPostId={artistPostId} preContent={content} preImg={img} />} */}
 
       {/* 디테일 포스트 컴포넌트임 => BigDetailPost, DetailPost 컴포넌트 */}
       {detailPost && (

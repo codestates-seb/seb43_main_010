@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { editpostOpen, setCommentContent } from '../../../reducer/editpostSlice';
-
+import EditPost from './EditPost';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
 const EditDeleteModalBlock = styled.div`
   position: absolute;
   min-width: 150px;
@@ -10,7 +13,7 @@ const EditDeleteModalBlock = styled.div`
   background-color: var(--white-100);
   border-radius: 9px;
   box-shadow: 0 2px 10px rgb(19, 28, 35, 17%);
-
+  z-index: 10;
   display: ${({ deleteModal }) => (deleteModal ? 'none' : 'flex')};
   justify-content: center;
   align-items: center;
@@ -159,17 +162,25 @@ const EditDeleteModal = ({
   detailPost,
   setDetailPost,
   postContent,
+  artistPostId,
+  preContent,
+  preImg,
+  artistId,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
-
+  const { isOpen } = useSelector((state) => state.editpost);
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  const { groupId } = useParams();
+  //  로그인한 사용자가 작성자의 ID와 같아야 수정가능
   const handleEdit = () => {
-    dispatch(editpostOpen());
-    dispatch(setCommentContent(postContent));
-    if (detailPost) {
-      setDetailPost(false);
+    if (currentUser.artistId === artistId) {
+      dispatch(editpostOpen());
+      dispatch(setCommentContent(postContent));
+      if (detailPost) {
+        setDetailPost(false);
+      }
     }
   };
 
@@ -202,8 +213,10 @@ const EditDeleteModal = ({
   }, [deleteModal]);
 
   const openDeleteModal = () => {
-    setDeleteModal(true);
-    openDeleteModalBg();
+    if (currentUser.artistId === artistId) {
+      setDeleteModal(true);
+      openDeleteModalBg();
+    }
   };
 
   const clickCancelFn = () => {
@@ -212,10 +225,29 @@ const EditDeleteModal = ({
     setOpenModal(false);
   };
 
-  const clickOkFn = () => {
+  const clickOkFn = async () => {
     // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
+    let body = {};
+    if (currentUser.artistId !== artistId) return;
     if (what === '포스트를') {
-      // 포스트 삭제
+      body = { artistId: currentUser.artistId };
+      await axios
+        .delete(
+          `/artist/${groupId}/${artistPostId}`,
+          { data: body },
+          {
+            headers: {
+              Authorization: getCookie(),
+            },
+          },
+        )
+        .then(() => {
+          window.location.href = `/artist/${groupId}`;
+        })
+        .catch((e) => {
+          alert('삭제 실패');
+          return;
+        });
     } else {
       // 댓글 삭제
     }
@@ -241,6 +273,8 @@ const EditDeleteModal = ({
             <span>삭제하기</span>
           </div>
         </button>
+        {/* 수정하는 모달 창 */}
+        {isOpen && <EditPost bgc05={true} artistPostId={artistPostId} preContent={preContent} preImg={preImg} />}
       </EditDeleteModalBlock>
 
       {/* 포스트 삭제 여부 모달 */}
