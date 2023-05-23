@@ -5,10 +5,9 @@ import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 
 import Comments from './Comments';
 import EditDeleteModal from './EditDeleteModal';
-
+import ArtistImgPreview from '../ArtistMaterial/ArtistImgPreview';
 // 임시 댓글 데이터
-import commentFeedData from '../commentFeedData.js';
-
+import commentFeedData from '../../Feed/commentFeedData';
 const DetailPostBlock = styled.div`
   position: fixed;
   top: 0;
@@ -81,9 +80,12 @@ const AuthorContentBox = styled.li`
     .profile-img {
       width: 46px;
       height: 46px;
-      background: ${({ img }) => `no-repeat url(${img})`};
+      background: ${({ profile }) => `no-repeat url(${profile})`};
       background-size: 46px 46px;
       border-radius: 50%;
+      img {
+        border-radius: 1.5rem;
+      }
     }
 
     .user-txt {
@@ -296,9 +298,10 @@ const DetailPost = ({
   detailPost,
   setDetailPost,
   createdAt,
+  profile,
   content,
   nickname,
-  img,
+  imgList,
   liked,
   like,
   clickLike,
@@ -360,10 +363,12 @@ const DetailPost = ({
         <DetailContent>
           <ul className='detail-post-ul'>
             <ul className='top-mid-ul'>
-              <AuthorContentBox img={img}>
+              <AuthorContentBox>
                 <div className='author'>
                   <div className='author-img-txt'>
-                    <div className='profile-img'></div>
+                    <div className='profile-img'>
+                      <img src={profile} alt='프로필' />
+                    </div>
                     <div className='user-txt'>
                       <span className='nickname'>{nickname}</span>
                       <span className='time'>{createdAt}</span>
@@ -398,6 +403,7 @@ const DetailPost = ({
                 <div className='content'>
                   <p>{content}</p>
                 </div>
+                <ArtistImgPreview imgList={imgList}></ArtistImgPreview>
               </AuthorContentBox>
 
               <ConmmentsNum>

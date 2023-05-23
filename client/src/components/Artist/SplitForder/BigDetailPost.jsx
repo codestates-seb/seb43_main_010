@@ -2,12 +2,12 @@ import styled from 'styled-components';
 import deleteBtn from '../../../assets/png-file/x-btn.png';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useRef, useState, useEffect } from 'react';
-
+import DetailImgPreview from './DetailImgPreview';
 import MiniComments from './MiniComments';
 import EditDeleteModal from './EditDeleteModal';
 
 // 임시 댓글 데이터
-import commentFeedData from '../commentFeedData.js';
+import commentFeedData from '../../Feed/commentFeedData';
 
 const BigDetailPostBlock = styled.div`
   position: fixed;
@@ -51,6 +51,9 @@ const LeftPost = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hi;
+  list-style-type: none;
 `;
 
 const RightComments = styled.div`
@@ -133,7 +136,6 @@ const AuthorContentBox = styled.li`
   width: 768px;
   border-radius: 20px 0 0 0;
   padding: 26px 33px 36px 36px;
-
   .right-icon-box {
     position: relative;
   }
@@ -150,9 +152,12 @@ const AuthorContentBox = styled.li`
     .profile-img {
       width: 46px;
       height: 46px;
-      background: ${({ img }) => `no-repeat url(${img})`};
+      background: ${({ profile }) => `no-repeat url(${profile})`};
       background-size: 46px 46px;
       border-radius: 50%;
+      img {
+        border-radius: 1.5rem;
+      }
     }
 
     .user-txt {
@@ -299,7 +304,8 @@ const BigDetailPost = ({
   createdAt,
   content,
   nickname,
-  img,
+  imgList,
+  profile,
   liked,
   like,
   clickLike,
@@ -362,10 +368,12 @@ const BigDetailPost = ({
           {/* 왼쪽 */}
           <LeftPost>
             <ul className='author-post-box'>
-              <AuthorContentBox img={img}>
+              <AuthorContentBox>
                 <div className='author'>
                   <div className='author-img-txt'>
-                    <div className='profile-img'></div>
+                    <div className='profile-img'>
+                      <img src={profile} alt='프로필' />
+                    </div>
                     <div className='user-txt'>
                       <span className='nickname'>{nickname}</span>
                       <span className='time'>{createdAt}</span>
@@ -396,6 +404,7 @@ const BigDetailPost = ({
                 <div className='content'>
                   <p>{content}</p>
                 </div>
+                <DetailImgPreview imgList={imgList}></DetailImgPreview>
               </AuthorContentBox>
             </ul>
 

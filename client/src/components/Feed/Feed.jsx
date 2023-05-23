@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import axios from 'axios';
 import profileImg from '../../assets/jpg-file/profile-img.jpg';
-
 import PostInput from '../PostInput/PostInput';
 import Gradation from './FeedMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
@@ -10,7 +9,6 @@ import RightImg from './FeedMaterial/RightImg';
 import Post from './FeedMaterial/Post';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
 import authFn from '../auth';
 const FeedBlock = styled.div`
   display: flex;
