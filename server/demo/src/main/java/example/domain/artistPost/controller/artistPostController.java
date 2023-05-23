@@ -94,10 +94,11 @@ public class artistPostController {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND);
         }
 
-        ArtistPost artistPost = mapper.artistPatchDtoToArtist(findArtistPost, requestBody, artist);
-        artistPost.setGroup(group);
+        findArtistPost = mapper.artistPatchDtoToArtist(findArtistPost, requestBody, artist);
+        findArtistPost.setGroup(group);
 
-        ArtistPost updateArtistPost = service.updateArtistPost(artistPost);
+
+        ArtistPost updateArtistPost = service.updateArtistPost(findArtistPost);
 
         return new ResponseEntity<>(mapper.artistToArtistResponseDto(updateArtistPost), HttpStatus.OK);
     }
