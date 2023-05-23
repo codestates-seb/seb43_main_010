@@ -34,6 +34,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Validated
@@ -344,17 +345,10 @@ public class CommentController {
 
     // feedPost 댓글 삭제
     @DeleteMapping("feed/{groupId}/{feedPostId}/comment/{commentId}")
-    public ResponseEntity<?> deleteFansComment(@PathVariable("groupId") @Positive int groupId,
-                                               @PathVariable("feedPostId") @Positive @NotNull int feedPostId,
-                                               @PathVariable("commentId") @Positive int commentId,
-                                               @Valid @RequestBody CommentDeleteDto requestBody) {
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
-
-        if (group.getId() != groupId) {
-            throw new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND);
-        }
-
+    public ResponseEntity<?> deleteComment(@PathVariable("groupId") @Positive int groupId,
+                                           @PathVariable("feedPostId") @Positive @NotNull int feedPostId,
+                                           @PathVariable("commentId") @Positive int commentId,
+                                           @Valid @RequestBody CommentDeleteDto requestBody) {
         FeedPost feedPost = feedPostRepository.findById(feedPostId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND));
 
@@ -362,45 +356,44 @@ public class CommentController {
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND);
         }
 
-        if (fansRepository.existsByEmail(requestBody.getEmail())) { // 이메일 주소를 가진 팬 정보가 있다면
-            FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId); // feedPostId에 해당하는 feedPost 정보 조회
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+        Comment findComment = commentService.findVerifiedComment(commentId);
 
-            if (findComment.getFan().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteFeedPostComment(findFeedPost, commentId);
-                return ResponseEntity.ok("feedPost 댓글 삭제 성공");
-            } else {
+        Optional<Fans> optionalFan = fansRepository.findByEmail(requestBody.getEmail());
+        if (optionalFan.isPresent()) {
+            Fans fan = optionalFan.get();
+
+            if (findComment.getFan() == null || !findComment.getFan().equals(fan)) {
                 throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
             }
-        } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
-            FeedPost findFeedPost = feedPostService.findFeedPost(feedPostId);
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
 
-            if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteFeedPostComment(findFeedPost, commentId);
-                return ResponseEntity.ok("feedPost 댓글 삭제 성공");
-            } else {
-                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-            }
-        } else {
-            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+            commentService.deletePostComment(findComment);
+            return ResponseEntity.ok("feedPost 댓글 삭제 성공");
         }
+
+        Optional<Artist> optionalArtist = artistRepository.findByEmail(requestBody.getEmail());
+        if (optionalArtist.isPresent()) {
+            Artist artist = optionalArtist.get();
+
+            if (findComment.getArtist() == null || !findComment.getArtist().equals(artist)) {
+                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+            }
+
+            commentService.deletePostComment(findComment);
+            return ResponseEntity.ok("feedPost 댓글 삭제 성공");
+        }
+
+        throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
     }
+
+
 
 
 // artistPost 에서 댓글 삭제
     @DeleteMapping("artist/{groupId}/{artistPostId}/comment/{commentId}")
     public ResponseEntity<?> deleteArtistComment(@PathVariable("groupId") @Positive int groupId,
-                                               @PathVariable("artistPostId") @Positive @NotNull int artistPostId,
-                                               @PathVariable("commentId") @Positive int commentId,
-                                               @Valid @RequestBody CommentDeleteDto requestBody) {
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
-
-        if (group.getId() != groupId) {
-            throw new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND);
-        }
-
+                                                 @PathVariable("artistPostId") @Positive @NotNull int artistPostId,
+                                                 @PathVariable("commentId") @Positive int commentId,
+                                                 @Valid @RequestBody CommentDeleteDto requestBody) {
         ArtistPost artistPost = artistPostRepository.findById(artistPostId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND));
 
@@ -408,29 +401,33 @@ public class CommentController {
             throw new BusinessLogicException(ExceptionCode.ARTISTPOST_NOT_FOUND);
         }
 
-        if (fansRepository.existsByEmail(requestBody.getEmail())) { // 이메일 주소를 가진 팬 정보가 있다면
-            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId); // feedPostId에 해당하는 feedPost 정보 조회
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
+        Comment findComment = commentService.findVerifiedComment(commentId);
 
-            if (findComment.getFan().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteArtistPostComment(findArtistPost, commentId);
-                return ResponseEntity.ok("artistPost 댓글 삭제 성공");
-            } else {
+        Optional<Fans> optionalFan = fansRepository.findByEmail(requestBody.getEmail());
+        if (optionalFan.isPresent()) {
+            Fans fan = optionalFan.get();
+
+            if (findComment.getFan() == null || !findComment.getFan().equals(fan)) {
                 throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
             }
-        } else if (artistRepository.existsByEmail(requestBody.getEmail())) {
-            ArtistPost findArtistPost = artistPostService.findArtistPost(artistPostId);
-            Comment findComment = commentService.findVerifiedComment(commentId); // commentId에 해당하는 comment 정보 조회
 
-            if (findComment.getArtist().getEmail().equals(requestBody.getEmail())) { //comment의 팬 이메일 정보와 요청받은 이메일 정보가 같다면
-                commentService.deleteArtistPostComment(findArtistPost, commentId);
-                return ResponseEntity.ok("artistPost 댓글 삭제 성공");
-            } else {
-                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-            }
-        } else {
-            throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
+            commentService.deletePostComment(findComment);
+            return ResponseEntity.ok("feedPost 댓글 삭제 성공");
         }
+
+        Optional<Artist> optionalArtist = artistRepository.findByEmail(requestBody.getEmail());
+        if (optionalArtist.isPresent()) {
+            Artist artist = optionalArtist.get();
+
+            if (findComment.getArtist() == null || !findComment.getArtist().equals(artist)) {
+                throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
+            }
+
+            commentService.deletePostComment(findComment);
+            return ResponseEntity.ok("feedPost 댓글 삭제 성공");
+        }
+
+        throw new BusinessLogicException(ExceptionCode.USER_NOT_FOUND);
     }
 
 }

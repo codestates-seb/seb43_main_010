@@ -91,83 +91,11 @@ public class CommentService {
         return commentRepository.save(findComment);
     }
 
-//    public Comment updateFanComment(int commentId, Comment comment){
-//        Comment findComment = findVerifiedComment(commentId);
-//        if(comment.getFans().getId() != findComment.getFans().getId()) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }else{
-//            Optional.ofNullable(comment.getContent()) // 내용 수정
-//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
-//            Optional.ofNullable(comment.getFeedPost())
-//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
-//            Optional.ofNullable(comment.getCreatedAt())
-//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
-//
-//            return commentRepository.save(findComment);
-//        }
-//    }
-//
-//    public Comment updateArtistComment(int commentId, Comment comment){
-//        Comment findComment = findVerifiedComment(commentId);
-//        if(comment.getArtist().getId() != findComment.getArtist().getId()) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }else{
-//            Optional.ofNullable(comment.getContent()) // 내용 수정
-//                    .ifPresent(commentContent -> findComment.setContent(commentContent));
-//            Optional.ofNullable(comment.getFeedPost())
-//                    .ifPresent(commentFeedPost -> findComment.setFeedPost(commentFeedPost));
-//            Optional.ofNullable(comment.getCreatedAt())
-//                    .ifPresent(commentCreatedAt -> findComment.setCreatedAt(commentCreatedAt)); // 업데이트 날짜 수정
-//
-//            return commentRepository.save(findComment);
-//        }
-//    }
 
 
-
-//    public void deleteFeedPostComment(FeedPost feedPost, int commentId){ -> 원래 코드
-//        Comment findComment = findVerifiedComment(commentId);
-//        if(feedPost.getFan().getFanId() != findComment.getFan().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
-//            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-//        }
-//        commentRepository.delete(findComment);
-//    }
-
-    public void deleteFeedPostComment(FeedPost feedPost, int commentId){
-        Comment findComment = findVerifiedComment(commentId);
-
-        if(findComment.getFan() == null && findComment.getArtist() == null){
-            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-        }
-        if(feedPost.getFan().getFanId() != findComment.getFan().getFanId() && feedPost.getArtist().getArtistId() != findComment.getArtist().getArtistId()) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-        }
+    public void deletePostComment(Comment findComment) {
         commentRepository.delete(findComment);
     }
 
 
-
-
-    public void deleteArtistPostComment(ArtistPost artistPost, int commentId){
-        Comment findComment = findVerifiedComment(commentId);
-
-        if (findComment.getArtist() == null && findComment.getFan() == null) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-        }
-
-        if (artistPost.getArtist().getArtistId() != findComment.getArtist().getArtistId() &&
-                artistPost.getFan().getFanId() != findComment.getFan().getFanId()) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_AUTHOR_NOT_MATCH);
-        }
-
-        commentRepository.delete(findComment);
-    }
-
-    public Fans findFansByEmail(String email) {
-        return fansRepository.findByEmail(email).orElse(null);
-    }
-
-    public Artist findArtistByEmail(String email) {
-        return artistRepository.findByEmail(email).orElse(null);
-    }
 }
