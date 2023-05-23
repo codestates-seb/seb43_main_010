@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { editpostOpen, setCommentContent } from '../../../reducer/editpostSlice';
+import EditPost from './EditPost';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -159,9 +160,13 @@ const EditDeleteModal = ({
   detailPost,
   setDetailPost,
   postContent,
+  artistPostId,
+  preContent,
+  preImg,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
+  const { isOpen } = useSelector((state) => state.editpost);
 
   const dispatch = useDispatch();
 
@@ -241,6 +246,8 @@ const EditDeleteModal = ({
             <span>삭제하기</span>
           </div>
         </button>
+        {/* 수정하는 모달 창 */}
+        {isOpen && <EditPost bgc05={true} artistPostId={artistPostId} preContent={preContent} preImg={preImg} />}
       </EditDeleteModalBlock>
 
       {/* 포스트 삭제 여부 모달 */}

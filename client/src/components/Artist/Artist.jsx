@@ -6,7 +6,6 @@ import RightArea from './ArtistMaterial/Rightarea';
 import authFn from '../auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { setCurrentGroupId } from '../../reducer/userSlice';
 import axios from 'axios';
 import WritePost from './SplitForder/WritePost';
 import PostInput from './SplitForder/PostInput';
@@ -51,11 +50,12 @@ const Artist = () => {
       setIsArtist(true);
     }
     axios.get(`http://localhost:8080/artist/${groupId}?page=1&size=16`).then((res) => {
-      console.log(res.data);
       setArtistPost(res.data.data);
     });
   }, [postData]);
-
+  // console.log(currentUser);
+  // console.log(groupId);
+  // console.log(artistPost);
   const openModal = () => {
     setModalOpen(true);
   };
@@ -81,6 +81,7 @@ const Artist = () => {
                 {artistPost.map((el) => (
                   <ArtistPost
                     key={el.artistPostId}
+                    artistPostId={el.artistPostId}
                     createdAt={el.createdAt}
                     nickname={el.artist.nickname}
                     content={el.content}
