@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
-
-// 임시 데이터
-import data from '../../Main/data.js';
+import { useSelector } from 'react-redux';
 
 import MyArtist from './MyArtist';
 
@@ -63,6 +61,16 @@ const StyledLink = styled(Link)`
 const MyArtistModal = ({ myArtModal, setMyArttModal }) => {
   const artistModalRef = useRef(null);
 
+  const { myCommunity } = useSelector((state) => state.community);
+  const { allGroup } = useSelector((state) => state.color);
+
+  const myGroupIds = new Set(myCommunity);
+
+  // My artist, 여기는 내 아티스트
+  const filteredMyCommuData = allGroup.filter((el) => {
+    return myGroupIds.has(el.groupId);
+  });
+
   useEffect(() => {
     const clickOut = (e) => {
       if (myArtModal && artistModalRef.current && !artistModalRef.current.contains(e.target)) {
@@ -81,7 +89,7 @@ const MyArtistModal = ({ myArtModal, setMyArttModal }) => {
       <ul className='my-artist-box'>
         {/* 현재 로그인한 유저의 커뮤니티 가입한 거를 map돌려야 함 */}
         {/* 해당 아티스트에 맞는 Link도 추가해야 함 => MyArtist 컴포넌트 */}
-        {data.myGroup.map((el) => (
+        {filteredMyCommuData.map((el) => (
           <StyledLink to={`/feed/${el.groupId}`} key={el.groupId}>
             <MyArtist grouplogoImg={el.grouplogoImg} groupName={el.groupName} />
           </StyledLink>

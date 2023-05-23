@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import leftIcon from '../../../assets/svg-file/left-icon.svg';
 import rightIcon from '../../../assets/svg-file/right-icon.svg';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // 임시 데이터
 import data from '../../Main/data.js';
@@ -23,6 +24,17 @@ const NoticeBlock = styled.div`
   box-shadow: 0 0 20px rgba(19, 28, 35, 15%);
   padding: 21px 20px 0 20px;
   background-color: var(--white-100);
+
+  .notice-not {
+    color: var(--light-gray-350);
+    font-size: 16px;
+    font-weight: 600;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 18px;
+  }
 
   .notice-box {
     position: relative;
@@ -158,6 +170,16 @@ const Notice = ({ openNotice, setOpenNotice }) => {
   const noticeRef = useRef(null);
   const containerRef = useRef(null);
 
+  const { myCommunity } = useSelector((state) => state.community);
+  const { allGroup } = useSelector((state) => state.color);
+
+  const myGroupIds = new Set(myCommunity);
+
+  // My artist, 여기는 내 아티스트
+  const filteredMyCommuData = allGroup.filter((el) => {
+    return myGroupIds.has(el.groupId);
+  });
+
   useEffect(() => {
     const clickOutside = (e) => {
       if (openNotice && noticeRef.current && !noticeRef.current.contains(e.target)) {
@@ -235,7 +257,7 @@ const Notice = ({ openNotice, setOpenNotice }) => {
           </Button>
         </li>
         {/* 로그인 한 유저가 구독한 커뮤니티들 map돌려야 함 => NoticeArtLi 컴포넌트 */}
-        {data.myGroup.map((el) => (
+        {filteredMyCommuData.map((el) => (
           <NoticeArtLi
             key={el.groupId}
             isScroll={isScroll}
@@ -250,9 +272,10 @@ const Notice = ({ openNotice, setOpenNotice }) => {
 
       {/* 아래 */}
       <ul className='noti-bottom'>
+        {filteredMyCommuData.length === 0 && <p className='notice-not'>30일 이내 알림이 없습니다.</p>}
         {/* 아래 아티스트 알림뜨는 곳 => NoticeArtContentAllLi, NoticeArtContentLi 컴포넌트 */}
         {selected === '전체' &&
-          data.myGroup.map((el) => {
+          filteredMyCommuData.map((el) => {
             const createdAt = el.createdAt || '오늘'; // 임시로 '오늘'을 사용
             const hideDate = prevCreatedAt === createdAt; // 이전 항목과 현재 항목의 createdAt 값 비교
             prevCreatedAt = createdAt; // 현재 항목의 createdAt 값을 이전 항목으로 설정
@@ -262,7 +285,7 @@ const Notice = ({ openNotice, setOpenNotice }) => {
               </StyledLink>
             );
           })}
-        {data.myGroup.map((el) => {
+        {filteredMyCommuData.map((el) => {
           return (
             <StyledLink to={`/artist/${el.groupId}`} key={el.groupId}>
               <NoticeArtContentLi groupName={el.groupName} selected={selected} />
