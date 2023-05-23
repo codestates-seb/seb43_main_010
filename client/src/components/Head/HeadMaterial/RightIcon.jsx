@@ -89,9 +89,11 @@ const RightIcon = () => {
           <i className='i-people-icon' />
         </button>
       </StyledLink>
-      <button className='ques'>
-        <i className='i-ques-icon' />
-      </button>
+      <StyledLink to={'/introduction'}>
+        <button className='ques'>
+          <i className='i-ques-icon' />
+        </button>
+      </StyledLink>
     </RightIconBlock>
   );
 };
