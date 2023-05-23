@@ -35,7 +35,7 @@ const Join = () => {
         <p className='top-txt-box'>
           <span className='bold'>BTS</span> 루미안 멤버가 되어 더 많은 컨텐츠를 즐겨보세요!
           <br />
-          커뮤니티에서 사용할 닉네임을 입력해 주세요.
+          커뮤니티에서 사용할 닉네임을 확인해 주세요.
         </p>
 
         {/* 커뮤니티 닉네임 입력창 => JoinForm 컴포넌트 */}

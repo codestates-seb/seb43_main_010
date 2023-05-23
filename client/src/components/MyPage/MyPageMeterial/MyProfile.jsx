@@ -6,8 +6,11 @@ import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
 import NewJeans from '../../../assets/jpg-file/card-jpg/3-newJeans.jpg';
 import { removeCookie } from '../../Login/LoginMaterial/setCookie';
 import axios from 'axios';
+import { logout } from '../../../reducer/userSlice';
+import { resetCommunity } from '../../../reducer/communitySlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../reducer/userSlice';
+
 const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -319,10 +322,14 @@ const MyProfile = () => {
     fetchMembershipDate();
   }, []);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogoutClick = async () => {
     dispatch(setCurrentUser(null));
     removeCookie();
+    dispatch(logout());
+    dispatch(resetCommunity());
     alert('로그아웃되었습니다.');
+
     navigate('/login');
     // try {
     //   // 로그아웃 API 요청

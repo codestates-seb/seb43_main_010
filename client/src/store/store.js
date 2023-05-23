@@ -8,6 +8,7 @@ import userSlice from '../reducer/userSlice';
 import colorSlice from '../reducer/colorSlice';
 import musicSlice from '../reducer/musicSlice';
 import editpostSlice from '../reducer/editpostSlice';
+import communitySlice from '../reducer/communitySlice';
 
 const reducers = combineReducers({
   signup: signupSlice,
@@ -16,12 +17,13 @@ const reducers = combineReducers({
   color: colorSlice,
   music: musicSlice,
   editpost: editpostSlice,
+  community: communitySlice,
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user'], // 해당 reducer만 저장
+  whitelist: ['user', 'community'], // 해당 reducer만 저장
   blacklist: ['signup', 'auth', 'color', 'music', 'editpost'],
 };
 
