@@ -241,6 +241,7 @@ const ArtistPost = ({
   postData,
   setPostData,
   groupId,
+  artistId,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeCount);
@@ -323,6 +324,7 @@ const ArtistPost = ({
                     preImg={img}
                     postData={postData}
                     setPostData={setPostData}
+                    artistId={artistId}
                   />
                 ) : null}
               </div>

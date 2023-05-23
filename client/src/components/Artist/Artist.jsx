@@ -59,6 +59,7 @@ const Artist = () => {
   const openModal = () => {
     setModalOpen(true);
   };
+  // console.log(artistPost);
   return (
     <>
       <Gradation /> {/* 그라데이션 컴포넌트임 => FeedBlock 컴포넌트 */}
@@ -94,6 +95,7 @@ const Artist = () => {
                     setPostData={setPostData}
                     groupId={Number(groupId)}
                     img={el.img}
+                    artistId={el.artist.artistId}
                   />
                 ))}
               </PostsBox>
