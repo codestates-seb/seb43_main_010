@@ -47,13 +47,10 @@ const Artist = () => {
     if (currentUser.group) {
       setIsArtist(true);
     }
-    axios.get(`http://localhost:8080/artist/${groupId}?page=1&size=16`).then((res) => {
+    axios.get(`/artist/${groupId}?page=1&size=16`).then((res) => {
       setArtistPost(res.data.data);
     });
   }, [postData]);
-  // console.log(currentUser);
-  // console.log(groupId);
-  // console.log(artistPost);
   const openModal = () => {
     setModalOpen(true);
   };
