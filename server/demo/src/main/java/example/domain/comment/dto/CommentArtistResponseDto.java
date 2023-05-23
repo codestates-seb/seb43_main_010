@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class CommentArtistResponseDto { // feedPost든 artistPost든 artist가 댓글 작성
     private ArtistResponseDto artist;
+    private Integer commentId;
     private Integer feedPostId;
     private Integer artistPostId;
     private String content;

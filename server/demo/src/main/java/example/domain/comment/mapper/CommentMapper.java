@@ -95,6 +95,7 @@ public interface CommentMapper {
         ModelMapper modelMapper = new ModelMapper();
         CommentFanResponseDto commentFanResponseDto = modelMapper.map(comment, CommentFanResponseDto.class);
         commentFanResponseDto.setFeedPostId(comment.getFeedPost().getId());
+        commentFanResponseDto.setCommentId(comment.getId());
 
         return commentFanResponseDto;
     }
@@ -103,6 +104,7 @@ public interface CommentMapper {
         ModelMapper modelMapper = new ModelMapper();
         CommentArtistResponseDto commentArtistResponseDto = modelMapper.map(comment, CommentArtistResponseDto.class);
         commentArtistResponseDto.setArtistPostId(comment.getArtistPost().getId());
+        commentArtistResponseDto.setCommentId(comment.getId());
 
         return commentArtistResponseDto;
     }
@@ -110,6 +112,7 @@ public interface CommentMapper {
     default CommentUserResponseDto commentToUserCommentResponseDto(Comment comment){
         ModelMapper modelMapper = new ModelMapper();
         CommentUserResponseDto commentUserResponseDto = modelMapper.map(comment, CommentUserResponseDto.class);
+        commentUserResponseDto.setCommentId(comment.getId());
 //        commentUserResponseDto.setFeedPostId(comment.getFeedPost().getId());
 //        commentUserResponseDto.setArtistPostId(comment.getArtistPost().getId());
 

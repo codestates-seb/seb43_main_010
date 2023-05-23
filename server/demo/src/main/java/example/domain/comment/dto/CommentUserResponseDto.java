@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class CommentUserResponseDto {
     private FansResponseDto fan;
     private ArtistResponseDto artist;
+    private Integer commentId;
     private Integer feedPostId;
     private Integer artistPostId;
     private String content;

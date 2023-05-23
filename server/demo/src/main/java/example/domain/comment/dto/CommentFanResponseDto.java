@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class CommentFanResponseDto {
     private FansResponseDto fan;
+    private Integer commentId;
     private Integer feedPostId;
     private Integer artistPostId;
     private String content;
