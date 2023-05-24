@@ -52,6 +52,7 @@ const ImageUpload = styled.input`
 
 const MyInfoRight = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
+  const defaultProfileImage = profile;
   const [info, setInfo] = useState({
     email: currentUser.email,
     nickname: currentUser.nickname,
@@ -66,7 +67,7 @@ const MyInfoRight = () => {
     password: false,
   });
 
-  const [profileImage, setProfileImage] = useState(currentUser.profile);
+  const [profileImage, setProfileImage] = useState(currentUser.profile || defaultProfileImage);
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (e) => {
