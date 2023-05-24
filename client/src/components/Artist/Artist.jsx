@@ -53,7 +53,7 @@ const Artist = () => {
         setArtistPost(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        return;
       });
   }, [postData]);
   const openModal = () => {

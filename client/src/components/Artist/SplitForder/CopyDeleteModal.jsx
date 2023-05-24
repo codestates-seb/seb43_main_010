@@ -264,7 +264,6 @@ const CopyDeleteModal = ({
         )
         .then(() => {
           setData(body);
-          console.log('삭제성공');
         })
         .catch((e) => {
           alert('삭제 실패');
