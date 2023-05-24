@@ -59,7 +59,6 @@ const Artist = () => {
   const openModal = () => {
     setModalOpen(true);
   };
-  // console.log(artistPost);
   return (
     <>
       <Gradation /> {/* 그라데이션 컴포넌트임 => FeedBlock 컴포넌트 */}
