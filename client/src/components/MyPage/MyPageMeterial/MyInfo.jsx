@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import profile from '../../../assets/jpg-file/profile-img.jpg';
-import { pwdValidation } from '../../Signup/validation.js';
+import Withdrawal from './MyInfoWithdrawal';
+import KakaoConnect from './MyInfoKakaoConnect';
+import FieldInput from './MyInfoInput';
 
 // font-weight
 // 100: Thin
@@ -29,102 +30,11 @@ const RightBox = styled.div`
   border: 1px solid var(--light-gray-150);
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
-`;
-
 const Title = styled.span`
   font-size: 30px;
   font-weight: 900;
   color: var(--gray-980);
   margin-bottom: 24px;
-`;
-
-const Label = styled.label`
-  font-size: 15px;
-  font-weight: 600;
-`;
-
-const Input = styled.input`
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--dark-blue-850);
-  border: 1px solid var(--gray-blue-200);
-  padding: 4px 8px;
-
-  &:focus {
-    outline: none;
-    border-color: var(--gray-blue-400);
-    box-shadow: 0 0 3px var(--gray-blue-200);
-  }
-`;
-
-const Button = styled.button`
-  width: 50px;
-  height: 32px;
-  border: 1px solid var(--skyblue-500);
-  border-radius: 4px;
-  color: var(--skyblue-500);
-  font-size: 13.5px;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    border: 3px solid var(--skyblue-600);
-  }
-`;
-
-const ConnectButton = styled(Button)`
-  width: 74px;
-  margin-left: auto;
-`;
-
-const InfoText = styled.span`
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--dark-blue-850);
-`;
-
-const ErrorText = styled.span`
-  color: red;
-  font-size: 12px;
-`;
-
-const KakaoContainer = styled.div`
-  margin-top: 35px;
-  display: flex;
-  align-items: center;
-
-  button {
-    margin-right: 8px;
-  }
-`;
-
-const Kakao = styled.div`
-  font-size: 15px;
-  font-weight: 600;
-  margin-left: 8px;
-`;
-
-const KakaoIcon = styled.i`
-  width: 22px;
-  height: 22px;
-`;
-
-const WithdrawalBtn = styled.button`
-  color: var(--gray-blue-400);
-  font-size: 13.5px;
-  font-weight: 500;
-  display: block;
-  cursor: pointer;
-  margin-top: 50px;
-
-  /* &:hover {
-    font-weight: bold;
-  } */
 `;
 
 const ProfileImage = styled.img`
@@ -172,15 +82,6 @@ const MyInfoRight = () => {
     }
   };
 
-  // 카카오톡 연결하기
-  const kakaohandleClick = () => {
-    const kakaoAppKey = 'YOUR_KAKAO_APP_KEY'; // 여기에 카카오 앱 키를 넣기
-    const redirectUri = 'YOUR_REDIRECT_URI'; // 여기에 리디렉트 URI를 넣기
-    const authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoAppKey}&redirect_uri=${redirectUri}&response_type=code`;
-
-    window.location.assign(authUrl);
-  };
-
   // 사용자 정보 변경(저장)
   const updateUserInfo = async (field, value, profileImage) => {
     try {
@@ -193,7 +94,7 @@ const MyInfoRight = () => {
         formData.append('profileImage', file); // 파일 형식의 필드를 추가합니다.
       }
 
-      const response = await axios.patch('서버의 API 엔드포인트', formData, {
+      const response = await axios.patch('/userdata/patch', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // 요청 헤더에 콘텐츠 유형을 설정합니다.
         },
@@ -221,98 +122,6 @@ const MyInfoRight = () => {
     return new Blob([ab], { type: mimeString });
   }
 
-  //루미안 탈퇴하기
-  const navigate = useNavigate();
-  const handleWithdrawal = async () => {
-    //   try {
-    //     // 탈퇴를 위한 API 호출
-    //     const response = await axios.delete('서버의 탈퇴 API 엔드포인트');
-
-    //     // 응답 상태코드가 200인 경우 탈퇴 성공
-    //     if (response.status === 200) {
-    //       // 탈퇴가 성공적으로 이루어지면 로그아웃 또는 리디렉션 등을 수행할 수 있습니다.
-    //       alert('탈퇴되었습니다.');
-    //       setTimeout(() => {
-    //         window.location.href = '/';
-    //       }, 1000);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error:', error);
-    //   }
-    // };
-    alert('루미안 탈퇴되었습니다.');
-    navigate('/');
-  };
-
-  const FieldInput = ({ field, label }) => {
-    const [inputValue, setInputValue] = useState(info[field]);
-    const isEmail = field === 'email';
-    const isPassword = field === 'password';
-
-    const [errorMessage, setErrorMessage] = useState('');
-    const [valid, setValid] = useState(true);
-
-    const handleChange = (e) => {
-      setInputValue(e.target.value);
-    };
-
-    const handleSaveButtonClick = () => {
-      let isValid = true;
-      let errorMsg = '';
-
-      if (isPassword) {
-        [isValid, errorMsg] = pwdValidation(inputValue);
-      }
-
-      if (!isValid) {
-        setErrorMessage(errorMsg);
-        setValid(false);
-        return;
-      }
-
-      setInfo((prevInfo) => ({
-        ...prevInfo,
-        [field]: isPassword ? '●'.repeat(inputValue.length) : inputValue, // 변경된 비밀번호를 ● 기호로 표시
-      }));
-      setShowInput((prevShowInput) => ({
-        ...prevShowInput,
-        [field]: false,
-      }));
-      setValid(true);
-      updateUserInfo(field, inputValue, profileImage); // 서버에 변경된 정보 전송
-    };
-
-    const handleEditButtonClick = () => {
-      setInputValue(info[field]);
-      setShowInput((prevShowInput) => ({
-        ...prevShowInput,
-        [field]: true,
-      }));
-    };
-
-    return (
-      <div>
-        <Label htmlFor={field}>{label}</Label>
-        <ButtonContainer>
-          {isEmail ? (
-            <InfoText>{info[field]}</InfoText>
-          ) : showInput[field] ? (
-            <>
-              <Input type={isPassword ? 'password' : 'text'} id={field} value={inputValue} onChange={handleChange} />
-              <Button onClick={handleSaveButtonClick}>저장</Button>
-            </>
-          ) : (
-            <>
-              <InfoText>{info[field]}</InfoText>
-              <Button onClick={handleEditButtonClick}>변경</Button>
-            </>
-          )}
-        </ButtonContainer>
-        {!valid && <ErrorText>{errorMessage}</ErrorText>}
-      </div>
-    );
-  };
-
   return (
     <>
       <RightBox>
@@ -323,21 +132,51 @@ const MyInfoRight = () => {
           onClick={() => fileInputRef.current.click()}
         />
         <ImageUpload ref={fileInputRef} type='file' id='image-upload' accept='image/*' onChange={handleImageUpload} />
-        <FieldInput field='email' label='이메일' />
-        <FieldInput field='nickname' label='닉네임' />
-        <FieldInput field='name' label='이름' />
-        <FieldInput field='password' label='비밀번호' />
+        <FieldInput
+          field='email'
+          label='이메일'
+          info={info}
+          setInfo={setInfo}
+          showInput={showInput}
+          setShowInput={setShowInput}
+          profileImage={profileImage}
+          updateUserInfo={updateUserInfo}
+        />
+        <FieldInput
+          field='nickname'
+          label='닉네임'
+          info={info}
+          setInfo={setInfo}
+          showInput={showInput}
+          setShowInput={setShowInput}
+          profileImage={profileImage}
+          updateUserInfo={updateUserInfo}
+        />
+        <FieldInput
+          field='name'
+          label='이름'
+          info={info}
+          setInfo={setInfo}
+          showInput={showInput}
+          setShowInput={setShowInput}
+          profileImage={profileImage}
+          updateUserInfo={updateUserInfo}
+        />
+        <FieldInput
+          field='password'
+          label='비밀번호'
+          info={info}
+          setInfo={setInfo}
+          showInput={showInput}
+          setShowInput={setShowInput}
+          profileImage={profileImage}
+          updateUserInfo={updateUserInfo}
+        />
         <div>
           <Title>연결된 SNS 계정</Title>
-          <KakaoContainer>
-            <button className='kakao'>
-              <KakaoIcon className='i-kakao-icon' />
-            </button>
-            <Kakao>카카오톡</Kakao>
-            <ConnectButton onClick={kakaohandleClick}>연결하기</ConnectButton>
-          </KakaoContainer>
+          <KakaoConnect />
         </div>
-        <WithdrawalBtn onClick={handleWithdrawal}>루미안 계정 탈퇴하기</WithdrawalBtn>
+        <Withdrawal />
       </RightBox>
     </>
   );

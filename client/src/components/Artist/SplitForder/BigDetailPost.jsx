@@ -5,10 +5,12 @@ import { useRef, useState, useEffect } from 'react';
 import DetailImgPreview from './DetailImgPreview';
 import MiniComments from './MiniComments';
 import EditDeleteModal from './EditDeleteModal';
-
+import axios from 'axios';
 // 임시 댓글 데이터
 import commentFeedData from '../../Feed/commentFeedData';
-
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { showDate } from '../ArtistMaterial/showDate';
 const BigDetailPostBlock = styled.div`
   position: fixed;
   top: 0;
@@ -298,27 +300,16 @@ const CommentListUl = styled.div`
   list-style-type: none;
 `;
 
-const BigDetailPost = ({
-  detailPost,
-  setDetailPost,
-  createdAt,
-  content,
-  nickname,
-  imgList,
-  profile,
-  liked,
-  like,
-  clickLike,
-  modalOpen,
-  setModalOpen,
-  postData,
-  setPostData,
-}) => {
-  const [comment, setComment] = useState('');
+const BigDetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname, imgList, profile, liked, like, clickLike, artistPostId }) => {
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [clipboard, setClipboard] = useState(false);
   const detailPostRef = useRef(null);
+  const { groupId } = useParams();
+  const { email } = useSelector((state) => state.user.currentUser);
+  const [comment, setComment] = useState('');
+  const [commentList, setCommentList] = useState();
+  const [data, setData] = useState();
 
   useEffect(() => {
     const outDetailPost = (e) => {
@@ -332,6 +323,13 @@ const BigDetailPost = ({
       document.removeEventListener('mousedown', outDetailPost);
     };
   }, [detailPost, openModal]);
+
+  useEffect(() => {
+    axios.get(`/artist/${groupId}/${artistPostId}/comment?page=1&size=16`).then((res) => {
+      setCommentList(res.data.data);
+      console.log(res.data.data);
+    });
+  }, [data]);
 
   const closeDetailPost = () => {
     setDetailPost(false);
@@ -357,10 +355,23 @@ const BigDetailPost = ({
       .catch(() => alert('복사에 실패했습니다.'));
   };
 
-  const submitComment = () => {
+  const submitComment = async (e) => {
     // !!!여기서 서버한테 comment 댓글 데이터 보내야 함!!!
+    if (comment.length < 1) {
+      alert('올바른 댓글을 입력해주세요');
+      return;
+    }
+    let body = { email, content: comment };
+    await axios
+      .post(`/artist/${groupId}/${artistPostId}/comment`, body)
+      .then((res) => {
+        setData(body);
+        setComment('');
+      })
+      .catch(() => {
+        console.log('등록실패');
+      });
   };
-
   return (
     <BigDetailPostBlock deleteModal={deleteModal}>
       <div ref={detailPostRef} className='big-detail-post'>
@@ -431,36 +442,46 @@ const BigDetailPost = ({
           {/* 오른쪽 */}
           <RightComments comment={comment.trim().length > 0}>
             <div className='comments'>
-              <div className='comments-num'>{commentFeedData.comments.length}개의 댓글</div>
+              {commentList && <div className='comments-num'>{commentList.length}개의 댓글</div>}
 
-              {/* 여기서 댓글 데이터 map 돌려야 함 => MiniComments 댓글 컴포넌트 */}
               <CommentListUl>
-                {commentFeedData.comments.map((el) => (
-                  <MiniComments
-                    key={el.commentId}
-                    deleteModal={deleteModal}
-                    setDeleteModal={setDeleteModal}
-                    commentName={el.commentName}
-                    commentContent={el.commentContent}
-                    likeNum={el.likeNum}
-                    createAt={el.createAt}
-                  />
-                ))}
+                {commentList &&
+                  commentList.map((el) => {
+                    return (
+                      <MiniComments
+                        key={el.commentId}
+                        commentId={el.commentId}
+                        createdAt={showDate(el.createdAt)}
+                        content={el.content}
+                        //팬 아티스트 중 프로필
+                        profile={el.artist !== null ? el.artist.profile : el.fan.profile}
+                        //작성자
+                        userEmail={el.artist !== null ? el.artist.email : el.fan.email}
+                        nickname={el.artist !== null ? el.artist.nickname : el.fan.nickname}
+                        likeCount={el.likeCount}
+                        artistPostId={el.artistPostId}
+                        deleteModal={deleteModal}
+                        setDeleteModal={setDeleteModal}
+                        setData={setData}
+                      />
+                    );
+                  })}
               </CommentListUl>
             </div>
 
             <div className='input-box'>
-              <form onSubmit={submitComment}>
+              <form>
                 <input
                   onChange={changeComment}
                   placeholder='댓글을 입력하세요.'
+                  value={comment}
                   type='text'
                   name='contents'
                   id='contents'
                   autoComplete='off'
                   required
                 />
-                <button className='double-starts'>
+                <button onClick={submitComment} className='double-starts' type='button'>
                   <i className='i-double-stars-icon' />
                 </button>
               </form>
