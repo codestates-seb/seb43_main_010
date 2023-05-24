@@ -71,15 +71,17 @@ const MyInfoRight = () => {
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+    //사용자가 이미지를 업로드하면 이미지를 읽어 profileImage 상태 변수에 저장하는 역할
+    const file = e.target.files[0]; //이벤트 객체에서 업로드된 파일 목록 가져와서 file 변수에 저장
+    const reader = new FileReader(); //객체를 생성하고 파일 읽고, 파일을 비동기적으로 읽는데 사용
 
     reader.onloadend = () => {
-      setProfileImage(reader.result);
+      //성공적으로 읽힌 후 실행될 콜백 함수를 등록
+      setProfileImage(reader.result); //콜백함수에서 reader.result를 사용하여 읽는 데이터를 가져와 setProfileImage를 호출하여 상태 변수 profileImage에 저장, 이미지가 프로필 이미지가 표시되고 사용자 인터페이스가 업데이트
     };
 
     if (file) {
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); //파일이 존재하는 경우에만 호출, URL 형식으로 읽음
     }
   };
 
