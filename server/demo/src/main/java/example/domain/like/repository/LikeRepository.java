@@ -21,5 +21,8 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByFansAndComment(Fans fans, Comment comment);
     Optional<Like> findByArtistAndComment(Artist artist, Comment comment);
 
+    long countByFans(Fans fans);
+    long countByArtist(Artist artist);
+
 
 }

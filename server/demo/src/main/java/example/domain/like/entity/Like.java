@@ -60,13 +60,13 @@ public class Like {
 
     @Builder
     public Like(Fans fans, FeedPost feedPost, Artist artist, ArtistPost artistPost) {
-        if ((fans == null && artist == null) || (fans != null && artist != null)) {
-            throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
-        }
-
-        if ((feedPost == null && artistPost == null) || (feedPost != null && artistPost != null)) {
-            throw new IllegalArgumentException("Invalid Like construction. Either feedPost and artistPost should be provided or neither should be provided.");
-        }
+//        if ((fans == null && artist == null) || (fans != null && artist != null)) {
+//            throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
+//        }
+//
+//        if ((feedPost == null && artistPost == null) || (feedPost != null && artistPost != null)) {
+//            throw new IllegalArgumentException("Invalid Like construction. Either feedPost and artistPost should be provided or neither should be provided.");
+//        }
 
         this.fans = fans;
         this.feedPost = feedPost;
@@ -125,13 +125,13 @@ public class Like {
 
 
         public Like build() {
-            if ((fans == null && artist == null) || (fans != null && artist != null)) {
-                throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
-            }
-
-            if ((feedPost == null && artistPost == null) || (feedPost != null && artistPost != null)) {
-                throw new IllegalArgumentException("Invalid Like construction. Either feedPost and artistPost should be provided or neither should be provided.");
-            }
+//            if ((fans == null && artist == null) || (fans != null && artist != null)) {
+//                throw new IllegalArgumentException("Invalid Like construction. Either artist and artistPost should be provided or neither should be provided.");
+//            }
+//
+//            if ((feedPost == null && artistPost == null) || (feedPost != null && artistPost != null)) {
+//                throw new IllegalArgumentException("Invalid Like construction. Either feedPost and artistPost should be provided or neither should be provided.");
+//            }
 
             return new Like(fans, feedPost, artist, artistPost);
         }
