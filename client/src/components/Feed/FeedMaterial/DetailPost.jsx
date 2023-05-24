@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
 import deleteBtn from '../../../assets/png-file/x-btn.png';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
+import { useSelector } from 'react-redux';
 
 import Comments from './Comments';
 import EditDeleteModal from './EditDeleteModal';
@@ -304,14 +308,18 @@ const DetailPost = ({
   clickLike,
   modalOpen,
   setModalOpen,
-  postData,
-  setPostData,
+  feedPostId,
+  comments,
 }) => {
   const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [clipboard, setClipboard] = useState(false);
+  const [commentContent, setCommentContent] = useState(comments.slice().reverse()); // 댓글 순서 뒤집기
   const detailPostRef = useRef(null);
+
+  const { groupId } = useParams();
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const outDetailPost = (e) => {
@@ -350,8 +358,22 @@ const DetailPost = ({
       .catch(() => alert('복사에 실패했습니다.'));
   };
 
-  const submitComment = () => {
+  const submitComment = (e) => {
     // !!!여기서 서버한테 comment 댓글 데이터 보내야 함!!!
+    e.preventDefault();
+    const token = getCookie();
+    const reqBody = { email: currentUser.email, content: comment };
+    axios
+      .post(`http://localhost:8080/feed/${groupId}/${feedPostId}/comment`, reqBody, { headers: { Authorization: `${token}` } })
+      .then((res) => {
+        const newComment = res.data; // 새로운 댓글 데이터
+        setCommentContent([newComment, ...commentContent]);
+        console.log(res.data);
+      })
+      .then(() => {
+        setComment(''); // 입력 필드 지워져야 함
+      })
+      .catch(() => alert('댓글 작성에 실패했습니다'));
   };
 
   return (
@@ -387,10 +409,10 @@ const DetailPost = ({
                         deleteModal={deleteModal}
                         setDeleteModal={setDeleteModal}
                         what='포스트를'
-                        //추가
                         detailPost={detailPost}
                         setDetailPost={setDetailPost}
                         postContent={content}
+                        feedPostId={feedPostId}
                       />
                     ) : null}
                   </div>
@@ -405,16 +427,18 @@ const DetailPost = ({
               </ConmmentsNum>
 
               {/* 여기서 댓글 데이터 map 돌려야 함 => Comments 댓글 컴포넌트 */}
-              <CommentMusicUl>
-                {commentFeedData.comments.map((el) => (
+              <CommentMusicUl className='comment-list'>
+                {commentContent.map((el) => (
                   <Comments
                     key={el.commentId}
                     deleteModal={deleteModal}
                     setDeleteModal={setDeleteModal}
-                    commentName={el.commentName}
-                    commentContent={el.commentContent}
-                    likeNum={el.likeNum}
-                    createAt={el.createAt}
+                    commentName={nickname}
+                    commentContent={el.content}
+                    likeNum={el.likeCount}
+                    createAt={el.createdAt}
+                    feedPostId={feedPostId}
+                    commentId={el.commentId} // 추가
                   />
                 ))}
               </CommentMusicUl>
@@ -424,6 +448,7 @@ const DetailPost = ({
               <div className='input-box'>
                 <form onSubmit={submitComment}>
                   <input
+                    value={comment}
                     onChange={changeComment}
                     placeholder='댓글을 입력하세요.'
                     type='text'

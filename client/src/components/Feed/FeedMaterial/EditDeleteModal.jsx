@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { editpostOpen, setCommentContent } from '../../../reducer/editpostSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { editpostOpen, setCommentContent, setTargetPostId } from '../../../reducer/editpostSlice';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -159,15 +162,20 @@ const EditDeleteModal = ({
   detailPost,
   setDetailPost,
   postContent,
+  feedPostId,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
   const dispatch = useDispatch();
+  const { groupId } = useParams();
+  const { currentUser } = useSelector((state) => state.user);
 
   const handleEdit = () => {
     dispatch(editpostOpen());
     dispatch(setCommentContent(postContent));
+    dispatch(setTargetPostId(feedPostId));
+
     if (detailPost) {
       setDetailPost(false);
     }
@@ -212,10 +220,29 @@ const EditDeleteModal = ({
     setOpenModal(false);
   };
 
-  const clickOkFn = () => {
+  const clickOkFn = async () => {
     // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
     if (what === '포스트를') {
       // 포스트 삭제
+      let body = {};
+      body = { fanId: currentUser.fanId };
+      await axios
+        .delete(
+          `/feed/${groupId}/${feedPostId}`,
+          { data: body },
+          {
+            headers: {
+              Authorization: getCookie(),
+            },
+          },
+        )
+        .then(() => {
+          window.location.href = `/feed/${groupId}`;
+        })
+        .catch((e) => {
+          alert('삭제 실패');
+          return;
+        });
     } else {
       // 댓글 삭제
     }

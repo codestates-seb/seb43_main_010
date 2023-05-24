@@ -147,7 +147,7 @@ const Comment = styled.div`
 `;
 
 // 댓글 컴포넌트임
-const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
+const MiniComments = ({ feedPostId, deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
@@ -199,6 +199,7 @@ const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent
                   setDeleteModal={setDeleteModal}
                   what='댓글을'
                   commentContent={commentContent}
+                  feedPostId={feedPostId}
                 />
               ) : null}
             </div>

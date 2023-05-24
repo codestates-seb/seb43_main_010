@@ -6,6 +6,9 @@ import { BsFillCameraFill } from 'react-icons/bs';
 import WriteImgPreview from './WritePostMaterial/WriteImgPreview';
 import { useSelector, useDispatch } from 'react-redux';
 import { editpostClose } from '../../reducer/editpostSlice';
+import axios from 'axios';
+import { getCookie } from '../Login/LoginMaterial/setCookie';
+import { useParams } from 'react-router-dom';
 
 const WritePostBlock = styled.div`
   position: fixed;
@@ -17,7 +20,7 @@ const WritePostBlock = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2;
-  background-color: ${({ bgc05 }) => (bgc05 ? `rgba(0, 0, 0, 0.45)` : `rgba(0, 0, 0, 0.7)`)};
+  background-color: ${({ bgc05 }) => (bgc05 ? `rgba(0, 0, 0, 0.2)` : `rgba(0, 0, 0, 0.7)`)};
 `;
 
 const PostContentBox = styled.div`
@@ -30,6 +33,10 @@ const PostContentBox = styled.div`
     position: absolute;
     top: 9%;
     right: -45px;
+
+    img {
+      max-width: 45px;
+    }
   }
 `;
 
@@ -129,6 +136,7 @@ const BottomBox = styled.div`
       font-size: 14.5px;
       font-weight: 800;
       transition: 0.3s ease-in;
+      margin: 0;
     }
   }
 
@@ -159,12 +167,14 @@ const ImgInput = styled.input`
 `;
 
 // Feed와 Artist에서 쓰는 포스트 작성 창입니다.
-const EditPost = ({ postData, setPostData, bgc05 }) => {
+const EditPost = ({ bgc05, setOpenModal }) => {
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
+  const { groupId } = useParams();
 
-  const { isOpen, commentContent } = useSelector((state) => state.editpost);
+  const { isOpen, commentContent, targetPostId: feedPostId } = useSelector((state) => state.editpost);
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   //이미지파일 저장 + 미리보기를 위한것
@@ -198,6 +208,7 @@ const EditPost = ({ postData, setPostData, bgc05 }) => {
   };
 
   const deleteBtnFn = () => {
+    setOpenModal(false);
     dispatch(editpostClose());
     setContent('');
     setImgList([]);
@@ -206,21 +217,35 @@ const EditPost = ({ postData, setPostData, bgc05 }) => {
   };
 
   // submit
-  const submitFn = (e) => {
+  const submitFn = async (e) => {
     e.preventDefault();
-    if (content.trim().length > 1) {
-      // 이 부분 조건을 바꿔야할까? 컨텐츠나 이미지 둘 다 null 일 경우 submit 안되게??
-      // 여기서 서버한테 content 데이터 전송해야 함.
-      // 서버에 데이터 전송 되면 내용 비우고 창 닫기
-      // 조건을 더 추가해서 현재 로그인한 유저가 연예인인지 아닌지에 따라 데이터 전송하는 부분을 나누면 될 것 같아요.
-      setPostData([{ content, img: imgList }, ...postData]);
-      setContent('');
-      setImgList([]);
-      limitRef.current = 4;
-      imgIdRef.current = 1;
-      dispatch(editpostClose());
+    if (content.trim().length < 1) {
+      alert('내용을 작성해주세요');
+      return;
     }
-    console.log(imgList);
+    let body = {};
+    const imgArr = imgList.map((el) => el.url);
+    //아티스트 포스트 제출
+    // 피트포스트 제출
+    body = { fanId: currentUser.fanId, content, img: imgArr };
+    await axios
+      .patch(`/feed/${groupId}/${feedPostId}`, body, {
+        headers: {
+          Authorization: getCookie(),
+        },
+      })
+      .then((res) => {
+        setContent('');
+        setImgList([]);
+        limitRef.current = 4;
+        imgIdRef.current = 1;
+        dispatch(editpostClose());
+        window.location.href = `/feed/${groupId}`;
+      })
+      .catch((e) => {
+        alert('등록 실패');
+        return;
+      });
   };
 
   //이미지 아이콘 누르면 imgInput에 접근
@@ -275,6 +300,8 @@ const EditPost = ({ postData, setPostData, bgc05 }) => {
     limitRef.current++;
     setImgList(newImgList);
   };
+
+  console.log(feedPostId);
   return (
     <>
       {isOpen ? (

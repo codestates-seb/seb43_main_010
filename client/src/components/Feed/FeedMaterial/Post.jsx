@@ -2,6 +2,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
 
 import EditDeleteModal from './EditDeleteModal';
 import DetailPost from './DetailPost';
@@ -174,23 +177,30 @@ const PostBlock = styled.div`
   }
 `;
 
-const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
+const Post = ({ feedPostId, comments, createdAt, nickname, content, img, likeNum, commentNum, modalOpen, setModalOpen, postData, setPostData }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [detailPost, setDetailPost] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const { currentUser } = useSelector((state) => state.user);
   const { isOpen } = useSelector((state) => state.editpost);
+  const { groupId } = useParams();
 
   const clickLike = () => {
     setLiked(!liked);
     if (!liked) {
-      setLike(like + 1);
-    } else {
-      setLike(like - 1);
+      axios
+        .post(`http://localhost:8080/feed/${groupId}/${feedPostId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
+        .then(() => {
+          setLike(like + 1);
+          setLiked(true);
+        })
+        .catch(() => {
+          setLiked(true);
+        });
     }
-    // 서버한테 바뀐 좋아요 데이터 전송 해야함
   };
 
   const clickMiniMenu = () => {
@@ -200,6 +210,19 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
   const openDetailPost = () => {
     setDetailPost(true);
   };
+
+  // 시간
+  const formatTime = (time) => {
+    const dateObj = new Date(time);
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+
+    return `${month}. ${day}. ${hours}:${minutes}`;
+  };
+
+  const formattedTime = formatTime(createdAt);
 
   return (
     <>
@@ -212,7 +235,7 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
 
           <div className='user-txt-box'>
             <div className='nickname'>{nickname}</div>
-            <span className='time'>{createdAt}</span>
+            <span className='time'>{formattedTime}</span>
           </div>
         </div>
 
@@ -271,14 +294,15 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
                 postData={postData}
                 setPostData={setPostData}
                 postContent={content}
+                feedPostId={feedPostId}
               />
             ) : null}
           </div>
         </div>
       </PostBlock>
 
-      {/* 수정하는 모달 창 */}
-      {isOpen && <EditPost bgc05={true} />}
+      {/* 포스트 수정 모달 */}
+      {isOpen && <EditPost bgc05={true} setOpenModal={setOpenModal} />}
 
       {/* 디테일 포스트 컴포넌트임 => BigDetailPost, DetailPost 컴포넌트 */}
       {detailPost && (
@@ -287,25 +311,29 @@ const Post = ({ createdAt, nickname, content, img, likeNum, commentNum, modalOpe
             <BigDetailPost
               detailPost={detailPost}
               setDetailPost={setDetailPost}
-              createdAt={createdAt}
+              createdAt={formattedTime}
               content={content}
               nickname={nickname}
               img={img}
               liked={liked}
               like={like}
               clickLike={clickLike}
+              comments={comments}
+              feedPostId={feedPostId}
             />
           ) : (
             <DetailPost
               detailPost={detailPost}
               setDetailPost={setDetailPost}
-              createdAt={createdAt}
+              createdAt={formattedTime}
               content={content}
               nickname={nickname}
               img={img}
               liked={liked}
               like={like}
               clickLike={clickLike}
+              comments={comments}
+              feedPostId={feedPostId}
             />
           )}
         </>

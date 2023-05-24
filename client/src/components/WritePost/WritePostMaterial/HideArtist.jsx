@@ -19,12 +19,22 @@ const HideArtistBlock = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 19px;
+    &:hover {
+      background: transparent;
+    }
   }
   .squre-fill {
-    width: 19px;
+    width: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
+    padding: 0;
+    transform: translateX(0px);
+    &:hover {
+      background: transparent;
+    }
   }
 `;
 

@@ -150,7 +150,7 @@ const commentContentData = `
 `;
 
 // 댓글 컴포넌트임
-const Comments = ({ deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
+const Comments = ({ feedPostId, deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
@@ -205,6 +205,7 @@ const Comments = ({ deleteModal, setDeleteModal, commentName, commentContent, li
                   setDeleteModal={setDeleteModal}
                   what='댓글을'
                   commentContent={commentContent}
+                  feedPostId={feedPostId}
                 />
               ) : null}
             </div>
