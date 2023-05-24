@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
+import { useSelector } from 'react-redux';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -174,11 +178,15 @@ const CopyDeleteModal = ({
   setDeleteModal,
   what,
   commentContent,
+  feedPostId,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
   const [clipboard, setClipboard] = useState(false);
+
+  const { groupId } = useParams();
+  const { currentUser } = useSelector((state) => state.user);
 
   // 댓글 복사
   const handleCopy = (text) => {
@@ -235,12 +243,31 @@ const CopyDeleteModal = ({
     setOpenModal(false);
   };
 
-  const clickOkFn = () => {
+  const clickOkFn = async () => {
     // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
     if (what === '포스트를') {
       // 포스트 삭제
     } else {
       // 댓글 삭제
+      // let body = {};
+      // body = { fanId: currentUser.fanId };
+      // await axios
+      //   .delete(
+      //     `/feed/${groupId}/${feedPostId}/comment/${commentId}`, // 나중에 commentId 추가하기
+      //     { data: body },
+      //     {
+      //       headers: {
+      //         Authorization: getCookie(),
+      //       },
+      //     },
+      //   )
+      //   .then(() => {
+      //     window.location.href = `/feed/${groupId}`;
+      //   })
+      //   .catch((e) => {
+      //     alert('삭제 실패');
+      //     return;
+      //   });
     }
     closeDeleteModalBg();
     setDeleteModal(false);

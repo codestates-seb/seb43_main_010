@@ -147,7 +147,7 @@ const Comment = styled.div`
 `;
 
 // 댓글 컴포넌트임
-const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
+const MiniComments = ({ commentId, deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
@@ -160,6 +160,18 @@ const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent
   const toggleShowAll = () => {
     setShowAll(!showAll);
   };
+
+  // 시간
+  const formatTime = (time) => {
+    const dateObj = new Date(time);
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+
+    return `${month}. ${day}. ${hours}:${minutes}`;
+  };
+  const formattedTime = formatTime(createAt);
 
   const clickLike = () => {
     setLiked(!liked);
@@ -180,7 +192,7 @@ const MiniComments = ({ deleteModal, setDeleteModal, commentName, commentContent
               <div className='profile-img'></div>
               <div className='user-txt'>
                 <span className='nickname'>{commentName}</span>
-                <span className='time'>{createAt}</span>
+                <span className='time'>{formattedTime}</span>
               </div>
             </div>
             <div className='right-icon-box'>

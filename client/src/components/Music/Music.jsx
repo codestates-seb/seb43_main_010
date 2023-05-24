@@ -10,6 +10,11 @@ import Loading from '../Loading/Loading';
 import LeftMusic from './MusicMaterial/LeftMusic';
 import RightMusic from './MusicMaterial/RightMusic';
 
+const Container = styled.div`
+  width: 100vw;
+  min-width: 1440px;
+`;
+
 const MusicBlock = styled.div`
   display: flex;
   justify-content: center;
@@ -62,20 +67,22 @@ const Music = () => {
 
   return (
     <>
-      <MusicBlock isLoading={isLoading}>
-        {/* CD => CdDisk 컴포넌트 */}
-        <CdDisk />
-        <RealMusicBlock>
-          {/* CD 아래 영역 */}
-          <CdBottom>
-            {/* 왼쪽 영역 => LeftMusic 컴포넌트 */}
-            <LeftMusic />
+      <Container>
+        <MusicBlock isLoading={isLoading}>
+          {/* CD => CdDisk 컴포넌트 */}
+          <CdDisk />
+          <RealMusicBlock>
+            {/* CD 아래 영역 */}
+            <CdBottom>
+              {/* 왼쪽 영역 => LeftMusic 컴포넌트 */}
+              <LeftMusic />
 
-            {/* 오른쪽 영역 => RightMusic 컴포넌트 */}
-            <RightMusic />
-          </CdBottom>
-        </RealMusicBlock>
-      </MusicBlock>
+              {/* 오른쪽 영역 => RightMusic 컴포넌트 */}
+              <RightMusic />
+            </CdBottom>
+          </RealMusicBlock>
+        </MusicBlock>
+      </Container>
     </>
   );
 };
