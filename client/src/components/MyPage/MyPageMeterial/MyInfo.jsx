@@ -86,20 +86,19 @@ const MyInfoRight = () => {
   };
 
   // 사용자 정보 변경(저장)
-  const updateUserInfo = async (field, value, profileImage) => {
+  const updateUserInfo = async (field, value) => {
     try {
-      const formData = new FormData(); // FormData 인스턴스를 생성합니다.
-      formData.append(field, value); // 텍스트 형식의 필드와 그 값을 추가합니다.
+      const data = { [field]: value }; // 필드와 값을 가지는 객체 생성
 
-      if (profileImage) {
-        // profileImage가 제공되면 추가합니다.
-        const file = dataURItoBlob(profileImage); // data URI를 Blob 형식으로 변환합니다.
-        formData.append('profileImage', file); // 파일 형식의 필드를 추가합니다.
+      if (field === 'profileImage') {
+        // 프로필 이미지 필드인 경우
+        const file = dataURItoBlob(profileImage);
+        data.profileImage = file; // 이미지 데이터를 추가
       }
 
-      const response = await axios.patch('/userdata/patch', formData, {
+      const response = await axios.patch('/userdata/patch', data, {
         headers: {
-          'Content-Type': 'multipart/form-data', // 요청 헤더에 콘텐츠 유형을 설정합니다.
+          'Content-Type': 'application/json',
         },
       });
 
@@ -129,11 +128,7 @@ const MyInfoRight = () => {
     <>
       <RightBox>
         <Title>내 정보</Title>
-        <ProfileImage
-          src={profileImage} //서버 URL
-          alt='profile'
-          onClick={() => fileInputRef.current.click()}
-        />
+        <ProfileImage src={profileImage} alt='profile' onClick={() => fileInputRef.current.click()} />
         <ImageUpload ref={fileInputRef} type='file' id='image-upload' accept='image/*' onChange={handleImageUpload} />
         <FieldInput
           field='email'
@@ -142,7 +137,6 @@ const MyInfoRight = () => {
           setInfo={setInfo}
           showInput={showInput}
           setShowInput={setShowInput}
-          profileImage={profileImage}
           updateUserInfo={updateUserInfo}
         />
         <FieldInput
@@ -152,7 +146,6 @@ const MyInfoRight = () => {
           setInfo={setInfo}
           showInput={showInput}
           setShowInput={setShowInput}
-          profileImage={profileImage}
           updateUserInfo={updateUserInfo}
         />
         <FieldInput
@@ -162,7 +155,6 @@ const MyInfoRight = () => {
           setInfo={setInfo}
           showInput={showInput}
           setShowInput={setShowInput}
-          profileImage={profileImage}
           updateUserInfo={updateUserInfo}
         />
         <FieldInput
@@ -172,7 +164,6 @@ const MyInfoRight = () => {
           setInfo={setInfo}
           showInput={showInput}
           setShowInput={setShowInput}
-          profileImage={profileImage}
           updateUserInfo={updateUserInfo}
         />
         <div>
