@@ -88,62 +88,9 @@ public class LikeService {
         }
     }
 
-//    @Transactional
-//    public void insertFeedFanLike(Integer groupId, LikeRequestDto likeRequestDto) throws Exception {
-//        FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
-//                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물을 찾을 수 없습니다."));
-//
-//        // 특정 그룹에 속하는지 확인
-//        if (!feedPost.getGroup().getId().equals(groupId)) {
-//            throw new IllegalArgumentException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물은 그룹 ID " + groupId + "에 속하지 않습니다.");
-//        }
-//
-//        // 팬이 이미 좋아요를 누른 경우는 예외를 발생시키지 않고, 계속 진행
-//        Optional<Like> existingFanLike = likeRepository.findByFansAndFeedPost(feedPost.getFan(), feedPost);
-//        if (!existingFanLike.isPresent()) {
-//            Like fanLike = Like.builder()
-//                    .feedPost(feedPost)
-//                    .fans(feedPost.getFan())
-//                    .build();
-//
-//            likeRepository.save(fanLike);
-//            feedPostRepository.addLikeCount(feedPost);
-//        } else if (!existingFanLike.get().getArtist().equals(feedPost.getArtist())) {
-//            // 이미 좋아요를 누른 아티스트가 다른 아티스트인 경우에만 예외를 발생시킴
-//            throw new DuplicateResourceException("ID가 " + feedPost.getFan().getFanId() + "인 팬은 이미 좋아요를 누른 피드 게시물입니다.");
-//        }
-//    }
-//
-//    // feedPost artist가 좋아요
-//    @Transactional
-//    public void insertFeedArtistLike(Integer groupId, LikeRequestDto likeRequestDto) throws Exception {
-//        FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
-//                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물을 찾을 수 없습니다."));
-//
-//        // 특정 그룹에 속하는지 확인
-//        if (!feedPost.getGroup().getId().equals(groupId)) {
-//            throw new IllegalArgumentException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물은 그룹 ID " + groupId + "에 속하지 않습니다.");
-//        }
-//
-//        // 아티스트가 이미 좋아요를 누른 경우는 예외를 발생시키지 않고, 계속 진행
-//        Optional<Like> existingArtistLike = likeRepository.findByArtistAndFeedPost(feedPost.getArtist(), feedPost);
-//        if (!existingArtistLike.isPresent()) {
-//            Like artistLike = Like.builder()
-//                    .feedPost(feedPost)
-//                    .artist(feedPost.getArtist())
-//                    .build();
-//
-//            likeRepository.save(artistLike);
-//            feedPostRepository.addLikeCount(feedPost);
-//        } else if (!existingArtistLike.get().getFans().equals(feedPost.getFan())) {
-//            // 이미 좋아요를 누른 팬이 다른 팬인 경우에만 예외를 발생시킴
-//            throw new DuplicateResourceException("ID가 " + feedPost.getArtist().getArtistId() + "인 아티스트는 이미 좋아요를 누른 피드 게시물입니다.");
-//        }
-//    }
 
 
     // artistPost fan이 좋아요
-
 
     @Transactional
     public void insertArtistFanLike(Integer groupId, LikeRequestDto likeRequestDto) throws Exception {
@@ -155,19 +102,21 @@ public class LikeService {
             throw new IllegalArgumentException("ID가 " + likeRequestDto.getArtistPostId() + "인 피드 게시물은 그룹 ID " + groupId + "에 속하지 않습니다.");
         }
 
-        // 팬이 이미 좋아요를 누른 경우는 예외를 발생시키지 않고, 계속 진행
-        Optional<Like> existingFanLike = likeRepository.findByFansAndArtistPost(artistPost.getFan(), artistPost);
+        Fans fan = fansRepository.findById(likeRequestDto.getFanId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFanId() + "인 팬을 찾을 수 없습니다."));
+
+
+        Optional<Like> existingFanLike = likeRepository.findByFansAndArtistPost(fan, artistPost);
         if (!existingFanLike.isPresent()) {
             Like fanLike = Like.builder()
                     .artistPost(artistPost)
-                    .fans(artistPost.getFan())
+                    .fans(fan)
                     .build();
 
             likeRepository.save(fanLike);
             artistPostRepository.addLikeCount(artistPost);
-        } else if (!existingFanLike.get().getArtist().equals(artistPost.getArtist())) {
-            // 이미 좋아요를 누른 아티스트가 다른 아티스트인 경우에만 예외를 발생시킴
-            throw new DuplicateResourceException("ID가 " + artistPost.getFan().getFanId() + "인 팬은 이미 좋아요를 누른 피드 게시물입니다.");
+        } else {
+            throw new DuplicateResourceException("ID가 " + fan.getFanId() + "인 팬은 이미 좋아요를 누른 피드 게시물입니다.");
         }
     }
 
@@ -185,77 +134,26 @@ public class LikeService {
             throw new IllegalArgumentException("ID가 " + likeRequestDto.getArtistPostId() + "인 피드 게시물은 그룹 ID " + groupId + "에 속하지 않습니다.");
         }
 
+        Artist artist = artistRepository.findById(likeRequestDto.getArtistId())
+                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getArtistId() + "인 아티스트를 찾을 수 없습니다."));
+
         // 아티스트가 이미 좋아요를 누른 경우는 예외를 발생시키지 않고, 계속 진행
-        Optional<Like> existingArtistLike = likeRepository.findByArtistAndArtistPost(artistPost.getArtist(), artistPost);
+        Optional<Like> existingArtistLike = likeRepository.findByArtistAndArtistPost(artist, artistPost);
         if (!existingArtistLike.isPresent()) {
             Like artistLike = Like.builder()
                     .artistPost(artistPost)
-                    .artist(artistPost.getArtist())
+                    .artist(artist)
                     .build();
 
             likeRepository.save(artistLike);
             artistPostRepository.addLikeCount(artistPost);
-        } else if (!existingArtistLike.get().getFans().equals(artistPost.getFan())) {
+        } else {
             // 이미 좋아요를 누른 팬이 다른 팬인 경우에만 예외를 발생시킴
-            throw new DuplicateResourceException("ID가 " + artistPost.getArtist().getArtistId() + "인 아티스트는 이미 좋아요를 누른 피드 게시물입니다.");
+            throw new DuplicateResourceException("ID가 " + artist.getArtistId() + "인 아티스트는 이미 좋아요를 누른 피드 게시물입니다.");
         }
     }
 
-//    @Transactional
-//    public void deleteFeedFanLike(Integer groupId, LikeRequestDto likeRequestDto) {
-//        Fans fans = fansRepository.findById(likeRequestDto.getFanId())
-//                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFanId() + "인 팬을 찾을 수 없습니다."));
-//
-//        FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
-//                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물을 찾을 수 없습니다."));
-//
-//        // 특정 그룹에 속하는지 확인
-//        if (!feedPost.getGroup().getId().equals(groupId)) {
-//            throw new IllegalArgumentException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물은 그룹 ID " + groupId + "에 속하지 않습니다.");
-//        }
-//
-//        if (feedPost.getArtist().getArtistId().equals(fans.getFanId())) {
-//            throw new IllegalArgumentException("아티스트 본인은 팬의 좋아요를 취소할 수 없습니다.");
-//        }
-//
-//        if (likeRepository.findByFansAndFeedPost(fans, feedPost).isPresent()) {
-//            Like like = likeRepository.findByFansAndFeedPost(fans, feedPost)
-//                    .orElseThrow(() -> new NotFoundException("해당 팬과 피드 게시물에 대한 좋아요를 찾을 수 없습니다."));
-//
-//            likeRepository.delete(like);
-//            feedPostRepository.subLikeCount(feedPost);
-//        } else {
-//            throw new NotFoundException("해당 팬과 피드 게시물에 대한 좋아요를 찾을 수 없습니다.");
-//        }
-//    }
-//
-//    @Transactional
-//    public void deleteFeedArtistLike(Integer groupId, LikeRequestDto likeRequestDto) {
-//        Artist artist = artistRepository.findById(likeRequestDto.getArtistId())
-//                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getArtistId() + "인 아티스트를 찾을 수 없습니다."));
-//
-//        FeedPost feedPost = feedPostRepository.findById(likeRequestDto.getFeedPostId())
-//                .orElseThrow(() -> new NotFoundException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물을 찾을 수 없습니다."));
-//
-//        // 특정 그룹에 속하는지 확인
-//        if (!feedPost.getGroup().getId().equals(groupId)) {
-//            throw new IllegalArgumentException("ID가 " + likeRequestDto.getFeedPostId() + "인 피드 게시물은 그룹 ID " + groupId + "에 속하지 않습니다.");
-//        }
-//
-//        if (feedPost.getFan().getFanId().equals(artist.getArtistId())) {
-//            throw new IllegalArgumentException("팬 본인은 아티스트의 좋아요를 취소할 수 없습니다.");
-//        }
-//
-//        if (likeRepository.findByArtistAndFeedPost(artist, feedPost).isPresent()) {
-//            Like like = likeRepository.findByArtistAndFeedPost(artist, feedPost)
-//                    .orElseThrow(() -> new NotFoundException("해당 아티스트와 피드 게시물에 대한 좋아요를 찾을 수 없습니다."));
-//
-//            likeRepository.delete(like);
-//            feedPostRepository.subLikeCount(feedPost);
-//        } else {
-//            throw new NotFoundException("해당 아티스트와 피드 게시물에 대한 좋아요를 찾을 수 없습니다.");
-//        }
-//    }
+
 
 
     // feedPost에서 fan이 좋아요 취소
@@ -318,16 +216,9 @@ public class LikeService {
 
         // 특정 그룹에 속하는지 확인
         if (!artistPost.getGroup().getId().equals(groupId)) {
-            throw new IllegalArgumentException("The feedPost with id: " + likeRequestDto.getArtistPostId()
+            throw new IllegalArgumentException("The artistPost with id: " + likeRequestDto.getArtistPostId()
                     + " does not belong to group with id: " + groupId);
         }
-
-//        if (likeRepository.findByFansAndFeedPost(feedPost.getFan(), feedPost).isPresent()) {
-//            // 이미 좋아요를 누른 팬인 경우는 예외를 발생시키지 않고, 계속 진행
-//            if (!feedPost.getArtist().getArtistId().equals(feedPost.getFan().getFanId())) {
-//                // todo 409 에러로 변경
-//                throw new DuplicateResourceException("아티스트 ID " + feedPost.getArtist().getArtistId() + "로 이미 좋아요가 눌러진 피드 게시물 ID: " + feedPost.getId());
-//            } else {
 
         Like like = likeRepository.findByFansAndArtistPost(fans, artistPost)
                 .orElseThrow(() -> new NotFoundException("Could not find like"));
