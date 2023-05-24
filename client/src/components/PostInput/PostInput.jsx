@@ -50,7 +50,7 @@ const PostInput = ({ transparent, placeholder, pointer }) => {
         id='content'
         name='content'
         autoComplete='off'
-        required
+        readOnly
       />
     </PostInputBlock>
   );

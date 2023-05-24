@@ -319,7 +319,7 @@ const DetailPost = ({
   const detailPostRef = useRef(null);
 
   const { groupId } = useParams();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, isUserFan } = useSelector((state) => state.user);
 
   useEffect(() => {
     const outDetailPost = (e) => {
@@ -423,7 +423,7 @@ const DetailPost = ({
               </AuthorContentBox>
 
               <ConmmentsNum>
-                <div>{commentFeedData.comments.length}개의 댓글</div>
+                <div>{commentContent?.length}개의 댓글</div>
               </ConmmentsNum>
 
               {/* 여기서 댓글 데이터 map 돌려야 함 => Comments 댓글 컴포넌트 */}
@@ -433,12 +433,16 @@ const DetailPost = ({
                     key={el.commentId}
                     deleteModal={deleteModal}
                     setDeleteModal={setDeleteModal}
-                    commentName={nickname}
+                    commentName={el.fan?.nickname}
                     commentContent={el.content}
                     likeNum={el.likeCount}
                     createAt={el.createdAt}
                     feedPostId={feedPostId}
                     commentId={el.commentId} // 추가
+                    setCommentContent={setCommentContent} // 추가
+                    commentContentAll={commentContent} //추가
+                    isArtist={el.artist ? true : false}
+                    artist={el.artist}
                   />
                 ))}
               </CommentMusicUl>
