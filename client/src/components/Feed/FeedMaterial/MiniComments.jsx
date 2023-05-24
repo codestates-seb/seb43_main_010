@@ -2,6 +2,11 @@ import styled from 'styled-components';
 import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
+import verifiedIcon from '../../../assets/svg-file/moon-verified-icon.svg';
 
 import CopyDeleteModal from './CopyDeleteModal';
 
@@ -16,6 +21,15 @@ const CommentsBlock = styled.li`
 
 const Comment = styled.div`
   padding: 13px 0 13px 19px;
+
+  .name-box {
+    display: flex;
+  }
+
+  .verifi-moon {
+    width: 10px;
+    transform: translate(4px, -1px);
+  }
 
   .right-icon-box {
     position: relative;
@@ -147,11 +161,27 @@ const Comment = styled.div`
 `;
 
 // 댓글 컴포넌트임
-const MiniComments = ({ commentId, deleteModal, setDeleteModal, commentName, commentContent, likeNum, createAt }) => {
+const MiniComments = ({
+  commentContentAll,
+  setCommentContent,
+  feedPostId,
+  commentId,
+  deleteModal,
+  setDeleteModal,
+  commentName,
+  commentContent,
+  likeNum,
+  createAt,
+  isArtist,
+  artist,
+}) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
   const [showAll, setShowAll] = useState(false); // 전체 내용 보여주는 여부
+
+  const { currentUser } = useSelector((state) => state.user);
+  const { groupId } = useParams();
 
   const clickMiniMenu = () => {
     setOpenModal(!openModal);
@@ -173,14 +203,34 @@ const MiniComments = ({ commentId, deleteModal, setDeleteModal, commentName, com
   };
   const formattedTime = formatTime(createAt);
 
-  const clickLike = () => {
+  const clickLike = (e) => {
+    e.preventDefault();
     setLiked(!liked);
-    if (!liked) {
-      setLike(like + 1);
-    } else {
-      setLike(like - 1);
+    if (!liked && !isArtist) {
+      axios
+        .post(
+          `http://localhost:8080/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          { fanId: currentUser.fanId },
+          { headers: { Authorization: getCookie() } },
+        )
+        .then(() => {
+          setLike(like + 1);
+          setLiked(true);
+        });
     }
-    // 서버한테 바뀐 좋아요 데이터 전송 해야함
+
+    if (!liked && isArtist) {
+      axios
+        .post(
+          `http://localhost:8080/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          { fanId: currentUser.artistId },
+          { headers: { Authorization: getCookie() } },
+        )
+        .then(() => {
+          setLike(like + 1);
+          setLiked(true);
+        });
+    }
   };
 
   return (
@@ -191,7 +241,10 @@ const MiniComments = ({ commentId, deleteModal, setDeleteModal, commentName, com
             <div className='user-img-txt'>
               <div className='profile-img'></div>
               <div className='user-txt'>
-                <span className='nickname'>{commentName}</span>
+                <div className='name-box'>
+                  <span className='nickname'>{isArtist ? artist.nickname : commentName}</span>
+                  {isArtist && <img className='verifi-moon' src={verifiedIcon} alt='moon' />}
+                </div>
                 <span className='time'>{formattedTime}</span>
               </div>
             </div>
@@ -211,6 +264,10 @@ const MiniComments = ({ commentId, deleteModal, setDeleteModal, commentName, com
                   setDeleteModal={setDeleteModal}
                   what='댓글을'
                   commentContent={commentContent}
+                  feedPostId={feedPostId}
+                  commentId={commentId}
+                  setCommentContent={setCommentContent}
+                  commentContentAll={commentContentAll}
                 />
               ) : null}
             </div>

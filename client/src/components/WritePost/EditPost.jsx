@@ -20,7 +20,7 @@ const WritePostBlock = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2;
-  background-color: ${({ bgc05 }) => (bgc05 ? `rgba(0, 0, 0, 0.2)` : `rgba(0, 0, 0, 0.7)`)};
+  background-color: ${({ bgc05 }) => (bgc05 ? `rgba(0, 0, 0, 0.26)` : `rgba(0, 0, 0, 0.7)`)};
 `;
 
 const PostContentBox = styled.div`
@@ -301,7 +301,6 @@ const EditPost = ({ bgc05, setOpenModal }) => {
     setImgList(newImgList);
   };
 
-  console.log(feedPostId);
   return (
     <>
       {isOpen ? (

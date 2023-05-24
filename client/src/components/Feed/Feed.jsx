@@ -10,10 +10,12 @@ import Gradation from './FeedMaterial/Gradation';
 import WritePost from '../WritePost/WritePost';
 import RightImg from './FeedMaterial/RightImg';
 import Post from './FeedMaterial/Post';
+import Loading from '../Loading/Loading';
 
 const Container = styled.div`
   width: 100vw;
   min-width: 1440px;
+  visibility: ${({ isLoading }) => (isLoading ? 'hidden' : 'visible')};
 `;
 
 const FeedBlock = styled.div`
@@ -54,6 +56,7 @@ const Feed = () => {
   const [postData, setPostData] = useState([]);
   //get요청 후 저장되는 곳은 feedPost고 이걸로 map 돌리시면 됩니다.
   const [feedPost, setFeedPost] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const openModal = () => {
     setModalOpen(true);
   };
@@ -65,17 +68,23 @@ const Feed = () => {
   authFn(); //로그인후 사용해주세요
 
   useEffect(() => {
+    setIsLoading(true);
     axios.get(`/feed/${groupId}?page=1&size=16`).then((res) => {
       setFeedPost(res.data.data);
+      setIsLoading(false);
     });
   }, [postData]);
+
+  if (isLoading) {
+    return <Loading bgWhite={true} />;
+  }
 
   console.log(feedPost);
 
   return (
     <>
       <Gradation /> {/* 그라데이션 컴포넌트임 => FeedBlock 컴포넌트 */}
-      <Container>
+      <Container isLoading={isLoading}>
         <FeedBlock>
           <RealFeedBlock>
             <PostContextBox>
@@ -95,13 +104,14 @@ const Feed = () => {
                   <Post
                     key={el.feedPostId}
                     createdAt={el.createdAt}
-                    nickname={currentUser.nickname}
+                    nickname={el.fan.nickname}
                     content={el.content}
-                    img={currentUser.profile}
+                    img={el.fan.profile}
                     likeNum={el.likeCount}
                     commentNum={el.commentNum}
                     comments={el.comments} // 추가
                     feedPostId={el.feedPostId} // 추가
+                    isFan={el.artistPostId ? false : true}
                     // 수정한 부분
                     modalOpen={modalOpen}
                     setModalOpen={setModalOpen}

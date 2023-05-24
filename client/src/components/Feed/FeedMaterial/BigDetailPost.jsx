@@ -55,6 +55,11 @@ const LeftPost = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+
+  .author-post-box {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 `;
 
 const RightComments = styled.div`
@@ -244,7 +249,7 @@ const LikeShare = styled.div`
     display: flex;
     justify-content: start;
     align-items: center;
-    padding: 17px 0 0 29px;
+    padding: 17px 0 17px 29px;
   }
 
   .num {
@@ -320,7 +325,7 @@ const BigDetailPost = ({
   const detailPostRef = useRef(null);
 
   const { groupId } = useParams();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, isUserFan } = useSelector((state) => state.user);
 
   useEffect(() => {
     const outDetailPost = (e) => {
@@ -443,7 +448,7 @@ const BigDetailPost = ({
           {/* 오른쪽 */}
           <RightComments comment={comment.trim().length > 0}>
             <div className='comments'>
-              <div className='comments-num'>{commentFeedData.comments.length}개의 댓글</div>
+              <div className='comments-num'>{commentContent?.length}개의 댓글</div>
 
               {/* 여기서 댓글 데이터 map 돌려야 함 => MiniComments 댓글 컴포넌트 */}
               <CommentListUl>
@@ -452,12 +457,16 @@ const BigDetailPost = ({
                     key={el.commentId}
                     deleteModal={deleteModal}
                     setDeleteModal={setDeleteModal}
-                    commentName={nickname}
+                    commentName={el.fan?.nickname}
                     commentContent={el.content}
                     likeNum={el.likeCount}
                     createAt={el.createdAt}
                     feedPostId={feedPostId}
                     commentId={el.commentId} // 추가
+                    setCommentContent={setCommentContent} // 추가
+                    commentContentAll={commentContent} //추가
+                    isArtist={el.artist} // 추가
+                    artist={el.artist}
                   />
                 ))}
               </CommentListUl>
