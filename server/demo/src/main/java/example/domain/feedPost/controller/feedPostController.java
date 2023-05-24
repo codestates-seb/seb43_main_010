@@ -99,35 +99,13 @@ public class feedPostController {
             throw new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND);
         }
 
-        // 기존의 findFeedPost의 아이디 값을 그대로 사용하여 객체를 수정
-        findFeedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fan);
-        findFeedPost.setGroup(group);
+        FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fan);
+        feedPost.setGroup(group);
 
-        FeedPost updateFeedPost = service.updateFeedPost(findFeedPost);
+        FeedPost updateFeedPost = service.updateFeedPost(feedPost);
 
         return new ResponseEntity<>(mapper.feedToFeedResponseDto(updateFeedPost), HttpStatus.OK);
     }
-//    @PatchMapping("/{groupId}/{feedPostId}")
-//    public ResponseEntity patchFeedPost(@PathVariable("groupId") @Positive int groupId,
-//                                        @PathVariable("feedPostId") @Positive int feedPostId,
-//                                        @Valid @RequestBody feedPostDto.Patch requestBody) {
-//        FeedPost findFeedPost = service.findFeedPost(feedPostId);
-//        Fans fan = fansRepository.findById(requestBody.getFanId())
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FANS_NOT_FOUND));
-//        Group group = groupRepository.findById(groupId)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.GROUP_NOT_FOUND));
-//
-//        if (findFeedPost.getGroup().getId() != groupId) {
-//            throw new BusinessLogicException(ExceptionCode.FEEDPOST_NOT_FOUND);
-//        }
-//
-//        FeedPost feedPost = mapper.feedPatchDtoToFeed(findFeedPost, requestBody, fan);
-//        feedPost.setGroup(group);
-//
-//        FeedPost updateFeedPost = service.updateFeedPost(feedPost);
-//
-//        return new ResponseEntity<>(mapper.feedToFeedResponseDto(updateFeedPost), HttpStatus.OK);
-//    }
 
 
 
