@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import axios from 'axios';
+import { removeCookie } from '../../Login/LoginMaterial/setCookie';
+import { logout, setCurrentUser } from '../../../reducer/userSlice';
+import { resetCommunity } from '../../../reducer/communitySlice';
+import CommunityModal from './MyProfileModal';
 import BTS from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
 import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
 import NewJeans from '../../../assets/jpg-file/card-jpg/3-newJeans.jpg';
-import { removeCookie } from '../../Login/LoginMaterial/setCookie';
-import axios from 'axios';
-import { logout, setCurrentUser } from '../../../reducer/userSlice';
-import { resetCommunity } from '../../../reducer/communitySlice';
-import { useSelector, useDispatch } from 'react-redux';
-import CommunityModal from './MyProfileModal';
 
 const LeftWrapper = styled.div`
   display: flex;
@@ -195,16 +195,17 @@ const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBt
 };
 
 const MyProfile = () => {
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState(currentUser.name);
+  const [email, setEmail] = useState(currentUser.email);
   const [membershipDate, setMembershipDate] = useState('2023-04-28');
   const [artistCards, setArtistCards] = useState([
     { imgSrc: BTS, imgAlt: 'BTS', nickName: 'TATA-V', artistName: 'BTS' },
     { imgSrc: TXT, imgAlt: 'TXT', nickName: 'TATA-V', artistName: 'TXT' },
     { imgSrc: NewJeans, imgAlt: 'NewJeans', nickName: 'TATA-V', artistName: 'NewJeans' },
   ]);
-
-  const currentUser = useSelector((state) => state.user.currentUser);
-  const dispatch = useDispatch();
 
   const handleDeleteBtnClick = (index) => () => {
     setShowModal({ open: true, index });
@@ -237,11 +238,12 @@ const MyProfile = () => {
   };
 
   useEffect(() => {
-    // 회원 가입일 가져오기
-    const fetchMembershipDate = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await axios.get('회원가입일자 API 엔드포인트');
+        const response = await axios.get('/userdata');
         if (response.status === 200) {
+          setName(response.data.nickname);
+          setEmail(response.data.email);
           setMembershipDate(response.data.membershipDate);
         }
       } catch (error) {
@@ -249,7 +251,7 @@ const MyProfile = () => {
       }
     };
 
-    fetchMembershipDate();
+    fetchUserData();
   }, []);
   const navigate = useNavigate();
   const handleLogoutClick = async () => {
@@ -276,8 +278,8 @@ const MyProfile = () => {
     <>
       <LeftWrapper>
         <LeftBox>
-          <Name>TATA-V</Name>
-          <Email>tata-v@example.com</Email>
+          <Name>{name}</Name>
+          <Email>{email}</Email>
           <LogoutBtn onClick={handleLogoutClick}>로그아웃</LogoutBtn>
         </LeftBox>
         <Container>

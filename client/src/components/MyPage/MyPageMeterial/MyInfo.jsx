@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import profile from '../../../assets/jpg-file/profile-img.jpg';
 import Withdrawal from './MyInfoWithdrawal';
 import KakaoConnect from './MyInfoKakaoConnect';
@@ -50,10 +51,11 @@ const ImageUpload = styled.input`
 `;
 
 const MyInfoRight = () => {
+  const currentUser = useSelector((state) => state.user.currentUser);
   const [info, setInfo] = useState({
-    email: 'tata-v@example.com',
-    nickname: 'TATA-V',
-    name: 'TATA-V',
+    email: currentUser.email,
+    nickname: currentUser.nickname,
+    name: currentUser.name,
     password: '●●●●●●●●',
   });
 
@@ -64,7 +66,7 @@ const MyInfoRight = () => {
     password: false,
   });
 
-  const [profileImage, setProfileImage] = useState(profile);
+  const [profileImage, setProfileImage] = useState(currentUser.profile);
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (e) => {
