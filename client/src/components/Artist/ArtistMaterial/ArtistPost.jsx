@@ -384,25 +384,35 @@ const ArtistPost = ({
               clickLike={clickLike}
               groupId={groupId}
               artistPostId={artistPostId}
+              //수정삭제
+              preContent={content}
+              preImg={img}
+              postData={postData}
+              setPostData={setPostData}
+              artistId={artistId}
             />
           ) : (
             <DetailPost
               detailPost={detailPost}
               setDetailPost={setDetailPost}
-              artistPostId={artistPostId}
               createdAt={showDate(createdAt)}
               content={content}
               nickname={nickname}
               profile={profile}
               imgList={img}
-              groupId={groupId}
-              //dddd
               liked={liked}
               like={like}
               clickLike={clickLike}
-              // 추가
+              groupId={groupId}
+              artistPostId={artistPostId}
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
+              //수정삭제
+              preContent={content}
+              preImg={img}
+              postData={postData}
+              setPostData={setPostData}
+              artistId={artistId}
             />
           )}
         </>

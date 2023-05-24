@@ -300,7 +300,24 @@ const CommentListUl = styled.div`
   list-style-type: none;
 `;
 
-const BigDetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname, imgList, profile, liked, like, clickLike, artistPostId }) => {
+const BigDetailPost = ({
+  detailPost,
+  setDetailPost,
+  createdAt,
+  content,
+  nickname,
+  imgList,
+  profile,
+  liked,
+  like,
+  clickLike,
+  artistPostId,
+  preContent,
+  preImg,
+  postData,
+  setPostData,
+  artistId,
+}) => {
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [clipboard, setClipboard] = useState(false);
@@ -408,6 +425,13 @@ const BigDetailPost = ({ detailPost, setDetailPost, createdAt, content, nickname
                         detailPost={detailPost}
                         setDetailPost={setDetailPost}
                         postContent={content}
+                        //수정삭제
+                        artistPostId={artistPostId}
+                        preContent={preContent}
+                        preImg={preImg}
+                        postData={postData}
+                        setPostData={setPostData}
+                        artistId={artistId}
                       />
                     ) : null}
                   </div>

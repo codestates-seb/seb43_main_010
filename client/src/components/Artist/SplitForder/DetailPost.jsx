@@ -8,6 +8,10 @@ import EditDeleteModal from './EditDeleteModal';
 import ArtistImgPreview from '../ArtistMaterial/ArtistImgPreview';
 // 임시 댓글 데이터
 import commentFeedData from '../../Feed/commentFeedData';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { showDate } from '../ArtistMaterial/showDate';
 const DetailPostBlock = styled.div`
   position: fixed;
   top: 0;
@@ -298,24 +302,29 @@ const DetailPost = ({
   detailPost,
   setDetailPost,
   createdAt,
-  profile,
   content,
   nickname,
   imgList,
+  profile,
   liked,
   like,
   clickLike,
-  modalOpen,
-  setModalOpen,
+  artistPostId,
+  preContent,
+  preImg,
   postData,
   setPostData,
+  artistId,
 }) => {
-  const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [clipboard, setClipboard] = useState(false);
   const detailPostRef = useRef(null);
-
+  const { groupId } = useParams();
+  const { email } = useSelector((state) => state.user.currentUser);
+  const [comment, setComment] = useState('');
+  const [commentList, setCommentList] = useState();
+  const [data, setData] = useState();
   useEffect(() => {
     const outDetailPost = (e) => {
       if (detailPost && detailPostRef.current && !openModal && !detailPostRef.current.contains(e.target)) {
@@ -328,6 +337,13 @@ const DetailPost = ({
       document.removeEventListener('mousedown', outDetailPost);
     };
   }, [detailPost, openModal]);
+
+  useEffect(() => {
+    axios.get(`/artist/${groupId}/${artistPostId}/comment?page=1&size=16`).then((res) => {
+      setCommentList(res.data.data);
+      console.log(res.data.data);
+    });
+  }, [data]);
 
   const closeDetailPost = () => {
     setDetailPost(false);
@@ -353,8 +369,22 @@ const DetailPost = ({
       .catch(() => alert('복사에 실패했습니다.'));
   };
 
-  const submitComment = () => {
-    // !!!여기서 서버한테 comment 댓글 데이터 보내야 함!!!
+  const submitComment = async (e) => {
+    if (comment.length < 1) {
+      alert('올바른 댓글을 입력해주세요');
+      return;
+    }
+    let body = { email, content: comment };
+    console.log(body);
+    await axios
+      .post(`/artist/${groupId}/${artistPostId}/comment`, body)
+      .then((res) => {
+        setData(body);
+        setComment('');
+      })
+      .catch(() => {
+        console.log('등록실패');
+      });
   };
 
   return (
@@ -396,6 +426,13 @@ const DetailPost = ({
                         detailPost={detailPost}
                         setDetailPost={setDetailPost}
                         postContent={content}
+                        //수정삭제
+                        artistPostId={artistPostId}
+                        preContent={preContent}
+                        preImg={preImg}
+                        postData={postData}
+                        setPostData={setPostData}
+                        artistId={artistId}
                       />
                     ) : null}
                   </div>
@@ -406,39 +443,46 @@ const DetailPost = ({
                 <ArtistImgPreview imgList={imgList}></ArtistImgPreview>
               </AuthorContentBox>
 
-              <ConmmentsNum>
-                <div>{commentFeedData.comments.length}개의 댓글</div>
-              </ConmmentsNum>
+              <ConmmentsNum>{commentList && <div>{commentList.length}개의 댓글</div>}</ConmmentsNum>
 
               {/* 여기서 댓글 데이터 map 돌려야 함 => Comments 댓글 컴포넌트 */}
               <CommentMusicUl>
-                {commentFeedData.comments.map((el) => (
-                  <Comments
-                    key={el.commentId}
-                    deleteModal={deleteModal}
-                    setDeleteModal={setDeleteModal}
-                    commentName={el.commentName}
-                    commentContent={el.commentContent}
-                    likeNum={el.likeNum}
-                    createAt={el.createAt}
-                  />
-                ))}
+                {commentList &&
+                  commentList.map((el) => (
+                    <Comments
+                      key={el.commentId}
+                      commentId={el.commentId}
+                      createdAt={showDate(el.createdAt)}
+                      content={el.content}
+                      //팬 아티스트 중 프로필
+                      profile={el.artist !== null ? el.artist.profile : el.fan.profile}
+                      //작성자
+                      userEmail={el.artist !== null ? el.artist.email : el.fan.email}
+                      nickname={el.artist !== null ? el.artist.nickname : el.fan.nickname}
+                      likeCount={el.likeCount}
+                      artistPostId={el.artistPostId}
+                      deleteModal={deleteModal}
+                      setDeleteModal={setDeleteModal}
+                      setData={setData}
+                    />
+                  ))}
               </CommentMusicUl>
             </ul>
 
             <InputSubmit comment={comment.trim().length > 0}>
               <div className='input-box'>
-                <form onSubmit={submitComment}>
+                <form>
                   <input
                     onChange={changeComment}
                     placeholder='댓글을 입력하세요.'
+                    value={comment}
                     type='text'
                     name='contents'
                     id='contents'
                     autoComplete='off'
                     required
                   />
-                  <button className='double-starts'>
+                  <button onClick={submitComment} className='double-starts' type='button'>
                     <i className='i-double-stars-icon' />
                   </button>
                 </form>
