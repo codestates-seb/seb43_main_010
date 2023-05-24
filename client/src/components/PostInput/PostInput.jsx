@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import profileImg from '../../assets/jpg-file/profile-img.jpg';
 import doubleStars from '../../assets/svg-file/double-stars.svg';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const PostInputBlock = styled.form`
   input {
@@ -14,7 +13,6 @@ const PostInputBlock = styled.form`
     color: var(--dark-blue-900);
     font-size: 15.5px;
 
-    /* background: no-repeat url('${profileImg}'), no-repeat url('${doubleStars}'); */
     background: ${({ currentUser }) => `no-repeat url('${currentUser}'), no-repeat url('${doubleStars}')`};
     background-size: 46px 46px, 23px 27px;
     background-position: 10px 10px, 649px 20px;
@@ -39,23 +37,12 @@ const Input = styled.input.attrs((props) => ({
 `;
 
 /* 공용 input입니다! transparent와 placeholder, pointer를 props로 받고 있어요. */
-const PostInput = ({ transparent, placeholder, pointer, currentUser }) => {
-  const [content, setContent] = useState('');
-
-  const changeContent = (e) => {
-    setContent(e.target.value);
-  };
-
-  const submitFn = (e) => {
-    e.preventDefault();
-    // 이 부분은 채팅시에 사용하게 되실 듯
-    // 서버에 데이터를 전송해주세요!
-  };
+const PostInput = ({ transparent, placeholder, pointer }) => {
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
-    <PostInputBlock onSubmit={submitFn} currentUser={currentUser}>
+    <PostInputBlock currentUser={currentUser.profile}>
       <Input
-        onChange={changeContent}
         transparent={transparent}
         pointer={pointer}
         type='text'

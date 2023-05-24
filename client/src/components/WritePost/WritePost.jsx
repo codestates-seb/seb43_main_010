@@ -206,7 +206,7 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
   const submitFn = async (e) => {
     e.preventDefault();
     if (content.trim().length < 1) {
-      alert('내용을 작성해주세욘');
+      alert('내용을 작성해주세요');
       return;
     }
     let body = {};

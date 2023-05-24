@@ -233,6 +233,8 @@ const Comments = ({
                   userEmail={userEmail}
                   artistPostId={artistPostId}
                   setData={setData}
+                  commentContent={commentContent}
+                  feedPostId={feedPostId}
                 />
               ) : null}
             </div>

@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   isOpen: false,
   commentContent: null,
+  targetPostId: null,
 };
 
 const editpostSlice = createSlice({
@@ -18,8 +19,11 @@ const editpostSlice = createSlice({
     setCommentContent: (state, action) => {
       return { ...state, commentContent: action.payload };
     },
+    setTargetPostId: (state, action) => {
+      return { ...state, targetPostId: action.payload };
+    },
   },
 });
 
-export const { editpostOpen, editpostClose, setCommentContent } = editpostSlice.actions;
+export const { editpostOpen, editpostClose, setCommentContent, setTargetPostId } = editpostSlice.actions;
 export default editpostSlice.reducer;

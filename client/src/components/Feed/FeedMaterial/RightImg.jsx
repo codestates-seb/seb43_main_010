@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import MiniFoot from '../../Foot/MiniFoot';
@@ -152,16 +152,20 @@ const RightImg = () => {
         <div className='chat-box'>
           {groupName.length > 4 ? (
             <>
-              <div className='chat-txt long'>
-                {`Let's go chat with `}
-                <br />
-                <span className='bold-txt'>{groupName}</span>
-              </div>
+              <Link to={`/artist/${groupId}`}>
+                <button className='chat-txt long'>
+                  {`Let's go chat with `}
+                  <br />
+                  <span className='bold-txt'>{groupName}</span>
+                </button>
+              </Link>
             </>
           ) : (
-            <div className='chat-txt'>
-              Let&apos;s go chat with <span className='bold-txt'>{groupName}</span>
-            </div>
+            <Link to={`/artist/${groupId}`}>
+              <button className='chat-txt'>
+                Let&apos;s go chat with <span className='bold-txt'>{groupName}</span>
+              </button>
+            </Link>
           )}
         </div>
       </RealRightImgBlock>
