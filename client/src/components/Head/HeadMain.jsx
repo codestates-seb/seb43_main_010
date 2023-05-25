@@ -1,11 +1,7 @@
 import styled from 'styled-components';
 import logo from '../../assets/svg-file/white-logo.svg';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { setCurrentUser } from '../../reducer/userSlice';
-import axios from 'axios';
-import { getCookie } from '../Login/LoginMaterial/setCookie';
+import { useSelector } from 'react-redux';
 
 import RightIcon from './HeadMaterial/RightIcon';
 import Signin from './HeadMaterial/Signin';

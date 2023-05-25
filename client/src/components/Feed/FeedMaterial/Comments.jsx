@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import profileImg from '../../../assets/jpg-file/profile-img.jpg';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -52,7 +51,8 @@ const Comment = styled.div`
     .profile-img {
       width: 32px;
       height: 32px;
-      background: no-repeat url('${profileImg}');
+      background: ${({ img }) => `no-repeat url('${img}')`};
+      border-radius: 50%;
       background-size: 32px 32px;
     }
 
@@ -176,6 +176,7 @@ const Comments = ({
   fanEmail,
   artistEmail,
   setEditComment,
+  img,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
@@ -213,10 +214,15 @@ const Comments = ({
   const clickLike = (e) => {
     e.preventDefault();
     setLiked(!liked);
+    const baseAPI = process.env.REACT_APP_API_URL;
 
     if (!liked && currentUser.fanId !== undefined) {
       axios
-        .post(`/feed/${groupId}/${feedPostId}/comment/${commentId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
+        .post(
+          `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          { fanId: currentUser.fanId },
+          { headers: { Authorization: getCookie() } },
+        )
         .then(() => {
           setLike(like + 1);
           setLiked(true);
@@ -229,7 +235,7 @@ const Comments = ({
     if (!liked && currentUser.fanId === undefined) {
       axios
         .post(
-          `/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
           { fanId: currentUser.artistId },
           { headers: { Authorization: getCookie() } },
         )
@@ -246,7 +252,7 @@ const Comments = ({
   return (
     <>
       <CommentsBlock>
-        <Comment>
+        <Comment img={img}>
           <div className='comments-author'>
             <div className='user-img-txt'>
               <div className='profile-img'></div>

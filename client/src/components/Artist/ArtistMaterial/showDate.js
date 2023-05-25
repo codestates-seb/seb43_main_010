@@ -1,5 +1,5 @@
 const showDate = (a) => {
-  const milliSeconds = new Date() - new Date(a);
+  const milliSeconds = new Date() - new Date(a + 'Z');
   const seconds = milliSeconds / 1000;
   if (seconds < 60) return `방금 전`;
   const minutes = seconds / 60;

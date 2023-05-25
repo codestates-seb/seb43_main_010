@@ -197,16 +197,18 @@ const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBt
 
 const MyProfile = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
+  const { myCommunity } = useSelector((state) => state.community);
+  const { allGroup } = useSelector((state) => state.color);
+  const myGroupIds = new Set(myCommunity);
+  const filteredMyCommuData = allGroup.filter((el) => {
+    return myGroupIds.has(el.groupId);
+  });
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
-  const [membershipDate, setMembershipDate] = useState('2023-04-28');
-  const [artistCards, setArtistCards] = useState([
-    { imgSrc: BTS, imgAlt: 'BTS', nickName: 'TATA-V', artistName: 'BTS' },
-    { imgSrc: TXT, imgAlt: 'TXT', nickName: 'TATA-V', artistName: 'TXT' },
-    { imgSrc: NewJeans, imgAlt: 'NewJeans', nickName: 'TATA-V', artistName: 'NewJeans' },
-  ]);
+  const [membershipDate, setMembershipDate] = useState('2023-05-31');
+  const [artistCards, setArtistCards] = useState(filteredMyCommuData);
 
   const handleDeleteBtnClick = (index) => () => {
     setShowModal({ open: true, index });
@@ -216,37 +218,24 @@ const MyProfile = () => {
     setShowModal(false);
   };
 
-  // const handleConfirmBtnClick = async () => {
-  // try {
-  //   const response = await axios.delete('사용자 정보 삭제 API 엔드포인트');
-  //   if (response.status === 200) {
-  //     setArtistCards(artistCards.filter((_, i) => i !== showModal.index));
-  //     setShowModal({ open: false, index: null });
-  //   }
-  // } catch (error) {
-  //   console.error('Error:', error);
-  // }
-  // };
-
   const handleConfirmBtnClick = () => {
-    // showModal이 객체이고 index 프로퍼티를 가지고 있을 때만 배열에서 제거
-    if (typeof showModal === 'object' && Object.prototype.hasOwnProperty.call(showModal, 'index')) {
-      const updatedArtistCards = artistCards.filter((_, i) => i !== showModal.index);
+    if (showModal.open && showModal.index !== null) {
+      const updatedArtistCards = artistCards.filter((el, index) => index !== showModal.index); // Use artistCards state instead of filteredMyCommuData
       setArtistCards(updatedArtistCards);
     }
 
-    setShowModal(false);
+    setShowModal({ open: false, index: null });
   };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('/userdata');
-        if (response.status === 200) {
-          setName(response.data.nickname);
-          setEmail(response.data.email);
-          setMembershipDate(response.data.membershipDate);
-        }
+        // const response = await axios.get('/userdata');
+        // if (response.status === 200) {
+        //   setName(response.data.nickname);
+        //   setEmail(response.data.email);
+        //   setMembershipDate(response.data.membershipDate);
+        // }
       } catch (error) {
         console.error('Error:', error);
       }
@@ -254,7 +243,9 @@ const MyProfile = () => {
 
     fetchUserData();
   }, []);
+
   const navigate = useNavigate();
+
   const handleLogoutClick = async () => {
     dispatch(setCurrentUser(null));
     removeCookie();
@@ -285,13 +276,13 @@ const MyProfile = () => {
         </LeftBox>
         <Container>
           <Title>나의 프로필</Title>
-          {artistCards.map((card, index) => (
+          {artistCards.map((el, index) => (
             <ArtistCard
               key={index}
-              imgSrc={card.imgSrc}
-              imgAlt={card.imgAlt}
-              nickName={card.nickName}
-              artistName={card.artistName}
+              imgSrc={el.groupImg}
+              imgAlt={el.groupName}
+              nickName={el.nickName}
+              artistName={el.groupName}
               membershipDate={membershipDate}
               handleDeleteBtnClick={handleDeleteBtnClick(index)}
             />

@@ -212,6 +212,7 @@ const WritePostMusic = ({ modalOpen, setModalOpen, postData, setPostData, groupI
     }
     let body = {};
     let postUrl = '';
+    const baseAPI = process.env.REACT_APP_API_URL;
     const imgArr = imgList.map((el) => el.url);
     //아티스트 포스트 제출
     if (currentUser.group) {
@@ -223,7 +224,7 @@ const WritePostMusic = ({ modalOpen, setModalOpen, postData, setPostData, groupI
       postUrl = '/feed';
     }
     await axios
-      .post(`${postUrl}/${groupId}`, body, {
+      .post(`${baseAPI}/${postUrl}/${groupId}`, body, {
         headers: {
           Authorization: getCookie(),
         },

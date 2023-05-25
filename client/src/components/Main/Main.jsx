@@ -135,12 +135,14 @@ const Main = () => {
   const { myCommunity, isUserFan } = useSelector((state) => state.community);
   const { allGroup } = useSelector((state) => state.color);
 
+  const baseAPI = process.env.REACT_APP_API_URL;
+
   const dispatch = useDispatch();
   useEffect(() => {
     const token = getCookie();
     // 로그인한 유저 찾아오기
     axios
-      .get('/user', {
+      .get(`${baseAPI}/user`, {
         headers: {
           Authorization: `${token}`,
         },
@@ -154,7 +156,7 @@ const Main = () => {
   // fanId라는 키를 가지고 있느냐 => 로그인한 유저가 팬이냐?
   useEffect(() => {
     const token = getCookie();
-    axios.get('/home', { headers: { Authorization: `${token}` } }).then((res) => {
+    axios.get(`${baseAPI}/home`, { headers: { Authorization: `${token}` } }).then((res) => {
       if ('fanId' in currentUser) {
         dispatch(checkUserFan(true)); // 현재 로그인한 유저는 팬
         const community = res.data.community.map((item) => item.id); // 가입되어 있는 커뮤니티의 id를 추출

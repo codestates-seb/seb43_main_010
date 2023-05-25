@@ -214,8 +214,9 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
     //아티스트 포스트 제출
     // 피트포스트 제출
     body = { fanId: currentUser.fanId, content, img: imgArr };
+    const baseAPI = process.env.REACT_APP_API_URL;
     await axios
-      .post(`/feed/${groupId}`, body, {
+      .post(`${baseAPI}/feed/${groupId}`, body, {
         headers: {
           Authorization: getCookie(),
         },

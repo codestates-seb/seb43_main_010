@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import profile from '../../../assets/jpg-file/profile-img.jpg';
 import Withdrawal from './MyInfoWithdrawal';
 import KakaoConnect from './MyInfoKakaoConnect';
@@ -96,15 +96,15 @@ const MyInfoRight = () => {
         data.profileImage = file; // 이미지 데이터를 추가
       }
 
-      const response = await axios.patch('/userdata/patch', data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // const response = await axios.patch('/userdata/patch', data, {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
 
-      if (response.status === 200) {
-        alert('저장되었습니다.');
-      }
+      // if (response.status === 200) {
+      //   alert('저장되었습니다.');
+      // }
     } catch (error) {
       console.error('Error:', error);
     }

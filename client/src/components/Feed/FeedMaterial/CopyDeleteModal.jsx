@@ -251,13 +251,16 @@ const CopyDeleteModal = ({
     e.preventDefault();
     let body = {};
     body = { email: currentUser.email };
-    axios.delete(`/feed/${groupId}/${feedPostId}/comment/${commentId}`, { data: body }, { headers: { Authorization: getCookie() } }).then(() => {
-      setCommentContent((commentContentAll) => commentContentAll.filter((comment) => comment.commentId !== commentId));
-      closeDeleteModalBg();
-      setDeleteModal(false);
-      setOpenModal(false);
-      setEditComment(true);
-    });
+    const baseAPI = process.env.REACT_APP_API_URL;
+    axios
+      .delete(`${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}`, { data: body }, { headers: { Authorization: getCookie() } })
+      .then(() => {
+        setCommentContent((commentContentAll) => commentContentAll.filter((comment) => comment.commentId !== commentId));
+        closeDeleteModalBg();
+        setDeleteModal(false);
+        setOpenModal(false);
+        setEditComment(true);
+      });
   };
 
   return (

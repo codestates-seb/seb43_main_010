@@ -173,7 +173,7 @@ const EditPost = ({ postData, setPostData, bgc05, artistPostId, preContent, preI
   const { groupId } = useParams();
   const { isOpen, commentContent } = useSelector((state) => state.editpost);
   const dispatch = useDispatch();
-
+  const API = `${process.env.REACT_APP_API_URL}`;
   //이미지파일 저장 + 미리보기를 위한것
   const [imgList, setImgList] = useState([]);
   // 이미지 파일 최대 올릴수 있는 개수 4개로 제한하는 변수관리
@@ -235,7 +235,7 @@ const EditPost = ({ postData, setPostData, bgc05, artistPostId, preContent, preI
       body = { artistId: currentUser.artistId, content, img: imgArr };
     }
     await axios
-      .patch(`/artist/${groupId}/${artistPostId}`, body, {
+      .patch(`${API}/artist/${groupId}/${artistPostId}`, body, {
         headers: {
           Authorization: getCookie(),
         },

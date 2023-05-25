@@ -103,6 +103,9 @@ const LoginForm = () => {
   // 확인 버튼 클릭과 취소 클릭 시 경로를 주기 위함
   const navigate = useNavigate();
 
+  // eslint-disable-next-line no-undef
+  const API = `${process.env.REACT_APP_API_URL}`;
+
   //이때 회원가입 버튼 클릭
   const onClickSubmit = async (e) => {
     e.preventDefault();
@@ -123,7 +126,7 @@ const LoginForm = () => {
       delete body.passwordCheck;
       //여기서 pwd암호화하기
       await axios
-        .post('/signup/artist', body)
+        .post(`${API}/signup/artist`, body)
         .then((res) => {
           alert('회원가입 성공');
           onReset();
@@ -148,7 +151,7 @@ const LoginForm = () => {
       body = { ...fanUser };
       delete body.passwordCheck;
       await axios
-        .post('/signup/fans', body)
+        .post(`${API}/signup/fans`, body)
         .then((res) => {
           alert('회원가입 성공');
           onReset();

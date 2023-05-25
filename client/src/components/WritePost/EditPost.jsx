@@ -228,8 +228,9 @@ const EditPost = ({ bgc05, setOpenModal }) => {
     //아티스트 포스트 제출
     // 피트포스트 제출
     body = { fanId: currentUser.fanId, content, img: imgArr };
+    const baseAPI = process.env.REACT_APP_API_URL;
     await axios
-      .patch(`/feed/${groupId}/${feedPostId}`, body, {
+      .patch(`${baseAPI}/feed/${groupId}/${feedPostId}`, body, {
         headers: {
           Authorization: getCookie(),
         },

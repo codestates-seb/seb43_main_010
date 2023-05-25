@@ -243,7 +243,7 @@ const CopyDeleteModal = ({
     setDeleteModal(false);
     setOpenModal(false);
   };
-
+  const API = `${process.env.REACT_APP_API_URL}`;
   const clickOkFn = async () => {
     // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
     if (what === '포스트를') {
@@ -254,7 +254,7 @@ const CopyDeleteModal = ({
       if (currentUser.email !== userEmail) return;
       await axios
         .delete(
-          `/artist/${groupId}/${artistPostId}/comment/${commentId}`,
+          `${API}/artist/${groupId}/${artistPostId}/comment/${commentId}`,
           { data: body },
           {
             headers: {
