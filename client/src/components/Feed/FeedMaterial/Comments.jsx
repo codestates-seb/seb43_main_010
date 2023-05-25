@@ -175,6 +175,7 @@ const Comments = ({
   artist,
   fanEmail,
   artistEmail,
+  setEditComment,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
@@ -306,6 +307,7 @@ const Comments = ({
                   commentId={commentId}
                   setCommentContent={setCommentContent}
                   commentContentAll={commentContentAll}
+                  setEditComment={setEditComment}
                 />
               ) : null}
             </div>

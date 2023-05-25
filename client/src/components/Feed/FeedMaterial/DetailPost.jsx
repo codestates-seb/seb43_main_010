@@ -316,16 +316,21 @@ const DetailPost = ({
   const [clipboard, setClipboard] = useState(false);
   const [commentContent, setCommentContent] = useState(comments.slice().reverse()); // 댓글 순서 뒤집기
   const [openCopy, setOpenCopy] = useState(false);
+  const [editComment, setEditComment] = useState(false);
 
   const detailPostRef = useRef(null);
 
   const { groupId } = useParams();
-  const { currentUser, isUserFan } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const outDetailPost = (e) => {
       if (detailPost && detailPostRef.current && !openModal && !detailPostRef.current.contains(e.target)) {
         setDetailPost(false);
+
+        if (editComment) {
+          window.location.href = `/feed/${groupId}`;
+        }
       }
     };
     document.addEventListener('mousedown', outDetailPost);
@@ -333,10 +338,13 @@ const DetailPost = ({
     return () => {
       document.removeEventListener('mousedown', outDetailPost);
     };
-  }, [detailPost, openModal]);
+  }, [detailPost, openModal, editComment]);
 
   const closeDetailPost = () => {
     setDetailPost(false);
+    if (editComment) {
+      window.location.href = `/feed/${groupId}`;
+    }
   };
 
   const clickMiniMenu = () => {
@@ -370,7 +378,7 @@ const DetailPost = ({
         .then((res) => {
           const newComment = res.data; // 새로운 댓글 데이터
           setCommentContent([newComment, ...commentContent]);
-          console.log(res.data);
+          setEditComment(true);
         })
         .then(() => {
           setComment(''); // 입력 필드 지워져야 함
@@ -465,13 +473,14 @@ const DetailPost = ({
                     likeNum={el.likeCount}
                     createAt={el.createdAt}
                     feedPostId={feedPostId}
-                    commentId={el.commentId} // 추가
-                    setCommentContent={setCommentContent} // 추가
-                    commentContentAll={commentContent} //추가
+                    commentId={el.commentId}
+                    setCommentContent={setCommentContent}
+                    commentContentAll={commentContent}
                     isArtist={el.artist ? true : false}
                     artist={el.artist}
                     fanEmail={el.fan?.email}
                     artistEmail={el.artist?.email}
+                    setEditComment={setEditComment} // 추가
                   />
                 ))}
               </CommentMusicUl>

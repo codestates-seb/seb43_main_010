@@ -322,6 +322,7 @@ const BigDetailPost = ({
   const [clipboard, setClipboard] = useState(false);
   const [commentContent, setCommentContent] = useState(comments.slice().reverse()); // 댓글 순서 뒤집기
   const [openCopy, setOpenCopy] = useState(false);
+  const [editComment, setEditComment] = useState(false);
   const detailPostRef = useRef(null);
 
   const { groupId } = useParams();
@@ -331,6 +332,10 @@ const BigDetailPost = ({
     const outDetailPost = (e) => {
       if (detailPost && detailPostRef.current && !openModal && !detailPostRef.current.contains(e.target)) {
         setDetailPost(false);
+
+        if (editComment) {
+          window.location.href = `/feed/${groupId}`;
+        }
       }
     };
     document.addEventListener('mousedown', outDetailPost);
@@ -338,10 +343,13 @@ const BigDetailPost = ({
     return () => {
       document.removeEventListener('mousedown', outDetailPost);
     };
-  }, [detailPost, openModal]);
+  }, [detailPost, openModal, editComment]);
 
   const closeDetailPost = () => {
     setDetailPost(false);
+    if (editComment) {
+      window.location.href = `/feed/${groupId}`;
+    }
   };
 
   const clickMiniMenu = () => {
@@ -375,6 +383,7 @@ const BigDetailPost = ({
         .then((res) => {
           const newComment = res.data; // 새로운 댓글 데이터
           setCommentContent([newComment, ...commentContent]);
+          setEditComment(true);
         })
         .then(() => {
           setComment(''); // 입력 필드 지워져야 함
@@ -489,13 +498,14 @@ const BigDetailPost = ({
                     likeNum={el.likeCount}
                     createAt={el.createdAt}
                     feedPostId={feedPostId}
-                    commentId={el.commentId} // 추가
-                    setCommentContent={setCommentContent} // 추가
-                    commentContentAll={commentContent} //추가
-                    isArtist={el.artist} // 추가
+                    commentId={el.commentId}
+                    setCommentContent={setCommentContent}
+                    commentContentAll={commentContent}
+                    isArtist={el.artist}
                     artist={el.artist}
                     fanEmail={el.fan?.email}
                     artistEmail={el.artist?.email}
+                    setEditComment={setEditComment} // 추가
                   />
                 ))}
               </CommentListUl>
