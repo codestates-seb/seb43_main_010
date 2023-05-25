@@ -380,7 +380,7 @@ const BigDetailPost = ({
     }
     let body = { email, content: comment };
     await axios
-      .post(`/artist/${groupId}/${artistPostId}/comment`, body)
+      .post(`${API}/artist/${groupId}/${artistPostId}/comment`, body)
       .then((res) => {
         setData(body);
         setComment('');
