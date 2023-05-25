@@ -7,9 +7,6 @@ import { removeCookie } from '../../Login/LoginMaterial/setCookie';
 import { logout, setCurrentUser } from '../../../reducer/userSlice';
 import { resetCommunity } from '../../../reducer/communitySlice';
 import CommunityModal from './MyProfileModal';
-import BTS from '../../../assets/jpg-file/card-jpg/1-bts.jpg';
-import TXT from '../../../assets/jpg-file/card-jpg/2-txt.jpg';
-import NewJeans from '../../../assets/jpg-file/card-jpg/3-newJeans.jpg';
 
 const LeftWrapper = styled.div`
   display: flex;
