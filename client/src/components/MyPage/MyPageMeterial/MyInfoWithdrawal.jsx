@@ -49,7 +49,7 @@ const ModalTitle = styled.div`
 const ModalTextBold = styled.div`
   font-size: 12.8px;
   font-weight: 600;
-  margin-top: 15px;
+  margin-top: 50px;
   margin-bottom: 15px;
 `;
 

@@ -57,7 +57,7 @@ const MyInfoRight = () => {
     email: currentUser.email,
     nickname: currentUser.nickname,
     name: currentUser.name,
-    password: '●●●●●●●●',
+    password: currentUser.password || '●●●●●●●●',
   });
 
   const [showInput, setShowInput] = useState({
