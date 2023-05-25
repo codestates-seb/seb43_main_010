@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 const PostInputBlock = styled.form`
   position: relative;
+  display: flex;
   .profile-img {
     position: absolute;
     top: 12px;
@@ -15,6 +16,12 @@ const PostInputBlock = styled.form`
       height: 100%;
       border-radius: 1.5rem;
     }
+  }
+  .double-stars {
+    width: 23px;
+    position: absolute;
+    right: 4.5%;
+    top: 28%;
   }
   input {
     width: 707px;
@@ -76,8 +83,9 @@ const PostInput = ({ transparent, placeholder, pointer, currentUser }) => {
         id='content'
         name='content'
         autoComplete='off'
-        required
+        readOnly
       />
+      <img className='double-stars' src={doubleStars} alt='double-stars' />
     </PostInputBlock>
   );
 };

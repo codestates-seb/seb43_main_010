@@ -482,6 +482,7 @@ const DetailPost = ({
                     fanEmail={el.fan?.email}
                     artistEmail={el.artist?.email}
                     setEditComment={setEditComment} // 추가
+                    img={img}
                   />
                 ))}
               </CommentMusicUl>
