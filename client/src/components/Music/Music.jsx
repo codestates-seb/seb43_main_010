@@ -39,7 +39,6 @@ const CdBottom = styled.div`
 const Music = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const { myCommunity } = useSelector((state) => state.community);
   const { currentUser } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
@@ -63,7 +62,6 @@ const Music = () => {
   if (isLoading) {
     return <Loading />;
   }
-  // console.log(myCommunity);
 
   return (
     <>

@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
@@ -65,74 +63,6 @@ const EditDeleteModalBlock = styled.div`
   }
 `;
 
-const DeleteModal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: ${({ height }) => (height ? `calc(100% + ${height}px)` : ' 100%')};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  background-color: ${({ bgColor }) => (bgColor ? bgColor : 'rgba(0, 0, 0, 0.7)')};
-  border-radius: ${({ radius }) => (radius ? radius : null)};
-`;
-
-const ModalBg = styled.div`
-  width: 428px;
-  height: 190px;
-  border-radius: 14px;
-  background-color: var(--white-100);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  .ques {
-    font-size: 14px;
-    color: var(--dark-blue-900);
-    text-shadow: 0 0 0 var(--dark-blue-900);
-    margin: 38px 0 47px 0;
-  }
-
-  // 버튼 구역
-  .btn-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .cancel {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--dark-blue-900);
-    width: 170px;
-    height: 50px;
-    border-radius: 8px;
-
-    &:hover {
-      background-color: var(--light-gray-100);
-      transition: 0.13s;
-    }
-  }
-
-  .ok {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--skyblue-500);
-    width: 170px;
-    height: 50px;
-    border-radius: 8px;
-    margin-left: 40px;
-
-    &:hover {
-      background-color: var(--skyblue-100);
-      transition: 0.13s;
-    }
-  }
-`;
-
 const SuccessMsg = styled.div`
   display: flex;
   justify-content: center;
@@ -149,27 +79,11 @@ const SuccessMsg = styled.div`
   transform: translateX(20px);
 `;
 
-function openDeleteModalBg() {
-  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-  document.body.style.overflow = 'hidden';
-  document.body.style.paddingRight = `${scrollbarWidth}px`;
-}
-
-function closeDeleteModalBg() {
-  document.body.style.overflow = 'unset';
-  document.body.style.paddingRight = '0px';
-}
-
-// 상위에서 const [openModal, setOpenModal] = useState(false);와
-// const [deleteModal, setDeleteModal] = useState(false);를 써주고, props로 받아와야 함.
-const CopyModal = ({ top, left, right, transform, openCopy, setOpenCopy, deleteModal, setDeleteModal, content }) => {
+const CopyModal = ({ top, left, right, transform, openCopy, setOpenCopy, deleteModal, content }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
   const [clipboard, setClipboard] = useState(false);
-
-  const { groupId } = useParams();
-  const { currentUser, isUserFan } = useSelector((state) => state.user);
 
   // 댓글 복사
   const handleCopy = (text) => {

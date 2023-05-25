@@ -177,6 +177,7 @@ const MiniComments = ({
   artist,
   fanEmail,
   artistEmail,
+  setEditComment,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
@@ -284,8 +285,6 @@ const MiniComments = ({
                   setOpenCopy={setOpenCopy}
                   deleteModal={deleteModal}
                   setDeleteModal={setDeleteModal}
-                  what='포스트를'
-                  feedPostId={feedPostId}
                   content={commentContent}
                 />
               )}
@@ -306,6 +305,7 @@ const MiniComments = ({
                   commentId={commentId}
                   setCommentContent={setCommentContent}
                   commentContentAll={commentContentAll}
+                  setEditComment={setEditComment}
                 />
               ) : null}
             </div>

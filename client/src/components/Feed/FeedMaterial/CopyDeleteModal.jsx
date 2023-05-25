@@ -181,7 +181,7 @@ const CopyDeleteModal = ({
   feedPostId,
   commentId,
   setCommentContent,
-  commentContentAll,
+  setEditComment,
 }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
@@ -189,7 +189,7 @@ const CopyDeleteModal = ({
   const [clipboard, setClipboard] = useState(false);
 
   const { groupId } = useParams();
-  const { currentUser, isUserFan } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   // 댓글 복사
   const handleCopy = (text) => {
@@ -256,6 +256,7 @@ const CopyDeleteModal = ({
       closeDeleteModalBg();
       setDeleteModal(false);
       setOpenModal(false);
+      setEditComment(true);
     });
   };
 
