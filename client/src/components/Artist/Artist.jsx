@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import WritePost from './SplitForder/WritePost';
 import PostInput from './SplitForder/PostInput';
+import Loading from '../Loading/Loading';
 const Container = styled.div`
   width: 100vw;
   min-width: 1440px;
@@ -43,15 +44,19 @@ const Artist = () => {
   //현재 GroupID 받아오기
   const { groupId } = useParams();
   const API = `${process.env.REACT_APP_API_URL}`;
+  const [isLoading, setIsLoading] = useState(true);
+
   authFn();
   useEffect(() => {
     if (currentUser.group) {
       setIsArtist(true);
     }
+    setIsLoading(true);
     axios
       .get(`${API}/artist/${groupId}?page=1&size=16`)
       .then((res) => {
         setArtistPost(res.data.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         return;
@@ -60,6 +65,9 @@ const Artist = () => {
   const openModal = () => {
     setModalOpen(true);
   };
+  if (isLoading) {
+    return <Loading bgWhite={true} />;
+  }
   return (
     <>
       <Gradation /> {/* 그라데이션 컴포넌트임 => FeedBlock 컴포넌트 */}
