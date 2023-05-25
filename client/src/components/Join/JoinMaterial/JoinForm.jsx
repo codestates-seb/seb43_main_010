@@ -90,7 +90,7 @@ const JoinForm = () => {
     const token = getCookie();
     const baseAPI = process.env.REACT_APP_API_URL;
     // 그룹 추가
-    axios.post(`${baseAPI}home/check/${groupId}`, {}, { headers: { Authorization: `${token}` } }).then(() => {
+    axios.post(`${baseAPI}/home/check/${groupId}`, {}, { headers: { Authorization: `${token}` } }).then(() => {
       navigate(`/music/${groupId}`);
     });
   };

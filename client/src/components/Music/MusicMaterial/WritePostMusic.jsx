@@ -224,7 +224,7 @@ const WritePostMusic = ({ modalOpen, setModalOpen, postData, setPostData, groupI
       postUrl = '/feed';
     }
     await axios
-      .post(`${baseAPI}${postUrl}/${groupId}`, body, {
+      .post(`${baseAPI}/${postUrl}/${groupId}`, body, {
         headers: {
           Authorization: getCookie(),
         },

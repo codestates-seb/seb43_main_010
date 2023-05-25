@@ -219,7 +219,7 @@ const MiniComments = ({
     if (!liked && currentUser.fanId !== undefined) {
       axios
         .post(
-          `${baseAPI}feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
           { fanId: currentUser.fanId },
           { headers: { Authorization: getCookie() } },
         )
@@ -235,7 +235,7 @@ const MiniComments = ({
     if (!liked && currentUser.fanId === undefined) {
       axios
         .post(
-          `${baseAPI}feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
           { fanId: currentUser.artistId },
           { headers: { Authorization: getCookie() } },
         )

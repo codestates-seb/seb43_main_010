@@ -253,7 +253,7 @@ const CopyDeleteModal = ({
     body = { email: currentUser.email };
     const baseAPI = process.env.REACT_APP_API_URL;
     axios
-      .delete(`${baseAPI}feed/${groupId}/${feedPostId}/comment/${commentId}`, { data: body }, { headers: { Authorization: getCookie() } })
+      .delete(`${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}`, { data: body }, { headers: { Authorization: getCookie() } })
       .then(() => {
         setCommentContent((commentContentAll) => commentContentAll.filter((comment) => comment.commentId !== commentId));
         closeDeleteModalBg();

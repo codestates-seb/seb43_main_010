@@ -375,7 +375,7 @@ const DetailPost = ({
     const reqBody = { email: currentUser.email, content: comment };
     if (currentUser.groupId === Number(groupId) || typeof currentUser.fanId === 'number') {
       axios
-        .post(`${baseAPI}feed/${groupId}/${feedPostId}/comment`, reqBody, { headers: { Authorization: `${token}` } })
+        .post(`${baseAPI}/feed/${groupId}/${feedPostId}/comment`, reqBody, { headers: { Authorization: `${token}` } })
         .then((res) => {
           const newComment = res.data; // 새로운 댓글 데이터
           setCommentContent([newComment, ...commentContent]);
