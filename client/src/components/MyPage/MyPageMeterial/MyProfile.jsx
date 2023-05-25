@@ -241,12 +241,12 @@ const MyProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('/userdata');
-        if (response.status === 200) {
-          setName(response.data.nickname);
-          setEmail(response.data.email);
-          setMembershipDate(response.data.membershipDate);
-        }
+        // const response = await axios.get('/userdata');
+        // if (response.status === 200) {
+        //   setName(response.data.nickname);
+        //   setEmail(response.data.email);
+        //   setMembershipDate(response.data.membershipDate);
+        // }
       } catch (error) {
         console.error('Error:', error);
       }
