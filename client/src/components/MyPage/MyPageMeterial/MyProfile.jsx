@@ -148,8 +148,9 @@ const Input = styled.input`
 `;
 
 const ArtistCard = ({ imgSrc, imgAlt, artistName, membershipDate, handleDeleteBtnClick }) => {
+  const currentUser = useSelector((state) => state.user.currentUser);
   const [editMode, setEditMode] = useState(false);
-  const [nickName, setNickName] = useState('TATA-V');
+  const [nickName, setNickName] = useState(currentUser.nickname);
   const [newNickName, setNewNickName] = useState(nickName);
 
   const handlePenClick = () => {
