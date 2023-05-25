@@ -67,9 +67,11 @@ const Feed = () => {
   let { groupId } = useParams();
   authFn(); //로그인후 사용해주세요
 
+  // const baseAPI = process.env.REACT_APP_API_URL;
+  const baseAPI = process.env.REACT_APP_API_URL;
   useEffect(() => {
     setIsLoading(true);
-    axios.get(`/feed/${groupId}?page=1&size=16`).then((res) => {
+    axios.get(`${baseAPI}feed/${groupId}?page=1&size=16`).then((res) => {
       setFeedPost(res.data.data);
       setIsLoading(false);
     });
