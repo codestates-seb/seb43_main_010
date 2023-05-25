@@ -9,6 +9,7 @@ import { getCookie } from '../../Login/LoginMaterial/setCookie';
 import verifiedIcon from '../../../assets/svg-file/moon-verified-icon.svg';
 
 import CopyDeleteModal from './CopyDeleteModal';
+import CopyModal from './CopyModal';
 
 const CommentsBlock = styled.li`
   overflow-y: auto;
@@ -172,13 +173,16 @@ const Comments = ({
   createAt,
   isArtist,
   artist,
+  fanEmail,
+  artistEmail,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [openModal, setOpenModal] = useState(false);
   const [showAll, setShowAll] = useState(false); // 전체 내용 보여주는 여부
+  const [openCopy, setOpenCopy] = useState(false);
 
-  const { currentUser, isUserFan } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const { groupId } = useParams();
 
   const clickMiniMenu = () => {
@@ -187,6 +191,10 @@ const Comments = ({
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
+  };
+
+  const handleOpenCopy = () => {
+    setOpenCopy(!openCopy);
   };
 
   // 시간
@@ -205,29 +213,31 @@ const Comments = ({
     e.preventDefault();
     setLiked(!liked);
 
-    if (!liked && !isArtist) {
+    if (!liked && currentUser.fanId !== undefined) {
       axios
-        .post(
-          `http://localhost:8080/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
-          { fanId: currentUser.fanId },
-          { headers: { Authorization: getCookie() } },
-        )
+        .post(`/feed/${groupId}/${feedPostId}/comment/${commentId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
         .then(() => {
           setLike(like + 1);
           setLiked(true);
+        })
+        .catch(() => {
+          alert('이미 좋아요를 누른 댓글입니다.');
         });
     }
 
-    if (!liked && isArtist) {
+    if (!liked && currentUser.fanId === undefined) {
       axios
         .post(
-          `http://localhost:8080/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          `/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
           { fanId: currentUser.artistId },
           { headers: { Authorization: getCookie() } },
         )
         .then(() => {
           setLike(like + 1);
           setLiked(true);
+        })
+        .catch(() => {
+          alert('이미 좋아요를 누른 댓글입니다.');
         });
     }
   };
@@ -248,9 +258,37 @@ const Comments = ({
               </div>
             </div>
             <div className='right-icon-box'>
-              <button onClick={clickMiniMenu} className='mini-menu'>
-                <i className='i-three-point-menu-icon' />
-              </button>
+              {!isArtist && currentUser.email === fanEmail && (
+                <button onClick={clickMiniMenu} className='mini-menu'>
+                  <i className='i-three-point-menu-icon' />
+                </button>
+              )}
+              {isArtist && currentUser.email === artistEmail && (
+                <button onClick={clickMiniMenu} className='mini-menu'>
+                  <i className='i-three-point-menu-icon' />
+                </button>
+              )}
+              {(!isArtist && currentUser.email !== fanEmail) || (isArtist && currentUser.email !== artistEmail) ? (
+                <button onClick={handleOpenCopy} className='mini-menu'>
+                  <i className='i-three-point-menu-icon' />
+                </button>
+              ) : null}
+
+              {/* 복사만 있는 모달 */}
+              {openCopy && (
+                <CopyModal
+                  top='-8%'
+                  right='178.5%'
+                  openCopy={openCopy}
+                  setOpenCopy={setOpenCopy}
+                  deleteModal={deleteModal}
+                  setDeleteModal={setDeleteModal}
+                  what='포스트를'
+                  feedPostId={feedPostId}
+                  content={commentContent}
+                />
+              )}
+
               {/* 게시글 수정, 삭제 모달 */}
               {openModal ? (
                 <CopyDeleteModal

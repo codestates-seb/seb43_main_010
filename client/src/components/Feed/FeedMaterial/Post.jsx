@@ -10,6 +10,7 @@ import EditDeleteModal from './EditDeleteModal';
 import DetailPost from './DetailPost';
 import BigDetailPost from './BigDetailPost';
 import EditPost from '../../WritePost/EditPost';
+import CopyModal from './CopyModal';
 
 const PostBlock = styled.div`
   width: 707px;
@@ -178,7 +179,6 @@ const PostBlock = styled.div`
 `;
 
 const Post = ({
-  isFan,
   feedPostId,
   comments,
   createdAt,
@@ -191,12 +191,14 @@ const Post = ({
   setModalOpen,
   postData,
   setPostData,
+  fanEmail,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
   const [detailPost, setDetailPost] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [openCopy, setOpenCopy] = useState(false);
 
   const { currentUser } = useSelector((state) => state.user);
   const { isOpen } = useSelector((state) => state.editpost);
@@ -206,26 +208,28 @@ const Post = ({
     e.preventDefault();
     setLiked(!liked);
     // 로그인한 유저가 팬일 때
-    if (!liked && isFan) {
+    if (!liked && currentUser.fanId !== undefined) {
       axios
-        .post(`http://localhost:8080/feed/${groupId}/${feedPostId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
+        .post(`/feed/${groupId}/${feedPostId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
         .then(() => {
           setLike(like + 1);
           setLiked(true);
+        })
+        .catch(() => {
+          alert('이미 좋아요를 누른 댓글입니다.');
         });
     }
 
-    if (!liked && !isFan) {
+    if (!liked && currentUser.fanId === undefined) {
       // 로그인한 유저가 아티스트 이면서, 해당 커뮤니티의 아티스트일 경우
       axios
-        .post(
-          `http://localhost:8080/feed/${groupId}/${feedPostId}/like`,
-          { artistId: currentUser.artistId },
-          { headers: { Authorization: getCookie() } },
-        )
+        .post(`/feed/${groupId}/${feedPostId}/like`, { artistId: currentUser.artistId }, { headers: { Authorization: getCookie() } })
         .then(() => {
           setLike(like + 1);
           setLiked(true);
+        })
+        .catch(() => {
+          alert('이미 좋아요를 누른 댓글입니다.');
         });
     }
   };
@@ -236,6 +240,10 @@ const Post = ({
 
   const openDetailPost = () => {
     setDetailPost(true);
+  };
+
+  const handleOpenCopy = () => {
+    setOpenCopy(!openCopy);
   };
 
   // 시간
@@ -301,11 +309,37 @@ const Post = ({
           </div>
 
           <div className='right-icon-box'>
-            <button onClick={clickMiniMenu} className='right-icon'>
-              <div className='mini-menu'>
-                <i className='i-three-point-menu-icon' />
-              </div>
-            </button>
+            {currentUser.email === fanEmail ? (
+              <button onClick={clickMiniMenu} className='right-icon'>
+                <div className='mini-menu'>
+                  <i className='i-three-point-menu-icon' />
+                </div>
+              </button>
+            ) : (
+              <button onClick={handleOpenCopy} className='right-icon'>
+                <div className='mini-menu'>
+                  <i className='i-three-point-menu-icon' />
+                </div>
+              </button>
+            )}
+            {/* 복사만 있는 모달 */}
+            {openCopy && (
+              <CopyModal
+                top='100%'
+                right='0'
+                openCopy={openCopy}
+                setOpenCopy={setOpenCopy}
+                deleteModal={deleteModal}
+                setDeleteModal={setDeleteModal}
+                what='포스트를'
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                postContent={content}
+                feedPostId={feedPostId}
+                content={content}
+              />
+            )}
+
             {/* 게시글 수정, 삭제 모달 */}
             {openModal ? (
               <EditDeleteModal
@@ -347,6 +381,7 @@ const Post = ({
               clickLike={clickLike}
               comments={comments}
               feedPostId={feedPostId}
+              fanEmail={fanEmail} // 추가
             />
           ) : (
             <DetailPost
@@ -361,6 +396,7 @@ const Post = ({
               clickLike={clickLike}
               comments={comments}
               feedPostId={feedPostId}
+              fanEmail={fanEmail} // 추가
             />
           )}
         </>
