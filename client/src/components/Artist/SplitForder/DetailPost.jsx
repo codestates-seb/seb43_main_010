@@ -326,6 +326,7 @@ const DetailPost = ({
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState();
   const [data, setData] = useState();
+  const API = `${process.env.REACT_APP_API_URL}`;
   useEffect(() => {
     const outDetailPost = (e) => {
       if (detailPost && detailPostRef.current && !openModal && !detailPostRef.current.contains(e.target)) {
@@ -340,7 +341,7 @@ const DetailPost = ({
   }, [detailPost, openModal]);
 
   useEffect(() => {
-    axios.get(`/artist/${groupId}/${artistPostId}/comment?page=1&size=16`).then((res) => {
+    axios.get(`${API}/artist/${groupId}/${artistPostId}/comment?page=1&size=16`).then((res) => {
       setCommentList(res.data.data);
     });
   }, [data]);
@@ -376,7 +377,7 @@ const DetailPost = ({
     }
     let body = { email, content: comment };
     await axios
-      .post(`/artist/${groupId}/${artistPostId}/comment`, body)
+      .post(`${API}/artist/${groupId}/${artistPostId}/comment`, body)
       .then((res) => {
         setData(body);
         setComment('');

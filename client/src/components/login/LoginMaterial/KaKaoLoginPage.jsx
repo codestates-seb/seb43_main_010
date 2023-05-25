@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const KaKaoLogin = () => {
   const navigate = useNavigate();
+  const API = `${process.env.REACT_APP_API_URL}`;
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code');
 
@@ -39,7 +40,7 @@ const KaKaoLogin = () => {
               const { nickname, profile_image } = res.data.properties;
               //받아온 카카오 정보로 fanUser 세팅
               axios
-                .post('/signup/fans', {
+                .post(`${API}/signup/fans`, {
                   email,
                   password: 'kakaoLogin',
                   name: nickname,

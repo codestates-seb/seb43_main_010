@@ -175,6 +175,7 @@ const KakaoBtn = styled.div`
 `;
 
 const LoginForm = () => {
+  const API = `${process.env.REACT_APP_API_URL}`;
   const navigate = useNavigate();
   // const token = useSelector((state) => state.auth);
   // const dispatch = useDispatch();
@@ -191,7 +192,7 @@ const LoginForm = () => {
     }
 
     await axios
-      .post('/login', body)
+      .post(`${API}/login`, body)
       .then((res) => {
         let token = res.headers.get('authorization');
         setAccessToken(token);

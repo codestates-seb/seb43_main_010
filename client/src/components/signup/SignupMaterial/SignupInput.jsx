@@ -80,6 +80,8 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
   const artist = useSelector((state) => state.signup.artist);
   // 비번체크
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-undef
+  const API = `${process.env.REACT_APP_API_URL}`;
 
   //input제어
 
@@ -110,7 +112,7 @@ const SignupInput = ({ emailRef, pwdRef, pwdCheckRef, nameRef, nicknnameRef }) =
     }
     //중복확인
     await axios
-      .post('/emails', {
+      .post(`${API}/emails`, {
         email: curEmail,
       })
       .then((res) => {

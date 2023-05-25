@@ -161,7 +161,7 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
   const [content, setContent] = useState('');
   const [validity, setValidity] = useState(false);
   const [hide, setHide] = useState(false);
-
+  const API = `${process.env.REACT_APP_API_URL}`;
   //이미지파일 저장 + 미리보기를 위한것
   const [imgList, setImgList] = useState([]);
   // 이미지 파일 최대 올릴수 있는 개수 4개로 제한하는 변수관리
@@ -213,7 +213,7 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
       body = { artistId: currentUser.artistId, content, img: imgArr };
     }
     await axios
-      .post(`/artist/${groupId}`, body, {
+      .post(`${API}/artist/${groupId}`, body, {
         headers: {
           Authorization: getCookie(),
         },
