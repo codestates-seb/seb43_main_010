@@ -18,11 +18,11 @@ const ModalContent = styled.div`
   width: 428px;
   height: 302px;
   border-radius: 14px;
-  padding: 70px;
+  padding: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
 `;
 
 const ModalTitle = styled.div`
