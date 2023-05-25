@@ -224,7 +224,7 @@ const EditDeleteModal = ({
     setDeleteModal(false);
     setOpenModal(false);
   };
-
+  const API = `${process.env.REACT_APP_API_URL}`;
   const clickOkFn = async () => {
     // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
     let body = {};
@@ -233,7 +233,7 @@ const EditDeleteModal = ({
       body = { artistId: currentUser.artistId };
       await axios
         .delete(
-          `/artist/${groupId}/${artistPostId}`,
+          `${API}/artist/${groupId}/${artistPostId}`,
           { data: body },
           {
             headers: {

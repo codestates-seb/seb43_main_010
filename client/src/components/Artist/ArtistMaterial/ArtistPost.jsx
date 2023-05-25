@@ -7,8 +7,6 @@ import EditDeleteModal from '../SplitForder/EditDeleteModal';
 import DetailPost from '../SplitForder/DetailPost';
 import BigDetailPost from '../SplitForder/BigDetailPost';
 import { showDate, showMonthDay } from './showDate';
-import axios from 'axios';
-import { getCookie } from '../../Login/LoginMaterial/setCookie';
 const Container = styled.div`
   width: 707px;
   display: flex;

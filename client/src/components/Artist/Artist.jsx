@@ -42,13 +42,14 @@ const Artist = () => {
   const [artistPost, setArtistPost] = useState([]);
   //현재 GroupID 받아오기
   const { groupId } = useParams();
+  const API = `${process.env.REACT_APP_API_URL}`;
   authFn();
   useEffect(() => {
     if (currentUser.group) {
       setIsArtist(true);
     }
     axios
-      .get(`/artist/${groupId}?page=1&size=16`)
+      .get(`${API}/artist/${groupId}?page=1&size=16`)
       .then((res) => {
         setArtistPost(res.data.data);
       })
