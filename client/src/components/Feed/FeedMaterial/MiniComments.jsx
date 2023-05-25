@@ -220,7 +220,7 @@ const MiniComments = ({
     e.preventDefault();
     setLiked(!liked);
     const baseAPI = process.env.REACT_APP_API_URL;
-    if (!liked && currentUser.fanId !== undefined) {
+    if (!liked && isFan) {
       axios
         .post(
           `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
@@ -236,7 +236,7 @@ const MiniComments = ({
         });
     }
 
-    if (!liked && currentUser.fanId === undefined) {
+    if (!liked && !isFan) {
       axios
         .post(
           `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
