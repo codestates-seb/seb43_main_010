@@ -9,9 +9,7 @@ import { useSelector } from 'react-redux';
 
 import Comments from './Comments';
 import EditDeleteModal from './EditDeleteModal';
-
-// 임시 댓글 데이터
-import commentFeedData from '../commentFeedData.js';
+import CopyModal from './CopyModal';
 
 const DetailPostBlock = styled.div`
   position: fixed;
@@ -310,12 +308,15 @@ const DetailPost = ({
   setModalOpen,
   feedPostId,
   comments,
+  fanEmail,
 }) => {
   const [comment, setComment] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [clipboard, setClipboard] = useState(false);
   const [commentContent, setCommentContent] = useState(comments.slice().reverse()); // 댓글 순서 뒤집기
+  const [openCopy, setOpenCopy] = useState(false);
+
   const detailPostRef = useRef(null);
 
   const { groupId } = useParams();
@@ -363,17 +364,23 @@ const DetailPost = ({
     e.preventDefault();
     const token = getCookie();
     const reqBody = { email: currentUser.email, content: comment };
-    axios
-      .post(`http://localhost:8080/feed/${groupId}/${feedPostId}/comment`, reqBody, { headers: { Authorization: `${token}` } })
-      .then((res) => {
-        const newComment = res.data; // 새로운 댓글 데이터
-        setCommentContent([newComment, ...commentContent]);
-        console.log(res.data);
-      })
-      .then(() => {
-        setComment(''); // 입력 필드 지워져야 함
-      })
-      .catch(() => alert('댓글 작성에 실패했습니다'));
+    if (currentUser.groupId === Number(groupId) || typeof currentUser.fanId === 'number') {
+      axios
+        .post(`/feed/${groupId}/${feedPostId}/comment`, reqBody, { headers: { Authorization: `${token}` } })
+        .then((res) => {
+          const newComment = res.data; // 새로운 댓글 데이터
+          setCommentContent([newComment, ...commentContent]);
+          console.log(res.data);
+        })
+        .then(() => {
+          setComment(''); // 입력 필드 지워져야 함
+        })
+        .catch(() => alert('댓글 작성에 실패했습니다'));
+    }
+  };
+
+  const handleOpenCopy = () => {
+    setOpenCopy(!openCopy);
   };
 
   return (
@@ -392,9 +399,33 @@ const DetailPost = ({
                     </div>
                   </div>
                   <div className='right-icon-box'>
-                    <button onClick={clickMiniMenu} className='mini-menu'>
-                      <i className='i-three-point-menu-icon' />
-                    </button>
+                    {currentUser.email === fanEmail ? (
+                      <button onClick={clickMiniMenu} className='mini-menu'>
+                        <i className='i-three-point-menu-icon' />
+                      </button>
+                    ) : (
+                      <button onClick={handleOpenCopy} className='mini-menu'>
+                        <i className='i-three-point-menu-icon' />
+                      </button>
+                    )}
+                    {/* 복사만 있는 모달 */}
+                    {openCopy && (
+                      <CopyModal
+                        top='56%'
+                        right='0'
+                        openCopy={openCopy}
+                        setOpenCopy={setOpenCopy}
+                        deleteModal={deleteModal}
+                        setDeleteModal={setDeleteModal}
+                        what='포스트를'
+                        modalOpen={modalOpen}
+                        setModalOpen={setModalOpen}
+                        postContent={content}
+                        feedPostId={feedPostId}
+                        content={content}
+                      />
+                    )}
+
                     {/* 게시글 수정, 삭제 모달 */}
                     {openModal ? (
                       <EditDeleteModal
@@ -443,6 +474,8 @@ const DetailPost = ({
                     commentContentAll={commentContent} //추가
                     isArtist={el.artist ? true : false}
                     artist={el.artist}
+                    fanEmail={el.fan?.email}
+                    artistEmail={el.artist?.email}
                   />
                 ))}
               </CommentMusicUl>

@@ -1,14 +1,12 @@
 import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { getCookie } from '../../Login/LoginMaterial/setCookie';
 import { useSelector } from 'react-redux';
 
 const EditDeleteModalBlock = styled.div`
   position: absolute;
   min-width: 150px;
-  height: 93px;
+  height: 52px;
   background-color: var(--white-100);
   border-radius: 9px;
   box-shadow: 0 2px 10px rgb(19, 28, 35, 17%);
@@ -164,25 +162,7 @@ function closeDeleteModalBg() {
 
 // 상위에서 const [openModal, setOpenModal] = useState(false);와
 // const [deleteModal, setDeleteModal] = useState(false);를 써주고, props로 받아와야 함.
-const CopyDeleteModal = ({
-  top,
-  left,
-  right,
-  transform,
-  height,
-  bgColor,
-  radius,
-  openModal,
-  setOpenModal,
-  deleteModal,
-  setDeleteModal,
-  what,
-  commentContent,
-  feedPostId,
-  commentId,
-  setCommentContent,
-  commentContentAll,
-}) => {
+const CopyModal = ({ top, left, right, transform, openCopy, setOpenCopy, deleteModal, setDeleteModal, content }) => {
   const modalRef = useRef(null);
   const deleteRef = useRef(null);
 
@@ -199,7 +179,7 @@ const CopyDeleteModal = ({
         setClipboard(true);
         setTimeout(() => {
           setClipboard(false);
-          setOpenModal(false);
+          setOpenCopy(false);
         }, 3000);
       })
       .catch(() => {
@@ -210,92 +190,29 @@ const CopyDeleteModal = ({
   // 수정, 삭제가 뜨는 미니 모달
   useEffect(() => {
     const clickOut = (e) => {
-      if (openModal && modalRef.current && !deleteRef.current && !modalRef.current.contains(e.target)) {
-        setOpenModal(false);
+      if (openCopy && modalRef.current && !deleteRef.current && !modalRef.current.contains(e.target)) {
+        setOpenCopy(false);
       }
     };
     document.addEventListener('mousedown', clickOut);
     return () => {
       document.removeEventListener('mousedown', clickOut);
     };
-  }, [openModal]);
-
-  // delete 모달
-  useEffect(() => {
-    const clickOut = (e) => {
-      if (deleteModal && deleteRef.current && !deleteRef.current.contains(e.target)) {
-        closeDeleteModalBg();
-        setDeleteModal(false);
-        setOpenModal(false);
-      }
-    };
-    document.addEventListener('mousedown', clickOut);
-    return () => {
-      document.removeEventListener('mousedown', clickOut);
-    };
-  }, [deleteModal]);
-
-  const openDeleteModal = () => {
-    setDeleteModal(true);
-    openDeleteModalBg();
-  };
-
-  const clickCancelFn = () => {
-    closeDeleteModalBg();
-    setDeleteModal(false);
-    setOpenModal(false);
-  };
-
-  const clickOkFn = async (e) => {
-    // !!!여기에서 서버한테 포스트 or 댓글 삭제하는 거 보내야 함!!!
-    e.preventDefault();
-    let body = {};
-    body = { email: currentUser.email };
-    axios.delete(`/feed/${groupId}/${feedPostId}/comment/${commentId}`, { data: body }, { headers: { Authorization: getCookie() } }).then(() => {
-      setCommentContent((commentContentAll) => commentContentAll.filter((comment) => comment.commentId !== commentId));
-      closeDeleteModalBg();
-      setDeleteModal(false);
-      setOpenModal(false);
-    });
-  };
+  }, [openCopy]);
 
   return (
     <>
       <EditDeleteModalBlock ref={modalRef} top={top} left={left} right={right} transform={transform} deleteModal={deleteModal}>
-        <button onClick={() => handleCopy(commentContent)} className='edit'>
+        <button onClick={() => handleCopy(content)} className='edit'>
           <div className='pen'>
             {!clipboard && <i className='i-share-icon' />}
 
             {clipboard ? <SuccessMsg>복사 완료</SuccessMsg> : <span>복사하기</span>}
           </div>
         </button>
-        {/* 포스트가 삭제되는 곳 */}
-        <button onClick={openDeleteModal} className='delete'>
-          <div className='trash'>
-            <i className='i-trash-icon' />
-            <span>삭제하기</span>
-          </div>
-        </button>
       </EditDeleteModalBlock>
-
-      {/* 포스트 삭제 여부 모달 */}
-      {deleteModal ? (
-        <DeleteModal height={height} bgColor={bgColor} radius={radius}>
-          <ModalBg ref={deleteRef}>
-            <div className='ques'>{`이 ${what} 삭제하시겠습니까?`}</div>
-            <div className='btn-box'>
-              <button className='cancel' onClick={clickCancelFn}>
-                취소
-              </button>
-              <button className='ok' onClick={clickOkFn}>
-                확인
-              </button>
-            </div>
-          </ModalBg>
-        </DeleteModal>
-      ) : null}
     </>
   );
 };
 
-export default CopyDeleteModal;
+export default CopyModal;

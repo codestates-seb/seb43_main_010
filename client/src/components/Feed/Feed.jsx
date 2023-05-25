@@ -111,7 +111,7 @@ const Feed = () => {
                     commentNum={el.commentNum}
                     comments={el.comments} // 추가
                     feedPostId={el.feedPostId} // 추가
-                    isFan={el.artistPostId ? false : true}
+                    fanEmail={el.fan.email}
                     // 수정한 부분
                     modalOpen={modalOpen}
                     setModalOpen={setModalOpen}
