@@ -230,7 +230,7 @@ const EditPost = ({ bgc05, setOpenModal }) => {
     body = { fanId: currentUser.fanId, content, img: imgArr };
     const baseAPI = process.env.REACT_APP_API_URL;
     await axios
-      .patch(`${baseAPI}feed/${groupId}/${feedPostId}`, body, {
+      .patch(`${baseAPI}/feed/${groupId}/${feedPostId}`, body, {
         headers: {
           Authorization: getCookie(),
         },

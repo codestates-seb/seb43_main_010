@@ -216,7 +216,7 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
     body = { fanId: currentUser.fanId, content, img: imgArr };
     const baseAPI = process.env.REACT_APP_API_URL;
     await axios
-      .post(`${baseAPI}feed/${groupId}`, body, {
+      .post(`${baseAPI}/feed/${groupId}`, body, {
         headers: {
           Authorization: getCookie(),
         },
