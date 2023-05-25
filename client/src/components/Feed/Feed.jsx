@@ -79,8 +79,6 @@ const Feed = () => {
     return <Loading bgWhite={true} />;
   }
 
-  console.log(feedPost);
-
   return (
     <>
       <Gradation /> {/* 그라데이션 컴포넌트임 => FeedBlock 컴포넌트 */}

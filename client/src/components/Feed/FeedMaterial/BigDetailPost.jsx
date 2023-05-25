@@ -375,7 +375,6 @@ const BigDetailPost = ({
         .then((res) => {
           const newComment = res.data; // 새로운 댓글 데이터
           setCommentContent([newComment, ...commentContent]);
-          console.log(res.data);
         })
         .then(() => {
           setComment(''); // 입력 필드 지워져야 함
@@ -423,12 +422,8 @@ const BigDetailPost = ({
                         openCopy={openCopy}
                         setOpenCopy={setOpenCopy}
                         deleteModal={deleteModal}
-                        setDeleteModal={setDeleteModal}
-                        what='포스트를'
                         modalOpen={modalOpen}
                         setModalOpen={setModalOpen}
-                        postContent={content}
-                        feedPostId={feedPostId}
                         content={content}
                       />
                     )}

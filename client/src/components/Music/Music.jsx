@@ -63,7 +63,6 @@ const Music = () => {
   if (isLoading) {
     return <Loading />;
   }
-  // console.log(myCommunity);
 
   return (
     <>

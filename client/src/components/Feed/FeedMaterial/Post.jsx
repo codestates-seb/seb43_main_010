@@ -216,7 +216,7 @@ const Post = ({
           setLiked(true);
         })
         .catch(() => {
-          alert('이미 좋아요를 누른 댓글입니다.');
+          alert('이미 좋아요를 누른 게시글입니다.');
         });
     }
 
@@ -229,7 +229,7 @@ const Post = ({
           setLiked(true);
         })
         .catch(() => {
-          alert('이미 좋아요를 누른 댓글입니다.');
+          alert('이미 좋아요를 누른 게시글입니다.');
         });
     }
   };
@@ -330,12 +330,8 @@ const Post = ({
                 openCopy={openCopy}
                 setOpenCopy={setOpenCopy}
                 deleteModal={deleteModal}
-                setDeleteModal={setDeleteModal}
-                what='포스트를'
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}
-                postContent={content}
-                feedPostId={feedPostId}
                 content={content}
               />
             )}

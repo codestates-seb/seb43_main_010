@@ -283,8 +283,6 @@ const Comments = ({
                   setOpenCopy={setOpenCopy}
                   deleteModal={deleteModal}
                   setDeleteModal={setDeleteModal}
-                  what='포스트를'
-                  feedPostId={feedPostId}
                   content={commentContent}
                 />
               )}

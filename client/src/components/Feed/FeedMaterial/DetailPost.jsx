@@ -416,12 +416,8 @@ const DetailPost = ({
                         openCopy={openCopy}
                         setOpenCopy={setOpenCopy}
                         deleteModal={deleteModal}
-                        setDeleteModal={setDeleteModal}
-                        what='포스트를'
                         modalOpen={modalOpen}
                         setModalOpen={setModalOpen}
-                        postContent={content}
-                        feedPostId={feedPostId}
                         content={content}
                       />
                     )}

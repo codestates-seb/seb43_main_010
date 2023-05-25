@@ -92,12 +92,9 @@ const JoinForm = () => {
     // !!!여기에서 commuNickname을 서버에 전송해야 함!!!
     const token = getCookie();
     // 그룹 추가
-    axios.post(`/home/check/${groupId}`, {}, { headers: { Authorization: `${token}` } }).then((res) => {
-      console.log(res.data);
+    axios.post(`/home/check/${groupId}`, {}, { headers: { Authorization: `${token}` } }).then(() => {
       navigate(`/music/${groupId}`);
     });
-
-    console.log(token);
   };
 
   return (
