@@ -49,8 +49,9 @@ const Music = () => {
     }, 1000);
 
     const token = getCookie();
+    const baseAPI = process.env.REACT_APP_API_URL;
 
-    axios.get('http://localhost:8080/home', { headers: { Authorization: `${token}` } }).then((res) => {
+    axios.get(`${baseAPI}home`, { headers: { Authorization: `${token}` } }).then((res) => {
       if ('fanId' in currentUser) {
         const community = res.data.community.map((item) => item.id); // 가입되어 있는 커뮤니티의 id를 추출
         dispatch(setMyCommunity(community)); // 현재 로그인한 유저가 가입된 커뮤니티들

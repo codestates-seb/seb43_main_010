@@ -375,11 +375,12 @@ const BigDetailPost = ({
   const submitComment = (e) => {
     // !!!여기서 서버한테 comment 댓글 데이터 보내야 함!!!
     e.preventDefault();
+    const baseAPI = process.env.REACT_APP_API_URL;
     const token = getCookie();
     const reqBody = { email: currentUser.email, content: comment };
     if (currentUser.groupId === Number(groupId) || typeof currentUser.fanId === 'number') {
       axios
-        .post(`/feed/${groupId}/${feedPostId}/comment`, reqBody, { headers: { Authorization: `${token}` } })
+        .post(`${baseAPI}feed/${groupId}/${feedPostId}/comment`, reqBody, { headers: { Authorization: `${token}` } })
         .then((res) => {
           const newComment = res.data; // 새로운 댓글 데이터
           setCommentContent([newComment, ...commentContent]);

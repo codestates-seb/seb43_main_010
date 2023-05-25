@@ -215,9 +215,14 @@ const MiniComments = ({
   const clickLike = (e) => {
     e.preventDefault();
     setLiked(!liked);
+    const baseAPI = process.env.REACT_APP_API_URL;
     if (!liked && currentUser.fanId !== undefined) {
       axios
-        .post(`/feed/${groupId}/${feedPostId}/comment/${commentId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
+        .post(
+          `${baseAPI}feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          { fanId: currentUser.fanId },
+          { headers: { Authorization: getCookie() } },
+        )
         .then(() => {
           setLike(like + 1);
           setLiked(true);
@@ -230,7 +235,7 @@ const MiniComments = ({
     if (!liked && currentUser.fanId === undefined) {
       axios
         .post(
-          `/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
+          `${baseAPI}feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
           { fanId: currentUser.artistId },
           { headers: { Authorization: getCookie() } },
         )

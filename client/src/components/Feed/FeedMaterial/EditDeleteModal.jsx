@@ -226,9 +226,10 @@ const EditDeleteModal = ({
       // 포스트 삭제
       let body = {};
       body = { fanId: currentUser.fanId };
+      const baseAPI = process.env.REACT_APP_API_URL;
       await axios
         .delete(
-          `/feed/${groupId}/${feedPostId}`,
+          `${baseAPI}feed/${groupId}/${feedPostId}`,
           { data: body },
           {
             headers: {

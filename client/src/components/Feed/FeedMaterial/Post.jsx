@@ -208,9 +208,10 @@ const Post = ({
     e.preventDefault();
     setLiked(!liked);
     // 로그인한 유저가 팬일 때
+    const baseAPI = process.env.REACT_APP_API_URL;
     if (!liked && currentUser.fanId !== undefined) {
       axios
-        .post(`/feed/${groupId}/${feedPostId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
+        .post(`${baseAPI}feed/${groupId}/${feedPostId}/like`, { fanId: currentUser.fanId }, { headers: { Authorization: getCookie() } })
         .then(() => {
           setLike(like + 1);
           setLiked(true);
@@ -223,7 +224,7 @@ const Post = ({
     if (!liked && currentUser.fanId === undefined) {
       // 로그인한 유저가 아티스트 이면서, 해당 커뮤니티의 아티스트일 경우
       axios
-        .post(`/feed/${groupId}/${feedPostId}/like`, { artistId: currentUser.artistId }, { headers: { Authorization: getCookie() } })
+        .post(`${baseAPI}feed/${groupId}/${feedPostId}/like`, { artistId: currentUser.artistId }, { headers: { Authorization: getCookie() } })
         .then(() => {
           setLike(like + 1);
           setLiked(true);
