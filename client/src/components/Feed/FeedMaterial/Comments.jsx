@@ -218,7 +218,7 @@ const Comments = ({
     setLiked(!liked);
     const baseAPI = process.env.REACT_APP_API_URL;
 
-    if (!liked && currentUser.fanId !== undefined) {
+    if (!liked && isFan) {
       axios
         .post(
           `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
@@ -234,7 +234,7 @@ const Comments = ({
         });
     }
 
-    if (!liked && currentUser.fanId === undefined) {
+    if (!liked && !isFan) {
       axios
         .post(
           `${baseAPI}/feed/${groupId}/${feedPostId}/comment/${commentId}/like`,
