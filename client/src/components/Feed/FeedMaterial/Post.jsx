@@ -25,6 +25,7 @@ const PostBlock = styled.div`
     .profile-img {
       width: 36px;
       height: 36px;
+      border-radius: 50%;
       background: ${({ img }) => `no-repeat url(${img})`};
       background-size: 36px 36px;
     }
@@ -306,7 +307,7 @@ const Post = ({
             <button onClick={openDetailPost} className='bubble-up'>
               <i className='i-bubble-icon' />
             </button>
-            {commentNum === 0 ? null : <span className='comment-num'>{commentNum}</span>}
+            {comments?.length === 0 ? null : <span className='comment-num'>{comments.length}</span>}
           </div>
 
           <div className='right-icon-box'>

@@ -54,8 +54,9 @@ const Comment = styled.div`
     .profile-img {
       width: 32px;
       height: 32px;
-      background: no-repeat url('${profileImg}');
+      background: ${({ img }) => `no-repeat url('${img}')`};
       background-size: 32px 32px;
+      border-radius: 50%;
     }
 
     .user-txt {
@@ -178,6 +179,7 @@ const MiniComments = ({
   fanEmail,
   artistEmail,
   setEditComment,
+  img,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
@@ -252,7 +254,7 @@ const MiniComments = ({
   return (
     <>
       <CommentsBlock>
-        <Comment>
+        <Comment img={img}>
           <div className='comments-author'>
             <div className='user-img-txt'>
               <div className='profile-img'></div>
