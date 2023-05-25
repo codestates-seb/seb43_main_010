@@ -5,7 +5,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCookie } from '../../Login/LoginMaterial/setCookie';
 import axios from 'axios';
-import { setMyCommunity } from '../../../reducer/communitySlice';
 
 const JoinFormBlock = styled.div`
   width: 448px;
@@ -85,14 +84,13 @@ const JoinForm = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-
   const submitNickname = (e) => {
     e.preventDefault();
     // !!!여기에서 commuNickname을 서버에 전송해야 함!!!
     const token = getCookie();
+    const baseAPI = process.env.REACT_APP_API_URL;
     // 그룹 추가
-    axios.post(`/home/check/${groupId}`, {}, { headers: { Authorization: `${token}` } }).then(() => {
+    axios.post(`${baseAPI}home/check/${groupId}`, {}, { headers: { Authorization: `${token}` } }).then(() => {
       navigate(`/music/${groupId}`);
     });
   };
