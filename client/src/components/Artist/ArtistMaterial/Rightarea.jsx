@@ -30,13 +30,18 @@ const RightMyPageBox = styled.div`
   }
 
   .user-profile {
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
     border-radius: 15px 15px 0 0;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+    }
   }
   .user-nickname {
     font-size: 19px;

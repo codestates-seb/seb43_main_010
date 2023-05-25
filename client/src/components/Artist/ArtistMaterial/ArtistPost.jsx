@@ -7,7 +7,8 @@ import EditDeleteModal from '../SplitForder/EditDeleteModal';
 import DetailPost from '../SplitForder/DetailPost';
 import BigDetailPost from '../SplitForder/BigDetailPost';
 import { showDate, showMonthDay } from './showDate';
-
+import axios from 'axios';
+import { getCookie } from '../../Login/LoginMaterial/setCookie';
 const Container = styled.div`
   width: 707px;
   display: flex;
@@ -247,10 +248,32 @@ const ArtistPost = ({
   const [detailPost, setDetailPost] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-
+  const { currentUser } = useSelector((state) => state.user);
   const { isOpen } = useSelector((state) => state.editpost);
-
-  const clickLike = () => {
+  // console.log(groupId);
+  // console.log(artistPostId);
+  // console.log(artistId);
+  console.log(currentUser);
+  const clickLike = async () => {
+    let userId = {};
+    if (currentUser.fanId) {
+      userId = { fanId: currentUser.fanId };
+    } else {
+      userId = { artistId: currentUser.artistId };
+    }
+    //좋아요를 안누른 상태 liked = false 면 눌렀을 때 +1이벤트
+    // if (liked === false) {
+    //   await axios.post(`/artist/${groupId}/${artistPostId}/like`, userId, { headers: { Authorization: getCookie() } }).then(() => {
+    //     setLike(like + 1);
+    //     setLiked(true);
+    //   });
+    //   if (liked === true) {
+    //     await axios.post(`/feed/${groupId}/${artistPostId}/like/cancelLike`, { userId }, { headers: { Authorization: getCookie() } }).then(() => {
+    //       setLike(like - 1);
+    //       setLiked(false);
+    //     });
+    //   }
+    // }
     setLiked(!liked);
     if (!liked) {
       setLike(like + 1);

@@ -70,6 +70,7 @@ const AuthorContentBox = styled.li`
 
   .right-icon-box {
     position: relative;
+    display: none;
   }
 
   .author {
@@ -341,7 +342,6 @@ const DetailPost = ({
   useEffect(() => {
     axios.get(`/artist/${groupId}/${artistPostId}/comment?page=1&size=16`).then((res) => {
       setCommentList(res.data.data);
-      console.log(res.data.data);
     });
   }, [data]);
 
@@ -375,7 +375,6 @@ const DetailPost = ({
       return;
     }
     let body = { email, content: comment };
-    console.log(body);
     await axios
       .post(`/artist/${groupId}/${artistPostId}/comment`, body)
       .then((res) => {
@@ -383,7 +382,7 @@ const DetailPost = ({
         setComment('');
       })
       .catch(() => {
-        console.log('등록실패');
+        alert('등록실패');
       });
   };
 
@@ -455,10 +454,10 @@ const DetailPost = ({
                       createdAt={showDate(el.createdAt)}
                       content={el.content}
                       //팬 아티스트 중 프로필
-                      profile={el.artist !== null ? el.artist.profile : el.fan.profile}
+                      profile={el.fan === null ? el.artist.profile : el.fan.profile}
                       //작성자
-                      userEmail={el.artist !== null ? el.artist.email : el.fan.email}
-                      nickname={el.artist !== null ? el.artist.nickname : el.fan.nickname}
+                      userEmail={el.fan === null ? el.artist.email : el.fan.email}
+                      nickname={el.fan === null ? el.artist.nickname : el.fan.nickname}
                       likeCount={el.likeCount}
                       artistPostId={el.artistPostId}
                       deleteModal={deleteModal}

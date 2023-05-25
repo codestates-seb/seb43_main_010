@@ -190,7 +190,6 @@ const MiniComments = ({
     } else {
       setLike(like - 1);
     }
-    // 서버한테 바뀐 좋아요 데이터 전송 해야함
   };
   return (
     <>
