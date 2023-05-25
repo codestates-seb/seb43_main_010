@@ -397,6 +397,8 @@ const BigDetailPost = ({
     setOpenCopy(!openCopy);
   };
 
+  console.log(commentContent);
+
   return (
     <BigDetailPostBlock deleteModal={deleteModal}>
       <div ref={detailPostRef} className='big-detail-post'>
@@ -507,7 +509,9 @@ const BigDetailPost = ({
                     fanEmail={el.fan?.email}
                     artistEmail={el.artist?.email}
                     setEditComment={setEditComment} // 추가
-                    img={img}
+                    isFan={el.artist === null}
+                    fanImg={el.fan?.profile}
+                    artistImg={el.artist?.profile}
                   />
                 ))}
               </CommentListUl>

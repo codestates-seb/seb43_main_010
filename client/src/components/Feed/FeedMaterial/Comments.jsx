@@ -176,7 +176,9 @@ const Comments = ({
   fanEmail,
   artistEmail,
   setEditComment,
-  img,
+  isFan,
+  fanImg,
+  artistImg,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
@@ -252,7 +254,7 @@ const Comments = ({
   return (
     <>
       <CommentsBlock>
-        <Comment img={img}>
+        <Comment img={isFan ? fanImg : artistImg}>
           <div className='comments-author'>
             <div className='user-img-txt'>
               <div className='profile-img'></div>
