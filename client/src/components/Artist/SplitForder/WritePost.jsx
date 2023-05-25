@@ -293,7 +293,6 @@ const WritePost = ({ modalOpen, setModalOpen, postData, setPostData, groupId, cu
             <PostContent>
               <div className='top-txt-box'>
                 <span className='post-txt'>포스트 쓰기</span>
-                <span className='artist-txt'>BTS</span> {/* 나중에 수정해야 할 부분임 */}
               </div>
               {/* 이미지 업로드시 미리보기를 위한 곳 */}
               {imgList.length === 0 ? null : <WriteImgPreview imgList={imgList} handleDeleteImg={handleDeleteImg} />}

@@ -250,10 +250,6 @@ const ArtistPost = ({
   const [deleteModal, setDeleteModal] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const { isOpen } = useSelector((state) => state.editpost);
-  // console.log(groupId);
-  // console.log(artistPostId);
-  // console.log(artistId);
-  console.log(currentUser);
   const clickLike = async () => {
     let userId = {};
     if (currentUser.fanId) {
@@ -261,19 +257,7 @@ const ArtistPost = ({
     } else {
       userId = { artistId: currentUser.artistId };
     }
-    //좋아요를 안누른 상태 liked = false 면 눌렀을 때 +1이벤트
-    // if (liked === false) {
-    //   await axios.post(`/artist/${groupId}/${artistPostId}/like`, userId, { headers: { Authorization: getCookie() } }).then(() => {
-    //     setLike(like + 1);
-    //     setLiked(true);
-    //   });
-    //   if (liked === true) {
-    //     await axios.post(`/feed/${groupId}/${artistPostId}/like/cancelLike`, { userId }, { headers: { Authorization: getCookie() } }).then(() => {
-    //       setLike(like - 1);
-    //       setLiked(false);
-    //     });
-    //   }
-    // }
+
     setLiked(!liked);
     if (!liked) {
       setLike(like + 1);
