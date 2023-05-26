@@ -54,7 +54,7 @@ const LeftPost = styled.div`
   justify-content: space-between;
   flex-direction: column;
   overflow-y: auto;
-  overflow-x: hi;
+  overflow-x: hidden;
   list-style-type: none;
 `;
 
