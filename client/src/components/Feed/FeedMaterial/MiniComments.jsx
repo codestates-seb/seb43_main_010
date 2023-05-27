@@ -256,7 +256,7 @@ const MiniComments = ({
   return (
     <>
       <CommentsBlock>
-        <Comment img={isFan ? fanImg : artistImg}>
+        <Comment img={isArtist ? artistImg : fanImg}>
           <div className='comments-author'>
             <div className='user-img-txt'>
               <div className='profile-img'></div>
