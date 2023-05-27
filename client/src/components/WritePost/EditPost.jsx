@@ -20,7 +20,7 @@ const WritePostBlock = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2;
-  background-color: ${({ bgc05 }) => (bgc05 ? `rgba(0, 0, 0, 0.26)` : `rgba(0, 0, 0, 0.7)`)};
+  background-color: ${({ bgc05 }) => (bgc05 ? `rgba(0, 0, 0, 0.08)` : `rgba(0, 0, 0, 0.7)`)};
 `;
 
 const PostContentBox = styled.div`
@@ -48,7 +48,6 @@ const PostContent = styled.div`
   background-color: var(--white-100);
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0px 5px 15px rgb(19, 28, 35, 0.1);
 
   .top-txt-box {
     height: 91px;
