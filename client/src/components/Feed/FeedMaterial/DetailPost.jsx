@@ -388,8 +388,6 @@ const DetailPost = ({
     }
   };
 
-  console.log(commentContent);
-
   const handleOpenCopy = () => {
     setOpenCopy(!openCopy);
   };
