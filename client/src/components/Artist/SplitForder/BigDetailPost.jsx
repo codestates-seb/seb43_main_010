@@ -210,6 +210,15 @@ const AuthorContentBox = styled.li`
     font-size: 15px;
     text-shadow: 0 0 0 var(--dark-blue-900);
     line-height: 21px;
+    p {
+      white-space: pre-line;
+      word-break: break-all;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
 `;
 

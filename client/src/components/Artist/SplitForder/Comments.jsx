@@ -92,6 +92,16 @@ const Comment = styled.div`
     text-shadow: 0 0 0 var(--dark-blue-900);
     padding: 0 33px 0 40px;
     line-height: 21px;
+
+    pre {
+      white-space: pre-line;
+      word-break: break-all;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
 
   .bottom-icon {
@@ -237,10 +247,10 @@ const Comments = ({
               <p>{content}</p>
             ) : (
               <>
-                {content.length > 650 ? (
+                {content.length > 250 ? (
                   <>
                     <div>
-                      {content.slice(0, 650)}...
+                      {content.slice(0, 250)}...
                       <button className='more' onClick={toggleShowAll}>
                         more
                       </button>

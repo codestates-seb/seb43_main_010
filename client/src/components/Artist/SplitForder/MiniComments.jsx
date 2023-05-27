@@ -94,6 +94,12 @@ const Comment = styled.div`
     text-shadow: 0 0 0 var(--dark-blue-900);
     padding: 0 23px 0 40px;
     line-height: 21px;
+
+    pre {
+      white-space: pre-line;
+      word-break: break-all;
+      overflow: hidden;
+    }
   }
 
   .bottom-icon {
@@ -234,10 +240,10 @@ const MiniComments = ({
               <p>{content}</p>
             ) : (
               <>
-                {content.length > 236 ? (
+                {content.length > 150 ? (
                   <>
                     <div>
-                      {content.slice(0, 236)}...
+                      {content.slice(0, 150)}...
                       <button className='more' onClick={toggleShowAll}>
                         more
                       </button>
