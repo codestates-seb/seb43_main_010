@@ -397,8 +397,6 @@ const BigDetailPost = ({
     setOpenCopy(!openCopy);
   };
 
-  console.log(commentContent);
-
   return (
     <BigDetailPostBlock deleteModal={deleteModal}>
       <div ref={detailPostRef} className='big-detail-post'>
