@@ -51,7 +51,7 @@ const FirstMusicUlBlock = styled.ul`
     }
 
     &:hover::after {
-      content: ${({ isPlaying }) => (isPlaying ? `url(${playImg})` : `url(${stopImg})`)};
+      content: ${({ isPlaying }) => (isPlaying ? `url(${stopImg})` : `url(${playImg})`)};
       display: flex;
       justify-content: center;
       align-items: center;
