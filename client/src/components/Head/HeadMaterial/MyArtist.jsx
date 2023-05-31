@@ -32,9 +32,9 @@ const MyArtistBlock = styled.li`
   }
 `;
 
-const MyArtist = ({ grouplogoImg, groupName }) => {
+const MyArtist = ({ groupId, grouplogoImg, groupName }) => {
   return (
-    <MyArtistBlock>
+    <MyArtistBlock onClick={() => (window.location.href = `/feed/${groupId}`)}>
       {/* 이미지와 alt 부분을 나중에 데이터 받아서 수정해줘야 함 */}
       {/* 만약 현재페이지와 같은 그룹이름이라면 => 글자 색상을 skyblue600으로 바꿔야 함 */}
       <div className='artist-img'>

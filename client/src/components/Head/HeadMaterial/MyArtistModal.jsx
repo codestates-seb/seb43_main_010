@@ -91,7 +91,7 @@ const MyArtistModal = ({ myArtModal, setMyArttModal }) => {
         {/* 해당 아티스트에 맞는 Link도 추가해야 함 => MyArtist 컴포넌트 */}
         {filteredMyCommuData.map((el) => (
           <StyledLink to={`/feed/${el.groupId}`} key={el.groupId}>
-            <MyArtist grouplogoImg={el.grouplogoImg} groupName={el.groupName} />
+            <MyArtist groupId={el.groupId} grouplogoImg={el.grouplogoImg} groupName={el.groupName} />
           </StyledLink>
         ))}
       </ul>
