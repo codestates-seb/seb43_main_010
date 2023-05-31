@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import thumbsUpFill from '../../../assets/svg-file/thumbs-up-fill.svg';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -176,7 +176,9 @@ const Comments = ({
   fanEmail,
   artistEmail,
   setEditComment,
-  img,
+  isFan,
+  fanImg,
+  artistImg,
 }) => {
   const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(likeNum);
@@ -252,7 +254,7 @@ const Comments = ({
   return (
     <>
       <CommentsBlock>
-        <Comment img={img}>
+        <Comment img={isArtist ? artistImg : fanImg}>
           <div className='comments-author'>
             <div className='user-img-txt'>
               <div className='profile-img'></div>

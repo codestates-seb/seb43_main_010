@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 const PostInputBlock = styled.form`
   position: relative;
   display: flex;
+  justify-content: center;
+  align-items: center;
   .profile-img {
     position: absolute;
     top: 12px;
@@ -61,7 +63,9 @@ const PostInput = ({ transparent, placeholder, pointer }) => {
 
   return (
     <PostInputBlock currentUser={currentUser.profile}>
-      <img src={currentUser.profile} alt='현재 사용자 프로밀' />
+      <div className='profile-img'>
+        <img src={currentUser.profile} alt='현재 사용자 프로밀' />
+      </div>
       <Input
         transparent={transparent}
         pointer={pointer}

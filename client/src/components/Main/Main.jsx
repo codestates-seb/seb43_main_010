@@ -130,7 +130,6 @@ const StyledLink = styled(Link)`
 
 const Main = () => {
   // login한 유저 찾아오기
-  // 그럼 로그인 여부를 알려면 매번 쿠키로 확인하고, 리덕스에서 값 가져와서 확인해야 하나?
   const { currentUser } = useSelector((state) => state.user);
   const { myCommunity, isUserFan } = useSelector((state) => state.community);
   const { allGroup } = useSelector((state) => state.color);

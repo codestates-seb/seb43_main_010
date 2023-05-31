@@ -477,12 +477,14 @@ const DetailPost = ({
                     commentId={el.commentId}
                     setCommentContent={setCommentContent}
                     commentContentAll={commentContent}
-                    isArtist={el.artist ? true : false}
+                    isArtist={!!el.artist}
                     artist={el.artist}
                     fanEmail={el.fan?.email}
                     artistEmail={el.artist?.email}
                     setEditComment={setEditComment} // 추가
-                    img={img}
+                    isFan={el.artist === null}
+                    fanImg={el.fan?.profile}
+                    artistImg={el.artist?.profile}
                   />
                 ))}
               </CommentMusicUl>
