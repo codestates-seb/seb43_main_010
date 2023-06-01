@@ -1,0 +1,16 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:test
+  jpa:
+    hibernate:
+      ddl-auto: create
+      globally_quoted_identifiers: true # 이 설정을 추가해준다.
+      show_sql: true # 쿼리를 출력해준다.
+      format_sql: true # 쿼리를 예쁘게 출력해준다.
+      generate_statistics: true # 쿼리 수행 통계를 확인할 수 있다.
+    show-sql: true
+    defer-datasource-initialization: true
