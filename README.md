@@ -65,7 +65,7 @@
 
 </br>
 
-## 📖메뉴얼
+## 📖매뉴얼
 
 [43기-Team-10-프로젝트매뉴얼.pdf](https://github.com/TATA-V/BT21-SIGH-IN/files/11620186/43.-Team-10-.pdf)
 
