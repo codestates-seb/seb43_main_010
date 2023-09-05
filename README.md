@@ -9,7 +9,7 @@
 - 프로젝트 기간 : 2023.04.28 - 2023.05.25
 - 프로젝트 설명<br>
   해당 웹사이트는 위버스에서 영감을 받아 만들어졌습니다. Lumian은 아티스트와 팬 간의 경계를 허물고, 함께 소통할 수 있는 공간입니다. 소셜 네트워크와 같은 커뮤니티 기능을 통해 팬들은 아티스트와 쉽게 대화를 나눌 수 있으며, 아티스트 노래 추천 기능을 제공하고 있어서 팬들은 아티스트가 추천하는 곡을 들을 수 있습니다.
-- 배포 링크 : <a href ="http://lumian.s3-website.ap-northeast-2.amazonaws.com/" target = "_blank" > LUMIAN </a>
+- 배포 링크 : <a href ="http://lumian-project.s3-website.ap-northeast-2.amazonaws.com" target = "_blank" > LUMIAN </a>
 
 </br>
 
